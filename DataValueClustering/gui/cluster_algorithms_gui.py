@@ -93,3 +93,19 @@ def cluster_spectral(distance_function, values):
     verbose = False
 
     return spectral(distance_function, values, n_clusters, eigen_solver, n_components, random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
+
+
+cluster_algorithms = np.array([
+    ["Hierarchical",
+     cluster_hierarchical],
+    ["KMedoids",
+     cluster_kmedoids],
+    ["DBSCAN",
+         cluster_dbscan()],
+    ["Optics",
+         cluster_optics],
+    ["Affinity Propagation",
+         cluster_affinity],
+    ["Spectral Clustering",
+         cluster_spectral()]
+])
