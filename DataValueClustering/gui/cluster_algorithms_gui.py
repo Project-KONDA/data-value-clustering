@@ -1,0 +1,23 @@
+from clustering.hierarchical import generate_linkage_matrix, hierarchical_lm
+from gui.dendrogram import show_dendrogram
+
+
+def cluster_hierarchical(distance_function, values):
+    # TODO: ask for 'method'
+    method = 'single'
+
+    # show dendrogram
+    linkage_matrix = generate_linkage_matrix(distance_function, values, method)
+    show_dendrogram(linkage_matrix, values)
+
+    # TODO: ask for additional arguments: n_cluster, distance_threshold
+    n_clusters = 2
+    distance_threshold = 2
+    criterion = 'distance'
+    # criterion: 'maxclust', 'distance', 'inconsistent', 'monocrit', 'maxclust_monocrit'
+    depth = 2
+    monocrit = None
+
+    return hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit)
+
+

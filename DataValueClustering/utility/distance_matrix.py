@@ -23,7 +23,6 @@ def calculate_condensed_distance_matrix(distance_function, values):
     assert (i == len(condensed_distance_matrix))
 
     if is_valid_y(condensed_distance_matrix):
-        #print(list(condensed_distance_matrix))
         return condensed_distance_matrix
     else:
         return None
