@@ -27,3 +27,10 @@ def calculate_condensed_distance_matrix(distance_function, values):
     else:
         return None
 
+
+def calculate_affinity_matrix(distance_function, values):
+    distance_matrix = calculate_distance_matrix(distance_function, values)
+    affinity_matrix = 1 - (distance_matrix / max(distance_matrix))
+    assert max(affinity_matrix) <= 1
+    assert min(affinity_matrix) >= 0
+    return affinity_matrix
