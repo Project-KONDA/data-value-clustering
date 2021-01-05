@@ -2,10 +2,10 @@ import numpy as np
 
 
 def cluster(values, compression_function, distance_function, cluster_function):
-    compressed_values = compression_function(values)  # may include removing duplicates
-    clusters_compressed = cluster_function(distance_function, compressed_values)  # returns one dimensional array
-
-    clusters = get_clusters_original_values(clusters_compressed, compressed_values, compression_function, values)
+    values_compressed = compression_function(values)  # may include removing duplicates
+    clusters_compressed = cluster_function(distance_function, values_compressed)  # returns one dimensional array
+    clusters = get_clusters_original_values(clusters_compressed, values_compressed, compression_function, values)
+    return fancy_cluster_representation(values, clusters)
 
     # TODO: return fancy result
 
@@ -20,4 +20,12 @@ def get_clusters_original_values(clusters, compressed_values, compression_functi
     return clusters_original_values
 
 
+def fancy_cluster_representation(values, clusters):
+    no_clusters = max(clusters) + 1
+    outer_list = list()
+    for i in range(no_clusters):
+        outer_list.append(list())
+    for j in range(len(values)):
+        outer_list[int(clusters[j])].append(values[j])
+    return outer_list
 
