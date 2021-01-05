@@ -21,3 +21,31 @@ def cluster_hierarchical(distance_function, values):
     return hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit)
 
 
+def cluster_kmedoids(distance_function, values):
+    # TODO: ask user for arguments - n_clusters, method, init, max_iter, random_state
+    # return kmedoids(distance_function, values, n_clusters, method, init, max_iter, random_state)
+    pass
+
+
+def cluster_dbscan(distance_function, values):
+    # TODO: ask user for arguments
+    # return dbscan(...)
+    pass
+
+
+def cluster_optics(distance_function, values):
+    # TODO: ask user for arguments
+    # return optics(...)
+    pass
+
+
+def cluster_affinity(distance_function, values):
+    # TODO: ask user for arguments
+    # return affinity(...)
+    pass
+
+
+def cluster_spectral(distance_function, values):
+    # TODO: ask user for arguments
+    # return spectral.py(...)
+    pass
