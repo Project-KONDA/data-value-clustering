@@ -2,17 +2,16 @@ import numpy as np
 from sklearn.cluster import AffinityPropagation
 
 from gui.clustering import fancy_cluster_representation
-from utility.distance_matrix import calculate_distance_matrix
+from utility.distance_matrix import calculate_affinity_matrix
 
 
 def affinity(distance_function, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None,
              verbose=False, random_state=None):
-    dm = calculate_distance_matrix(distance_function, values)
+    affinity_matrix = calculate_affinity_matrix(distance_function, values)
     clusters = AffinityPropagation(
         affinity='precomputed', damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, copy=copy,
         preference=preference, verbose=verbose, random_state=random_state
-    ).fit_predict(-dm)
-    # TODO: set damping, max_iter, convergence_iter, copy, preference, verbose
+    ).fit_predict(affinity_matrix)
     return clusters
 
 
