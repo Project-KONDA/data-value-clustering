@@ -1,4 +1,5 @@
 from scipy.cluster.hierarchy import linkage, fcluster
+
 from utility.distance_matrix import calculate_condensed_distance_matrix
 
 

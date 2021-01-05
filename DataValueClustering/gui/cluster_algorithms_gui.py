@@ -1,5 +1,8 @@
 from clustering.hierarchical import generate_linkage_matrix, hierarchical_lm
+from clustering.kmedoids import kmedoids
+
 from gui.dendrogram import show_dendrogram
+
 
 
 def cluster_hierarchical(distance_function, values):
@@ -23,8 +26,13 @@ def cluster_hierarchical(distance_function, values):
 
 def cluster_kmedoids(distance_function, values):
     # TODO: ask user for arguments - n_clusters, method, init, max_iter, random_state
-    # return kmedoids(distance_function, values, n_clusters, method, init, max_iter, random_state)
-    pass
+    n_clusters = 2
+    method = 'single'
+    init = 'build'
+    max_iter = None
+    random_state = None
+
+    return kmedoids(distance_function, values, n_clusters, method, init, max_iter, random_state)
 
 
 def cluster_dbscan(distance_function, values):
