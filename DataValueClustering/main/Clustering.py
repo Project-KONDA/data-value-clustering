@@ -7,17 +7,17 @@ def cluster(values, compression_function, distance_function, cluster_function):
     clusters = get_clusters_original_values(clusters_compressed, values_compressed, compression_function, values)
     return fancy_cluster_representation(values, clusters)
 
-    # TODO: return fancy result
 
-
-def get_clusters_original_values(clusters, compressed_values, compression_function, values):
+def get_clusters_original_values(clusters_compressed, values_compressed, compression_function, values):
     size = len(values)
     clusters_original_values = np.zeros(size, int)
-    for x in range(size):
-        i = compressed_values.index(compression_function([values[x]]))
-        clusters_original_values[x] = clusters[i]
-    assert max(clusters_original_values) == max(clusters)
-    return clusters_original_values
+    for k in range(size):
+        compression_result = compression_function([values[k]])
+        assert len(compression_result) == 1
+        index = values_compressed.index(compression_result[0])
+        clusters_original_values[k] = clusters_compressed[index]
+    assert max(clusters_original_values) == max(clusters_compressed)
+    return clusters_original_values  # one dimensional array
 
 
 def fancy_cluster_representation(values, clusters):
