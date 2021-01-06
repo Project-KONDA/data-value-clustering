@@ -10,7 +10,7 @@ from gui.dendrogram import show_dendrogram
 # pass method of this module as cluster_function to clustering.clustering.cluster
 
 def cluster_hierarchical():
-    # TODO: ask for 'method'
+    # TODO: ask user for 'method' argument
     method = 'single'
 
     return lambda distance_function, values: cluster_hierarchical_helper(distance_function, values, method)
@@ -21,8 +21,8 @@ def cluster_hierarchical_helper(distance_function, values, method):
     linkage_matrix = generate_linkage_matrix(distance_function, values, method)
     show_dendrogram(linkage_matrix, values)
 
-    # TODO: ask for additional arguments: n_cluster, distance_threshold etc.
-    n_clusters = 2
+    # TODO: ask user for additional arguments
+    n_clusters = 2  # TODO: support elbow method
     distance_threshold = 2
     criterion = 'distance'
     # criterion: 'maxclust', 'distance', 'inconsistent', 'monocrit', 'maxclust_monocrit'
@@ -34,8 +34,8 @@ def cluster_hierarchical_helper(distance_function, values, method):
 
 
 def cluster_kmedoids():
-    # TODO: ask user for arguments - n_clusters, method, init, max_iter, random_state
-    n_clusters = 2
+    # TODO: ask user for arguments
+    n_clusters = 2  # TODO: support elbow method
     method = 'single'
     init = 'build'
     max_iter = None
