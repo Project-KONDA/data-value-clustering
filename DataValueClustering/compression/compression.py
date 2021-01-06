@@ -3,12 +3,22 @@ import numpy as np
 
 
 char_compression = [
+    ["[a-zA-Z]", "e"],
+    ["[0-9]", "0"]
+]
+
+char_compression_case_sensitive = [
     ["[a-z]", "l"],
     ["[A-Z]", "L"],
     ["[0-9]", "0"]
 ]
 
 sequence_compression = [
+    ["[a-zA-Z]+", "f"],
+    ["[0-9]+", "1"]
+]
+
+sequence_compression_case_sensitive = [
     ["[a-z]+", "w"],
     ["[A-Z]+", "S"],
     ["[0-9]+", "1"]
@@ -67,6 +77,18 @@ word_sequence_compression = [
     ["Lw", "W"],
     ["(w+ )+w+", "q"],
     ["(W+ )+W+", "U"],
+    ["[qU]+", "V"],
+    ["[0-9]+", "1"]
+]
+
+word_sequence_compression_case_sensitive = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["l+", "w"],
+    ["LL+", "M"],
+    ["Lw", "W"],
+    ["(w+ )+w+", "q"],
+    ["(W+ )+W+", "U"],
     ["[0-9]+", "1"]
 ]
 
@@ -83,8 +105,9 @@ sentence_compression = [
 ]
 
 
-def suggest_compression():
+def suggest_compression(meta_information):
     # TODO: add parameters
+
     # TODO: suggest a (predefined or newly build) compression function based on user input
     pass
 
