@@ -1,3 +1,4 @@
 /Viola/venv/
 /DataValueClustering/venv/
 /.idea
+*.pyc

@@ -29,8 +29,7 @@ def cluster_hierarchical_helper(distance_function, values, method):
     depth = 2
     monocrit = None
 
-    return lambda distance_function, values: hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold,
-                                                             criterion, depth, monocrit)
+    return hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit)
 
 
 def cluster_kmedoids():
