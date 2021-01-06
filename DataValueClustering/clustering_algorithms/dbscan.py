@@ -4,9 +4,9 @@ from clustering.clustering import fancy_cluster_representation
 from utility.distance_matrix import calculate_distance_matrix
 
 
-def dbscan(distance_function, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, p=None, n_jobs=None):
+def dbscan(distance_function, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):
     dm = calculate_distance_matrix(distance_function, values)
-    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', algorithm=algorithm, leaf_size=leaf_size, p=p, n_jobs=n_jobs).fit_predict(dm)
+    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', algorithm=algorithm, leaf_size=leaf_size, n_jobs=n_jobs).fit_predict(dm)
     return clusters
 
 

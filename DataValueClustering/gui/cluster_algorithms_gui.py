@@ -47,15 +47,14 @@ def cluster_kmedoids():
 
 def cluster_dbscan():
     # TODO: ask user for arguments
-    eps = 0.5
-    min_samples = 5
+    eps = 0.5  # depends on distances
+    min_samples = 5  # depends on number of values
     algorithm = 'auto'
     leaf_size = 30
-    p = None
     n_jobs = None
 
     return lambda distance_function, values: dbscan(distance_function, values, eps, min_samples, algorithm, leaf_size,
-                                                    p, n_jobs)
+                                                    n_jobs)
 
 
 def cluster_optics():
