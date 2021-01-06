@@ -5,6 +5,10 @@ import numpy as np
 from numpy.core.defchararray import lower
 from pip._vendor.msgpack.fallback import xrange
 
+
+# TODO: suggest a cost map based on user input
+
+
 weight_case = 1
 regex = ["", "[a-zäöüß]", "[A-ZÄÖÜ]", "[0-9]", " ", "[\$\&\+,:;=\?@\#\|'<>\.\-\^\*\(\)%!]"]
 weights = [
