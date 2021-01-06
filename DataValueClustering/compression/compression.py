@@ -2,10 +2,85 @@ import re
 import numpy as np
 
 
-# TODO: dictionary ?
+char_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["[0-9]", "0"]
+]
 
-# TODO: predefined compression matrices ?
-compression_simple = None
+sequence_compression = [
+    ["[a-z]+", "w"],
+    ["[A-Z]+", "S"],
+    ["[0-9]+", "1"]
+]
+
+letter_sequence_compression = [
+    ["[a-z]+", "w"],
+    ["[A-Z]+", "S"],
+    ["[0-9]", "0"]
+]
+
+number_sequence_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["[0-9]+", "1"]
+]
+
+lower_sequence_compression = [
+    ["[a-z]+", "w"],
+    ["[A-Z]", "L"],
+    ["[0-9]", "0"]
+]
+
+upper_sequence_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]+", "S"],
+    ["[0-9]", "0"]
+]
+
+
+word_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["l+", "w"],
+    ["LL+", "M"],
+    ["Lw", "W"],
+    ["[0-9]+", "1"]
+]
+
+word_decimal_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["l+", "w"],
+    ["LL+", "M"],
+    ["Lw", "W"],
+    ["[0-9]+", "1"],
+    ["1,1", "2"]
+]
+
+
+word_sequence_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["l+", "w"],
+    ["LL+", "M"],
+    ["Lw", "W"],
+    ["(w+ )+w+", "q"],
+    ["(W+ )+W+", "U"],
+    ["[0-9]+", "1"]
+]
+
+sentence_compression = [
+    ["[a-z]", "l"],
+    ["[A-Z]", "L"],
+    ["l+", "w"],
+    ["LL+", "M"],
+    ["Lw", "W"],
+    ["(w+ )+w+", "q"],
+    ["(W+ )+W+", "U"],
+    ["(W )[qU]+", "T"],
+    ["[0-9]+", "1"]
+]
 
 
 def suggest_compression():
