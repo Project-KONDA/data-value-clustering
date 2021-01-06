@@ -6,9 +6,16 @@ from numpy.core.defchararray import lower
 from pip._vendor.msgpack.fallback import xrange
 
 
-# TODO: suggest a cost map based on user input
+# TODO: predefined cost maps ?
 
 
+def suggest_cost_map():
+    # TODO: add parameters
+    # TODO: suggest a (predefined or newly build) cost map based on user input
+    pass
+
+
+# example cost map components:
 weight_case = 1
 regex = ["", "[a-zäöüß]", "[A-ZÄÖÜ]", "[0-9]", " ", "[\$\&\+,:;=\?@\#\|'<>\.\-\^\*\(\)%!]"]
 weights = [
