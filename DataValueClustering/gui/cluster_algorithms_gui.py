@@ -23,7 +23,7 @@ def cluster_hierarchical_helper(distance_function, values, method):
 
     # TODO: ask user for additional arguments
     n_clusters = 2  # TODO: support elbow method
-    distance_threshold = 2
+    distance_threshold = 2  # depends on distances
     criterion = 'distance'
     # criterion: 'maxclust', 'distance', 'inconsistent', 'monocrit', 'maxclust_monocrit'
     depth = 2
@@ -36,10 +36,10 @@ def cluster_hierarchical_helper(distance_function, values, method):
 def cluster_kmedoids():
     # TODO: ask user for arguments
     n_clusters = 2  # TODO: support elbow method
-    method = 'single'
-    init = 'build'
+    method = 'alternate'  # "‘alternate’ is faster while ‘pam’ is more accurate"
+    init = 'build'  # "if there are outliers in the dataset, use another initialization than build"
     max_iter = None
-    random_state = None
+    random_state = None  # only relevant for testing
 
     return lambda distance_function, values: kmedoids(distance_function, values, n_clusters, method, init, max_iter,
                                                       random_state)
