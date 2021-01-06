@@ -21,11 +21,11 @@ def get_clusters_original_values(clusters_compressed, values_compressed, compres
 
 
 def fancy_cluster_representation(values, clusters):
-    no_clusters = max(clusters) + 1
+    n_clusters = max(clusters) + 1
     outer_list = list()
     noise = list()
 
-    for i in range(no_clusters):
+    for i in range(n_clusters):
         outer_list.append(list())
 
     for j in range(len(values)):
