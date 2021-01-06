@@ -1,4 +1,4 @@
-from gui.clustering import fancy_cluster_representation
+from clustering.clustering import fancy_cluster_representation
 
 
 def test_fancy_cluster_representation():

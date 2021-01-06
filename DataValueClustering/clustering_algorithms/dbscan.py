@@ -1,6 +1,6 @@
 from sklearn.cluster import DBSCAN
 
-from gui.clustering import fancy_cluster_representation
+from clustering.clustering import fancy_cluster_representation
 from utility.distance_matrix import calculate_distance_matrix
 
 

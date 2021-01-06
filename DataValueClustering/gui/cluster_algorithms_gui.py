@@ -1,9 +1,9 @@
-from clustering.hierarchical import generate_linkage_matrix, hierarchical_lm
-from clustering.kmedoids import kmedoids
-from clustering.dbscan import *
-from clustering.optics import *
-from clustering.affinity_propagation import *
-from clustering.spectral import *
+from clustering_algorithms.hierarchical import generate_linkage_matrix, hierarchical_lm
+from clustering_algorithms.kmedoids import kmedoids
+from clustering_algorithms.dbscan import *
+from clustering_algorithms.optics import *
+from clustering_algorithms.affinity_propagation import *
+from clustering_algorithms.spectral import *
 
 from gui.dendrogram import show_dendrogram
 
