@@ -7,6 +7,7 @@ from clustering_algorithms.spectral import *
 
 from gui.dendrogram import show_dendrogram
 
+# pass method of this module as cluster_function to clustering.clustering.cluster
 
 def cluster_hierarchical():
     # TODO: ask for 'method'
@@ -40,7 +41,8 @@ def cluster_kmedoids():
     max_iter = None
     random_state = None
 
-    return lambda distance_function, values: kmedoids(distance_function, values, n_clusters, method, init, max_iter, random_state)
+    return lambda distance_function, values: kmedoids(distance_function, values, n_clusters, method, init, max_iter,
+                                                      random_state)
 
 
 def cluster_dbscan():
@@ -52,7 +54,8 @@ def cluster_dbscan():
     p = None
     n_jobs = None
 
-    return lambda distance_function, values: dbscan(distance_function, values, eps, min_samples,algorithm, leaf_size, p, n_jobs)
+    return lambda distance_function, values: dbscan(distance_function, values, eps, min_samples, algorithm, leaf_size,
+                                                    p, n_jobs)
 
 
 def cluster_optics():
@@ -68,7 +71,9 @@ def cluster_optics():
     leaf_size = 30
     n_jobs = None
 
-    return lambda distance_function, values: optics(distance_function, values, min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, algorithm, leaf_size, n_jobs)
+    return lambda distance_function, values: optics(distance_function, values, min_samples, max_eps, cluster_method,
+                                                    eps, xi, predecessor_correction, min_cluster_size, algorithm,
+                                                    leaf_size, n_jobs)
 
 
 def cluster_affinity():
@@ -81,7 +86,8 @@ def cluster_affinity():
     verbose = False
     random_state = None
 
-    return lambda distance_function, values: affinity(distance_function, values, damping, max_iter, convergence_iter, copy, preference, verbose, random_state)
+    return lambda distance_function, values: affinity(distance_function, values, damping, max_iter, convergence_iter,
+                                                      copy, preference, verbose, random_state)
 
 
 def cluster_spectral():
@@ -96,7 +102,8 @@ def cluster_spectral():
     assign_labels = 'kmeans'
     verbose = False
 
-    return lambda distance_function, values: spectral(distance_function, values, n_clusters, eigen_solver, n_components, random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
+    return lambda distance_function, values: spectral(distance_function, values, n_clusters, eigen_solver, n_components,
+                                                      random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
 
 
 cluster_algorithms = np.array([
@@ -105,11 +112,11 @@ cluster_algorithms = np.array([
     ["KMedoids",
      cluster_kmedoids],
     ["DBSCAN",
-         cluster_dbscan],
+     cluster_dbscan],
     ["Optics",
-         cluster_optics],
+     cluster_optics],
     ["Affinity Propagation",
-         cluster_affinity],
+     cluster_affinity],
     ["Spectral Clustering",
-         cluster_spectral]
+     cluster_spectral]
 ])
