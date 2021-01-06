@@ -8,11 +8,14 @@ from clustering_algorithms.spectral import *
 from gui.dendrogram import show_dendrogram
 
 
-
-def cluster_hierarchical(distance_function, values):
+def cluster_hierarchical():
     # TODO: ask for 'method'
     method = 'single'
 
+    return lambda distance_function, values: cluster_hierarchical_helper(distance_function, values, method)
+
+
+def cluster_hierarchical_helper(distance_function, values, method):
     # show dendrogram
     linkage_matrix = generate_linkage_matrix(distance_function, values, method)
     show_dendrogram(linkage_matrix, values)
@@ -25,10 +28,11 @@ def cluster_hierarchical(distance_function, values):
     depth = 2
     monocrit = None
 
-    return hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit)
+    return lambda distance_function, values: hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold,
+                                                             criterion, depth, monocrit)
 
 
-def cluster_kmedoids(distance_function, values):
+def cluster_kmedoids():
     # TODO: ask user for arguments - n_clusters, method, init, max_iter, random_state
     n_clusters = 2
     method = 'single'
@@ -36,10 +40,10 @@ def cluster_kmedoids(distance_function, values):
     max_iter = None
     random_state = None
 
-    return kmedoids(distance_function, values, n_clusters, method, init, max_iter, random_state)
+    return lambda distance_function, values: kmedoids(distance_function, values, n_clusters, method, init, max_iter, random_state)
 
 
-def cluster_dbscan(distance_function, values):
+def cluster_dbscan():
     # TODO: ask user for arguments
     eps = 0.5
     min_samples = 5
@@ -48,10 +52,10 @@ def cluster_dbscan(distance_function, values):
     p = None
     n_jobs = None
 
-    return dbscan(distance_function, values, eps, min_samples,algorithm, leaf_size, p, n_jobs)
+    return lambda distance_function, values: dbscan(distance_function, values, eps, min_samples,algorithm, leaf_size, p, n_jobs)
 
 
-def cluster_optics(distance_function, values):
+def cluster_optics():
     # TODO: ask user for arguments
     min_samples = 5
     max_eps = np.inf
@@ -64,10 +68,10 @@ def cluster_optics(distance_function, values):
     leaf_size = 30
     n_jobs = None
 
-    return optics(distance_function, values, min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, algorithm, leaf_size, n_jobs)
+    return lambda distance_function, values: optics(distance_function, values, min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, algorithm, leaf_size, n_jobs)
 
 
-def cluster_affinity(distance_function, values):
+def cluster_affinity():
     # TODO: ask user for arguments
     damping = 0.5
     max_iter = 200
@@ -77,10 +81,10 @@ def cluster_affinity(distance_function, values):
     verbose = False
     random_state = None
 
-    return affinity(distance_function, values, damping, max_iter, convergence_iter, copy, preference, verbose, random_state)
+    return lambda distance_function, values: affinity(distance_function, values, damping, max_iter, convergence_iter, copy, preference, verbose, random_state)
 
 
-def cluster_spectral(distance_function, values):
+def cluster_spectral():
     # TODO: ask user for arguments
     n_clusters = 8
     eigen_solver = None
@@ -92,7 +96,7 @@ def cluster_spectral(distance_function, values):
     assign_labels = 'kmeans'
     verbose = False
 
-    return spectral(distance_function, values, n_clusters, eigen_solver, n_components, random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
+    return lambda distance_function, values: spectral(distance_function, values, n_clusters, eigen_solver, n_components, random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
 
 
 cluster_algorithms = np.array([
@@ -101,11 +105,11 @@ cluster_algorithms = np.array([
     ["KMedoids",
      cluster_kmedoids],
     ["DBSCAN",
-         cluster_dbscan()],
+         cluster_dbscan],
     ["Optics",
          cluster_optics],
     ["Affinity Propagation",
          cluster_affinity],
     ["Spectral Clustering",
-         cluster_spectral()]
+         cluster_spectral]
 ])
