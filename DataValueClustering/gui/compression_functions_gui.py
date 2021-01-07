@@ -28,10 +28,10 @@ compression_functions = np.array([
     ["No Compression", lambda vals: vals],
 
     ["letters, digits", char_compression_function],
-    ["case_Letters, digits", char_compression_case_sensitive_function],
+    ["case-sensitive letters, digits", char_compression_case_sensitive_function],
     ["letter sequences and digit sequences", sequence_compression_function],
     ["case-sensitive letter sequences and digit sequences", sequence_compression_case_sensitive_function],
-    ["letter_sequences, digits", letter_sequence_compression_function],
+    ["letter sequences, digits", letter_sequence_compression_function],
     ["letters, number sequences", number_sequence_compression_function],
     ["words", word_compression_function],
     ["words and decimal", word_decimal_compression_function],

@@ -105,26 +105,27 @@ question_array = [
     [[],           [12], "special_rest",      "Should all other special characters be treated equally?"]   # 15
 ]
 
+
 replacement_array = [
     # dependencies, not-dependencies, replacement(v)
-    [[1],             [0],   lambda v: v.lower()],
+    [[1],             [0],    lambda v: v.lower()],
     [[0],             [1, 3], lambda v: re.sub("[a-zäöüß]",                                   "l", v)],
     [[0,3],           [1,6],  lambda v: re.sub("[a-zäöüß]+",                                  "s", v)],
     [[0, 3, 6],       [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+",                         "w", v)],
     [[0, 3, 6, 7],    [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v)],
     [[0, 1],          [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]",                             "a", v)],
-    [[0, 1, 4],       [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "a", v)],
+    [[0, 1, 4],       [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "b", v)],
     [[0, 1, 4, 8],    [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+",        "Q", v)],
     [[2],             [1, 5], lambda v: re.sub("[A-ZÄÖÜ]",                                    "L", v)],
     [[2, 5],          [1],    lambda v: re.sub("[A-ZÄÖÜ]+",                                   "S", v)],
 
     [[9],             [10],   lambda v: re.sub("[0-9]",                                       "0", v)],
-    [[9, 10],         [11],   lambda v: re.sub("[0-9]+",                                      "0", v)],
-    [[9, 10, 11],     [],     lambda v: re.sub("[0-9]+,[0-9]+",                               "1", v)],
+    [[9, 10],         [],     lambda v: re.sub("[0-9]+",                                      "1", v)],
+    [[9, 10, 11],     [],     lambda v: re.sub("[0-9]+,[0-9]+",                               "2", v)],
 
     [[13],            [12],   lambda v: re.sub("[\.,:;!\?]",                                  ".", v)],
     [[14],            [12],   lambda v: re.sub("[\(\)\[\]\{\}<>]",                            "(", v)],
-    [[15],            [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "$", v)],
+    [[15],            [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "+", v)],
     [[12],            [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]",                        "$", v)]
 ]
 
@@ -135,7 +136,8 @@ def get_replacement_method(answers, unify_values=True):
         for i in range(len(values)):
             for compr in compressions_list:
                 values[i] = compr(values[i])
-        if unique: values = np.array(list(set(values)))
+        if unique:
+            values = np.array(list(set(values)))
         return values
 
     assert(len(answers) == len(question_array))
