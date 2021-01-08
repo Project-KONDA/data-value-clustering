@@ -14,7 +14,7 @@ def get_clusters_original_values(clusters_compressed, values_compressed, compres
     for k in range(size):
         compression_result = compression_function([values[k]])
         assert len(compression_result) == 1
-        index = values_compressed.index(compression_result[0])
+        index = np.where(values_compressed == compression_result[0])[0][0]
         clusters_original_values[k] = clusters_compressed[index]
     assert max(clusters_original_values) == max(clusters_compressed)
     return clusters_original_values  # one dimensional array
