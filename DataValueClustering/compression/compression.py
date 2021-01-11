@@ -3,7 +3,7 @@ import numpy as np
 
 
 def char_compression_function(values, unify_values=True):
-    # ["[a-zA-Z]", "e"], ["[0-9]",    "0"]
+    # ["[a-zA-Z]", "e"], ["[0-9]", "0"]
     return get_replacement_method(
         [True, True, False, False, False, False, False, False, False,
          True, False, False,
@@ -21,7 +21,7 @@ def char_compression_case_sensitive_function(values, unify_values=True):
 
 
 def sequence_compression_function(values, unify_values=True):
-    # ["[a-zA-Z]+", "f"],  ["[0-9]+",    "1"]
+    # ["[a-zA-Z]+", "f"],  ["[0-9]+", "1"]
     return get_replacement_method(
         [True, True, False, False, True, False, False, False, False,
          True, True, False,
@@ -39,7 +39,7 @@ def sequence_compression_case_sensitive_function(values, unify_values=True):
 
 
 def letter_sequence_compression_function(values, unify_values=True):
-    # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]",  "0"]
+    # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]", "0"]
     return get_replacement_method(
         [True, False, True, True, False, True, False, False, False,
          True, False, False,
@@ -48,7 +48,7 @@ def letter_sequence_compression_function(values, unify_values=True):
 
 
 def number_sequence_compression_function(values, unify_values=True):
-    # ["[a-z]",  "l"], ["[A-Z]",  "L"], ["[0-9]+", "1"]
+    # ["[a-z]", l"], ["[A-Z]", "L"], ["[0-9]+", "1"]
     return get_replacement_method(
         [True, False, True, False, False, False, False, False, False,
          True, True, False,
@@ -57,7 +57,7 @@ def number_sequence_compression_function(values, unify_values=True):
 
 
 def word_compression_function(values, unify_values=True):
-    # ["[a-z]",  "l"], ["[A-Z]",  "L"], ["l+",     "w"], ["LL+",    "M"], ["Lw",     "W"], ["[0-9]+", "1"]
+    # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"]
     return get_replacement_method(
         [True, False, True, True, False, True, True, False, False,
          True, True, False,
@@ -66,7 +66,7 @@ def word_compression_function(values, unify_values=True):
 
 
 def word_decimal_compression_function(values, unify_values=True):
-    # ["[a-z]",  "l"], ["[A-Z]",  "L"], ["l+",     "w"], ["LL+",    "M"], ["Lw",     "W"], ["[0-9]+", "1"], ["1,1",    "2"]
+    # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"], ["1,1", "2"]
     return get_replacement_method(
         [True, False, True, True, False, True, True, False, False,
          True, True, True,
@@ -75,7 +75,7 @@ def word_decimal_compression_function(values, unify_values=True):
 
 
 def word_sequence_compression_function(values, unify_values=True):
-    # ["[a-z]",    "l"], ["[A-Z]",    "L"], ["l+",       "w"], ["LL+",      "M"], ["Lw",       "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"], ["[qU]+",    "V"], ["[0-9]+",   "1"]
+    # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"], ["[qU]+", "V"], ["[0-9]+", "1"]
     return get_replacement_method(
         [True, False, True, True, False, True, True, True, False,
          True, True, False,
@@ -85,48 +85,83 @@ def word_sequence_compression_function(values, unify_values=True):
 
 question_array = [
     # index, dependencies, not-dependencies, name, question
-    [[],           [],   "lower_case",        "Should all lower case letters be treated equally?"],  # 0
-    [[],           [],   "to_lower",          "Should an upper case letter be treated as its lower case variant?"],  # 1
-    [[],           [1],  "upper_case",        "Should all upper case letters be treated equally?"],  # 2
-    [[0],          [1],  "lower_sequence",    "Should all lower case letter sequences (= lower case word) be treated equally?"],  # 3
-    [[0, 1],       [],   "sequence",          "Should all letter sequences be treated equally?"],  # 4
-    [[2],          [1],  "upper_sequence",    "Should all upper case letter sequences be treated equally?"],  # 5
-    [[0, 3],       [1],  "words",             "Should all sequences of upper case words be treated equally?"],  # 6
-    [[0, 3, 6],    [1],  "word_sequence",     "Should all sequences of words be treated equally?"],  # 7
-    [[0, 1, 4],    [],   "sequence_sequence", "Should all sequences of words be treated equally?"],  # 8
+    [[],           [],   "lower_case",
+     "Should all lower case letters be treated equally?"],  # 0
+    [[],           [],   "to_lower",
+     "Should an upper case letter be treated as its lower case variant?"],  # 1
+    [[],           [1],  "upper_case",
+     "Should all upper case letters be treated equally?"],  # 2
+    [[0],          [1],  "lower_sequence",
+     "Should all lower case letter sequences (= lower case word) be treated equally?"],  # 3
+    [[0, 1],       [],   "sequence",
+     "Should all letter sequences be treated equally?"],  # 4
+    [[2],          [1],  "upper_sequence",
+     "Should all upper case letter sequences be treated equally?"],  # 5
+    [[0, 3],       [1],  "words",
+     "Should all sequences of upper case words be treated equally?"],  # 6
+    [[0, 3, 6],    [1],  "word_sequence",
+     "Should all sequences of words be treated equally?"],  # 7
+    [[0, 1, 4],    [],   "sequence_sequence",
+     "Should all sequences of words be treated equally?"],  # 8
 
-    [[],           [],   "digits",            "Should all digits be treated equally?"],  # 9
-    [[9],          [],   "int",               "Should all digit sequences be treated equally?"],  # 10
-    [[9, 10],      [],   "float",             "Should all digit sequences that contain a comma be treated equally?"],  # 11
+    [[],           [],   "digits",
+     "Should all digits be treated equally?"],  # 9
+    [[9],          [],   "int",
+     "Should all digit sequences be treated equally?"],  # 10
+    [[9, 10],      [],   "float",
+     "Should all digit sequences that contain a comma be treated equally?"],  # 11
 
-    [[],           [],   "specials",          "Should all special characters be treated equally?"],  # 12
-    [[],           [12], "punctuation",       "Should all punctuation marks be treated equally?"],  # 13
-    [[],           [12], "brackets",          "Should all bracket characters be treated equally?"],  # 14
-    [[],           [12], "special_rest",      "Should all other special characters be treated equally?"]   # 15
+    [[],           [],   "specials",
+     "Should all special characters be treated equally?"],  # 12
+    [[],           [12], "punctuation",
+     "Should all punctuation marks be treated equally?"],  # 13
+    [[],           [12], "brackets",
+     "Should all bracket characters be treated equally?"],  # 14
+    [[],           [12], "special_rest",
+     "Should all other special characters be treated equally?"]   # 15
 ]
 
 
 replacement_array = [
-    # dependencies, not-dependencies, replacement(v)
-    [[1],             [0],    lambda v: v.lower()],
-    [[0],             [1, 3], lambda v: re.sub("[a-zäöüß]",                                   "l", v)],
-    [[0,3],           [1,6],  lambda v: re.sub("[a-zäöüß]+",                                  "s", v)],
-    [[0, 3, 6],       [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+",                         "w", v)],
-    [[0, 3, 6, 7],    [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v)],
-    [[0, 1],          [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]",                             "a", v)],
-    [[0, 1, 4],       [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "b", v)],
-    [[0, 1, 4, 8],    [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+",        "Q", v)],
-    [[2],             [1, 5], lambda v: re.sub("[A-ZÄÖÜ]",                                    "L", v)],
-    [[2, 5],          [1],    lambda v: re.sub("[A-ZÄÖÜ]+",                                   "S", v)],
+    # dependencies, not-dependencies, replacement(v), function, regex
+    [[1],          [0],    lambda v: v.lower(),
+     'lambda v: v.lower()', "lower case"],
+    [[0],          [1, 3], lambda v: re.sub("[a-zäöüß]",                                   "l", v),
+     'lambda v: re.sub("[a-zäöüß]", "l", v)', "[a-zäöüß]"],
+    [[0,3],        [1, 6], lambda v: re.sub("[a-zäöüß]+","s", v),
+     'lambda v: re.sub("[a-zäöüß]+", "s", v)', "[a-zäöüß]+"],
+    [[0, 3, 6],    [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+","w", v),
+     'lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+", "w", v)', "[A-ZÄÖÜ]?[a-zäöüß]+"],
+    [[0, 3, 6, 7], [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v),
+     'lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v)', "([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+"],
+    [[0, 1],       [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]",                             "a", v),
+     'lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]","a", v)', "[a-zäöüßA-ZÄÖÜ]"],
+    [[0, 1, 4],    [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "b", v),
+     'lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "b", v)', "[a-zäöüßA-ZÄÖÜ]+"],
+    [[0, 1, 4, 8], [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+",        "Q", v),
+     'lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+",        "Q", v)', "([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+"],
+    [[2],          [1, 5], lambda v: re.sub("[A-ZÄÖÜ]",                                    "L", v),
+     'lambda v: re.sub("[A-ZÄÖÜ]",                                    "L", v)', "[A-ZÄÖÜ]"],
+    [[2, 5],       [1],    lambda v: re.sub("[A-ZÄÖÜ]+",                                   "S", v),
+     'lambda v: re.sub("[A-ZÄÖÜ]+",                                   "S", v)', "[A-ZÄÖÜ]+"                                  ],
 
-    [[9],             [10],   lambda v: re.sub("[0-9]",                                       "0", v)],
-    [[9, 10],         [],     lambda v: re.sub("[0-9]+",                                      "1", v)],
-    [[9, 10, 11],     [],     lambda v: re.sub("[0-9]+,[0-9]+",                               "2", v)],
 
-    [[13],            [12],   lambda v: re.sub("[\.,:;!\?]",                                  ".", v)],
-    [[14],            [12],   lambda v: re.sub("[\(\)\[\]\{\}<>]",                            "(", v)],
-    [[15],            [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "+", v)],
-    [[12],            [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]",                        "$", v)]
+    [[9],          [10],   lambda v: re.sub("[0-9]",                                       "0", v),
+     'lambda v: re.sub("[0-9]",                                       "0", v)', "[0-9]"                                      ],
+    [[9, 10],      [],     lambda v: re.sub("[0-9]+",                                      "1", v),
+     'lambda v: re.sub("[0-9]+",                                      "1", v)', "[0-9]+"                                     ],
+    [[9, 10, 11],  [],     lambda v: re.sub("[0-9]+,[0-9]+",                               "2", v),
+     'lambda v: re.sub("[0-9]+,[0-9]+",                               "2", v)', "[0-9]+,[0-9]+"                              ],
+
+
+    [[13],         [12],   lambda v: re.sub("[\.,:;!\?]",                                  ".", v),
+     'lambda v: re.sub("[\.,:;!\?]",                                  ".", v)', "[\.,:;!\?]"                                 ],
+    [[14],         [12],   lambda v: re.sub("[\(\)\[\]\{\}<>]",                            "(", v),
+     'lambda v: re.sub("[\(\)\[\]\{\}<>]",                            "(", v)', "[\(\)\[\]\{\}<>]"                           ],
+    [[15],         [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "+", v),
+     'lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "+", v)', "[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]" ],
+    [[12],         [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]",                        "$", v),
+     'lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]",                        "$", v)', "[^a-zäöüßA-ZÄÖÜ0-9 ]"                       ]
 ]
 
 
