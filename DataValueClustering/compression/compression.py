@@ -139,13 +139,13 @@ question_array = [
      "'118,43' and '0,5' will be treated equally since both consist of two digit sequences separated by a comma"],  # 11
 
     [[],           [],   "specials",
-     "Should all special characters be treated equally?",
-     "",
-     "'' and '' will be treated equally"],  # 12
+     "Should all characters that are not letters or digits be treated equally?",
+     "Choose yes if the concrete character does not have a crucial impact on the meaning.",
+     "'/' and '?' will be treated equally since both are neither a letter nor a digit"],  # 12
     [[],           [12], "punctuation",
      "Should all punctuation marks be treated equally?",
-     "",
-     "'' and '' will be treated equally"],  # 13
+     "Choose yes if ...",
+     "'.' and '?' will be treated equally"],  # 13
     [[],           [12], "brackets",
      "Should all bracket characters be treated equally?",
      "",
