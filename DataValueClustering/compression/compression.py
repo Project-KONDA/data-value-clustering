@@ -83,42 +83,90 @@ def word_sequence_compression_function(values, unify_values=True):
         unify_values)(values)
 
 
+
+
+
 question_array = [
-    # index, dependencies, not-dependencies, name, question
+    # index, dependencies, not-dependencies, name, question, explanation, example
     [[],           [],   "lower_case",
-     "Should all lower case letters be treated equally?"],  # 0
+     "Should all lower case letters be treated equally?",  # TODO: ask if there are exceptions
+     "Choose yes if the concrete lower case letter present does not have a crucial impact on the meaning.",
+     "'face' and 'tree' will be treated equally since both consist of four lower case letters"],  # 0
     [[],           [],   "to_lower",
-     "Should an upper case letter be treated as its lower case variant?"],  # 1
+     "Should an upper case letter be treated as its lower case variant?",
+     "Choose yes if the capitalization does not have a crucial impact on the meaning.",
+     "'Painting' and 'painting' will be treated equally since the only difference is the capitalization of 'p'"],  # 1
     [[],           [1],  "upper_case",
-     "Should all upper case letters be treated equally?"],  # 2
+     "Should all upper case letters be treated equally?",  # TODO: ask if there are exceptions
+     "Choose yes if the concrete upper case letter present does not have a crucial impact on the meaning.",
+     "'USA' and 'DDR' will be treated equally since both consist of three upper case letters"],  # 2
     [[0],          [1],  "lower_sequence",
-     "Should all lower case letter sequences (= lower case word) be treated equally?"],  # 3
+     "Should all lower case letter sequences (= lower case word) be treated equally?",
+     "Choose yes if the length of lower case letter sequences does not have a crucial impact on the meaning or if you expect lower case letter sequences of heterogeneous length.",
+     "'red' and 'architecture' will be treated equally since both consist of a sequence of lower case letters"],  # 3
     [[0, 1],       [],   "sequence",
-     "Should all letter sequences be treated equally?"],  # 4
+     "Should all letter sequences be treated equally?",
+     "Choose yes if the length of lower, upper or mixed case letter sequences does not have a crucial impact on the meaning or if you expect such letter sequences of heterogeneous length.",
+     "'Portrait' and 'USA' will be treated equally since both consist of a sequence of lower, upper or mixed case letters"],  # 4
     [[2],          [1],  "upper_sequence",
-     "Should all upper case letter sequences be treated equally?"],  # 5
+     "Should all upper case letter sequences be treated equally?",
+     "Choose yes if the length of upper case letter sequences does not have a crucial impact on the meaning or if you expect upper case letter sequences of heterogeneous length.",
+     "'EU' and 'USA' will be treated equally since both consist of a sequence of upper case letters"],  # 5
     [[0, 3],       [1],  "words",
-     "Should all sequences of upper case words be treated equally?"],  # 6
+     "Should all lower and upper case words be treated equally?",
+     "Choose yes if the capitalization of the first letter of a word does not have a crucial impact on the meaning.",
+     "'Portrait' and 'child' will be treated equally since both are words"],  # 6
     [[0, 3, 6],    [1],  "word_sequence",
-     "Should all sequences of words be treated equally?"],  # 7
+     "Should all sequences of lower or upper case words seperated by a blank space be treated equally?",
+     "Choose yes if the length of sequences of lower or upper case words does not have a crucial impact on the meaning or if you expect sequences of lower or upper case words of heterogeneous length.",
+     "'in Marburg' and 'brother or father' will be treated equally since both are sequences of words seperated by a blank space"],  # 7
     [[0, 1, 4],    [],   "sequence_sequence",
-     "Should all sequences of words be treated equally?"],  # 8
+     "Should all sequences of lower, upper or mixed case letter sequences seperated by a blank space be treated equally?",
+     "Choose yes if the length of sequences of lower, upper or mixed case letter sequences does not have a crucial impact on the meaning or if you expect sequences of lower, upper or mixed case letter sequences of heterogeneous length.",
+     "'in USA' and 'around or in Marburg' will be treated equally since both are sequences of letter sequences seperated by a blank"],  # 8
 
     [[],           [],   "digits",
-     "Should all digits be treated equally?"],  # 9
+     "Should all digits be treated equally?",  # TODO: ask if there are exceptions
+     "Choose yes if the concrete digit does not have a crucial impact on the meaning.",
+     "'1' and '2' will be treated equally since both are digits"],  # 9
     [[9],          [],   "int",
-     "Should all digit sequences be treated equally?"],  # 10
+     "Should all digit sequences be treated equally?",
+     "Choose yes if the length of digit sequences does not have a crucial impact on the meaning or if you expect digit sequences of heterogeneous length.",
+     "'1' and '1024' will be treated equally since both are digit sequences"],  # 10
     [[9, 10],      [],   "float",
-     "Should all digit sequences that contain a comma be treated equally?"],  # 11
+     "Should all pairs of digit sequences separated by a comma be treated equally?",
+     "Choose yes if the length of digit sequences preceding and following a comma does not have a crucial impact on the meaning or if you expect pairs of digit sequences separated by a comma of heterogeneous length.",
+     "'118,43' and '0,5' will be treated equally since both consist of two digit sequences separated by a comma"],  # 11
 
     [[],           [],   "specials",
-     "Should all special characters be treated equally?"],  # 12
+     "Should all special characters be treated equally?",
+     "",
+     "'' and '' will be treated equally"],  # 12
     [[],           [12], "punctuation",
-     "Should all punctuation marks be treated equally?"],  # 13
+     "Should all punctuation marks be treated equally?",
+     "",
+     "'' and '' will be treated equally"],  # 13
     [[],           [12], "brackets",
-     "Should all bracket characters be treated equally?"],  # 14
+     "Should all bracket characters be treated equally?",
+     "",
+     "'' and '' will be treated equally"],  # 14
     [[],           [12], "special_rest",
-     "Should all other special characters be treated equally?"]   # 15
+     "Should all other special characters be treated equally?",
+     "",
+     "'' and '' will be treated equally"]   # 15
+]
+
+
+dictionary = [
+    # term, definition
+    ["letter", "[a-zäöüßA-ZÄÖÜ]"],
+    ["lower case letter", "[a-zäöüß]"],
+    ["upper case letter", "[A-ZÄÖÜ]"],
+    ["word", "[A-ZÄÖÜ]?[a-zäöüß]+"],
+    ["lower case word (= lower case letter sequence)", "[a-zäöüß]+"],
+    ["upper case word", "[A-ZÄÖÜ][a-zäöüß]+"],
+    ["upper case letter sequence", "[A-ZÄÖÜ]+"],
+    ["letter sequence", "[a-zäöüßA-ZÄÖÜ]+"],
 ]
 
 
