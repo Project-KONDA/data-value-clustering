@@ -83,9 +83,6 @@ def word_sequence_compression_function(values, unify_values=True):
         unify_values)(values)
 
 
-
-
-
 question_array = [
     # index, dependencies, not-dependencies, name, question, explanation, example
     [[],           [],   "lower_case",
@@ -148,14 +145,21 @@ question_array = [
      "'.' and '?' will be treated equally"],  # 13
     [[],           [12], "brackets",
      "Should all bracket characters be treated equally?",
-     "",
-     "'' and '' will be treated equally"],  # 14
+     "Choose yes if ...",
+     "'{' and )'' will be treated equally"],  # 14
+    [[], [12], "math_characters",
+     "Should all mathematical operators be treated equally?",
+     "Choose yes if ...",
+     "'+' and '&' will be treated equally"],  # 15
+    [[],           [12], "quotation_marks",
+     "Should all quotation_marks be treated equally",
+     "Choose yes if ...",
+     "'\"'' and ''' will be treated equally"],  # 16
     [[],           [12], "special_rest",
      "Should all other special characters be treated equally?",
-     "",
-     "'' and '' will be treated equally"]   # 15
+     "Choose yes if ...",
+     "'$' and 'µ' will be treated equally"]   # 17
 ]
-
 
 dictionary = [
     # term, definition
@@ -169,52 +173,33 @@ dictionary = [
     ["letter sequence", "[a-zäöüßA-ZÄÖÜ]+"],
 ]
 
-
 replacement_array = [
-    # dependencies, not-dependencies, replacement(v), function, regex
-    [[1],          [0],    lambda v: v.lower(),
-     'lambda v: v.lower()', "lower case"],
-    [[0],          [1, 3], lambda v: re.sub("[a-zäöüß]",                                   "l", v),
-     'lambda v: re.sub("[a-zäöüß]", "l", v)', "[a-zäöüß]"],
-    [[0,3],        [1, 6], lambda v: re.sub("[a-zäöüß]+","s", v),
-     'lambda v: re.sub("[a-zäöüß]+", "s", v)', "[a-zäöüß]+"],
-    [[0, 3, 6],    [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+","w", v),
-     'lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+", "w", v)', "[A-ZÄÖÜ]?[a-zäöüß]+"],
-    [[0, 3, 6, 7], [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v),
-     'lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v)', "([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+"],
-    [[0, 1],       [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]",                             "a", v),
-     'lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]","a", v)', "[a-zäöüßA-ZÄÖÜ]"],
-    [[0, 1, 4],    [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "b", v),
-     'lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+",                            "b", v)', "[a-zäöüßA-ZÄÖÜ]+"],
-    [[0, 1, 4, 8], [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+",        "Q", v),
-     'lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+",        "Q", v)', "([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+"],
-    [[2],          [1, 5], lambda v: re.sub("[A-ZÄÖÜ]",                                    "L", v),
-     'lambda v: re.sub("[A-ZÄÖÜ]",                                    "L", v)', "[A-ZÄÖÜ]"],
-    [[2, 5],       [1],    lambda v: re.sub("[A-ZÄÖÜ]+",                                   "S", v),
-     'lambda v: re.sub("[A-ZÄÖÜ]+",                                   "S", v)', "[A-ZÄÖÜ]+"                                  ],
+    # dependencies, not-dependencies, replacement(v), regex
+    [[1],           [0],    lambda v: v.lower(),                                                                    "lower case"],  # 0
+    [[0],           [1, 3], lambda v: re.sub("[a-zäöüß]", "l", v),                                                  "[a-zäöüß]"],  # 1
+    [[0, 3],        [1, 6], lambda v: re.sub("[a-zäöüß]+", "s", v),                                                 "[a-zäöüß]+"],  # 2
+    [[0, 3, 6],     [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+", "w", v),                                        "[A-ZÄÖÜ]?[a-zäöüß]+"],  # 3
+    [[0, 3, 6, 7],  [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v),                "([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+"],  # 4
+    [[0, 1],        [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]", "a", v),                                            "[a-zäöüßA-ZÄÖÜ]"],  # 5
+    [[0, 1, 4],     [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+", "b", v),                                           "[a-zäöüßA-ZÄÖÜ]+"],  # 6
+    [[0, 1, 4, 8],  [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+", "Q", v),                       "([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+"],  # 7
+    [[2],           [1, 5], lambda v: re.sub("[A-ZÄÖÜ]", "L", v),                                                   "[A-ZÄÖÜ]"],  # 8
+    [[2, 5],        [1],    lambda v: re.sub("[A-ZÄÖÜ]+", "S", v),                                                  "[A-ZÄÖÜ]+"],  # 9
 
+    [[9],           [10],   lambda v: re.sub("[0-9]", "0", v),                                                      "[0-9]"],  # 10
+    [[9, 10],       [],     lambda v: re.sub("[0-9]+", "1", v),                                                     "[0-9]+"],  # 11
+    [[9, 10, 11],   [],     lambda v: re.sub("[0-9]+,[0-9]+", "2", v),                                              "[0-9]+,[0-9]+"],  # 12
 
-    [[9],          [10],   lambda v: re.sub("[0-9]",                                       "0", v),
-     'lambda v: re.sub("[0-9]",                                       "0", v)', "[0-9]"                                      ],
-    [[9, 10],      [],     lambda v: re.sub("[0-9]+",                                      "1", v),
-     'lambda v: re.sub("[0-9]+",                                      "1", v)', "[0-9]+"                                     ],
-    [[9, 10, 11],  [],     lambda v: re.sub("[0-9]+,[0-9]+",                               "2", v),
-     'lambda v: re.sub("[0-9]+,[0-9]+",                               "2", v)', "[0-9]+,[0-9]+"                              ],
-
-
-    [[13],         [12],   lambda v: re.sub("[\.,:;!\?]",                                  ".", v),
-     'lambda v: re.sub("[\.,:;!\?]",                                  ".", v)', "[\.,:;!\?]"                                 ],
-    [[14],         [12],   lambda v: re.sub("[\(\)\[\]\{\}<>]",                            "(", v),
-     'lambda v: re.sub("[\(\)\[\]\{\}<>]",                            "(", v)', "[\(\)\[\]\{\}<>]"                           ],
-    [[15],         [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "+", v),
-     'lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]",  "+", v)', "[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}<>]" ],
-    [[12],         [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]",                        "$", v),
-     'lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]",                        "$", v)', "[^a-zäöüßA-ZÄÖÜ0-9 ]"                       ]
+    [[13],          [12],   lambda v: re.sub("[\.,:;!\?]", ".", v),                                                 "[\.,:;!\?]"],  # 13
+    [[14],          [12],   lambda v: re.sub("[\(\)\[\]\{\}]", "(", v),                                             "[\(\)\[\]\{\}]"],  # 14
+    [[15],          [12],   lambda v: re.sub("[\+\-\*/%=<>\&\|]", "+", v),                                          "[\+\-\*/%=<>\&\|]"],  # 15
+    [[16],          [12],   lambda v: re.sub("[\"`´']", "´", v),                                                    "[\"`´']"],  # 16
+    [[17],          [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]", "_", v),    "[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]"],  # 17
+    [[12],          [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]", "$", v), '',                                   "[^a-zäöüßA-ZÄÖÜ0-9 ]"]  # 18
 ]
 
 
 def get_replacement_method(answers, unify_values=True):
-
     def local_func(values, compressions_list, unique):
         for i in range(len(values)):
             for compr in compressions_list:
@@ -223,14 +208,14 @@ def get_replacement_method(answers, unify_values=True):
             values = np.array(list(set(values)))
         return values
 
-    assert(len(answers) == len(question_array))
+    assert (len(answers) == len(question_array))
     compression_list = list()
     for replacement in replacement_array:
         apply = True
         for dep in replacement[0]:  # check positive dependencies
             apply = apply and answers[dep]
         for not_dep in replacement[1]:  # check negative dependencies
-            apply = apply and not(answers[not_dep])
+            apply = apply and not (answers[not_dep])
         if apply: compression_list.append(replacement[2])
 
     return lambda values: local_func(values, compression_list, unify_values)
