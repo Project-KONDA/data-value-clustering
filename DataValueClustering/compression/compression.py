@@ -86,7 +86,7 @@ def word_sequence_compression_function(values, unify_values=True):
 question_array = [
     # index, dependencies, not-dependencies, name, question, explanation, example
     [[],           [],   "lower_case",
-     "Should all lower case letters be treated equally?",  # TODO: ask if there are exceptions
+     "Should all lower case letters be treated equally?",  # TODO: ask if there are exceptions?
      "Choose yes if the concrete lower case letter present does not have a crucial impact on the meaning.",
      "'face' and 'tree' will be treated equally since both consist of four lower case letters"],  # 0
     [[],           [],   "to_lower",
@@ -94,7 +94,7 @@ question_array = [
      "Choose yes if the capitalization does not have a crucial impact on the meaning.",
      "'Painting' and 'painting' will be treated equally since the only difference is the capitalization of 'p'"],  # 1
     [[],           [1],  "upper_case",
-     "Should all upper case letters be treated equally?",  # TODO: ask if there are exceptions
+     "Should all upper case letters be treated equally?",  # TODO: ask if there are exceptions?
      "Choose yes if the concrete upper case letter present does not have a crucial impact on the meaning.",
      "'USA' and 'DDR' will be treated equally since both consist of three upper case letters"],  # 2
     [[0],          [1],  "lower_sequence",
@@ -141,24 +141,24 @@ question_array = [
      "'/' and '?' will be treated equally since both are neither a letter nor a digit"],  # 12
     [[],           [12], "punctuation",
      "Should all punctuation marks be treated equally?",
-     "Choose yes if ...",
-     "'.' and '?' will be treated equally"],  # 13
+     "Choose yes if the concrete punctuation mark does not have a crucial impact on the meaning.",
+     "'.' and '?' will be treated equally since both are punctuation marks"],  # 13
     [[],           [12], "brackets",
      "Should all bracket characters be treated equally?",
-     "Choose yes if ...",
-     "'{' and )'' will be treated equally"],  # 14
+     "Choose yes if the concrete bracket character does not have a crucial impact on the meaning.",
+     "'{' and )'' will be treated equally since both are bracket characters"],  # 14
     [[], [12], "math_characters",
-     "Should all mathematical operators be treated equally?",
-     "Choose yes if ...",
-     "'+' and '&' will be treated equally"],  # 15
+     "Should all mathematical characters (i.e. '+','-','*','/', '%', '=', '<', '>', '&', '|') be treated equally?",
+     "Choose yes if the concrete mathematical character does not have a crucial impact on the meaning.",
+     "'+' and '&' will be treated equally since both are mathematical characters"],  # 15
     [[],           [12], "quotation_marks",
-     "Should all quotation_marks be treated equally",
-     "Choose yes if ...",
-     "'\"'' and ''' will be treated equally"],  # 16
+     "Should all quotation marks be treated equally?",
+     "Choose yes if the concrete quotation mark does not have a crucial impact on the meaning.",
+     "'\"'' and ''' will be treated equally since both are quotation marks"],  # 16
     [[],           [12], "special_rest",
      "Should all other special characters be treated equally?",
-     "Choose yes if ...",
-     "'$' and 'µ' will be treated equally"]   # 17
+     "Choose yes if the concrete specical character does not have a crucial impact on the meaning.",
+     "'$' and 'µ' will be treated equally since both are specical characters"]   # 17
 ]
 
 dictionary = [
