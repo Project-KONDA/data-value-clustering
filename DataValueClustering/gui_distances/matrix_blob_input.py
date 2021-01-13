@@ -1,5 +1,5 @@
 from math import sin, cos, radians, sqrt
-from tkinter import Tk, Button, Canvas
+from tkinter import Tk, Button, Canvas, PhotoImage
 
 import numpy as np
 
@@ -13,6 +13,7 @@ class Blob:
         self.y = y
         self.size = size
         self.oval = self.create_oval("white")
+        # self.image = self.create_image()
 
     # size of a blob
     def get_size(self):
@@ -29,6 +30,7 @@ class Blob:
         self.x += dx
         self.y += dy
         self.canvas.move(self.oval, dx, dy)
+        # self.canvas.move(self.image, dx, dy)
 
     def set_position(self, x=0, y=0):
         self.x = x
@@ -51,12 +53,17 @@ class Blob:
             tags=("token",),
         )
 
+    def create_image(self):
+        image = PhotoImage(file='...')  # TODO
+        return self.canvas.create_image(50, 50, image=image, anchor='center')
+
 
 class BlobInput:
 
-    def __init__(self, labels):
+    def __init__(self, chars_labels):
 
-        self.labels = labels
+        self.labels = chars_labels[:, 1]
+        self.chars = chars_labels[:, 0]
 
         self.root = Tk()
         self.root.title('Distance Specification')
@@ -87,7 +94,7 @@ class BlobInput:
         #print(self.coordinates)
 
         # build blobs
-        self.blobs = np.empty(len(labels), dtype=Blob)
+        self.blobs = np.empty(len(chars_labels), dtype=Blob)
         for i, c in enumerate(self.coordinates):
             self.blobs[i] = Blob(self.root, self.canvas, c[0], c[1], c[2], c[3])
 
@@ -155,16 +162,18 @@ class BlobInput:
         distance_map = {(()): 1.}
 
         for i, l in enumerate(self.labels):
-            distance_map[i] = l
+            distance_map[(i)] = "[^" + self.chars[i] + "$]"
+
+        # TODO: costs for insertion (:,0) and deletion (0,:)
 
         for i, label_i in enumerate(self.labels):
             for j, label_j in enumerate(self.labels):
                 if i == j:
                     # (i,j), i==j -> blobsize(i)
-                    distance_map[(i, i)] = self.blobs[i].get_size()
+                    distance_map[(i+1, i+1)] = self.blobs[i].get_size()
                 else:
                     # (i,j), i!=j -> distance ( blob(i), blob(j) )
-                    distance_map[(i, j)] = self.blobs[i].get_distance(blob=self.blobs[j])
+                    distance_map[(i+1, j+1)] = self.blobs[i].get_distance(blob=self.blobs[j])
 
         return distance_map
 
