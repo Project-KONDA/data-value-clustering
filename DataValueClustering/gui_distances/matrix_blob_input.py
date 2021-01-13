@@ -182,5 +182,5 @@ class BlobInput:
 
 
 if __name__ == '__main__':
-    names = ["Blib", "Blab", "Blob", "Blub", "Blöb", "Bläb", "Blüb"]
+    names = np.array([["1", "Blib"], ["2", "Blab"], ["3", "Blob"], ["4", "Blub"], ["5", "Blöb"], ["6", "Bläb"], ["7", "Blüb"]], dtype=object)
     print(str(BlobInput(names).get()))
