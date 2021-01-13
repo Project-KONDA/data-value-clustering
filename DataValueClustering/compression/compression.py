@@ -174,32 +174,32 @@ dictionary = [
 ]
 
 replacement_array = [
-    # dependencies, not-dependencies, replacement(v), regex
-    [[1],           [0],    lambda v: v.lower(),                                                                 "↓", "lower case"],  # 0
-    [[0],           [1, 3], lambda v: re.sub("[a-zäöüß]", "l", v),                                               "l", "[a-zäöüß]"],  # 1
-    [[0, 3],        [1, 6], lambda v: re.sub("[a-zäöüß]+", "s", v),                                              "s", "[a-zäöüß]+"],  # 2
-    [[0, 3, 6],     [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+", "w", v),                                     "w", "[A-ZÄÖÜ]?[a-zäöüß]+"],  # 3
-    [[0, 3, 6, 7],  [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v),             "q", "([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+"],  # 4
-    [[0, 1],        [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]", "a", v),                                         "a", "[a-zäöüßA-ZÄÖÜ]"],  # 5
-    [[0, 1, 4],     [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+", "b", v),                                        "b", "[a-zäöüßA-ZÄÖÜ]+"],  # 6
-    [[0, 1, 4, 8],  [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+", "Q", v),                    "Q", "([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+"],  # 7
-    [[2],           [1, 5], lambda v: re.sub("[A-ZÄÖÜ]", "L", v),                                                "L", "[A-ZÄÖÜ]"],  # 8
-    [[2, 5],        [1],    lambda v: re.sub("[A-ZÄÖÜ]+", "S", v),                                               "S", "[A-ZÄÖÜ]+"],  # 9
+    # dependencies, not-dependencies, replacement function, replacement char, label, regex
+    [[1],           [0],    lambda v: v.lower(),                                                                 "↓",   "",                             "lower_case"],  # 0
+    [[0],           [1, 3], lambda v: re.sub("[a-zäöüß]", "l", v),                                               "l",   "lower_case_letters",           "[a-zäöüß]"],  # 1
+    [[0, 3],        [1, 6], lambda v: re.sub("[a-zäöüß]+", "s", v),                                              "s",   "lower_case_words",             "[a-zäöüß]+"],  # 2
+    [[0, 3, 6],     [1, 7], lambda v: re.sub("[A-ZÄÖÜ]?[a-zäöüß]+", "w", v),                                     "w",   "words",                        "[A-ZÄÖÜ]?[a-zäöüß]+"],  # 3
+    [[0, 3, 6, 7],  [1],    lambda v: re.sub("([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+", "q", v),             "q",   "word_sequences",               "([A-ZÄÖÜ]?[a-zäöüß]+ )* [A-ZÄÖÜ]?[a-zäöüß]+"],  # 4
+    [[0, 1],        [4],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]", "a", v),                                         "a",   "letters",                      "[a-zäöüßA-ZÄÖÜ]"],  # 5
+    [[0, 1, 4],     [8],    lambda v: re.sub("[a-zäöüßA-ZÄÖÜ]+", "b", v),                                        "b",   "letter_sequences",             "[a-zäöüßA-ZÄÖÜ]+"],  # 6
+    [[0, 1, 4, 8],  [],     lambda v: re.sub("([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+", "Q", v),                    "Q",   "letter_sequence_sequences",    "([a-zäöüßA-ZÄÖÜ]+ )*[a-zäöüßA-ZÄÖÜ]+"],  # 7
+    [[2],           [1, 5], lambda v: re.sub("[A-ZÄÖÜ]", "L", v),                                                "L",   "upper_case_letters",           "[A-ZÄÖÜ]"],  # 8
+    [[2, 5],        [1],    lambda v: re.sub("[A-ZÄÖÜ]+", "S", v),                                               "S",   "upper_case_letter_sequences",  "[A-ZÄÖÜ]+"],  # 9
 
-    [[9],           [10],   lambda v: re.sub("[0-9]", "0", v),                                                   "0", "[0-9]"],  # 10
-    [[9, 10],       [],     lambda v: re.sub("[0-9]+", "1", v),                                                  "1", "[0-9]+"],  # 11
-    [[9, 10, 11],   [],     lambda v: re.sub("[0-9]+,[0-9]+", "2", v),                                           "2", "[0-9]+,[0-9]+"],  # 12
+    [[9],           [10],   lambda v: re.sub("[0-9]", "0", v),                                                   "0",   "digits",                       "[0-9]"],  # 10
+    [[9, 10],       [],     lambda v: re.sub("[0-9]+", "1", v),                                                  "1",   "integers",                     "[0-9]+"],  # 11
+    [[9, 10, 11],   [],     lambda v: re.sub("[0-9]+,[0-9]+", "2", v),                                           "2",   "floats",                       "[0-9]+,[0-9]+"],  # 12
 
-    [[13],          [12],   lambda v: re.sub("[\.,:;!\?]", ".", v),                                              ".", "[\.,:;!\?]"],  # 13
-    [[14],          [12],   lambda v: re.sub("[\(\)\[\]\{\}]", "(", v),                                          "(", "[\(\)\[\]\{\}]"],  # 14
-    [[15],          [12],   lambda v: re.sub("[\+\-\*/%=<>\&\|]", "+", v),                                       "+", "[\+\-\*/%=<>\&\|]"],  # 15
-    [[16],          [12],   lambda v: re.sub("[\"`´']", "´", v),                                                 "`", "[\"`´']"],  # 16
-    [[17],          [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]", "_", v), "_", "[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]"],  # 17
-    [[12],          [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]", "$", v), '',                                "$", "[^a-zäöüßA-ZÄÖÜ0-9 ]"]  # 18
+    [[13],          [12],   lambda v: re.sub("[\.,:;!\?]", ".", v),                                              "\.",   "punctuation_marks",            "[\.,:;!\?]"],  # 13
+    [[14],          [12],   lambda v: re.sub("[\(\)\[\]\{\}]", "(", v),                                          "\(",   "brackets",                     "[\(\)\[\]\{\}]"],  # 14
+    [[15],          [12],   lambda v: re.sub("[\+\-\*/%=<>\&\|]", "+", v),                                       "\+",   "math_operators",               "[\+\-\*/%=<>\&\|]"],  # 15
+    [[16],          [12],   lambda v: re.sub("[\"`´']", "\"", v),                                                "\"",   "quotation_marks",              "[\"`´']"],  # 16
+    [[17],          [12],   lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]", "_", v), "_",    "other_characters",             "[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]"],  # 17
+    [[12],          [],     lambda v: re.sub("[^a-zäöüßA-ZÄÖÜ0-9 ]", "$", v), '',                                "\$",   "special_characters",           "[^a-zäöüßA-ZÄÖÜ0-9 ]"]  # 18
 ]
 
 
-def get_replacement_method(answers, unify_values=True):
+def get_replacement_method(applicable_replacements, unify_values=True):
     def local_func(values, compressions_list, unique):
         for i in range(len(values)):
             for compr in compressions_list:
@@ -208,14 +208,41 @@ def get_replacement_method(answers, unify_values=True):
             values = np.array(list(set(values)))
         return values
 
+    compressions = applicable_replacements[:, 2]
+
+    return lambda values: local_func(values, compressions, unify_values)
+
+
+def get_regex_labels_map(applicable_replacements):
+    # labels = applicable_replacements[:,4]
+    # chars = applicable_replacements[:,3]
+    # map = {}
+    # for i in range(1, len(labels)):
+    #     map[chars[i]] = labels[i]
+    # return map
+    return applicable_replacements[1:, 3:5]
+
+
+def get_applicable_replacements(answers):
     assert (len(answers) == len(question_array))
-    compression_list = list()
+    result = list()
     for replacement in replacement_array:
         apply = True
         for dep in replacement[0]:  # check positive dependencies
             apply = apply and answers[dep]
         for not_dep in replacement[1]:  # check negative dependencies
             apply = apply and not (answers[not_dep])
-        if apply: compression_list.append(replacement[2])
+        if apply:
+            result.append(replacement)
+    return np.array(result, dtype=object)
 
-    return lambda values: local_func(values, compression_list, unify_values)
+
+if __name__ == '__main__':
+    r = get_applicable_replacements(
+        [True, True, False, False, True, False, False, False, False,
+         True, True, False,
+         False, False, False, False, False, False],
+        )
+    print(r)
+    print(r[:,2])
+    print("[^" + get_regex_labels_map(r)[0,0] + "$]")
