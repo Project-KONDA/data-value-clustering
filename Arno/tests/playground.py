@@ -15,7 +15,41 @@ def b(f, v):
     return f(1) + v
 
 
+def myescape2(s, debug=False):
+    if debug: print('start: ' + s)
+    s = re.escape(s)
+    if debug: print('escaped: ' + s)
+    regex = '(' + '[a-z]\\\-[a-z]' + '|' + '[A-Z]\\\-[A-Z]' + '|' + '[0-9]\\\-[0-9]' + ')'
+
+    if debug: print(re.search(regex, s))
+    while re.search(regex, s) != None:
+        match = re.search(regex, s)
+        if debug:
+            print('match: ' + str(match))
+            m = match.group()
+            if debug: print('  ' + str(match) + ' ' + m)
+            m2 = m.replace("\-", "-")
+            if debug: print('  replace ' + m + ' with ' + str(m2))
+            print('    from ' + s)
+            s = s.replace(m, m2)
+            print('    to   ' + s)
+    if debug: print('result: ' + s)
+    return s
+
+    def myescape(s):
+        s = re.escape(s)
+        regex = '(' + '[a-z]\\\-[a-z]' + '|' + '[A-Z]\\\-[A-Z]' + '|' + '[0-9]\\\-[0-9]' + ')'
+        match = re.search(regex, s)
+        while match != None:
+            m2 = match.group().replace("\-", "-")
+            s = s.replace(match.group(), m2)
+            match = re.search(regex, s)
+        return s
+
+
 if __name__ == '__main__':
+    s = "\"`´'"
+    print("[" + re.escape(s) + "]")
     # d = {}
     # for i in range(-1, 2):
     #    for j in range(-1, 2):
@@ -41,6 +75,12 @@ if __name__ == '__main__':
     # print(not list)
     # list.append(2)
     # print(not list)
-    v = np.zeros((2, 2))
-    v[1,0] = 1
-    print(len(list(set(data_test[0:100]))))
+    # v = np.zeros((2, 2))
+    # v[1,0] = 1
+    # print(len(list(set(data_test[0:100]))))
+
+    # start = "a-ba-dsd-f--+d-f-*/-"
+    # goal = "a-ba-dsd-f\-\-\+d-f\-\*/\-"
+    #
+    # result = myescape(start)
+    # print(result == goal)

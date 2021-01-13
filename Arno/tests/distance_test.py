@@ -4,7 +4,7 @@ from distance_functions.weighted_levenshtein_distance import levenshtein_distanc
 
 lt = np.array([
     ["", "", "", "a"],
-    #["a", "ab", "a", "nc"],
+    # ["a", "ab", "a", "nc"],
     ["a", "c", "a", "1"],
     ["a", "A", "a", "1"],
     ["a", "B", "a", "1"],

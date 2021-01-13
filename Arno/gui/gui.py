@@ -32,7 +32,7 @@ class ClusterApp():
         Label(self.root, text="Cluster: ").grid(row=3, column=0)
         OptionMenu(self.root, output[3], *self.input[3]).grid(row=3, column=1)
 
-        button = Button(self.root, text='OK', command=lambda:self.end(self))
+        button = Button(self.root, text='OK', command=lambda: self.end(self))
         button.grid(row=5, column=0)
 
         Label(self.root, text=self.looping).grid(row=5, column=2)

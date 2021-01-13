@@ -33,7 +33,7 @@ def output_Matrix():
     # print(d)
 
 
-def copyToColumn(i):
+def copy_to_column(i):
     if type(regex[i]) is Entry and type(label[i]) is Label:
         text = regex[i].get()
         label_text[i] = text
@@ -41,19 +41,19 @@ def copyToColumn(i):
     return True
 
 
-def testVal(inStr, acttyp):
+def test_val(text, acttyp):
     if acttyp == '1':  # insert
-        if not inStr.isdigit():
+        if not text.isdigit():
             return False
     return True
 
 
-def recordmatrix():
+def record_matrix():
     # root = Tk()
     root.title("Cost Matrix")
-    width = 210 + 32 * n # 300 #270 # 240
-    hight = 70 + 19 * n # 130 # 110 # 90
-    widthtext = str(width)+"x"+str(hight)
+    width = 210 + 32 * n  # 300 #270 # 240
+    hight = 70 + 19 * n  # 130 # 110 # 90
+    widthtext = str(width) + "x" + str(hight)
     root.geometry(widthtext)
     # root.geometry("450x200")
 
@@ -61,18 +61,18 @@ def recordmatrix():
 
     Label(root, text="Case Change:", anchor="w").grid(row=4, column=2)
 
-    entry['validatecommand'] = (entry.register(testVal), '%P', '%d')
+    entry['validatecommand'] = (entry.register(test_val), '%P', '%d')
     entry.grid(row=4, column=3)
 
     for i in range(n):
         label[i] = Label(root, textvariable=label_text[i], width=3, bg="lightgrey", anchor="w")
         label[i].grid(row=4, column=i + 5)
         regex[i] = Entry(root, width=35, bg="lightgrey", validate="focusout",
-                         validatecommand=lambda i2=i: copyToColumn(i2))
+                         validatecommand=lambda i2=i: copy_to_column(i2))
         regex[i].grid(row=i + 5, column=2, columnspan=3)
         for j in range(n):
             values[i, j] = Entry(root, validate="key", width=3)
-            values[i, j]['validatecommand'] = (values[i, j].register(testVal), '%P', '%d')
+            values[i, j]['validatecommand'] = (values[i, j].register(test_val), '%P', '%d')
             values[i, j].grid(column=i + 5, row=j + 5)
 
     # for i in range(n):
@@ -86,12 +86,11 @@ def recordmatrix():
     return "aa"
 
 
-
 def getcostmatrix(size):
     n = size
-    recordmatrix()
+    record_matrix()
     return matrix
 
 
 if __name__ == "__main__":
-    print(getcostmatrix())
+    print(getcostmatrix(4))
