@@ -7,7 +7,7 @@ def char_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, True, False, False, False, False, False, False, False,
          True, False, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -16,7 +16,7 @@ def char_compression_case_sensitive_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, False, False, False, False, False, False,
          True, False, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -25,7 +25,7 @@ def sequence_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, True, False, False, True, False, False, False, False,
          True, True, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -34,7 +34,7 @@ def sequence_compression_case_sensitive_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, True, False, True, False, False, False,
          True, True, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -43,7 +43,7 @@ def letter_sequence_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, True, False, True, False, False, False,
          True, False, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -52,7 +52,7 @@ def number_sequence_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, False, False, False, False, False, False,
          True, True, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -61,7 +61,7 @@ def word_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, True, False, True, True, False, False,
          True, True, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -70,7 +70,7 @@ def word_decimal_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, True, False, True, True, False, False,
          True, True, True,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
@@ -79,7 +79,7 @@ def word_sequence_compression_function(values, unify_values=True):
     return get_replacement_method(
         [True, False, True, True, False, True, True, True, False,
          True, True, False,
-         False, False, False, False],
+         False, False, False, False, False, False],
         unify_values)(values)
 
 
