@@ -37,7 +37,7 @@ def cluster_dendrogram(cluster_function, distance_function, value_list):
     matrix = np.zeros(0)
     cluster = np.zeros(0)
     matrix = calculate_condensed_distance_matrix2(distance_function, value_list)
-    #matrix = calculate_distance_matrix(distance_function, value_list)
+    # matrix = calculate_distance_matrix(distance_function, value_list)
     cluster = cluster_function(matrix)
     show_dendrogram(cluster)
 

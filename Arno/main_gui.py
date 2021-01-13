@@ -6,7 +6,7 @@ from cluster_algorithms.dendrogram import cluster_dendrogram_centroid, cluster_d
 from compression.compressions import compression_simple, compress_array, compression_typed
 from compression.thin import super_thin_array_amounts
 from distance_functions.weighted_levenshtein_distance2 import get_cost_map, levenshtein_distance2
-from gui.gui_costmatrix2 import Costmatrix
+from gui_costmatrix.gui_costmatrix import CostMatrix
 from tests.testdata import data_test
 from distance_functions.weighted_levenshtein_distance import levenshtein_distance
 
@@ -43,11 +43,11 @@ dist = np.array([
     ["LS2",
      lambda s1, s2: levenshtein_distance2(get_cost_map(), s1, s2)],
     ["LS2 - c3",
-     lambda s1, s2: levenshtein_distance2(Costmatrix.getcostmatrix(3), s1, s2)],
+     lambda s1, s2: levenshtein_distance2(CostMatrix.getCostMatrix(3), s1, s2)],
     ["LS2 - c4",
-     lambda s1, s2: levenshtein_distance2(Costmatrix.getcostmatrix(4), s1, s2)],
+     lambda s1, s2: levenshtein_distance2(CostMatrix.getCostMatrix(4), s1, s2)],
     ["LS2 - c5",
-     lambda s1, s2: levenshtein_distance2(Costmatrix.getcostmatrix(5), s1, s2)]
+     lambda s1, s2: levenshtein_distance2(CostMatrix.getCostMatrix(5), s1, s2)]
 
 ])
 
@@ -73,6 +73,7 @@ def buildclusters(da, co, di, cl):
 
 
 def buildmyclusters():
+    print("aaaaaa")
     if i_data.get() != "" and i_comp.get() != "" and i_dist.get() != "" and i_clus.get() != "" and i_numb.get() != "":
         buildclusters(
             list(data[:, 0]).index(i_data.get()),
