@@ -1,5 +1,8 @@
 from math import sin, cos, radians, sqrt
-from tkinter import Tk, Button, Canvas, PhotoImage
+from tkinter import Tk, Button, Canvas
+
+from PIL import Image, ImageTk
+
 
 import numpy as np
 
@@ -12,8 +15,8 @@ class Blob:
         self.x = x
         self.y = y
         self.size = size
-        self.oval = self.create_oval("white")
-        # self.image = self.create_image()
+        # self.oval = self.create_oval("white")
+        self.image = self.create_image()
 
     # size of a blob
     def get_size(self):
@@ -29,8 +32,8 @@ class Blob:
     def move(self, dx=0, dy=0):
         self.x += dx
         self.y += dy
-        self.canvas.move(self.oval, dx, dy)
-        # self.canvas.move(self.image, dx, dy)
+        # self.canvas.move(self.oval, dx, dy)
+        self.canvas.move(self.image, dx, dy)
 
     def set_position(self, x=0, y=0):
         self.x = x
@@ -54,8 +57,17 @@ class Blob:
         )
 
     def create_image(self):
-        image = PhotoImage(file='...')  # TODO
-        return self.canvas.create_image(50, 50, image=image, anchor='center')
+        # image = PhotoImage(file='../blob_images/' + self.label + '.png')  # TODO
+        # im = PIL.Image.open('../blob_images/' + self.label + '.png')
+        # photo = PIL.ImageTk.PhotoImage(im)
+        p = "../blob_images/" + self.label + ".png"
+        print(p)
+        load = Image.open(p)
+        print(load)
+        photo = ImageTk.PhotoImage(load)
+        print(photo)
+
+        return self.canvas.create_image(self.x, self.y, image=photo, anchor='center',tags=("token",))
 
 
 class BlobInput:
@@ -182,5 +194,6 @@ class BlobInput:
 
 
 if __name__ == '__main__':
-    names = np.array([["1", "Blib"], ["2", "Blab"], ["3", "Blob"], ["4", "Blub"], ["5", "Blöb"], ["6", "Bläb"], ["7", "Blüb"]], dtype=object)
+    # , ["2", "Blab"], ["3", "Blob"], ["4", "Blub"], ["5", "Blöb"], ["6", "Bläb"], ["7", "Blüb"]
+    names = np.array([["1", "Blib"]], dtype=object)
     print(str(BlobInput(names).get()))
