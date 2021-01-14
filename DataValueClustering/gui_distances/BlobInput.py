@@ -37,7 +37,7 @@ class BlobInput:
         self.distance_factor = self.max_distance / self.diagonal
         self.size_factor = self.max_distance / self.diagonal
         self.distance_threshold = self.diagonal / 20
-        self.coordinates = self.create_coordinates()  # array: [label, x, y, size]
+        self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
         """Canvas"""
         self.canvas = Canvas(width=400, height=400, background="alice blue")
@@ -65,23 +65,6 @@ class BlobInput:
                ).place(anchor='center', x=self.x, y=self.h - 20)
 
         self.root.mainloop()
-
-    # create n coordinates of equal distance to middlepoint x|y clockwise
-    def create_coordinates(self):
-        distance_to_center = min(self.w, self.h) / 4
-        # array: [label, x, y, size]
-        array = np.empty((len(self.labels), 3), dtype=object)
-        degree_delta = 360 / len(self.labels)
-
-        for i, l in enumerate(self.labels):
-            degree = i * degree_delta - 135
-            g = sin(radians(degree)) * distance_to_center
-            a = cos(radians(degree)) * distance_to_center
-            array[i, 0] = self.x + a
-            array[i, 1] = self.y + g
-            array[i, 2] = self.image_sizes
-
-        return array
 
     def find_nearest_blob(self, x, y):
         min_blob, min_distance = (None, self.distance_threshold)
