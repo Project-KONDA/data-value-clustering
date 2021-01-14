@@ -88,8 +88,9 @@ class BlobInput:
     def __init__(self, chars_labels):
 
         self.chars_labels = chars_labels
-        self.labels = chars_labels[:, 1]
-        self.chars = chars_labels[:, 0]
+        self.labels = chars_labels[:, 0]
+        self.regex = chars_labels[:, 1]
+        self.resizable = chars_labels[:, 2]
 
         """ROOT"""
         self.root = Tk()
@@ -105,7 +106,6 @@ class BlobInput:
         self.diagonal = int(sqrt(self.w * self.w + self.h * self.h))
 
         """Images"""
-        print(self.diagonal)
         self.image_sizes = int(min(self.h, self.w) / 8)
 
         self.max_distance = 20
@@ -131,11 +131,8 @@ class BlobInput:
 
         """Build Blobs"""
         self.blobs = np.empty(len(chars_labels), dtype=Blob)
-        for i, c in enumerate(self.coordinates):
-            if i == 2:
-                self.blobs[i] = Blob(self, c[0], c[1], c[2], c[3], True)
-            else:
-                self.blobs[i] = Blob(self, c[0], c[1], c[2], c[3])
+        for i, c in reversed(list(enumerate(self.coordinates))):
+            self.blobs[i] = Blob(self, self.labels[i], c[0], c[1], c[2], self.resizable[i])
 
         """OK Button"""
         Button(self.root, text='OK', command=self.close, width=int(self.w / 7.2), background='lime green'
@@ -150,17 +147,16 @@ class BlobInput:
     def create_coordinates(self):
         distance_to_center = min(self.w, self.h) / 4
         # array: [label, x, y, size]
-        array = np.empty((len(self.labels), 4), dtype=object)
+        array = np.empty((len(self.labels), 3), dtype=object)
         degree_delta = 360 / len(self.labels)
 
         for i, l in enumerate(self.labels):
-            degree = i * degree_delta
+            degree = i * degree_delta - 135
             g = sin(radians(degree)) * distance_to_center
             a = cos(radians(degree)) * distance_to_center
-            array[i, 0] = l
-            array[i, 1] = self.x + a
-            array[i, 2] = self.y + g
-            array[i, 3] = self.image_sizes
+            array[i, 0] = self.x + a
+            array[i, 1] = self.y + g
+            array[i, 2] = self.image_sizes
 
         return array
 
@@ -216,7 +212,7 @@ class BlobInput:
         distance_map = {(()): 1.}
 
         for i, l in enumerate(self.labels):
-            distance_map[i] = "[^" + self.chars[i] + "$]"
+            distance_map[i] = self.regex[i]
 
         # TODO: costs for insertion (:,0) and deletion (0,:)
 
@@ -224,10 +220,10 @@ class BlobInput:
             for j, label_j in enumerate(self.labels):
                 if i == j:
                     # (i,j), i==j -> blobsize(i)
-                    distance_map[(i + 1, i + 1)] = round((self.blobs[i].get_size() * self.size_factor), 2)
+                    distance_map[(i, i)] = round((self.blobs[i].get_size() * self.size_factor), 2)
                 else:
                     # (i,j), i!=j -> distance ( blob(i), blob(j) )
-                    distance_map[(i + 1, j + 1)] = round(
+                    distance_map[(i, j)] = round(
                         (self.blobs[i].get_distance(blob=self.blobs[j]) * self.distance_factor), 2)
 
         return distance_map
@@ -242,6 +238,15 @@ class BlobInput:
 
 
 if __name__ == '__main__':
-    # , ["2", "Blab"], ["3", "Blob"], ["4", "Blub"], ["5", "Blöb"], ["6", "Bläb"], ["7", "Blüb"]
-    names = np.array([["1", "Digits"], ["1", "Letters"], ["1", "Integers"]], dtype=object)
-    print(str(BlobInput(names).get()))
+    min_blobs = [True, False, False, False, False, False, False, False, False,
+        True, True, False,
+        True, False, False, False, False, False]
+    min_blob_config = get_blob_configuration(min_blobs)
+    print(str(BlobInput(min_blob_config).get()))
+
+    # max_blobs = [False, False, True, True, True, True, True, True, True,
+    #     True, True, True,
+    #     False, True, True, True, True, True]
+    # max_blob_config = get_blob_configuration(max_blobs)
+    # print(str(BlobInput(max_blob_config).get()))
+
