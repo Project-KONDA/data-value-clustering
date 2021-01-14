@@ -1,6 +1,7 @@
-from math import sin, cos, radians, sqrt
-from tkinter import Tk, Button, Canvas
+from math import sqrt
+from tkinter import Tk, Button, Canvas, Menu
 import numpy as np
+from PIL import Image, ImageTk
 
 from compression.compression import get_blob_configuration
 from gui_distances.Blob import Blob
@@ -11,23 +12,30 @@ class BlobInput:
 
     def __init__(self, chars_labels):
 
+        """Parameters"""
         self.chars_labels = chars_labels
         self.labels = chars_labels[:, 0]
         self.regex = chars_labels[:, 1]
         self.resizable = chars_labels[:, 2]
+        self.canceled = False
 
-        """ROOT"""
+        """Root"""
         self.root = Tk()
         self.root.title('Distance Specification')
 
         """Frame"""
-        self.w = 1000
-        self.h = 900
-        self.root.geometry(str(self.w) + "x" + str(self.h))
-        self.root.config(bg='white')
+        self.w = int(3*self.root.winfo_screenwidth()/4)
+        self.h = int(3*self.root.winfo_screenheight()/4)
         self.x = int(self.w / 2)
         self.y = int(self.h / 2)
         self.diagonal = int(sqrt(self.w * self.w + self.h * self.h))
+        self.root.geometry(f"{self.w}x{self.h}+{int(self.w/6)}+{int(self.h/6)}")
+        # self.root.geometry(f"{self.w}x{self.h}")
+        # self.root.eval('tk::PlaceWindow . center')
+        self.root.resizable(False, False)
+        # self.root.minsize(400, 300)
+        # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
+        self.root.config(bg='white')
 
         """Images"""
         self.image_sizes = int(min(self.h, self.w) / 8)
@@ -39,8 +47,23 @@ class BlobInput:
         self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
         """Canvas"""
-        self.canvas = Canvas(width=400, height=400, background="alice blue")
+        self.canvas = Canvas(width=self.w, height=self.h, background="alice blue")
         self.canvas.pack(fill="both", expand=True)
+
+        # garbage collector defense mechanism
+        img = Image.open("..\\blob_images\\background3.png")
+        img = img.resize((self.w, self.h), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(img)
+        self.background_image = img
+        self.background = self.canvas.create_image(0, 0, image=img, anchor='nw')
+
+        """Menu"""
+        menu = Menu(self.root)
+        # configMenu = Menu(menu)
+        # configMenu.add_command(label="Configure1")
+        # menu.add_cascade(label="Configure", menu=configMenu)
+        menu.add_command(label="Help")
+        self.root.config(menu=menu)
 
         """Dragging"""
         # this data is used to keep track of an item being dragged
