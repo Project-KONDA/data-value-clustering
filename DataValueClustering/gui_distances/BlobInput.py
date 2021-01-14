@@ -4,6 +4,7 @@ import numpy as np
 
 from compression.compression import get_blob_configuration
 from gui_distances.Blob import Blob
+from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix
 
 
 class BlobInput:
@@ -144,11 +145,11 @@ class BlobInput:
 
 
 if __name__ == '__main__':
-    min_blobs = [True, False, False, False, False, False, False, False, False,
-        True, True, False,
+    min_blobs = [False, False, False, False, False, False, False, False, False,
+        False, False, False,
         True, False, False, False, False, False]
     min_blob_config = get_blob_configuration(min_blobs)
-    print(str(BlobInput(min_blob_config).get()))
+    print_cost_matrix(BlobInput(min_blob_config).get())
 
     # max_blobs = [False, False, True, True, True, True, True, True, True,
     #     True, True, True,
