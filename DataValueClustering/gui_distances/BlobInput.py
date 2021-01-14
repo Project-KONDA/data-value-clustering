@@ -31,12 +31,10 @@ class BlobInput:
 
         """Images"""
         self.image_sizes = int(min(self.h, self.w) / 8)
-
         self.max_distance = 20
         self.max_self_dif = 5
-
-        self.distance_factor = self.max_distance / self.diagonal
-        self.size_factor = self.max_distance / self.diagonal
+        self.distance_factor = 1 / self.image_sizes  # self.max_distance / self.diagonal
+        self.size_factor = 1.  # 2 / self.image_sizes  # self.max_distance / self.diagonal / 0.62
         self.distance_threshold = self.diagonal / 20
         self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
@@ -51,13 +49,12 @@ class BlobInput:
         self.canvas.tag_bind("token", "<ButtonPress-1>", self.drag_start)
         self.canvas.tag_bind("token", "<ButtonRelease-1>", self.drag_stop)
         self.canvas.tag_bind("token", "<B1-Motion>", self.drag)
+        self.canvas.bind_all("<n>", self.scale_blob_normal)
         self.canvas.bind_all("<MouseWheel>", self.scale_a_blob)
 
         """Build Blobs"""
         self.blobs = np.empty(len(chars_labels), dtype=Blob)
         for i, c in reversed(list(enumerate(self.coordinates))):
-            self.blobs[i] = Blob(self, self.labels[i], c[0], c[1], c[2], self.resizable[i])
-
         """OK Button"""
         Button(self.root, text='OK', command=self.close, width=int(self.w / 7.2), background='lime green'
                ).place(anchor='center', x=self.x, y=self.h - 50)
@@ -110,10 +107,12 @@ class BlobInput:
         up = event.delta > 0
         nearest = self.find_nearest_blob(event.x, event.y)
         if nearest is not None:
-            nearest.scale(up)
-            print(nearest.label + " " + str(nearest.size))
-        else:
-            print("None")
+            nearest.scale(up=up)
+
+    def scale_blob_normal(self, event):
+        nearest = self.find_nearest_blob(event.x, event.y)
+        if nearest is not None:
+            nearest.scale(reset=True)
 
     # calculate and return distance map
     def get(self):

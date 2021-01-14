@@ -23,7 +23,7 @@ class Blob:
     # size of a blob
     def get_size(self):
         if self.resizable:
-            return self.size - self.min_size
+            return (self.size - self.min_size) / (self.default_size - self.min_size)
         else:
             return 0.
 
@@ -44,30 +44,26 @@ class Blob:
         self.x = x
         self.y = y
 
-    def scale(self, up=True):
+    def scale(self, up=None, reset=False):
+        self.lift()
         if self.resizable:
-            if up:
+            print("aa")
+            if reset is True:
+                self.size = self.default_size
+
+            elif up is True:
                 self.size = min(self.max_size, self.size + 5)
                 # self.size = int(round(self.size * 1.251))
-            else:
+            elif up is False:
                 self.size = max(self.min_size, self.size - 5)
                 # self.size = int(round(self.size / 1.251))
             self.update_image()
 
-    def create_oval(self, color):
-        return self.blob_input.canvas.create_oval(
-            self.x - 25,
-            self.y - 25,
-            self.x + 25,
-            self.y + 25,
-            outline=color,
-            fill=color,
-            tags="token"
-        )
-
     def create_image(self):
         img = Image.open(self.path)
-        img = img.resize((int(self.size * 1.2), self.size), Image.ANTIALIAS)
+        img_h, img_w = img.size
+        img_w2 = int(self.size * img_h / img_w)
+        img = img.resize((img_w2, self.size), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(img)
         # garbage collector defense mechanism
         self.photoimage = img
