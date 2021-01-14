@@ -4,7 +4,7 @@ import numpy as np
 
 def char_compression_function(values, unify_values=True):
     # ["[a-zA-Z]", "e"], ["[0-9]", "0"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, True, False, False, False, False, False, False, False,
          True, False, False,
          False, False, False, False, False, False],
@@ -13,7 +13,7 @@ def char_compression_function(values, unify_values=True):
 
 def char_compression_case_sensitive_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["[0-9]", "0"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, False, False, False, False, False, False,
          True, False, False,
          False, False, False, False, False, False],
@@ -22,7 +22,7 @@ def char_compression_case_sensitive_function(values, unify_values=True):
 
 def sequence_compression_function(values, unify_values=True):
     # ["[a-zA-Z]+", "f"],  ["[0-9]+", "1"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, True, False, False, True, False, False, False, False,
          True, True, False,
          False, False, False, False, False, False],
@@ -31,7 +31,7 @@ def sequence_compression_function(values, unify_values=True):
 
 def sequence_compression_case_sensitive_function(values, unify_values=True):
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]+", "1"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, True, False, True, False, False, False,
          True, True, False,
          False, False, False, False, False, False],
@@ -40,7 +40,7 @@ def sequence_compression_case_sensitive_function(values, unify_values=True):
 
 def letter_sequence_compression_function(values, unify_values=True):
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]", "0"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, True, False, True, False, False, False,
          True, False, False,
          False, False, False, False, False, False],
@@ -49,7 +49,7 @@ def letter_sequence_compression_function(values, unify_values=True):
 
 def number_sequence_compression_function(values, unify_values=True):
     # ["[a-z]", l"], ["[A-Z]", "L"], ["[0-9]+", "1"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, False, False, False, False, False, False,
          True, True, False,
          False, False, False, False, False, False],
@@ -58,7 +58,7 @@ def number_sequence_compression_function(values, unify_values=True):
 
 def word_compression_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, True, False, True, True, False, False,
          True, True, False,
          False, False, False, False, False, False],
@@ -67,7 +67,7 @@ def word_compression_function(values, unify_values=True):
 
 def word_decimal_compression_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"], ["1,1", "2"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, True, False, True, True, False, False,
          True, True, True,
          False, False, False, False, False, False],
@@ -77,7 +77,7 @@ def word_decimal_compression_function(values, unify_values=True):
 def word_sequence_compression_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"],
     # ["[qU]+", "V"], ["[0-9]+", "1"]
-    return get_replacement_method(
+    return get_compression_method(
         [True, False, True, True, False, True, True, True, False,
          True, True, False,
          False, False, False, False, False, False],
