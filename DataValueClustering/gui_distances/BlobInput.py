@@ -79,7 +79,9 @@ class BlobInput:
     def drag_start(self, event):
         """Beginning drag of an object"""
         # record the item and its location
-        self._drag_data["item"] = self.find_nearest_blob(event.x, event.y)
+        nearest = self.find_nearest_blob(event.x, event.y)
+        nearest.lift()
+        self._drag_data["item"] = nearest
         self._drag_data["item_last"] = None
         self._drag_data["x"] = event.x
         self._drag_data["y"] = event.y

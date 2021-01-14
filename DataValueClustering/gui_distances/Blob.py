@@ -80,3 +80,6 @@ class Blob:
             img = ImageTk.PhotoImage(img)
             self.photoimage = img  # garbage collector defense mechanism
             self.blob_input.canvas.itemconfig(self.image, image=img)
+
+    def lift(self):
+        self.blob_input.canvas.lift(self.image)
