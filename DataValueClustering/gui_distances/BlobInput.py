@@ -74,17 +74,20 @@ class BlobInput:
         self.canvas.tag_bind("token", "<B1-Motion>", self.drag)
         self.canvas.bind_all("<n>", self.scale_blob_normal)
         self.canvas.bind_all("<MouseWheel>", self.scale_a_blob)
+        self.canvas.bind_all("<Escape>", lambda event: self.close(True))
+        self.canvas.bind_all("<Return>", lambda event: self.close())
 
         """Build Blobs"""
         self.blobs = np.empty(len(chars_labels), dtype=Blob)
         for i, c in reversed(list(enumerate(self.coordinates))):
-        """OK Button"""
-        Button(self.root, text='OK', command=self.close, width=int(self.w / 7.2), background='lime green'
-               ).place(anchor='center', x=self.x, y=self.h - 50)
+            self.blobs[i] = Blob(self, self.labels[i], c[0], c[1], self.image_sizes, self.resizable[i])
 
-        Button(self.root, text='Restart', command=self.restart, width=int(self.w / 7.2), background='brown2'
-               ).place(anchor='center', x=self.x, y=self.h - 20)
+        """Buttons"""
+        self.button_restart = Button(self.root, text='Restart', command=self.restart, width=int(0.13*self.x), background='brown2')
+        self.button_restart.place(anchor='center', x=0.5*self.x, y=self.h - 20)
 
+        self.button_ok = Button(self.root, text='OK', command=self.close, width=int(0.13*self.x), background='lime green')
+        self.button_ok.place(anchor='center', x=1.5*self.x, y=self.h - 20)
         self.root.mainloop()
 
     def find_nearest_blob(self, x, y):
@@ -139,6 +142,8 @@ class BlobInput:
 
     # calculate and return distance map
     def get(self):
+        if self.canceled:
+            return {}
         # TODO: () -> ?
         distance_map = {(()): 1.}
 
@@ -159,7 +164,8 @@ class BlobInput:
 
         return distance_map
 
-    def close(self):
+    def close(self, canceled=False):
+        self.canceled = canceled
         self.root.destroy()
 
     def restart(self):
