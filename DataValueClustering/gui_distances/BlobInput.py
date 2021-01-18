@@ -58,7 +58,7 @@ class BlobInput:
         self.canvas.place(anchor='nw', x=0, y=0)
 
         # garbage collector defense mechanism
-        self.img = Image.open("..\\blob_images\\background4.png")
+        self.img = Image.open("blob_images\\background4.png")
         self.img = self.img.resize((self.w, self.h), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
         self.background_image = self.img
@@ -86,10 +86,10 @@ class BlobInput:
         self.button_h = self.y // 9
         self.button_w = self.x - 2*self.button_distance
 
-        self.button_image_restart = Image.open("..\\blob_images\\button_restart.png")
+        self.button_image_restart = Image.open("blob_images\\button_restart.png")
         self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
         self.button_image_restart = ImageTk.PhotoImage(self.button_image_restart)
-        self.button_image_ok = Image.open("..\\blob_images\\button_ok.png")
+        self.button_image_ok = Image.open("blob_images\\button_ok.png")
         self.button_image_ok = self.button_image_ok.resize((self.button_w, self.button_h), Image.ANTIALIAS)
         self.button_image_ok = ImageTk.PhotoImage(self.button_image_ok)
 

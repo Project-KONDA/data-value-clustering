@@ -2,12 +2,11 @@ from math import sqrt
 from PIL import Image, ImageTk
 
 
-
 class Blob:
     def __init__(self, blob_input, label, x, y, size, resizable=True):
         self.blob_input = blob_input
         self.label = label
-        self.path = "..\\blob_images\\" + (lambda: "" if resizable else "fixed\\")() + label + ".png"
+        self.path = "blob_images\\" + (lambda: "" if resizable else "fixed\\")() + label + ".png"
         self.x = x
         self.y = y
 
@@ -19,7 +18,7 @@ class Blob:
         self.min_size = size - 10 * self.step_size
         self.max_size = size * 5
 
-        self.photoimage = None
+        self.photo_image = None
         self.image = self.create_image()
 
     # size of a blob
@@ -67,7 +66,7 @@ class Blob:
         img = img.resize((img_w2, self.size), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(img)
         # garbage collector defense mechanism
-        self.photoimage = img
+        self.photo_image = img
         return self.blob_input.canvas.create_image(self.x, self.y, image=img, anchor='center', tags=("token",))
 
     def update_image(self):
@@ -75,7 +74,7 @@ class Blob:
             img = Image.open(self.path)
             img = img.resize((self.size, self.size), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(img)
-            self.photoimage = img  # garbage collector defense mechanism
+            self.photo_image = img  # garbage collector defense mechanism
             self.blob_input.canvas.itemconfig(self.image, image=img)
 
     def lift(self):
