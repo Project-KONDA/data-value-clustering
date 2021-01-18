@@ -30,7 +30,7 @@ def fancy_cluster_representation(values, clusters):
 
     for j in range(len(values)):
         x = int(clusters[j])
-        if x >=0:
+        if x >= 0:
             outer_list[x].append(values[j])
         else:
             noise.append(values[j])

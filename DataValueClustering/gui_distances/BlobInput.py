@@ -24,21 +24,19 @@ class BlobInput:
         self.root.title('Distance Specification')
 
         """Frame"""
-        self.w = int(3*self.root.winfo_screenwidth()/4)
-        self.h = int(3*self.root.winfo_screenheight()/4)
-        self.x = int(self.w / 2)
-        self.y = int(self.h / 2)
+        self.w = 3 * self.root.winfo_screenwidth() // 4
+        self.h = 3 * self.root.winfo_screenheight() // 4
+        self.x = self.w // 2
+        self.y = self.h // 2
         self.diagonal = int(sqrt(self.w * self.w + self.h * self.h))
-        self.root.geometry(f"{self.w}x{self.h}+{int(self.w/6)}+{int(self.h/6)}")
-        # self.root.geometry(f"{self.w}x{self.h}")
-        # self.root.eval('tk::PlaceWindow . center')
+        self.root.geometry(f"{self.w}x{self.h}+{self.w // 6}+{self.h // 6}")
         self.root.resizable(False, False)
         # self.root.minsize(400, 300)
         # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
-        self.root.config(bg='white')
+        self.root.config(bg='black')
 
         """Images"""
-        self.image_sizes = int(min(self.h, self.w) / 8)
+        self.image_sizes = min(self.h, self.w) // 8
         self.max_distance = 20
         self.max_self_dif = 5
         self.distance_factor = 1 / self.image_sizes  # self.max_distance / self.diagonal
@@ -47,15 +45,10 @@ class BlobInput:
         self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
         """Canvas"""
-        self.canvas = Canvas(width=self.w, height=self.h, background="alice blue")
-        self.canvas.pack(fill="both", expand=True)
+        self.canvas = Canvas(width=self.w, height=37*self.h//40, highlightbackground="black")  # , background="alice blue")
+        self.canvas.place(anchor='nw', x=0, y=0)
 
         # garbage collector defense mechanism
-        img = Image.open("..\\blob_images\\background3.png")
-        img = img.resize((self.w, self.h), Image.ANTIALIAS)
-        img = ImageTk.PhotoImage(img)
-        self.background_image = img
-        self.background = self.canvas.create_image(0, 0, image=img, anchor='nw')
 
         """Menu"""
         menu = Menu(self.root)
@@ -64,6 +57,11 @@ class BlobInput:
         # menu.add_cascade(label="Configure", menu=configMenu)
         menu.add_command(label="Help")
         self.root.config(menu=menu)
+        self.img = Image.open("..\\blob_images\\background4.png")
+        self.img = self.img.resize((self.w, self.h), Image.ANTIALIAS)
+        self.img = ImageTk.PhotoImage(self.img)
+        self.background_image = self.img
+        self.background = self.canvas.create_image(0, 0, image=self.img, anchor='nw')
 
         """Dragging"""
         # this data is used to keep track of an item being dragged
