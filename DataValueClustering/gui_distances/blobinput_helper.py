@@ -63,11 +63,11 @@ def print_cost_matrix(matrix):
     print(s)
     s = f'{"": <15}'
     for i in range(n):
-        s += f'{str(matrix[i]): <10}  '
+        s += f'{str(matrix[i]): <11}  '
     print(s)
     for i in range(n):
-        s = f'{matrix[i] + ":": <15}'
+        s = f'{matrix[i]: <15}'
         for j in range(n):
-            s += f'{str(matrix[(j, i)]): <10}  '
+            s += f'{str(matrix[(j, i)]): <11}  '
         print(s)
     print("}")
