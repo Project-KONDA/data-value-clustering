@@ -28,3 +28,14 @@ def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compresse
 
     plt.axis('equal')
     plt.show()
+
+
+if __name__ == "__main__":
+    values_compressed = ["a", "1", "?"]
+    distance_matrix = np.array([
+        [0,1,2],
+        [0,0,1.5],
+        [0,0,0]
+    ])
+    clusters_compressed = [0,1,2]
+    show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed)
