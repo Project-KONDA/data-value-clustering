@@ -2,6 +2,14 @@ import numpy as np
 from scipy.spatial.distance import is_valid_y
 
 
+def get_symmetric(matrix):
+    symmetric_matrix = matrix.copy()
+    for i in range(len(symmetric_matrix)):
+        for j in range(i):
+            symmetric_matrix[i, j] = matrix[j, i]
+    return symmetric_matrix
+
+
 def calculate_distance_matrix(distance_function, values):
     size = len(values)
     matrix = np.zeros((size, size))
