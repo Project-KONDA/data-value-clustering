@@ -38,7 +38,8 @@ def menu_help_blob_input():
         "of deleting or adding a character is represented by the distance to the special empty ",
         "blue blob.",
         # interpretation
-        " When the blobs just barely touch each other the distance between them is interpreted as the value 1.",
+        "When the blobs just barely touch each other the distance between them is interpreted",
+        "as the value 1.",
         # controls
         "The distances can be modified via drag&drop.",
         "",
@@ -82,7 +83,7 @@ def menu_information_display(title, content):
            ).grid(row=len(content) + 3, column=1)
 
     root.update()
-    root.geometry("500x" + str(root.winfo_height() + 10))
+    # root.geometry("500x" + str(root.winfo_height() + 10))
 
     root.mainloop()
 
