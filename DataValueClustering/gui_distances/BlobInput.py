@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image, ImageTk
 
 from compression.compression import get_blob_configuration
+from gui.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
 from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix
 
@@ -40,7 +41,7 @@ class BlobInput:
         # configMenu = Menu(menu)
         # configMenu.add_command(label="Configure1")
         # menu.add_cascade(label="Configure", menu=configMenu)
-        self.menu.add_command(label="Help")
+        self.menu.add_command(label="Help", command=menu_help_blob_input)
         self.root.config(menu=self.menu)
 
         """Images"""
