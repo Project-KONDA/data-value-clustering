@@ -11,7 +11,7 @@ def automatic():
 
     answers = []  # TODO: save answers
 
-    return get_replacement_method(answers)  # TODO: add arguments
+    return get_compression_method(answers)  # TODO: add arguments
 
 
 def custom_dictionary():
