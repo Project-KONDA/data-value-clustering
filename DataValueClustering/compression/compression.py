@@ -291,8 +291,9 @@ def get_compression_method(answers, unify_values=True):
         for i in range(len(values_compressed)):
             for compression in compressions_list:
                 values_compressed[i] = compression(values_compressed[i])
+            # could create compression dict entry here
         if unique:
-            values_compressed = np.array(list(set(values_compressed)))
+            values_compressed = np.array(list(set(values_compressed)))  # order differs across multiple runs
         return values_compressed
 
     compressions = get_compression_configuration(answers=answers)
