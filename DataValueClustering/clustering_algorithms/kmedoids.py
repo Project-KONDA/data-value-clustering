@@ -3,6 +3,27 @@ from sklearn_extra.cluster import KMedoids
 from utility.distance_matrix import calculate_distance_matrix
 
 
+method_array = [
+    # dependencies, not-dependencies, value
+    # suggest value if none of the 'not-dependencies' questions were answered with True
+
+    [[], [0], "pam"],
+    [[], [], "alternate"],
+
+]
+
+initialization_array = [
+    # dependencies, not-dependencies, value
+    # suggest value if none of the 'not-dependencies' questions were answered with True
+
+    [[], [1],   "random"],
+    [[], [0],   "heuristic"],
+    [[], [0,1], "k-medoids++"],
+    [[], [0],   "build"],
+
+]
+
+
 def kmedoids(distance_function, values, n_clusters=8, method='alternate', init='build', max_iter=None,
              random_state=None):
     distance_matrix = calculate_distance_matrix(distance_function, values)

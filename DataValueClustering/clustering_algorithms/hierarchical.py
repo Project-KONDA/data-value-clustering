@@ -15,6 +15,21 @@ from utility.distance_matrix import calculate_condensed_distance_matrix
 #                                                                      depth, monocrit)
 
 
+method_array = [
+    # dependencies, not-dependencies, value
+    # z.b. wenn für keine der Fragen in (not-)dependencies Ja geantwortet wurde, wird value vorgeschlagen
+
+    [[], [], "single"],
+    [[], [4], "complete"],
+    [[], [4,5], "ward"],
+    [[], [], "average"],
+    [[], [], "weighted"],  # 4
+    [[], [], "centroid"],
+    [[], [], "median"],  # 4
+
+]
+
+
 def generate_linkage_matrix(distance_function, values, method):
     cdm = calculate_condensed_distance_matrix(distance_function, values)
     # c, coph_dists = cophenet(linkage_matrix, condensed_distance_matrix)
