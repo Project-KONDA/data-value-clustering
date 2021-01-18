@@ -287,14 +287,21 @@ def get_blob_configuration(answers):
 def get_compression_method(answers, unify_values=True):
     def local_func(values, compressions_list, unique):
         values_compressed = values.copy()
+        compression_dict = {}
         assert len(values_compressed) == len(values)
         for i in range(len(values_compressed)):
+            # apply all compressions:
             for compression in compressions_list:
                 values_compressed[i] = compression(values_compressed[i])
-            # could create compression dict entry here
+            # add dict entry:
+            if values_compressed[i] in compression_dict:
+                compression_dict[values_compressed[i]].append(values[i])
+            else:
+                compression_dict[values_compressed[i]] = [values[i]]
         if unique:
+            # remove redundancy:
             values_compressed = np.array(list(set(values_compressed)))  # order differs across multiple runs
-        return values_compressed
+        return values_compressed, compression_dict
 
     compressions = get_compression_configuration(answers=answers)
 
