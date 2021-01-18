@@ -1,5 +1,5 @@
 from math import sqrt
-from tkinter import Tk, Button, Canvas, Menu
+from tkinter import Tk, Button, Canvas, Menu, FLAT
 import numpy as np
 from PIL import Image, ImageTk
 
@@ -24,21 +24,27 @@ class BlobInput:
         self.root.title('Distance Specification')
 
         """Frame"""
-        self.w = int(3*self.root.winfo_screenwidth()/4)
-        self.h = int(3*self.root.winfo_screenheight()/4)
-        self.x = int(self.w / 2)
-        self.y = int(self.h / 2)
+        self.w = 3 * self.root.winfo_screenwidth() // 4
+        self.h = 3 * self.root.winfo_screenheight() // 4
+        self.x = self.w // 2
+        self.y = self.h // 2
         self.diagonal = int(sqrt(self.w * self.w + self.h * self.h))
-        self.root.geometry(f"{self.w}x{self.h}+{int(self.w/6)}+{int(self.h/6)}")
-        # self.root.geometry(f"{self.w}x{self.h}")
-        # self.root.eval('tk::PlaceWindow . center')
+        self.root.geometry(f"{self.w}x{self.h}+{self.w // 6}+{self.h // 6}")
         self.root.resizable(False, False)
         # self.root.minsize(400, 300)
         # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
-        self.root.config(bg='white')
+        self.root.config(bg='black')
+
+        """Menu"""
+        self.menu = Menu(self.root)
+        # configMenu = Menu(menu)
+        # configMenu.add_command(label="Configure1")
+        # menu.add_cascade(label="Configure", menu=configMenu)
+        self.menu.add_command(label="Help")
+        self.root.config(menu=self.menu)
 
         """Images"""
-        self.image_sizes = int(min(self.h, self.w) / 8)
+        self.image_sizes = min(self.h, self.w) // 8
         self.max_distance = 20
         self.max_self_dif = 5
         self.distance_factor = 1 / self.image_sizes  # self.max_distance / self.diagonal
@@ -47,23 +53,15 @@ class BlobInput:
         self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
         """Canvas"""
-        self.canvas = Canvas(width=self.w, height=self.h, background="alice blue")
-        self.canvas.pack(fill="both", expand=True)
+        self.canvas = Canvas(width=self.w, height=37*self.h//40, highlightbackground="black")  # , background="alice blue")
+        self.canvas.place(anchor='nw', x=0, y=0)
 
         # garbage collector defense mechanism
-        img = Image.open("..\\blob_images\\background3.png")
-        img = img.resize((self.w, self.h), Image.ANTIALIAS)
-        img = ImageTk.PhotoImage(img)
-        self.background_image = img
-        self.background = self.canvas.create_image(0, 0, image=img, anchor='nw')
-
-        """Menu"""
-        menu = Menu(self.root)
-        # configMenu = Menu(menu)
-        # configMenu.add_command(label="Configure1")
-        # menu.add_cascade(label="Configure", menu=configMenu)
-        menu.add_command(label="Help")
-        self.root.config(menu=menu)
+        self.img = Image.open("..\\blob_images\\background4.png")
+        self.img = self.img.resize((self.w, self.h), Image.ANTIALIAS)
+        self.img = ImageTk.PhotoImage(self.img)
+        self.background_image = self.img
+        self.background = self.canvas.create_image(0, 0, image=self.img, anchor='nw')
 
         """Dragging"""
         # this data is used to keep track of an item being dragged
@@ -83,11 +81,26 @@ class BlobInput:
             self.blobs[i] = Blob(self, self.labels[i], c[0], c[1], self.image_sizes, self.resizable[i])
 
         """Buttons"""
-        self.button_restart = Button(self.root, text='Restart', command=self.restart, width=int(0.13*self.x), background='brown2')
-        self.button_restart.place(anchor='center', x=0.5*self.x, y=self.h - 20)
+        self.button_distance = self.h // 100
+        self.button_h = self.y // 9
+        self.button_w = self.x - 2*self.button_distance
 
-        self.button_ok = Button(self.root, text='OK', command=self.close, width=int(0.13*self.x), background='lime green')
-        self.button_ok.place(anchor='center', x=1.5*self.x, y=self.h - 20)
+        self.button_image_restart = Image.open("..\\blob_images\\button_restart.png")
+        self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
+        self.button_image_restart = ImageTk.PhotoImage(self.button_image_restart)
+        self.button_image_ok = Image.open("..\\blob_images\\button_ok.png")
+        self.button_image_ok = self.button_image_ok.resize((self.button_w, self.button_h), Image.ANTIALIAS)
+        self.button_image_ok = ImageTk.PhotoImage(self.button_image_ok)
+
+        self.button_restart = Button(self.root, text='Restart', command=self.restart,
+                                     width=self.button_w, height=self.button_h,
+                                     bg='black', border=0, image=self.button_image_restart)  # background='brown2',
+        self.button_restart.place(anchor='center', x=self.x//2, y=self.h-self.button_h//2-self.button_distance)
+
+        self.button_ok = Button(self.root, text='OK', command=self.close,
+                                width=self.button_w, height=self.button_h,
+                                bg='black', border=0, image=self.button_image_ok)  # background='lime green',
+        self.button_ok.place(anchor='center', x=3*self.x//2, y=self.h-self.button_h//2-self.button_distance)
         self.root.mainloop()
 
     def find_nearest_blob(self, x, y):

@@ -14,8 +14,8 @@ class Blob:
         self.resizable = resizable
         self.min_size = 50
         self.default_size = size
-        self.size = size
-        self.max_size = size * 3
+        self.size = (lambda: size if resizable else self.min_size)()
+        self.max_size = size * 5
 
         self.photoimage = None
         self.image = self.create_image()
@@ -47,7 +47,6 @@ class Blob:
     def scale(self, up=None, reset=False):
         self.lift()
         if self.resizable:
-            print("aa")
             if reset is True:
                 self.size = self.default_size
 
@@ -62,7 +61,7 @@ class Blob:
     def create_image(self):
         img = Image.open(self.path)
         img_h, img_w = img.size
-        img_w2 = int(self.size * img_h / img_w)
+        img_w2 = self.size * img_h // img_w
         img = img.resize((img_w2, self.size), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(img)
         # garbage collector defense mechanism
@@ -72,7 +71,7 @@ class Blob:
     def update_image(self):
         if self.image is not None:
             img = Image.open(self.path)
-            img = img.resize((int(self.size * 1.2), int(self.size)), Image.ANTIALIAS)
+            img = img.resize((int(self.size * 1.2), self.size), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(img)
             self.photoimage = img  # garbage collector defense mechanism
             self.blob_input.canvas.itemconfig(self.image, image=img)
