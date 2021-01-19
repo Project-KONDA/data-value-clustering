@@ -3,9 +3,10 @@ from PIL import Image, ImageTk
 
 
 class Blob:
-    def __init__(self, blob_input, label, x, y, size, resizable=True):
+    def __init__(self, blob_input, label, x, y, size, resizable=True, info=""):
         self.blob_input = blob_input
         self.label = label
+        self.info = info
         self.path = "blob_images\\" + (lambda: "" if resizable else "fixed\\")() + label + ".png"
         self.x = x
         self.y = y
@@ -67,7 +68,7 @@ class Blob:
         img = ImageTk.PhotoImage(img)
         # garbage collector defense mechanism
         self.photo_image = img
-        return self.blob_input.canvas.create_image(self.x, self.y, image=img, anchor='center', tags=("token",))
+        return self.blob_input.canvas.create_image(self.x, self.y, image=img, anchor='center', tags="token")
 
     def update_image(self):
         if self.image is not None:

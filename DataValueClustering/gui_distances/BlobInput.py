@@ -18,6 +18,7 @@ class BlobInput:
         self.labels = chars_labels[:, 0]
         self.regex = chars_labels[:, 1]
         self.resizable = chars_labels[:, 2]
+        self.chars_info = chars_labels[:, 3]
         self.canceled = False
 
         """Root"""
@@ -35,6 +36,8 @@ class BlobInput:
         # self.root.minsize(400, 300)
         # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
         self.root.config(bg='black')
+        self.root.bind_all("<Escape>", lambda event: self.close(True))
+        self.root.bind_all("<Return>", lambda event: self.close())
 
         """Menu"""
         self.menu = Menu(self.root)
@@ -50,7 +53,7 @@ class BlobInput:
         self.max_self_dif = 5
         self.distance_factor = 1 / self.image_sizes  # self.max_distance / self.diagonal
         self.size_factor = 1.  # 2 / self.image_sizes  # self.max_distance / self.diagonal / 0.62
-        self.distance_threshold = self.diagonal / 20
+        self.distance_threshold = 0. # self.diagonal / 20
         self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
         """Canvas"""
@@ -71,20 +74,24 @@ class BlobInput:
         self.canvas.tag_bind("token", "<ButtonPress-1>", self.drag_start)
         self.canvas.tag_bind("token", "<ButtonRelease-1>", self.drag_stop)
         self.canvas.tag_bind("token", "<B1-Motion>", self.drag)
+
+        """Scale"""
         self.canvas.bind_all("<n>", self.scale_blob_normal)
         self.canvas.bind_all("<MouseWheel>", self.scale_a_blob)
-        self.canvas.bind_all("<Escape>", lambda event: self.close(True))
-        self.canvas.bind_all("<Return>", lambda event: self.close())
+
+        """Info"""
+        self.canvas.bind("<Motion>", self.canvas_blob_info)
+        self.canvas.text = self.canvas.create_text(10, 10, text="", anchor="nw")
 
         """Build Blobs"""
         self.blobs = np.empty(len(chars_labels), dtype=Blob)
         for i, c in reversed(list(enumerate(self.coordinates))):
-            self.blobs[i] = Blob(self, self.labels[i], c[0], c[1], self.image_sizes, self.resizable[i])
+            self.blobs[i] = Blob(self, self.labels[i], c[0], c[1], self.image_sizes, self.resizable[i], self.chars_info[i])
 
         """Buttons"""
         self.button_distance = self.h // 100
         self.button_h = self.y // 9
-        self.button_w = self.x - 2*self.button_distance
+        self.button_w = self.x - 2 * self.button_distance
 
         self.button_image_restart = Image.open("blob_images\\button_restart.png")
         self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
@@ -96,19 +103,30 @@ class BlobInput:
         self.button_restart = Button(self.root, text='Restart', command=self.restart,
                                      width=self.button_w, height=self.button_h,
                                      bg='black', border=0, image=self.button_image_restart)  # background='brown2',
-        self.button_restart.place(anchor='center', x=self.x//2, y=self.h-self.button_h//2-self.button_distance)
+        self.button_restart.place(anchor='center', x=self.x // 2, y=self.h - self.button_h // 2 - self.button_distance)
 
         self.button_ok = Button(self.root, text='OK', command=self.close,
                                 width=self.button_w, height=self.button_h,
                                 bg='black', border=0, image=self.button_image_ok)  # background='lime green',
-        self.button_ok.place(anchor='center', x=3*self.x//2, y=self.h-self.button_h//2-self.button_distance)
+        self.button_ok.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.button_distance)
         self.root.mainloop()
 
+    def canvas_blob_info(self, event):
+        blob = self.find_nearest_blob(event.x, event.y)
+        if isinstance(blob, Blob):
+            text = blob.info
+            text += " <dist=" + str(blob.get_distance(event.x, event.y)) + ">"
+            text += " <size=" + str(blob.get_size() * self.size_factor) + ">" if blob.resizable else ""
+            self.canvas.itemconfigure(self.canvas.text, text=text)
+        else:
+            self.canvas.itemconfigure(self.canvas.text, text="")
+
     def find_nearest_blob(self, x, y):
+        """Finds the nearest blob to (x|y)"""
         min_blob, min_distance = (None, self.distance_threshold)
         # min_blob, min_distance = (self.blobs[0], self.blobs[0].get_distance(x, y))
         for i, blob in enumerate(self.blobs):
-            d = blob.get_distance(x, y) - blob.size
+            d = (blob.get_distance(x, y) - blob.size/2) / blob.size
             if d < min_distance:
                 min_blob, min_distance = blob, d
         return min_blob
@@ -148,23 +166,23 @@ class BlobInput:
         nearest = self.find_nearest_blob(event.x, event.y)
         if nearest is not None:
             nearest.scale(up=up)
+        self.canvas_blob_info(event)
 
     def scale_blob_normal(self, event):
+        """Set Blob to normal size"""
         nearest = self.find_nearest_blob(event.x, event.y)
         if nearest is not None:
             nearest.scale(reset=True)
+        self.canvas_blob_info(event)
 
-    # calculate and return distance map
     def get(self):
+        """Calculate and return distance map"""
         if self.canceled:
             return {}
-        # TODO: () -> ?
         distance_map = {(()): 1.}
 
         for i, l in enumerate(self.labels):
             distance_map[i] = self.regex[i]
-
-        # TODO: costs for insertion (:,0) and deletion (0,:)
 
         for i, label_i in enumerate(self.labels):
             for j, label_j in enumerate(self.labels):

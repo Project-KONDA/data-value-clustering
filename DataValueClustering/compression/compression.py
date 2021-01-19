@@ -176,17 +176,17 @@ question_array = [
      "For example, '$' and 'µ' will be treated equally since both are specical characters"] # 17
 ]
 
-dictionary = [
-    # term, definition
-    ["letter",                                          "[a-zäöüßA-ZÄÖÜ]"],
-    ["lower case letter",                               "[a-zäöüß]"],
-    ["upper case letter",                               "[A-ZÄÖÜ]"],
-    ["word",                                            "[A-ZÄÖÜ]?[a-zäöüß]+"],
-    ["lower case word (= lower case letter sequence)",  "[a-zäöüß]+"],
-    ["upper case word",                                 "[A-ZÄÖÜ][a-zäöüß]+"],
-    ["upper case letter sequence",                      "[A-ZÄÖÜ]+"],
-    ["letter sequence",                                 "[a-zäöüßA-ZÄÖÜ]+"],
-]
+# dictionary = [
+#     # term, definition
+#     ["letter",                                          "[a-zäöüßA-ZÄÖÜ]"],
+#     ["lower case letter",                               "[a-zäöüß]"],
+#     ["upper case letter",                               "[A-ZÄÖÜ]"],
+#     ["word",                                            "[A-ZÄÖÜ]?[a-zäöüß]+"],
+#     ["lower case word (= lower case letter sequence)",  "[a-zäöüß]+"],
+#     ["upper case word",                                 "[A-ZÄÖÜ][a-zäöüß]+"],
+#     ["upper case letter sequence",                      "[A-ZÄÖÜ]+"],
+#     ["letter sequence",                                 "[a-zäöüßA-ZÄÖÜ]+"],
+# ]
 
 compression_configuration_array = [
     # dependencies, not-dependencies, replacement function, replacement char, label, regex
@@ -214,38 +214,66 @@ compression_configuration_array = [
 ]
 
 blob_configuration_array = [
-    # dependencies, not-dependencies, name, resizable, regex
-    [[],           [],                       "none",                        "^$",                                                        False],
+    # dependencies, not-dependencies, name, resizable, regex, info
+    [[],           [],                       "none",                        "^$",                                                        False,
+     "info_none"],
 
-    [[0],          [1, 3],                   "lower_case_letters",          "^l$",                                                       False],
-    [[],           [0],                      "lower_case_letters",          "^[a-zäöüß]$",                                               True],
-    [[0, 3],       [1, 6],                   "lower_case_words",            "^s$",                                                       False],
-    [[0, 3, 6],    [1, 7],                   "words",                       "^w$",                                                       False],
-    [[0, 3, 6, 7], [1],                      "word_sequences",              "^q$",                                                       False],
-    [[0, 1],       [4],                      "letters",                     "^a$",                                                       False],
-    [[0, 1, 4],    [8],                      "letter_sequences",            "^b$",                                                       False],
-    [[0, 1, 4, 8], [],                       "letter_sequence_sequences",   "^Q$",                                                       False],
-    [[2],          [1, 5],                   "upper_case_letters",          "^L$",                                                       False],
-    [[],           [1, 2],                   "upper_case_letters",          "^[A-ZÄÖÜ]$",                                                True],
-    [[2, 5],       [1],                      "upper_case_letter_sequences", "^S$",                                                       False],
+    [[0],          [1, 3],                   "lower_case_letters",          "^l$",                                                       False,
+     "info_lower_case_letters"],
+    [[],           [0],                      "lower_case_letters",          "^[a-zäöüß]$",                                               True,
+     "info_lower_case_letters"],
+    [[0, 3],       [1, 6],                   "lower_case_words",            "^s$",                                                       False,
+     "info_lower_case_words"],
+    [[0, 3, 6],    [1, 7],                   "words",                       "^w$",                                                       False,
+     "info_words"],
+    [[0, 3, 6, 7], [1],                      "word_sequences",              "^q$",                                                       False,
+     "info_word_sequences"],
+    [[0, 1],       [4],                      "letters",                     "^a$",                                                       False,
+     "info_letters"],
+    [[0, 1, 4],    [8],                      "letter_sequences",            "^b$",                                                       False,
+     "info_letter_sequences"],
+    [[0, 1, 4, 8], [],                       "letter_sequence_sequences",   "^Q$",                                                       False,
+     "info_letter_sequence_sequences"],
+    [[2],          [1, 5],                   "upper_case_letters",          "^L$",                                                       False,
+     "info_upper_case_letters"],
+    [[],           [1, 2],                   "upper_case_letters",          "^[A-ZÄÖÜ]$",                                                True,
+     "info_upper_case_letters"],
+    [[2, 5],       [1],                      "upper_case_letter_sequences", "^S$",                                                       False,
+     "info_upper_case_letter_sequences"],
 
-    [[9],          [10],                     "digits",                      "^0$",                                                       False],
-    [[],           [9],                      "digits",                      "^[0-9]$",                                                   True],
-    [[9, 10],      [],                       "integers",                    "^1$",                                                       False],
-    [[9, 10, 11],  [],                       "floats",                      "^2$",                                                       False],
+    [[9],          [10],                     "digits",                      "^0$",                                                       False,
+     "info_digits"],
+    [[],           [9],                      "digits",                      "^[0-9]$",                                                   True,
+     "info_digits"],
+    [[9, 10],      [],                       "integers",                    "^1$",                                                       False,
+     "info_integers"],
+    [[9, 10, 11],  [],                       "floats",                      "^2$",                                                       False,
+     "info_floats"],
 
-    [[13],         [12],                     "punctuation_marks",           "^\.$",                                                      False],
-    [[],           [12, 13],                 "punctuation_marks",           "^[\.,:;!\?]$",                                              True],
-    [[14],         [12],                     "brackets",                    "^\($",                                                      False],
-    [[],           [12, 14],                 "brackets",                    "^[\(\)\[\]\{\}]$",                                          True],
-    [[15],         [12],                     "math_operators",              "^\+$",                                                      False],
-    [[],           [12, 15],                 "math_operators",              "^[\+\-\*/%=<>\&\|]$",                                       True],
-    [[16],         [12],                     "quotation_marks",             "^\"$",                                                      False],
-    [[],           [12, 16],                 "quotation_marks",             "^[\"`´']$",                                                 True],
-    [[17],         [12],                     "other_characters",            "^_$",                                                       False],
-    [[],           [12, 17],                 "other_characters",            "^[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]$", True],
-    [[12],         [],                       "special_characters",          "^\$",                                                       False],
-    [[],           [12, 13, 14, 15, 16, 17], "special_characters",          "^[^a-zäöüßA-ZÄÖÜ0-9 ]$",                                    True]
+    [[13],         [12],                     "punctuation_marks",           "^\.$",                                                      False,
+     "info_punctuation_marks"],
+    [[],           [12, 13],                 "punctuation_marks",           "^[\.,:;!\?]$",                                              True,
+     "info_punctuation_marks"],
+    [[14],         [12],                     "brackets",                    "^\($",                                                      False,
+     "info_brackets"],
+    [[],           [12, 14],                 "brackets",                    "^[\(\)\[\]\{\}]$",                                          True,
+     "info_brackets"],
+    [[15],         [12],                     "math_operators",              "^\+$",                                                      False,
+     "info_math_operators"],
+    [[],           [12, 15],                 "math_operators",              "^[\+\-\*/%=<>\&\|]$",                                       True,
+     "info_math_operators"],
+    [[16],         [12],                     "quotation_marks",             "^\"$",                                                      False,
+     "info_quotation_marks"],
+    [[],           [12, 16],                 "quotation_marks",             "^[\"`´']$",                                                 True,
+     "info_quotation_marks"],
+    [[17],         [12],                     "other_characters",            "^_$",                                                       False,
+     "info_other_characters"],
+    [[],           [12, 17],                 "other_characters",            "^[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]$", True,
+     "info_other_characters"],
+    [[12],         [],                       "special_characters",          "^\$",                                                       False,
+     "info_special_characters"],
+    [[],           [12, 13, 14, 15, 16, 17], "special_characters",          "^[^a-zäöüßA-ZÄÖÜ0-9 ]$",                                    True,
+     "info_special_characters"]
 ]
 
 
