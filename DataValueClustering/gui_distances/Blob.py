@@ -17,7 +17,7 @@ class Blob:
         self.size = (lambda: size if resizable else self.min_size)()
         self.step_size = self.default_size // 20
         self.min_size = size - 10 * self.step_size
-        self.max_size = size * 5
+        self.max_size = self.min_size + 100 * self.step_size
 
         self.photo_image = None
         self.image = self.create_image()

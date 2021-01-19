@@ -115,8 +115,8 @@ class BlobInput:
         blob = self.find_nearest_blob(event.x, event.y)
         if isinstance(blob, Blob):
             text = blob.info
-            text += " <dist=" + str(blob.get_distance(event.x, event.y)) + ">"
-            text += " <size=" + str(blob.get_size() * self.size_factor) + ">" if blob.resizable else ""
+            text += "\ndist: " + str(blob.get_distance(event.x, event.y)) + ""
+            text += "\nsize: " + str(blob.get_size() * self.size_factor) + "" if blob.resizable else ""
             self.canvas.itemconfigure(self.canvas.text, text=text)
         else:
             self.canvas.itemconfigure(self.canvas.text, text="")
