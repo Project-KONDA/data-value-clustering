@@ -1,7 +1,6 @@
 from scipy.cluster.hierarchy import linkage, fcluster
 
-from utility.distance_matrix import calculate_condensed_distance_matrix
-
+from utility.distance_matrix import calculate_condensed_distance_matrix, plot_image
 
 # def hierarchical(distance_function, values, n_clusters, distance_threshold, method='single', criterion='inconsistent',
 #                  depth=2, monocrit=None):
@@ -17,7 +16,7 @@ from utility.distance_matrix import calculate_condensed_distance_matrix
 
 method_array = [
     # dependencies, not-dependencies, value
-    # z.b. wenn für keine der Fragen in (not-)dependencies Ja geantwortet wurde, wird value vorgeschlagen
+    # suggest value if none of the 'not-dependencies' questions were answered with True
 
     [[], [], "single"],
     [[], [4], "complete"],
