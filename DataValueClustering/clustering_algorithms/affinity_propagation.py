@@ -14,6 +14,28 @@ def affinity(distance_function, values, damping=0.5, max_iter=200, convergence_i
     return clusters
 
 
+def damping_config():
+    min_damping = 0.5
+    max_damping = 1
+    pass
+
+
+def preference_config():
+    # it is advised to start with a preference equal to the median of the input similarities (= default)
+    # if less clusters are desired: set the preference value lower
+    pass
+
+
+def max_iter_config(answers):
+    # decrease for faster execution
+    pass
+
+
+def convergence_iter(answers):
+    # decrease for faster execution
+    pass
+
+
 if __name__ == '__main__':
     v = [1, 1, 1, 3, 4, 5, 10, 100, 3]
     for i in range(10):

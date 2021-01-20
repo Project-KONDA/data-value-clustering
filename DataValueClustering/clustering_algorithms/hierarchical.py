@@ -46,3 +46,22 @@ def decrease_by_one(clusters):
     for i in range(len(clusters)):
         clusters[i] = clusters[i] - 1
     return clusters
+
+
+def n_clusters_config(linkage_matrix, no_values):
+    # min_n_clusters = 2
+    # max_n_clusters = no_values
+
+    # if only compression but no clustering is desired: n_clusters = max_n_clusters
+
+    pass
+
+
+def distance_threshold_config(linkage_matrix, distance_matrix):
+
+    # if only compression but no clustering is desired: distance_threshold = 0
+    # else: min_distance_threshold = min_value_distance
+
+    # max_distance_threshold = max_cluster_distance
+
+    pass

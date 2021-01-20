@@ -16,6 +16,23 @@ def optics(distance_function, values,
     return clusters
 
 
+def min_samples_config(no_values, values, answers):
+    min_min_samples = 3
+    # max_min_samples = no_values
+    # increase if a) noisy , b) big data set or c) data contains many duplicates
+    # larger values will yield more significant clusters
+    pass
+
+
+def max_eps_config():
+    # default value of np.inf will identify clusters across all scales
+    # reducing max_eps will result in shorter run times
+
+    # see DBSCAN
+
+    pass
+
+
 if __name__ == '__main__':
     v = [1, 1, 1, 3, 4, 5, 10, 100, 3]
     c = optics(lambda a, b: abs(a - b), v, min_samples=2)

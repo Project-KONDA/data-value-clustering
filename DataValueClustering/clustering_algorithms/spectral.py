@@ -7,3 +7,12 @@ def spectral(distance_function, values, n_clusters=8, eigen_solver=None, n_compo
     affinity_matrix = calculate_affinity_matrix(distance_function, values)
     clusters = SpectralClustering(n_clusters=n_clusters, eigen_solver=eigen_solver, n_components=n_components, random_state=random_state, n_init=n_init, gamma=gamma, affinity='precomputed', eigen_tol=eigen_tol, assign_labels=assign_labels, verbose=verbose).fit_predict(affinity_matrix)
     return clusters
+
+
+def n_clusters_config():
+    # min_n_clusters = 2
+    # max_n_clusters = no_values
+
+    # if only compression but no clustering is desired: n_clusters = max_n_clusters
+
+    pass

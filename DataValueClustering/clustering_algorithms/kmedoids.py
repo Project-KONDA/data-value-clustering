@@ -37,3 +37,12 @@ def kmedoids_args(n_clusters=8, method='alternate', init='build', max_iter=None,
     return lambda distance_function, values_compressed: kmedoids(distance_function, values_compressed,
                                                                  n_clusters, method, init, max_iter,
                                                                  random_state)
+
+
+def n_clusters_config(no_values):
+    # min_n_clusters = 2
+    # max_n_clusters = no_values
+
+    # if only compression but no clustering is desired: n_clusters = max_n_clusters
+
+    pass
