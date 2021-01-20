@@ -3,16 +3,17 @@ from PIL import Image, ImageTk
 
 
 class Blob:
-    def __init__(self, blob_input, label, x, y, size, resizable=True, info=""):
+    def __init__(self, blob_input, label, x=0, y=0, size=100, resizable=True, regex="", info=""):
         self.blob_input = blob_input
         self.label = label
-        self.info = info
-        self.path = "blob_images\\" + (lambda: "" if resizable else "fixed\\")() + label + ".png"
         self.x = x
         self.y = y
+        self.regex = regex
+        self.info = info
+        self.path = "blob_images\\" + (lambda: "" if resizable else "fixed\\")() + label + ".png"
 
         self.resizable = resizable
-        self.min_size = 50
+        self.min_size = size // 2
         self.default_size = size
         self.size = (lambda: size if resizable else self.min_size)()
         self.step_size = self.default_size // 20
