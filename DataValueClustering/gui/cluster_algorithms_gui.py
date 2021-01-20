@@ -22,7 +22,9 @@ def cluster_hierarchical_helper(distance_function, values, method):
     show_dendrogram(linkage_matrix, values)
 
     # TODO: ask user for additional arguments
-    n_clusters = 2  # TODO: support elbow method
+    n_clusters = 2  # TODO: support elbow method & Co.
+    # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
+    # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
     distance_threshold = 2  # depends on distances
     criterion = 'distance'
     # criterion: 'maxclust', 'distance', 'inconsistent', 'monocrit', 'maxclust_monocrit'
@@ -35,9 +37,9 @@ def cluster_hierarchical_helper(distance_function, values, method):
 def cluster_kmedoids():
     # TODO: ask user for arguments
     n_clusters = 2  # TODO: support elbow method
-    method = 'alternate'  # "‘alternate’ is faster while ‘pam’ is more accurate"
+    method = 'alternate'  # efficiency vs. quality preference: "‘alternate’ is faster while ‘pam’ is more accurate"
     init = 'build'  # "if there are outliers in the dataset, use another initialization than build"
-    max_iter = None
+    max_iter = None  # depends on efficiency vs. quality preference
     random_state = None  # only relevant for testing
 
     return lambda distance_function, values: kmedoids(distance_function, values, n_clusters, method, init, max_iter,
@@ -46,6 +48,7 @@ def cluster_kmedoids():
 
 def cluster_dbscan():
     # TODO: ask user for arguments
+    # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     eps = 0.5  # depends on distances
     min_samples = 5  # depends on number of values
     algorithm = 'auto'
