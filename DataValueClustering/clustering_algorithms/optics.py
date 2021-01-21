@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.cluster import OPTICS
 
 from clustering.clustering import fancy_cluster_representation
+from clustering_algorithms import dbscan
 from utility.distance_matrix import calculate_distance_matrix
 
 
@@ -16,12 +17,8 @@ def optics(distance_function, values,
     return clusters
 
 
-def min_samples_config(no_values, values, answers):
-    min_min_samples = 3
-    # max_min_samples = no_values
-    # increase if a) noisy , b) big data set or c) data contains many duplicates
-    # larger values will yield more significant clusters
-    pass
+def min_samples_config(no_values, answers):
+    return dbscan.min_samples_config(no_values, answers)
 
 
 def max_eps_config():
