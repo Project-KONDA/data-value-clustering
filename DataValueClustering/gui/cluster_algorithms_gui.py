@@ -120,4 +120,5 @@ cluster_algorithms = np.array([
      cluster_affinity],
     ["Spectral Clustering",
      cluster_spectral]
+    # TODO: option 'none' for applying compression only
 ])
