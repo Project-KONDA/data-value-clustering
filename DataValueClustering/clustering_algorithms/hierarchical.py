@@ -1,6 +1,6 @@
 from scipy.cluster.hierarchy import linkage, fcluster
 
-from utility.distance_matrix import calculate_condensed_distance_matrix, plot_image
+from utility.distance_matrix import calculate_condensed_distance_matrix, plot_image, get_condensed, min_distance
 
 # def hierarchical(distance_function, values, n_clusters, distance_threshold, method='single', criterion='inconsistent',
 #                  depth=2, monocrit=None):
@@ -48,20 +48,29 @@ def decrease_by_one(clusters):
     return clusters
 
 
-def n_clusters_config(linkage_matrix, no_values):
-    # min_n_clusters = 2
-    # max_n_clusters = no_values
+def method_config(answers):
+    name = "method"
+    explanation = "Method for calculating the distance between clusters."
+    values = method_array[:, 2]
+    suggestion_values = ""  # TODO: calculate from answers and method_array
 
-    # if only compression but no clustering is desired: n_clusters = max_n_clusters
-
-    pass
+    return name, explanation, values, suggestion_values
 
 
-def distance_threshold_config(linkage_matrix, distance_matrix):
+def n_clusters_config(no_values):
+    name = "n_clusters"
+    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
+    min_n_clusters = 2
+    max_n_clusters = no_values
+    suggestion_value = min(7, no_values/2)
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
 
-    # if only compression but no clustering is desired: distance_threshold = 0
-    # else: min_distance_threshold = min_value_distance
 
-    # max_distance_threshold = max_cluster_distance
-
-    pass
+def distance_threshold_config(linkage_matrix, distance_matrix):  # or pass condensed_distance_matrix instead?
+    name = "distance_threshold"
+    explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
+    condensed = get_condensed(distance_matrix)
+    min_n_clusters = min_distance(condensed)
+    max_n_clusters = linkage_matrix[len(linkage_matrix)-1, 2] - 0.01
+    suggestion_value = (max_n_clusters-min_n_clusters)/2
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value

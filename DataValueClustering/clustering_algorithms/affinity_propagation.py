@@ -2,7 +2,7 @@ from sklearn.cluster import AffinityPropagation
 
 from clustering.clustering import fancy_cluster_representation
 from utility.distance_matrix import calculate_affinity_matrix
-
+import numpy as np
 
 def affinity(distance_function, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None,
              verbose=False, random_state=None):
@@ -15,24 +15,30 @@ def affinity(distance_function, values, damping=0.5, max_iter=200, convergence_i
 
 
 def damping_config():
+    name = "damping"
+    explanation = "Higher values will yield less clusters."
     min_damping = 0.5
-    max_damping = 1
-    pass
+    max_damping = 0.99
+    suggestion_value = 0.5
+    return name, explanation, min_damping, max_damping, suggestion_value
 
 
-def preference_config():
+def preference_config(affinity_matrix):
     # it is advised to start with a preference equal to the median of the input similarities (= default)
-    # if less clusters are desired: set the preference value lower
-    pass
+    name = "preference"
+    explanation = "Lower values will yield less clusters."
+    min_preference = 0  # TODO
+    max_preference = np.inf  # TODO
+    suggestion_value = np.median(affinity_matrix)  # = default
+    return name, explanation, min_preference, max_preference, suggestion_value
 
 
 def max_iter_config(answers):
-    # decrease for faster execution
     pass
 
 
 def convergence_iter(answers):
-    # decrease for faster execution
+    # increase for more clusters?
     pass
 
 

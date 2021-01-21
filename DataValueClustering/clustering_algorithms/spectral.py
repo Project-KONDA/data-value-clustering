@@ -12,10 +12,10 @@ def spectral(distance_function, values, n_clusters=8, eigen_solver=None, n_compo
     return clusters
 
 
-def n_clusters_config():
-    # min_n_clusters = 2
-    # max_n_clusters = no_values
-
-    # if only compression but no clustering is desired: n_clusters = max_n_clusters
-
-    pass
+def n_clusters_config(no_values):
+    name = "n_clusters"
+    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
+    min_n_clusters = 2
+    max_n_clusters = no_values
+    suggestion_value = min(7, no_values / 2)
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
