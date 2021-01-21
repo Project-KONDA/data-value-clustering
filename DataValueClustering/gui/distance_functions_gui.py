@@ -5,8 +5,10 @@ from distance.levenshtein_distance import levenshtein_distance
 from distance.longest_common_subsequence_distance import longest_common_subsequence_distance
 from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map
 
-
 # pass method of this module as distance_function to clustering.clustering.cluster
+from gui.DropdownInput import DropdownInput, input_dropdown
+from gui_distances.BlobInput import BlobInput, input_blobs
+from gui_distances.CostMatrixInput import CostMatrixInput, input_costmatrix
 
 
 def distance_dice():
@@ -23,7 +25,27 @@ def distance_longest_common_subsequence():
 
 def distance_weighted_levenshtein():
     # TODO: let user choose one of cost_maps and execute function
-    cost_map = None
+
+    titlex = "Choose a Cost Map"
+    labelsx = ["Cost Map"]
+
+    # TODO4
+    num = 5
+    config = None
+
+    optionsx = np.array([
+        ["Costmatrix",
+         lambda: input_costmatrix(num)],
+        ["Costmatrix Empty",
+         lambda: input_costmatrix(num, empty=True)],
+        ["BlobInput",
+         lambda: input_blobs(config)],
+    ])
+
+    myDropdown = DropdownInput(titlex, list(labelsx), list([optionsx[:, 0]]))
+    answer, index = myDropdown.get()
+
+    cost_map = optionsx[index[0], 1]()
 
     return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)
 
@@ -47,14 +69,16 @@ cost_maps = np.array([
      custom_full]
 ])
 
-
 distance_functions = np.array([
-    ["Dice",
-     distance_dice],
+    ["Weighted Levenshtein",
+     distance_weighted_levenshtein],
     ["Levenshtein",
      distance_levenshtein],
     ["Longest Common Subsequence",
      distance_longest_common_subsequence],
-    ["Weighted Levenshtein",
-     distance_weighted_levenshtein]
+    ["Dice",
+     distance_dice],
 ])
+
+if __name__ == "__main__":
+    print(distance_weighted_levenshtein())
