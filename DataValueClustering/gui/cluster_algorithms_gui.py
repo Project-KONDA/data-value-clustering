@@ -107,6 +107,15 @@ def cluster_spectral():
                                                       random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
 
 
+def cluster_none():
+    return clusters_from_compressed_values
+
+
+def clusters_from_compressed_values(distance_function, values_compressed):
+    n_clusters = len(values_compressed)
+    return list(range(0, n_clusters))
+
+
 cluster_algorithms = np.array([
     ["Hierarchical",
      cluster_hierarchical],
@@ -119,6 +128,6 @@ cluster_algorithms = np.array([
     ["Affinity Propagation",
      cluster_affinity],
     ["Spectral Clustering",
-     cluster_spectral]
-    # TODO: option 'none' for applying compression only
+     cluster_spectral],
+    ["None", cluster_none]
 ])
