@@ -22,7 +22,7 @@ def cluster_hierarchical_helper(distance_function, values, method):
     show_dendrogram(linkage_matrix, values)
 
     # TODO: ask user for additional arguments
-    n_clusters = 2  # TODO: support elbow method & Co.
+    n_clusters = None  # TODO: support elbow method & Co.
     # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
     # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
     distance_threshold = 2  # depends on distances
