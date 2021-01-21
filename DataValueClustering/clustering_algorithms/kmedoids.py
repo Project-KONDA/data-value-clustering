@@ -3,7 +3,7 @@ from sklearn_extra.cluster import KMedoids
 from utility.distance_matrix import calculate_distance_matrix
 
 
-method_array = [
+method_array = [ # not supported by KMedoids anymore
     # dependencies, not-dependencies, value
     # suggest value if none of the 'not-dependencies' questions were answered with True
 
@@ -19,7 +19,7 @@ initialization_array = [
     [[], [1],   "random"],
     [[], [0],   "heuristic"],
     [[], [0,1], "k-medoids++"],
-    [[], [0],   "build"],
+    [[], [0],   "build"],  # not supported by KMedoids anymore
 
 ]
 
@@ -27,8 +27,10 @@ initialization_array = [
 def kmedoids(distance_function, values, n_clusters=8, method='alternate', init='build', max_iter=None,
              random_state=None):
     distance_matrix = calculate_distance_matrix(distance_function, values)
-    clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, method=method, init=init, max_iter=max_iter,
+    clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, init=init, max_iter=max_iter,
                         random_state=random_state).fit_predict(distance_matrix)
+    # TODO: method=method is unexpected keyword argument ...
+    # method=method,
     return clusters
 
 
