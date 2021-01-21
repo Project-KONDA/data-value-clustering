@@ -75,7 +75,7 @@ class BlobInput:
 
         """Dragging"""
         # this data is used to keep track of an item being dragged
-        self._drag_data = {"x": 0, "y": 0, "item": None, "item_last": None}
+        self._drag_data = {"x": 0, "y": 0, "item": None, "item_last": None, "nearest": None, "last_nearest": None}
         # add bindings for clicking, dragging and releasing over any object with the "token" tag
         self.canvas.tag_bind("token", "<ButtonPress-1>", self.drag_start)
         self.canvas.tag_bind("token", "<ButtonRelease-1>", self.drag_stop)
@@ -121,14 +121,19 @@ class BlobInput:
 
     def canvas_blob_info(self, event):
         """On mouse over show Information of Blob in Canvas"""
-        blob = self.find_nearest_blob(event.x, event.y)
-        if isinstance(blob, Blob):
-            text = blob.info
+        self.find_nearest_blob(event.x, event.y)
+        if isinstance(self._drag_data["nearest"], Blob):
+            text = self._drag_data["nearest"].info
             # text += f"\ndist.: {str(blob.get_distance(event.x, event.y))}"
-            text += f"\nposition: ({event.x:>4},{event.y:>4})"
-            text += f"\nregex: {blob.regex}"
-            text += f"\nsize : {str(blob.get_size() * self.size_factor)}" if blob.resizable else ''
-            text
+            # text += f"\nposition: ({event.x:>4},{event.y:>4})"
+            text += f"\nregex: {self._drag_data['nearest'].regex}"
+            if self._drag_data["nearest"].resizable:
+                text += f"\nsize : {str(self._drag_data['nearest'].get_size() * self.size_factor)}"
+            if self._drag_data['last_nearest'] is not None \
+                    and self._drag_data['last_nearest'] is not self._drag_data['nearest']:
+                text += f"\n    distance from: {self._drag_data['last_nearest'].label}"
+                text += f"\n    " + str(round(self._drag_data['nearest'].get_distance(
+                    blob=self._drag_data['last_nearest']) * self.distance_factor, 2))
             self.canvas.itemconfigure(self.canvas.text, text=text)
         else:
             self.canvas.itemconfigure(self.canvas.text, text="")
@@ -136,28 +141,28 @@ class BlobInput:
     def find_nearest_blob(self, x, y):
         """Finds the nearest blob to (x|y)"""
         min_blob, min_distance = (None, self.distance_threshold)
-        # min_blob, min_distance = (self.blobs[0], self.blobs[0].get_distance(x, y))
         for i, blob in enumerate(self.blobs):
             d = (blob.get_distance(x, y) - blob.size / 2) / blob.size
             if d < min_distance:
                 min_blob, min_distance = blob, d
-        return min_blob
+
+        if not self._drag_data["nearest"] is min_blob:
+            if min_blob is not self._drag_data["nearest"] and isinstance(self._drag_data["nearest"], Blob):
+                self._drag_data["last_nearest"] = self._drag_data["nearest"]
+            self._drag_data["nearest"] = min_blob
 
     def drag_start(self, event):
         """Beginning drag of an object"""
         # record the item and its location
-        nearest = self.find_nearest_blob(event.x, event.y)
-        if isinstance(nearest, Blob):
-            nearest.lift()
-        self._drag_data["item"] = nearest
-        # self._drag_data["item_last"] = None
+        if isinstance(self._drag_data["nearest"], Blob):
+            self._drag_data["nearest"].lift()
+        self._drag_data["item"] = self._drag_data["nearest"]
         self._drag_data["x"] = event.x
         self._drag_data["y"] = event.y
 
     def drag_stop(self, event):
         """End drag of an object"""
         # reset the drag information
-        self._drag_data["item_last"] = self._drag_data["item"]
         self._drag_data["item"] = None
         self._drag_data["x"] = 0
         self._drag_data["y"] = 0
@@ -177,16 +182,16 @@ class BlobInput:
     def scale_a_blob(self, event):
         """Handles scaling a Blob"""
         up = event.delta > 0
-        nearest = self.find_nearest_blob(event.x, event.y)
-        if nearest is not None:
-            nearest.scale(up=up)
+        # self._drag_data["nearest"] = self.find_nearest_blob(event.x, event.y)
+        if self._drag_data["nearest"] is not None:
+            self._drag_data["nearest"].scale(up=up)
         self.canvas_blob_info(event)
 
     def scale_blob_normal(self, event):
         """Set Blob to normal size"""
-        nearest = self.find_nearest_blob(event.x, event.y)
-        if nearest is not None:
-            nearest.scale(reset=True)
+        # nearest = self.find_nearest_blob(event.x, event.y)
+        if self._drag_data["nearest"] is not None:
+            self._drag_data["nearest"].scale(reset=True)
         self.canvas_blob_info(event)
 
     def get(self):
