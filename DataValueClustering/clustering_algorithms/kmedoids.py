@@ -1,5 +1,6 @@
 from sklearn_extra.cluster import KMedoids
 
+from clustering_algorithms import hierarchical
 from utility.distance_matrix import calculate_distance_matrix
 
 
@@ -42,12 +43,7 @@ def kmedoids_args(n_clusters=8, method='alternate', init='build', max_iter=None,
 
 
 def n_clusters_config(no_values):
-    name = "n_clusters"
-    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
-    min_n_clusters = 2
-    max_n_clusters = no_values
-    suggestion_value = min(7, no_values / 2)
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
+    return hierarchical.n_clusters_config(no_values)
 
 
 def init_config(answers):

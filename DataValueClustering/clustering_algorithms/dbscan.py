@@ -12,7 +12,7 @@ def dbscan(distance_function, values, eps=0.5, min_samples=5, algorithm='auto', 
 
 def min_samples_config(no_values, answers):
     name = "min_samples"
-    explanation = "Higher values will yield less clusters."
+    explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise."
     min_min_samples = 3
     max_min_samples = no_values
 
@@ -21,32 +21,33 @@ def min_samples_config(no_values, answers):
     noisy = False  # TODO: extract from answers
     if(noisy):
         noise_factor = 1.5  # TODO: experiment
-    suggestion_min = max(no_values/2000 * noise_factor, min_min_samples)  # TODO: experiment
-    suggestion_max = min(no_values/50 * noise_factor, max_min_samples)  # TODO: experiment
-    suggestion_value = suggestion_min  # TODO: experiment
+    suggestion_value = int(max(no_values/20 * noise_factor, min_min_samples))  # TODO: experiment
+    # suggestion_max = round(min(no_values/2 * noise_factor, max_min_samples))
+    # suggestion_value = suggestion_min
 
+    # However, larger values are usually better for data sets with noise and will yield more significant clusters
     # increase if a) noisy , b) big data set or c) data contains many duplicates
 
-    return name, explanation, min_min_samples, max_min_samples, suggestion_min, suggestion_max, suggestion_value
+    return name, explanation, min_min_samples, max_min_samples, suggestion_value
 
 
 def eps_config(distance_matrix, no_values):
     name = "eps"
-    explanation = "Higher values will yield less clusters."
+    explanation = "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
+                  "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
+                  "the same cluster "
 
-    # min_eps = min(distances_to_k_nearest) # TODO
-    # max_eps = max_value_distance or max(distances_to_k_nearest) # TODO
+    # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
-    # if eps is chosen much too small, a large part of the data will not be clustered
-    # whereas for a too high value of eps, clusters will merge and the majority of objects will be in the same cluster
+    # min_eps = min(distance_matrix) # TODO
+    # max_eps = max(distance_matrix) or max(distances_to_k_nearest) # TODO
 
     # The value for eps can then be chosen by using a k-distance graph,
     # plotting the distance to the k = minPts-1 nearest neighbor ordered from the largest to the smallest value
     # good values of eps are where this plot shows an “elbow”
     # TODO: calculate graph and plot
 
-    # In general, small values of eps are preferable
-    # as a rule of thumb, only a small fraction of points should be within this distance of each other
+
     pass
 
     # return name, explanation, min_min_samples, max_min_samples, suggestion_min, suggestion_max, suggestion_value
