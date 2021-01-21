@@ -53,6 +53,19 @@ def eps_config(distance_matrix, no_values):
     # return name, explanation, min_min_samples, max_min_samples, suggestion_min, suggestion_max, suggestion_value
 
 
+def k_distance_graph(distance_matrix, k):
+    distances = np.empty(len(distance_matrix), dtype=float)
+    for i in range(len(distance_matrix)):
+        d = distance_matrix[i, :]
+        sorted = np.sort(d)
+        distances[i] = sorted[k-1]
+    distances_sorted = np.sort(distances)
+    print(distances_sorted)
+    plt.plot(distances_sorted)
+    plt.show()
+
+
+
 if __name__ == '__main__':
     v = [1, 1, 1, 3, 4, 5, 10, 100, 3]
     c = dbscan(lambda a, b: abs(a - b), v, eps=0.1, min_samples=2)
