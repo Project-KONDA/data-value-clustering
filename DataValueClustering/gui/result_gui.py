@@ -14,7 +14,10 @@ def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compresse
     color_set = cm.rainbow(np.linspace(0, 1, n_clusters))
     value_colors = np.empty(n_compressed_values, dtype=object)
     for i in range(len(clusters_compressed)):
-        value_colors[i] = color_set[clusters_compressed[i]]
+        if clusters_compressed[i] == -1:
+            value_colors[i] = 'black'
+        else:
+            value_colors[i] = color_set[clusters_compressed[i]]
 
     # compute MDS:
     model = MDS(n_components=2, dissimilarity='precomputed')  # random_state
