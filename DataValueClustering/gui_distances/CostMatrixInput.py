@@ -1,8 +1,8 @@
 from tkinter import *
 import numpy as np
 
-from costmatrixinput_helper import validate_input_float, character_escape, print_cost_matrix
 from gui.help_popup_gui import menu_help_cost_matrix
+from gui_distances.costmatrixinput_helper import validate_input_float, print_cost_matrix, character_escape
 
 
 def input_costmatrix(size, empty=False):

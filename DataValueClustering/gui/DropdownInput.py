@@ -2,6 +2,11 @@ from tkinter import Tk, StringVar, Label, OptionMenu, Button
 
 import numpy as np
 
+def input_dropdown(title, labels, matrix):
+    dropdown = DropdownInput(title, labels, matrix)
+    result = dropdown.get()
+    return result
+
 
 class DropdownInput:
 
@@ -10,7 +15,7 @@ class DropdownInput:
         self.label_text = labels
         self.options = option_array
         self.num = len(option_array)
-        print(self.num)
+        assert (self.num > 0)
 
         self.root = Tk()
         self.root.title(self.title)
@@ -26,12 +31,12 @@ class DropdownInput:
         for i in range(self.num):
             self.answers[i] = StringVar(value=self.options[i][0])
             self.label[i] = Label(self.root, text=self.label_text[i], justify='left', width=15)
-            self.label[i].grid(row=3, column=i, sticky='we')
+            self.label[i].grid(row=i, column=3, sticky='we')
             self.option_menu[i] = OptionMenu(self.root, self.answers[i], *self.options[i])
-            self.option_menu[i].grid(row=4, column=i, sticky='we')
+            self.option_menu[i].grid(row=i, column=4, sticky='we')
 
         self.button = Button(self.root, text='OK', command=self.close)
-        self.button.grid(sticky='nswe', row=6, column=0, columnspan=self.num)
+        self.button.grid(sticky='nswe', row=self.num + 6, column=3, columnspan=2)
 
         self.root.mainloop()
 
@@ -39,10 +44,13 @@ class DropdownInput:
         self.root.destroy()
 
     def get(self):
-        answers = list()
+        answer_choice = list()
+        answer_index = list()
         for i in range(self.num):
-            answers.append(self.answers[i].get())
-        return answers
+            answer = self.answers[i].get()
+            answer_choice.append(answer)
+            answer_index.append(self.options[i].index(answer))
+        return answer_choice, answer_index
 
 
 if __name__ == '__main__':
@@ -56,4 +64,6 @@ if __name__ == '__main__':
         ["Option40"],
         ["Option50", "Option51", "Option52", "Option53", "Option54"]
     ]
-    print(DropdownInput(title, labels, matrix).get())
+    answer, index = input_dropdown(title, labels, matrix)
+    print("Result:", answer, index)
+
