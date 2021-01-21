@@ -45,6 +45,8 @@ def match(regex, string):
 
 
 def get_costmap_index(cost_map, c):
+    if not isinstance(cost_map, dict):
+        return -1
     num = math.floor(math.sqrt(len(cost_map)))
     for i in range(num):
         if match (cost_map[i], c):

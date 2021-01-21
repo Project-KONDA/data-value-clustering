@@ -10,7 +10,7 @@ class DropdownInput:
         self.label_text = labels
         self.options = option_array
         self.num = len(option_array)
-        print(self.num)
+        assert (self.num > 0)
 
         self.root = Tk()
         self.root.title(self.title)

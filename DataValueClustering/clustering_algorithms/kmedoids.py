@@ -18,7 +18,7 @@ initialization_array = [
 
     [[], [1],   "random"],
     [[], [0],   "heuristic"],
-    [[], [0,1], "k-medoids++"],
+    [[], [0, 1], "k-medoids++"],
     [[], [0],   "build"],  # not supported by KMedoids anymore
 
 ]

@@ -76,4 +76,5 @@ def distance_weighted_levenshtein():
     return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)
 
 
-run_clustering(midas_dates, 1000, sequence_compression_case_sensitive_function, distance_weighted_levenshtein(), cluster_affinity())
+if __name__ == '__main__':
+    run_clustering(midas_dates, 1000, sequence_compression_case_sensitive_function, distance_weighted_levenshtein(), cluster_affinity())
