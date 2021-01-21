@@ -25,7 +25,7 @@ def custom_full():
 
 
 compression_functions = np.array([
-    ["No Compression", lambda vals: vals],
+    ["No Compression", lambda vals: (vals, {})],
 
     ["letters, digits", char_compression_function],
     ["case-sensitive letters, digits", char_compression_case_sensitive_function],
