@@ -26,8 +26,9 @@ class BlobInput:
         self.root.title('Distance Specification')
 
         """Frame"""
-        self.w = 3 * self.root.winfo_screenwidth() // 4
-        self.h = 3 * self.root.winfo_screenheight() // 4
+        self.window_size = 3/4
+        self.w = int(self.root.winfo_screenwidth() * self.window_size)
+        self.h = int(self.root.winfo_screenheight() * self.window_size)
         self.x = self.w // 2
         self.y = self.h // 2
         self.diagonal = int(sqrt(self.w * self.w + self.h * self.h))
@@ -51,27 +52,30 @@ class BlobInput:
         self.image_sizes = min(self.h, self.w) // 8
         self.max_distance = 20
         self.max_self_dif = 5
+        self.gui_spacing = 5
         self.distance_factor = 1 / self.image_sizes  # self.max_distance / self.diagonal
         self.size_factor = 1.  # 2 / self.image_sizes  # self.max_distance / self.diagonal / 0.62
         self.distance_threshold = 0.  # self.diagonal / 20
-        self.coordinates = create_coordinates(self.x, self.y, self.labels)  # array: [label, x, y, size]
 
         """Canvas"""
-        self.gui_spacing = 5
-        self.canvas = Canvas(width=self.w - self.gui_spacing, height=17 * self.h // 18 - 2 * self.gui_spacing,
+        self.canvas_h = 17 * self.h // 18 - 4 * self.gui_spacing
+        self.canvas_w =self.w - 3 * self.gui_spacing
+        self.canvas = Canvas(width=self.canvas_w, height=self.canvas_h,
                              highlightbackground="black")  # , background="alice blue")
-        self.canvas.place(anchor='nw', x=0, y=0)
+        self.canvas.place(anchor='nw', x=self.gui_spacing, y=self.gui_spacing)
+        self.coordinates = create_coordinates(self.canvas_w//2, self.canvas_h//2, self.labels)  # array: [label, x, y, size]
 
         # garbage collector defense mechanism
+
         self.img = Image.open("blob_images\\background4.png")
-        self.img = self.img.resize((self.w, self.h), Image.ANTIALIAS)
+        self.img = self.img.resize((self.canvas_w, self.canvas_h), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
         self.background_image = self.img
         self.background = self.canvas.create_image(0, 0, image=self.img, anchor='nw')
 
         """Dragging"""
         # this data is used to keep track of an item being dragged
-        self._drag_data = {"x": 0, "y": 0, "item": None, "item_last": None}
+        self._drag_data = {"x": 0, "y": 0, "item": None, "item_last": None, "nearest": None, "last_nearest": None}
         # add bindings for clicking, dragging and releasing over any object with the "token" tag
         self.canvas.tag_bind("token", "<ButtonPress-1>", self.drag_start)
         self.canvas.tag_bind("token", "<ButtonRelease-1>", self.drag_stop)
@@ -92,8 +96,7 @@ class BlobInput:
                                  resizable=self.resizable[i], regex=self.regex[i], info=self.chars_info[i])
 
         """Buttons"""
-
-        self.button_h = self.y // 9
+        self.button_h = self.h // 18
         self.button_w = self.x - 2 * self.gui_spacing
 
         self.button_image_restart = Image.open("blob_images\\button_restart.png")
@@ -106,22 +109,31 @@ class BlobInput:
         self.button_restart = Button(self.root, text='Restart', command=self.restart,
                                      width=self.button_w, height=self.button_h, bg='black', border=0,
                                      image=self.button_image_restart)
-        self.button_restart.place(anchor='center', x=self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
+        # self.button_restart.place(anchor='center', x=self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
+        self.button_restart.place(anchor='sw', x=self.gui_spacing + 1, y=self.h - self.gui_spacing)
 
         self.button_ok = Button(self.root, text='OK', command=self.close,
                                 width=self.button_w, height=self.button_h, bg='black', border=0,
                                 image=self.button_image_ok)
-        self.button_ok.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
+        # self.button_ok.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
+        self.button_ok.place(anchor='se', x=self.w - self.gui_spacing - 1, y=self.h - self.gui_spacing)
         self.root.mainloop()
 
     def canvas_blob_info(self, event):
         """On mouse over show Information of Blob in Canvas"""
-        blob = self.find_nearest_blob(event.x, event.y)
-        if isinstance(blob, Blob):
-            text = blob.info
-            # text += "\ndist.: " + str(blob.get_distance(event.x, event.y)) + ""
-            text += "\nregex: " + blob.regex
-            text += "\nsize : " + str(blob.get_size() * self.size_factor) + "" if blob.resizable else ""
+        self.find_nearest_blob(event.x, event.y)
+        if isinstance(self._drag_data["nearest"], Blob):
+            text = self._drag_data["nearest"].info
+            # text += f"\ndist.: {str(blob.get_distance(event.x, event.y))}"
+            # text += f"\nposition: ({event.x:>4},{event.y:>4})"
+            text += f"\nregex: {self._drag_data['nearest'].regex}"
+            if self._drag_data["nearest"].resizable:
+                text += f"\nsize : {str(self._drag_data['nearest'].get_size() * self.size_factor)}"
+            if self._drag_data['last_nearest'] is not None \
+                    and self._drag_data['last_nearest'] is not self._drag_data['nearest']:
+                text += f"\n    distance from: {self._drag_data['last_nearest'].label}"
+                text += f"\n    " + str(round(self._drag_data['nearest'].get_distance(
+                    blob=self._drag_data['last_nearest']) * self.distance_factor, 2))
             self.canvas.itemconfigure(self.canvas.text, text=text)
         else:
             self.canvas.itemconfigure(self.canvas.text, text="")
@@ -129,28 +141,28 @@ class BlobInput:
     def find_nearest_blob(self, x, y):
         """Finds the nearest blob to (x|y)"""
         min_blob, min_distance = (None, self.distance_threshold)
-        # min_blob, min_distance = (self.blobs[0], self.blobs[0].get_distance(x, y))
         for i, blob in enumerate(self.blobs):
             d = (blob.get_distance(x, y) - blob.size / 2) / blob.size
             if d < min_distance:
                 min_blob, min_distance = blob, d
-        return min_blob
+
+        if not self._drag_data["nearest"] is min_blob:
+            if min_blob is not self._drag_data["nearest"] and isinstance(self._drag_data["nearest"], Blob):
+                self._drag_data["last_nearest"] = self._drag_data["nearest"]
+            self._drag_data["nearest"] = min_blob
 
     def drag_start(self, event):
         """Beginning drag of an object"""
         # record the item and its location
-        nearest = self.find_nearest_blob(event.x, event.y)
-        if isinstance(nearest, Blob):
-            nearest.lift()
-        self._drag_data["item"] = nearest
-        self._drag_data["item_last"] = None
+        if isinstance(self._drag_data["nearest"], Blob):
+            self._drag_data["nearest"].lift()
+        self._drag_data["item"] = self._drag_data["nearest"]
         self._drag_data["x"] = event.x
         self._drag_data["y"] = event.y
 
     def drag_stop(self, event):
         """End drag of an object"""
         # reset the drag information
-        self._drag_data["item_last"] = self._drag_data["item"]
         self._drag_data["item"] = None
         self._drag_data["x"] = 0
         self._drag_data["y"] = 0
@@ -170,16 +182,16 @@ class BlobInput:
     def scale_a_blob(self, event):
         """Handles scaling a Blob"""
         up = event.delta > 0
-        nearest = self.find_nearest_blob(event.x, event.y)
-        if nearest is not None:
-            nearest.scale(up=up)
+        # self._drag_data["nearest"] = self.find_nearest_blob(event.x, event.y)
+        if self._drag_data["nearest"] is not None:
+            self._drag_data["nearest"].scale(up=up)
         self.canvas_blob_info(event)
 
     def scale_blob_normal(self, event):
         """Set Blob to normal size"""
-        nearest = self.find_nearest_blob(event.x, event.y)
-        if nearest is not None:
-            nearest.scale(reset=True)
+        # nearest = self.find_nearest_blob(event.x, event.y)
+        if self._drag_data["nearest"] is not None:
+            self._drag_data["nearest"].scale(reset=True)
         self.canvas_blob_info(event)
 
     def get(self):
