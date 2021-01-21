@@ -86,9 +86,14 @@ def calculate_condensed_distance_matrix(distance_function, values):
 
 def calculate_affinity_matrix(distance_function, values):
     distance_matrix = calculate_distance_matrix(distance_function, values)
-    affinity_matrix = 1 - (distance_matrix / max(distance_matrix))
-    assert max(affinity_matrix) <= 1
-    assert min(affinity_matrix) >= 0
+    affinity_matrix = 1 - (distance_matrix / np.amax(distance_matrix))
+
+    for i in range(len(affinity_matrix)):
+        for j in range(i):
+            affinity_matrix[i,j] = affinity_matrix[j,i]
+
+    assert np.amax(affinity_matrix) <= 1
+    assert np.amin(affinity_matrix) >= 0
     return affinity_matrix
 
 
