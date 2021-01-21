@@ -10,7 +10,7 @@ from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix
 
 
 def input_blobs(config):
-    result = BlobInput(min_blob_config).get()
+    result = BlobInput(config).get()
     return result
 
 

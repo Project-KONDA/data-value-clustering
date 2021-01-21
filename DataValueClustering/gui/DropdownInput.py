@@ -2,6 +2,7 @@ from tkinter import Tk, StringVar, Label, OptionMenu, Button
 
 import numpy as np
 
+
 def input_dropdown(title, labels, matrix):
     dropdown = DropdownInput(title, labels, matrix)
     result = dropdown.get()
@@ -47,9 +48,9 @@ class DropdownInput:
         answer_choice = list()
         answer_index = list()
         for i in range(self.num):
-            answer = self.answers[i].get()
-            answer_choice.append(answer)
-            answer_index.append(self.options[i].index(answer))
+            answer_test = self.answers[i].get()
+            answer_choice.append(answer_test)
+            answer_index.append(list(self.options[i]).index(answer_test))
         return answer_choice, answer_index
 
 
