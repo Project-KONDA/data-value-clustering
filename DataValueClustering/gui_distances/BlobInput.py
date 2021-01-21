@@ -9,6 +9,11 @@ from gui_distances.Blob import Blob
 from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix
 
 
+def input_blobs(config):
+    result = BlobInput(min_blob_config).get()
+    return result
+
+
 class BlobInput:
 
     def __init__(self, chars_labels):
