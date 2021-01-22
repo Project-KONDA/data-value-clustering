@@ -1,15 +1,7 @@
 import time
 
-from sklearn.manifold import MDS
-import numpy as np
-
 from clustering.clustering import cluster
-from clustering_algorithms.affinity_propagation import affinity
-from clustering_algorithms.dbscan import dbscan
-from clustering_algorithms.hierarchical import hierarchical_lm, generate_linkage_matrix
-from clustering_algorithms.kmedoids import kmedoids
-from clustering_algorithms.optics import optics
-from clustering_algorithms.spectral import spectral
+
 from compression.compression import char_compression_function, sequence_compression_function, \
     sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
