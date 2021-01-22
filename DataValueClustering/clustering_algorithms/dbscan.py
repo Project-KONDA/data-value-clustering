@@ -15,45 +15,41 @@ def dbscan(distance_function, values, eps=0.5, min_samples=5, algorithm='auto', 
 
 def min_samples_config(no_values, answers):
     name = "min_samples"
-    explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise."
+    explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be. "
     min_min_samples = 3
     max_min_samples = no_values
-
-    # TODO:
-    noise_factor = 1
-    noisy = False  # TODO: extract from answers
-    if(noisy):
-        noise_factor = 1.5  # TODO: experiment
-    suggestion_value = int(max(no_values/20 * noise_factor, min_min_samples))  # TODO: experiment
-    # suggestion_max = round(min(no_values/2 * noise_factor, max_min_samples))
-    # suggestion_value = suggestion_min
+    suggestion_value = min_min_samples
 
     # However, larger values are usually better for data sets with noise and will yield more significant clusters
-    # increase if a) noisy , b) big data set or c) data contains many duplicates
+    # increase if a) noisy , b) large data set set or c) data contains many duplicates
 
     return name, explanation, min_min_samples, max_min_samples, suggestion_value
 
 
-def eps_config(distance_matrix, no_values):
+def eps_config(distance_matrix, no_values, min_samples):
     name = "eps"
-    explanation = "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
+    explanation = "The maximum distance between two samples belonging to the same cluster." \
+                  "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
                   "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
                   "the same cluster "
 
     # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
-    # min_eps = min(distance_matrix) # TODO
-    # max_eps = max(distance_matrix) or max(distances_to_k_nearest) # TODO
+    if not (min_samples is None):
+        k = min_samples
+        distances = np.empty(len(distance_matrix), dtype=float)
+        for i in range(len(distance_matrix)):
+            d = distance_matrix[i, :]
+            sorted = np.sort(d)
+            distances[i] = sorted[k + 1]
+        max_eps = max(distances)
+    else:
+        max_eps = np.amax(distance_matrix)
 
-    # The value for eps can then be chosen by using a k-distance graph,
-    # plotting the distance to the k = minPts-1 nearest neighbor ordered from the largest to the smallest value
-    # good values of eps are where this plot shows an “elbow”
-    # TODO: calculate graph and plot
+    min_eps = min(get_condensed(distance_matrix))
+    suggestion_value = min_eps
 
-
-    pass
-
-    # return name, explanation, min_min_samples, max_min_samples, suggestion_min, suggestion_max, suggestion_value
+    return name, explanation, min_eps, max_eps, suggestion_value
 
 
 def k_distance_graph(distance_matrix, k):
@@ -61,9 +57,10 @@ def k_distance_graph(distance_matrix, k):
     for i in range(len(distance_matrix)):
         d = distance_matrix[i, :]
         sorted = np.sort(d)
-        distances[i] = sorted[k-1]
+        # distances[i] = sum(sorted[0:k-1])/k
+        distances[i] = sum(sorted[1:k + 1]) / k
+        # distances[i] = sorted[k+1]
     distances_sorted = np.sort(distances)
-    print(distances_sorted)
     plt.plot(distances_sorted)
     plt.show()
 
