@@ -112,7 +112,15 @@ def clusters_from_compressed_values(distance_function, values_compressed):
     return list(range(0, n_clusters))
 
 
+def cluster_suggest():
+    # use algorithm_selection with answers from compression questionnaire
+    # need to show questionnaire if not shown before
+    pass
+
+
 cluster_algorithms = np.array([
+    ["Suggest",
+     cluster_suggest],
     ["Hierarchical",
      cluster_hierarchical],
     ["KMedoids",
