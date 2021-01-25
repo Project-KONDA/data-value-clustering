@@ -1,7 +1,7 @@
 from sklearn.cluster import AffinityPropagation
 
-from clustering.clustering import fancy_cluster_representation
-from utility.distance_matrix import calculate_affinity_matrix
+from main.clustering import fancy_cluster_representation
+from distance.distance_matrix import calculate_affinity_matrix
 import numpy as np
 
 def affinity(distance_function, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None,

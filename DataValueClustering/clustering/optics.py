@@ -1,9 +1,9 @@
 import numpy as np
 from sklearn.cluster import OPTICS
 
-from clustering.clustering import fancy_cluster_representation
-from clustering_algorithms import dbscan
-from utility.distance_matrix import calculate_distance_matrix
+from main.clustering import fancy_cluster_representation
+from clustering import dbscan
+from distance.distance_matrix import calculate_distance_matrix
 
 
 def optics(distance_function, values,

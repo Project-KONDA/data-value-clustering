@@ -2,8 +2,8 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from matplotlib import pyplot as plt
 
-from clustering.clustering import fancy_cluster_representation
-from utility.distance_matrix import calculate_distance_matrix, get_condensed, min_distance, max_distance, avg_distance
+from main.clustering import fancy_cluster_representation
+from distance.distance_matrix import calculate_distance_matrix, get_condensed
 
 
 def dbscan(distance_function, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):

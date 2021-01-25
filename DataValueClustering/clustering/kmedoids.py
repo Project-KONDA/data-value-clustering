@@ -1,7 +1,7 @@
 from sklearn_extra.cluster import KMedoids
 
-from clustering_algorithms import hierarchical
-from utility.distance_matrix import calculate_distance_matrix
+from clustering import hierarchical
+from distance.distance_matrix import calculate_distance_matrix
 
 
 method_array = [ # not supported by KMedoids anymore

@@ -1,6 +1,6 @@
 from scipy.cluster.hierarchy import linkage, fcluster
 
-from utility.distance_matrix import calculate_condensed_distance_matrix, plot_image, get_condensed, min_distance
+from distance.distance_matrix import calculate_condensed_distance_matrix, get_condensed, min_distance
 
 # def hierarchical(distance_function, values, n_clusters, distance_threshold, method='single', criterion='inconsistent',
 #                  depth=2, monocrit=None):
