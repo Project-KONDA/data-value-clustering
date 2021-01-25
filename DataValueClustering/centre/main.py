@@ -10,7 +10,8 @@ from data_extraction.read_file import get_sources_in_experiment_data_directory
 
 class Main:
 
-    def __init__(self, data_index=-1, compression_index=-1, distance_index = -1, cluster_index = -1, data = None, compression_f = None, distance_f = None, cluster_f = None):
+    def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
+                 compression_f=None, distance_f=None, cluster_f=None):
 
         self.l_data = get_sources_in_experiment_data_directory()
         self.l_compressions = compression_functions
@@ -31,7 +32,12 @@ class Main:
         self.compression_dict = None
         self.distance_matrix = None
 
-        self.show_configuration_centre()
+
+        if ((data_index == -1 or data is None)
+                and (compression_index == -1 or compression_f is None)
+                and (distance_index == -1 or distance_f is None)
+                and (cluster_index == -1 or cluster_f is None)):
+            self.show_configuration_centre()
 
         self.execute()
 
@@ -47,11 +53,11 @@ class Main:
               "Cluster:", self.l_clusters[self.cluster_index, 0], "]")
 
         # EXECUTION
-        cluster_list, noise = cluster()
+        cluster_list, noise = self.cluster()
 
         # CLUSTER VISUALISATION
         # TODO
-        #print(cluster_list, noise)
+        # print(cluster_list, noise)
 
         # CLUSTER VALIDATION
         # TODO
@@ -81,7 +87,8 @@ class Main:
             list(self.l_distances[:, 0]),
             list(self.l_clusters[:, 0])
         ]
-        answers, answer_indexes = input_dropdown(title, labels, matrix)
+        current_indexes = [self.data_index, self.compression_index, self.distance_index, self.cluster_index]
+        answers, answer_indexes = input_dropdown(title, labels, matrix, current_indexes)
         assert (len(answer_indexes) == 4)
         [self.data_index, self.compression_index, self.distance_index, self.cluster_index] = answer_indexes
 
