@@ -3,6 +3,7 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar
 import numpy as np
 
 import gui_compression.compression_questionnaire
+import gui_compression.questions
 from gui_clustering import algorithm_selection
 from compression import compression
 from gui.ToolTip import CreateToolTip
@@ -138,7 +139,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config2 = gui_compression.compression_questionnaire.question_array
+    q_config2 = gui_compression.questions.question_array
     q_config3 = algorithm_selection.question_array
 
     print(QuestionnaireInput(title, q_config3).get())

@@ -1,7 +1,7 @@
 import re
 import numpy as np
 
-from gui_compression.compression_questionnaire import question_array
+from gui_compression.questions import question_array
 
 
 def char_compression_function():
