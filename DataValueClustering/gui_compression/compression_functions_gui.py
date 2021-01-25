@@ -1,17 +1,8 @@
-import numpy as np
-
 from compression.compression import *
 
 
 # pass compression as compression_function to clustering.clustering.cluster
-
-
-def automatic():
-    # TODO: ask user questions about the data
-
-    answers = []  # TODO: save answers
-
-    return get_compression_method(answers)  # TODO: add arguments
+from gui_compression.compression_questionnaire import automatic
 
 
 def custom_dictionary():
@@ -25,6 +16,7 @@ def custom_full():
 
 
 compression_functions = np.array([
+    ["Atomatic", automatic],
     ["No Compression", lambda vals: (vals, {})],
 
     ["letters, digits", char_compression_function],
@@ -37,7 +29,7 @@ compression_functions = np.array([
     ["words and decimal", word_decimal_compression_function],
     ["sentence", word_sequence_compression_function],
 
-    ["Atomatic", automatic]
+
     # ["Custom Dictionary", custom_dictionary],
     # ["Custom Full", custom_full]
 ])
