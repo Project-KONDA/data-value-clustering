@@ -138,7 +138,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config2 = compression.question_array
+    q_config2 = gui_compression.compression_questionnaire.question_array
     q_config3 = algorithm_selection.question_array
 
     print(QuestionnaireInput(title, q_config3).get())
