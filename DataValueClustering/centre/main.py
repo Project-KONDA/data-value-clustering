@@ -32,30 +32,46 @@ class Main:
         self.compression_dict = None
         self.distance_matrix = None
 
-
+        # Basic Configurations
         if ((data_index == -1 or data is None)
                 and (compression_index == -1 or compression_f is None)
                 and (distance_index == -1 or distance_f is None)
                 and (cluster_index == -1 or cluster_f is None)):
             self.show_configuration_centre()
 
-        self.execute()
+        # Specific Configurations
+        # self.extract_configurations()
+        if self.data_index != -1:
+            self.extract_data()
 
-    def execute(self):
-        # DATA
-        # TODO: choose data
-
-        self.data, self.compression_f, self.distance_f, self.cluster_f = self.extract_configurations()
-
-        print("Execute ... [", "Data:", self.l_data[self.data_index, 0],
-              "Compression:", self.l_compressions[self.compression_index, 0],
-              "Distance:", self.l_distances[self.distance_index, 0],
-              "Cluster:", self.l_clusters[self.cluster_index, 0], "]")
+        if self.compression_index != -1:
+            self.compression_f = self.l_compressions[self.compression_index, 1]()
+        if self.distance_index != -1:
+            self.distance_f = self.l_distances[self.distance_index, 1]()  # compression configuration für blobs
 
         # EXECUTION
-        cluster_list, noise = self.cluster()
+
+        print("Calculate compression ...")
+        # COMPRESSION
+        if self.values_compressed is None or self.compression_dict is None:
+            self.values_compressed, self.compression_dict = self.compression_f(self.data)
+
+        print("Calculate distance matrix ...")
+        # DISTANCE
+        if self.distance_matrix is None:
+            self.distance_matrix = calculate_distance_matrix(self.distance_f, self.values_compressed)
+
+        if self.cluster_index != -1:
+            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # distanzmatrix bereits berechnet
+
+        print("Start clustering ...")
+        # CLUSTERING
+        clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)
+        clusters = get_clusters_original_values(clusters_compressed, self.values_compressed, self.compression_f,
+                                                self.data)
 
         # CLUSTER VISUALISATION
+        fancy_cluster_representation(self.data, clusters)
         # TODO
         # print(cluster_list, noise)
 
@@ -65,18 +81,10 @@ class Main:
         # SUGGEST DATA ENHANCEMENTS
         # TODO
 
-    def extract_configurations(self):
-        data = self.extract_data()
-        compression_f = self.l_compressions[self.compression_index, 1]()
-        distance_f = self.l_distances[self.distance_index, 1]()
-        cluster_f = cluster_algorithms[self.cluster_index, 1]()
-        return data, compression_f, distance_f, cluster_f
-
     def extract_data(self):
-        data = self.l_data[self.data_index, 1]()
-        if len(data) > 1000:
-            data = data[0:1000]
-        return data
+        self.data = self.l_data[self.data_index, 1]()
+        if len(self.data) > 1000:
+            self.data = self.data[0:1000]
 
     def show_configuration_centre(self):
         title = "Configuration Centre"
@@ -92,18 +100,3 @@ class Main:
         assert (len(answer_indexes) == 4)
         [self.data_index, self.compression_index, self.distance_index, self.cluster_index] = answer_indexes
 
-    def cluster(self):
-
-        # COMPRESSION
-        if self.values_compressed is None or self.compression_dict is None:
-            self.values_compressed, self.compression_dict = self.compression_f(self.data)
-
-        # DISTANCE
-        if self.distance_matrix is None:
-            self.distance_matrix = calculate_distance_matrix(self.distance_f, self.values_compressed)
-
-        # CLUSTERING
-        clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)
-        clusters = get_clusters_original_values(clusters_compressed, self.values_compressed, self.compression_f, self.data)
-
-        return fancy_cluster_representation(self.data, clusters)
