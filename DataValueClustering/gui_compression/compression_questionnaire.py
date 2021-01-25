@@ -101,5 +101,5 @@ question_array = [
 
 def automatic():
     answers = input_questionnaire("Compression Configuration", question_array)
-    return get_compression_method(answers)
+    return get_compression_method(answers), answers
 

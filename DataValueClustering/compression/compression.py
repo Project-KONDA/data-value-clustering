@@ -4,68 +4,86 @@ import numpy as np
 from gui_compression.compression_questionnaire import question_array
 
 
-def char_compression_function(values, unify_values=True):
+def char_compression_function():
     # ["[a-zA-Z]", "e"], ["[0-9]", "0"]
-    return get_compression_method([True, True, False, False, False, False, False, False, False,
-                                   True, False, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, True, False, False, False, False, False, False, False,
+               True, False, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def char_compression_case_sensitive_function(values, unify_values=True):
+def char_compression_case_sensitive_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["[0-9]", "0"]
-    return get_compression_method([True, False, True, False, False, False, False, False, False,
-                                   True, False, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, False, False, False, False, False, False,
+               True, False, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def sequence_compression_function(values, unify_values=True):
+def sequence_compression_function():
     # ["[a-zA-Z]+", "f"],  ["[0-9]+", "1"]
-    return get_compression_method([True, True, False, False, True, False, False, False, False,
-                                   True, True, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, True, False, False, True, False, False, False, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def sequence_compression_case_sensitive_function(values, unify_values=True):
+def sequence_compression_case_sensitive_function():
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]+", "1"]
-    return get_compression_method([True, False, True, True, False, True, False, False, False,
-                                   True, True, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, True, False, True, False, False, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def letter_sequence_compression_function(values, unify_values=True):
+def letter_sequence_compression_function():
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]", "0"]
-    return get_compression_method([True, False, True, True, False, True, False, False, False,
-                                   True, False, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, True, False, True, False, False, False,
+               True, False, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def number_sequence_compression_function(values, unify_values=True):
+def number_sequence_compression_function():
     # ["[a-z]", l"], ["[A-Z]", "L"], ["[0-9]+", "1"]
-    return get_compression_method([True, False, True, False, False, False, False, False, False,
-                                   True, True, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, False, False, False, False, False, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def word_compression_function(values, unify_values=True):
+def word_compression_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"]
-    return get_compression_method([True, False, True, True, False, True, True, False, False,
-                                   True, True, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, True, False, True, True, False, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
-def word_decimal_compression_function(values, unify_values=True):
+def word_decimal_compression_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"], ["1,1", "2"]
-    return get_compression_method([True, False, True, True, False, True, True, False, False,
-                                   True, True, True,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, True, False, True, True, False, False,
+               True, True, True,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method( answers), answers
 
 
-def word_sequence_compression_function(values, unify_values=True):
+def word_sequence_compression_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"],
     # ["[qU]+", "V"], ["[0-9]+", "1"]
-    return get_compression_method([True, False, True, True, False, True, True, True, False,
-                                   True, True, False,
-                                   False, False, False, False, False, False])(values)
+    answers = [True, False, True, True, False, True, True, True, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
 
 
 # dictionary = [
