@@ -14,15 +14,16 @@ class DropdownInput:
     def __init__(self, title, labels, option_array, initial_indices=None):
         self.title = title
         self.label_text = labels
-        self.options = option_array
-        self.initial_indices = initial_indices
-
         self.num = len(labels)
+        self.options = option_array
 
-        if self.initial_indices is None:
-            self.initial_indices = np.full(self.num, 0)
+        if initial_indices is None:
+            self.initial_indices = list(np.full(self.num, 0))
+        else:
+            self.initial_indices = initial_indices
 
-        assert self.num == len(option_array) == len(initial_indices) > 0
+        assert self.num == len(option_array) > 0
+        assert self.initial_indices is None or len(self.initial_indices) == self.num
 
         self.root = Tk()
         self.root.title(self.title)
@@ -36,9 +37,9 @@ class DropdownInput:
         # self.root.geometry("570x110")
 
         for i in range(self.num):
-            if initial_indices[i] not in range(len(self.options[i])):
-                initial_indices[i] = 0
-            self.answers[i] = StringVar(value=self.options[i][initial_indices[i]])
+            if self.initial_indices[i] not in range(len(self.options[i])):
+                self.initial_indices[i] = 0
+            self.answers[i] = StringVar(value=self.options[i][self.initial_indices[i]])
 
             self.label[i] = Label(self.root, text=self.label_text[i], justify='left', width=15)
             self.label[i].grid(row=i, column=3, sticky='we')
