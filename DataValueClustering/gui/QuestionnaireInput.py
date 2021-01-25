@@ -6,6 +6,12 @@ from clustering import algorithm_selection
 from compression import compression
 from gui.ToolTip import CreateToolTip
 
+
+def input_questionnaire(title, config):
+    questionnaire = QuestionnaireInput(title, config)
+    result = questionnaire.get()
+    return result
+
 class QuestionnaireInput:
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
