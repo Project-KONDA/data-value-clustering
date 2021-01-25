@@ -1,6 +1,6 @@
 import time
 
-from centre.clustering import cluster
+from clustering.clustering import cluster
 
 from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance

@@ -1,5 +1,5 @@
 from centre.cluster_representation import fancy_cluster_representation
-from centre.clustering import get_clusters_original_values
+from clustering.clustering import get_clusters_original_values
 from distance.distance_matrix import calculate_distance_matrix
 from gui.DropdownInput import input_dropdown
 from gui_clustering.cluster_algorithms_gui import cluster_algorithms

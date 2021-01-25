@@ -7,6 +7,7 @@ from clustering.spectral import *
 
 from gui_clustering.dendrogram import show_dendrogram
 
+
 # pass method of this module as cluster_function to clustering.clustering.cluster
 
 def cluster_hierarchical():
