@@ -1,5 +1,7 @@
 import numpy as np
 
+from centre.cluster_representation import fancy_cluster_representation
+
 
 def cluster(values, compression_function, distance_function, cluster_function):
     values_compressed, compression_dict = compression_function(values)  # may include removing duplicates
@@ -20,21 +22,4 @@ def get_clusters_original_values(clusters_compressed, values_compressed, compres
     assert max(clusters_original_values) == max(clusters_compressed)
     return clusters_original_values  # one dimensional array
 
-
-def fancy_cluster_representation(values, clusters):
-    n_clusters = max(clusters) + 1
-    outer_list = list()
-    noise = list()
-
-    for i in range(n_clusters):
-        outer_list.append(list())
-
-    for j in range(len(values)):
-        x = int(clusters[j])
-        if x >= 0:
-            outer_list[x].append(values[j])
-        else:
-            noise.append(values[j])
-
-    return outer_list, noise
 

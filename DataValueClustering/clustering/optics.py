@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.cluster import OPTICS
 
-from main.clustering import fancy_cluster_representation
+from centre.cluster_representation import fancy_cluster_representation
 from clustering import dbscan
 from distance.distance_matrix import calculate_distance_matrix
 

@@ -1,21 +1,15 @@
 import time
 
-from clustering.clustering import cluster
+from centre.clustering import cluster
 
-from compression.compression import char_compression_function, sequence_compression_function, \
-    sequence_compression_case_sensitive_function
+from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
-from gui.cluster_algorithms_gui import cluster_hierarchical, cluster_dbscan, cluster_kmedoids, cluster_optics, \
-    cluster_affinity, cluster_spectral
-from gui.dendrogram import show_dendrogram
-from utility.distance_matrix import calculate_distance_matrix, plot_image, min_distance, max_distance, avg_distance, \
-    plot_at_y, plot_histogram, plot_box
-from utility.read_file import read_data_values_from_file
-from matplotlib import pyplot as plt, cm
+from gui_clustering.cluster_algorithms_gui import cluster_dbscan
+from data_extraction.read_file import read_data_values_from_file
 
-midas_dates = "../experiment_data/midas_dates.txt"
-midas_artist_names = "../experiment_data/midas_artist_names.txt"
-midas_measurements = "../experiment_data/midas_measurement.txt"
+midas_dates = "../data/midas_dates.txt"
+midas_artist_names = "../data/midas_artist_names.txt"
+midas_measurements = "../data/midas_measurement.txt"
 
 
 def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):

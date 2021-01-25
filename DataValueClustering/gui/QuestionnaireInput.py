@@ -4,8 +4,7 @@ import numpy as np
 
 from clustering import algorithm_selection
 from compression import compression
-from gui_distances.ToolTip import CreateToolTip
-
+from gui.ToolTip import CreateToolTip
 
 class QuestionnaireInput:
 
