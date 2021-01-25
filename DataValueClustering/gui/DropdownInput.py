@@ -11,12 +11,16 @@ def input_dropdown(title, labels, matrix):
 
 class DropdownInput:
 
-    def __init__(self, title, labels, option_array):
+    def __init__(self, title, labels, option_array, initial_indices=None):
         self.title = title
         self.label_text = labels
         self.options = option_array
+
         self.num = len(option_array)
         assert (self.num > 0)
+
+        self.initial_indices = initial_indices
+        #assert initial_indices == None or len(initial_indices) == self.num
 
         self.root = Tk()
         self.root.title(self.title)

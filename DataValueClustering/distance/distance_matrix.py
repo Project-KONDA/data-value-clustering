@@ -103,6 +103,10 @@ def calculate_condensed_distance_matrix(distance_function, values):
 
 def calculate_affinity_matrix(distance_function, values):
     distance_matrix = calculate_distance_matrix(distance_function, values)
+    return calculate_affinity_matrix_from_distance_matrix(distance_matrix)
+
+
+def calculate_affinity_matrix_from_distance_matrix(distance_matrix):
     affinity_matrix = 1 - (distance_matrix / np.amax(distance_matrix))
 
     # for i in range(len(affinity_matrix)):
