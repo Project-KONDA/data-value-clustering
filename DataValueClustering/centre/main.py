@@ -45,7 +45,7 @@ class Main:
             self.extract_data()
 
         if self.compression_index != -1:
-            self.compression_f = self.l_compressions[self.compression_index, 1]()
+            self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1]()
         if self.distance_index != -1:
             self.distance_f = self.l_distances[self.distance_index, 1]()  # compression configuration für blobs
 
@@ -100,3 +100,6 @@ class Main:
         assert (len(answer_indexes) == 4)
         [self.data_index, self.compression_index, self.distance_index, self.cluster_index] = answer_indexes
 
+
+if __name__ == '__main__':
+    Main()

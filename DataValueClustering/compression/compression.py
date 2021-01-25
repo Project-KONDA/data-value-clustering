@@ -245,7 +245,7 @@ def get_compression_method(answers):
 
     n = len(answers)
 
-    compressions = get_compression_configuration(answers=answers[0:n-1])
+    compressions = get_compression_configuration(answers=answers)
 
     return lambda values: local_func(values, compressions, answers[n-1])
 

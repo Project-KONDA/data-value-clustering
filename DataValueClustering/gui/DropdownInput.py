@@ -3,8 +3,8 @@ from tkinter import Tk, StringVar, Label, OptionMenu, Button
 import numpy as np
 
 
-def input_dropdown(title, labels, matrix):
-    dropdown = DropdownInput(title, labels, matrix)
+def input_dropdown(title, labels, matrix, initial_indices=None):
+    dropdown = DropdownInput(title, labels, matrix, initial_indices)
     result = dropdown.get()
     return result
 
