@@ -3,6 +3,7 @@ import numpy as np
 
 def cluster(values, compression_function, distance_function, cluster_function):
     values_compressed, compression_dict = compression_function(values)  # may include removing duplicates
+    print(len(values_compressed))
     clusters_compressed = cluster_function(distance_function, values_compressed)  # returns one dimensional array
     clusters = get_clusters_original_values(clusters_compressed, values_compressed, compression_function, values)
     return fancy_cluster_representation(values, clusters)
