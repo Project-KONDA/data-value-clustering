@@ -113,6 +113,7 @@ def clusters_from_compressed_values(distance_function, values_compressed):
 
 
 def cluster_suggest():
+    # TODO
     # use algorithm_selection with answers from compression questionnaire
     # need to show questionnaire if not shown before
     pass

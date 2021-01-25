@@ -47,7 +47,7 @@ class Main:
         if self.compression_index != -1:
             self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1]()
         if self.distance_index != -1:
-            self.distance_f = self.l_distances[self.distance_index, 1]()  # compression configuration für blobs
+            self.distance_f = self.l_distances[self.distance_index, 1]()  # TODO: pass answers to blob view
 
         # EXECUTION
 
@@ -60,13 +60,14 @@ class Main:
         # DISTANCE
         if self.distance_matrix is None:
             self.distance_matrix = calculate_distance_matrix(self.distance_f, self.values_compressed)
+        # TODO: calculate condensed distance matrix?
 
         if self.cluster_index != -1:
-            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # distanzmatrix bereits berechnet
+            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # TODO: pass answers and distance matrix
 
         print("Start clustering ...")
         # CLUSTERING
-        clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)
+        clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)  # TODO: modify clustering algorithms such that they expect distance_matrix instead of distance_function
         clusters = get_clusters_original_values(clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
 
