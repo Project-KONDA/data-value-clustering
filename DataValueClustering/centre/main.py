@@ -27,24 +27,13 @@ class Main:
     def execute(self):
         # DATA
         # TODO: choose data
-        data = self.l_data[self.data_index, 1]()
-        if len(data) > 1000:
-            data = data[0:1000]
 
-        # CONFIGURATION
-        # configuration compression?
-        compression_f = self.l_compressions[self.compression_index, 1]
-
-        # configuration distance
-        distance_f = self.l_distances[self.distance_index, 1]()
-
-        # configuration cluster
-        cluster_f = cluster_algorithms[self.cluster_index, 1]()
+        data, compression_f, distance_f, cluster_f = self.extract_configurations()
 
         print("Execute ... [", "Data:", self.l_data[self.data_index, 0],
               "Compression:", self.l_compressions[self.compression_index, 0],
               "Distance:", self.l_distances[self.distance_index, 0],
-              "Cluster:", self.cluster_algorithms[self.cluster_index, 0], "]")
+              "Cluster:", self.l_clusters[self.cluster_index, 0], "]")
 
         # EXECUTION
         cluster_list, noise = cluster(data, compression_f, distance_f, cluster_f)
@@ -58,6 +47,19 @@ class Main:
 
         # SUGGEST DATA ENHANCEMENTS
         # TODO
+
+    def extract_configurations(self):
+        data = self.extract_data()
+        compression_f = self.l_compressions[self.compression_index, 1]()
+        distance_f = self.l_distances[self.distance_index, 1]()
+        cluster_f = cluster_algorithms[self.cluster_index, 1]()
+        return data, compression_f, distance_f, cluster_f
+
+    def extract_data(self):
+        data = self.l_data[self.data_index, 1]()
+        if len(data) > 1000:
+            data = data[0:1000]
+        return data
 
     def show_configuration_centre(self):
         title = "Configuration Centre"
