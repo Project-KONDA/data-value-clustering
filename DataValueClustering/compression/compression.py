@@ -4,88 +4,70 @@ import numpy as np
 
 def char_compression_function(values, unify_values=True):
     # ["[a-zA-Z]", "e"], ["[0-9]", "0"]
-    return get_compression_method(
-        [True, True, False, False, False, False, False, False, False,
-         True, False, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, True, False, False, False, False, False, False, False,
+                                   True, False, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def char_compression_case_sensitive_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["[0-9]", "0"]
-    return get_compression_method(
-        [True, False, True, False, False, False, False, False, False,
-         True, False, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, False, False, False, False, False, False,
+                                   True, False, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def sequence_compression_function(values, unify_values=True):
     # ["[a-zA-Z]+", "f"],  ["[0-9]+", "1"]
-    return get_compression_method(
-        [True, True, False, False, True, False, False, False, False,
-         True, True, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, True, False, False, True, False, False, False, False,
+                                   True, True, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def sequence_compression_case_sensitive_function(values, unify_values=True):
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]+", "1"]
-    return get_compression_method(
-        [True, False, True, True, False, True, False, False, False,
-         True, True, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, True, False, True, False, False, False,
+                                   True, True, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def letter_sequence_compression_function(values, unify_values=True):
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]", "0"]
-    return get_compression_method(
-        [True, False, True, True, False, True, False, False, False,
-         True, False, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, True, False, True, False, False, False,
+                                   True, False, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def number_sequence_compression_function(values, unify_values=True):
     # ["[a-z]", l"], ["[A-Z]", "L"], ["[0-9]+", "1"]
-    return get_compression_method(
-        [True, False, True, False, False, False, False, False, False,
-         True, True, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, False, False, False, False, False, False,
+                                   True, True, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def word_compression_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"]
-    return get_compression_method(
-        [True, False, True, True, False, True, True, False, False,
-         True, True, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, True, False, True, True, False, False,
+                                   True, True, False,
+                                   False, False, False, False, False, False])(values)
 
 
 def word_decimal_compression_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"], ["1,1", "2"]
-    return get_compression_method(
-        [True, False, True, True, False, True, True, False, False,
-         True, True, True,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, True, False, True, True, False, False,
+                                   True, True, True,
+                                   False, False, False, False, False, False])(values)
 
 
 def word_sequence_compression_function(values, unify_values=True):
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"],
     # ["[qU]+", "V"], ["[0-9]+", "1"]
-    return get_compression_method(
-        [True, False, True, True, False, True, True, True, False,
-         True, True, False,
-         False, False, False, False, False, False],
-        unify_values)(values)
+    return get_compression_method([True, False, True, True, False, True, True, True, False,
+                                   True, True, False,
+                                   False, False, False, False, False, False])(values)
 
 
 question_array = [
-    # dependencies, not-dependencies, name, question, default, explanation, example
+    # dependencies, not-dependencies, name, default, question, explanation, example
     [[], [], "lower_case", True,
      "Should all lower case letters be treated equally?",  # TODO: ask if there are exceptions?
      "Choose yes if the concrete lower case letter present does not have a crucial impact on the meaning.\n" +
@@ -173,7 +155,12 @@ question_array = [
     [[], [12], "special_rest", False,
      "Should all other special characters be treated equally?",
      "Choose yes if the concrete specical character does not have a crucial impact on the meaning.\n" +
-     "For example, '$' and 'µ' will be treated equally since both are specical characters"] # 17
+     "For example, '$' and 'µ' will be treated equally since both are specical characters"], # 17
+
+    [[], [], "unify", True,
+     "Should duplicates be removed?",
+     "Choose yes if ....\n" + # TODO: influence on clusters
+     "For example, ..."]  # 18
 ]
 
 # dictionary = [
@@ -314,7 +301,7 @@ def get_blob_configuration(answers):
 #     return np.array(result, dtype=object)
 
 
-def get_compression_method(answers, unify_values=True):
+def get_compression_method(answers):
     def local_func(values, compressions_list, unique):
         values_compressed = values.copy()
         compression_dict = {}
@@ -333,9 +320,11 @@ def get_compression_method(answers, unify_values=True):
             values_compressed = np.array(list(set(values_compressed)))  # order differs across multiple runs
         return values_compressed, compression_dict
 
-    compressions = get_compression_configuration(answers=answers)
+    n = len(answers)
 
-    return lambda values: local_func(values, compressions, unify_values)
+    compressions = get_compression_configuration(answers=answers[0:n-1])
+
+    return lambda values: local_func(values, compressions, answers[n-1])
 
 
 if __name__ == '__main__':
@@ -350,3 +339,4 @@ if __name__ == '__main__':
         False, True, True, True, True, True]
     max_compression = get_blob_configuration(answers=min)
     print(max_compression)
+
