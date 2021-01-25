@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt, cm
 import numpy as np
 from sklearn.manifold import MDS
 
-from utility.distance_matrix import get_symmetric
+from distance.distance_matrix import get_symmetric
 
 
 def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed):
