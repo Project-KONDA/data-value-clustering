@@ -187,13 +187,15 @@ def get_compression_method(answers):
 if __name__ == '__main__':
     min = [True, True, False, False, False, False, False, False, False,
         True, True, False,
-        True, False, False, False, False, False]
+        True, False, False, False, False, False,
+        True]
     min_compression = get_compression_configuration(answers=min)
     print(min_compression)
 
-    max = [True, False, True, True, True, True, True, True, True,
-        True, True, True,
-        False, True, True, True, True, True]
+    # max = [True, False, True, True, True, True, True, True, True,
+    #     True, True, True,
+    #     False, True, True, True, True, True,
+    #     True]
     #max_compression = get_blob_configuration(answers=min)
     #print(max_compression)
 

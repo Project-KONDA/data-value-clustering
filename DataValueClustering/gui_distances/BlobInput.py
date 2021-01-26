@@ -5,7 +5,8 @@ from PIL import Image, ImageTk
 
 from gui.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
-from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix, get_blob_configuration
+from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix, get_blob_configuration, \
+    create_coordinates_relative
 
 
 def input_blobs(config):
@@ -64,20 +65,15 @@ class BlobInput:
         self.gui_spacing = 5
         self.distance_factor = 1 / self.image_sizes  # self.max_distance / self.diagonal
         self.size_factor = 1.  # 2 / self.image_sizes  # self.max_distance / self.diagonal / 0.62
-        self.distance_threshold = 0.  # self.diagonal / 20
 
         """Canvas"""
         self.canvas_h = 17 * self.h // 18 - 4 * self.gui_spacing
-        self.canvas_w =self.w - 3 * self.gui_spacing
+        self.canvas_w = self.w - 3 * self.gui_spacing
         self.canvas = Canvas(width=self.canvas_w, height=self.canvas_h,
                              highlightbackground="black")  # , background="alice blue")
         self.canvas.place(anchor='nw', x=self.gui_spacing, y=self.gui_spacing)
 
-        # TODO: map coordinates to canvas instead of creating coordinates
-        self.coordinates = create_coordinates(self.canvas_w//2, self.canvas_h//2, self.n)  # array: [x, y]
-
         # garbage collector defense mechanism
-
         self.img = Image.open("blob_images\\background4.png")
         self.img = self.img.resize((self.canvas_w, self.canvas_h), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
@@ -103,8 +99,9 @@ class BlobInput:
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)
         for i, c in reversed(list(enumerate(self.coordinates))):
-            self.blobs[i] = Blob(self, label=self.labels[i], x=c[0], y=c[1], size=self.image_sizes, # TODO: extract size from config
-                                 resizable=self.resizable[i], regex=self.regex[i], info=self.chars_info[i])
+            self.blobs[i] = Blob(self, label=self.labels[i], regex=self.regexes[i], resizable=self.resizable[i],
+                                 info=self.chars_info[i], rel_x=self.coordinates[i, 0], rel_y=self.coordinates[i, 1],
+                                 rel_size=self.sizes[i])
 
         """Buttons"""
         self.button_h = self.h // 18
@@ -151,9 +148,9 @@ class BlobInput:
 
     def find_nearest_blob(self, x, y):
         """Finds the nearest blob to (x|y)"""
-        min_blob, min_distance = (None, self.distance_threshold)
+        min_blob, min_distance = (None, 0.)
         for i, blob in enumerate(self.blobs):
-            d = (blob.get_distance(x, y) - blob.size / 2) / blob.size
+            d = (blob.get_distance(x, y) - blob.get_abs_size() / 2) / blob.get_abs_size()
             if d < min_distance:
                 min_blob, min_distance = blob, d
 
@@ -231,20 +228,56 @@ class BlobInput:
 
     def restart(self):
         """Reopen the window, inclusive positions and sizes."""
-        chars_labels = self.chars_labels
+        configuration = self.get_config()
+        new_coordinates = create_coordinates_relative(self.n)
+
+        for i in range(self.n):
+            for j in range (3):
+                configuration[i, j+4] = new_coordinates[i,j]
+
         self.root.destroy()
-        self.__init__(chars_labels)
+        self.__init__(configuration)
+
+    def get_absolute_coordinate_value(self, relative_value, x=True):
+        # ca. (-0.2, 1.2) -> (0-1920)
+        factor = min(self.h, self.w)
+        difference = abs(self.h - self.w) // 2
+        result = relative_value * factor
+        if x != (self.w <= self.h):  # longer axis
+            result += difference
+        return result
+
+    def get_relative_coordinate_value(self, absolute_value, x=True):
+        # ca. (0-1920) -> (-0.2, 1.2)
+        factor = min(self.h, self.w)
+        difference = abs(self.h - self.w) // 2
+        if x != (self.w <= self.h):  # longer axis
+            absolute_value -= difference
+        result = absolute_value / factor
+        return result
+
+    def get_config(self):
+        # [label, regex, resizable, info, x, y, size]
+        config = list()
+        for blob in self.blobs:
+            blob_config = [blob.label, blob.regex, blob.resizable, blob.info, blob.rel_x, blob.rel_y, blob.rel_size]
+            config.append(blob_config)
+        return np.array(config, dtype=object)
 
 
 if __name__ == '__main__':
     min_blobs = [False, False, False, False, False, False, False, False, False,
                  False, False, False,
-                 True, False, False, False, False, False]
-    min_blob_config = get_blob_configuration(min_blobs)
-    print_cost_matrix(BlobInput(min_blob_config).get())
+                 True, False, False, False, False, False,
+                 True]
+    min_config = get_blob_configuration(min_blobs)
+    print(len(min_config), min_config)
+    print_cost_matrix(BlobInput(min_config).get())
 
     # max_blobs = [False, False, True, True, True, True, True, True, True,
     #              True, True, True,
-    #              False, True, True, True, True, True]
+    #              False, True, True, True, True, True,
+    #              True]
+    # max_config = get_blob_configuration(max_blobs)
     # max_blob_config = get_blob_configuration(max_blobs)
     # print(str(BlobInput(max_blob_config).get()))
