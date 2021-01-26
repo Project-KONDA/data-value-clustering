@@ -20,12 +20,14 @@ class BlobInput:
         # config is array of form [label, regex, resizable, info, x, y, size]
 
         """Parameters"""
-        self.chars_labels = config
+        self.configuration = config
         self.labels = config[:, 0]
         self.n = len(self.labels)
-        self.regex = config[:, 1]
+        self.regexes = config[:, 1]
         self.resizable = config[:, 2]
         self.chars_info = config[:, 3]
+        self.coordinates = config[:, (4, 5)]
+        self.sizes = config[:, 6]
         self.canceled = False
 
         """Root"""

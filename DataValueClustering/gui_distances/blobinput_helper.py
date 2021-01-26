@@ -27,10 +27,10 @@ def create_coordinates(x, y, n):
 def create_coordinates_relative(n):
     x = 0.5
     y = 0.5
-    size = 0.125
+    size = 1
     distance_to_center = min(x, y) / 1.5
     # array: [x, y]
-    array = np.empty((n, 2), dtype=object)
+    array = np.empty((n, 3), dtype=object)
     degree_delta = 360 / n
 
     for i in range(n):
@@ -42,7 +42,6 @@ def create_coordinates_relative(n):
         array[i, 2] = size
 
     return array
-
 
 
 def matrix_is_valid(matrix, n=-1):
@@ -167,13 +166,15 @@ def get_blob_configuration(answers):
     coordinates = create_coordinates_relative(n)  # [x, y, size]
     blob_info_t = np.transpose(blob_info)
     coordinates_t = np.transpose(coordinates)
-    blob_configuration = np.concatenate((blob_info_t, coordinates_t))  # [label, regex, resizable, info, x, y, size]
+    blob_configuration_t = np.concatenate((blob_info_t, coordinates_t))  # [label, regex, resizable, info, x, y, size]
+    blob_configuration = np.transpose(blob_configuration_t)
+    print(blob_configuration)
     return blob_configuration
 
 
 if __name__ == "__main__":
-    m = np.full((5,5),"a")
-    n = np.full((5,5),"b")
+    m = np.full((5, 5), "a")
+    n = np.full((5, 5), "b")
     print(m)
     print(n)
 
