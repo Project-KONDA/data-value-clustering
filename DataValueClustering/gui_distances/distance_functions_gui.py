@@ -23,7 +23,7 @@ def distance_longest_common_subsequence():
     return longest_common_subsequence_distance
 
 
-def distance_weighted_levenshtein():
+def distance_weighted_levenshtein(blob_configuration):
     # TODO: let user choose one of cost_maps and execute function
 
     titlex = "Choose a Cost Map"
@@ -31,7 +31,6 @@ def distance_weighted_levenshtein():
 
     # TODO4
     num = 5
-    config = None
 
     optionsx = np.array([
         ["Costmatrix",
@@ -39,15 +38,15 @@ def distance_weighted_levenshtein():
         ["Costmatrix Empty",
          lambda: input_costmatrix(num, empty=True)],
         ["BlobInput",
-         lambda: input_blobs(config)],
+         lambda: input_blobs(blob_configuration)],
     ])
 
     myDropdown = DropdownInput(titlex, list(labelsx), list([optionsx[:, 0]]))
     answer, index = myDropdown.get()
 
-    cost_map = optionsx[index[0], 1]()
+    cost_map = optionsx[index[0], 1]()  # TODO: return modified blob_configuration
 
-    return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)
+    return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)  # TODO: return modified blob_configuration
 
 
 def automatic():
@@ -73,11 +72,11 @@ distance_functions = np.array([
     ["Weighted Levenshtein",
      distance_weighted_levenshtein],
     ["Levenshtein",
-     distance_levenshtein],
+     lambda blob_configuration: distance_levenshtein()],
     ["Longest Common Subsequence",
-     distance_longest_common_subsequence],
+     lambda blob_configuration: distance_longest_common_subsequence()],
     ["Dice",
-     distance_dice],
+     lambda blob_configuration: distance_dice()],
 ])
 
 if __name__ == "__main__":
