@@ -100,6 +100,8 @@ blob_configuration_array = [
     # dependencies, not-dependencies, name, regex, resizable, info
     [[],           [],                       "none",                        "^$",                                                        False,
      "info_none"],
+    [[],           [],                       "space",                        "^ $",                                                        False,
+     "info_space"],
 
     [[0],          [1, 3],                   "lower_case_letters",          "^l$",                                                       False,
      "info_lower_case_letters"],

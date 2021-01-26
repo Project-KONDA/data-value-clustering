@@ -20,7 +20,7 @@ class Blob:
         self.step_size = 0.05
         self.max_size = 5.5  # self.min_size + 100 * self.step_size
 
-        self.path = "blob_images\\" + (lambda: "" if self.resizable else "fixed\\")() + self.label + ".png"
+        self.path = "..\\gui_distances\\blob_images\\" + (lambda: "" if self.resizable else "fixed\\")() + self.label + ".png"
         self.photo_image = None
         self.image = self.create_image()
 
