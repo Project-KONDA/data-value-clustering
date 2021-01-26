@@ -1,5 +1,6 @@
 from centre.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
+from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_matrix
 from gui.DropdownInput import input_dropdown
 from gui_clustering.cluster_algorithms_gui import cluster_algorithms
@@ -47,7 +48,8 @@ class Main:
         if self.compression_index != -1:
             self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1]()
         if self.distance_index != -1:
-            self.distance_f = self.l_distances[self.distance_index, 1]()  # TODO: pass answers to blob view
+            self.blob_configuration = get_blob_configuration(self.compression_answers)  # [label, regex, resizable, info, x, y, size]
+            self.distance_f = self.l_distances[self.distance_index, 1](self.blob_configuration)  # TODO: return and save modified blob_configuration
 
         # EXECUTION
 

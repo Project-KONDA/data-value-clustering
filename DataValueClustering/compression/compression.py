@@ -2,6 +2,7 @@ import re
 import numpy as np
 
 from gui_compression.questions import question_array
+#from gui_distances.blobinput_helper import get_blob_configuration
 
 
 def char_compression_function():
@@ -123,69 +124,6 @@ compression_configuration_array = [
     [[12],         [],     lambda v: re.sub("[^a-zäöüßáàéèíìóòúùA-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ0-9 ]", "$", v),                                    ],  # "\$", "special_characters",          "[^a-zäöüßA-ZÄÖÜ0-9 ]"]  # 18
 ]
 
-blob_configuration_array = [
-    # dependencies, not-dependencies, name, resizable, regex, info
-    [[],           [],                       "none",                        "^$",                                                        False,
-     "info_none"],
-
-    [[0],          [1, 3],                   "lower_case_letters",          "^l$",                                                       False,
-     "info_lower_case_letters"],
-    [[],           [0],                      "lower_case_letters",          "^[a-zäöüß]$",                                               True,
-     "info_lower_case_letters"],
-    [[0, 3],       [1, 6],                   "lower_case_words",            "^s$",                                                       False,
-     "info_lower_case_words"],
-    [[0, 3, 6],    [1, 7],                   "words",                       "^w$",                                                       False,
-     "info_words"],
-    [[0, 3, 6, 7], [1],                      "word_sequences",              "^q$",                                                       False,
-     "info_word_sequences"],
-    [[0, 1],       [4],                      "letters",                     "^a$",                                                       False,
-     "info_letters"],
-    [[0, 1, 4],    [8],                      "letter_sequences",            "^b$",                                                       False,
-     "info_letter_sequences"],
-    [[0, 1, 4, 8], [],                       "letter_sequence_sequences",   "^Q$",                                                       False,
-     "info_letter_sequence_sequences"],
-    [[2],          [1, 5],                   "upper_case_letters",          "^L$",                                                       False,
-     "info_upper_case_letters"],
-    [[],           [1, 2],                   "upper_case_letters",          "^[A-ZÄÖÜ]$",                                                True,
-     "info_upper_case_letters"],
-    [[2, 5],       [1],                      "upper_case_letter_sequences", "^S$",                                                       False,
-     "info_upper_case_letter_sequences"],
-
-    [[9],          [10],                     "digits",                      "^0$",                                                       False,
-     "info_digits"],
-    [[],           [9],                      "digits",                      "^[0-9]$",                                                   True,
-     "info_digits"],
-    [[9, 10],      [],                       "integers",                    "^1$",                                                       False,
-     "info_integers"],
-    [[9, 10, 11],  [],                       "floats",                      "^2$",                                                       False,
-     "info_floats"],
-
-    [[13],         [12],                     "punctuation_marks",           "^\.$",                                                      False,
-     "info_punctuation_marks"],
-    [[],           [12, 13],                 "punctuation_marks",           "^[\.,:;!\?]$",                                              True,
-     "info_punctuation_marks"],
-    [[14],         [12],                     "brackets",                    "^\($",                                                      False,
-     "info_brackets"],
-    [[],           [12, 14],                 "brackets",                    "^[\(\)\[\]\{\}]$",                                          True,
-     "info_brackets"],
-    [[15],         [12],                     "math_operators",              "^\+$",                                                      False,
-     "info_math_operators"],
-    [[],           [12, 15],                 "math_operators",              "^[\+\-\*/%=<>\&\|]$",                                       True,
-     "info_math_operators"],
-    [[16],         [12],                     "quotation_marks",             "^\"$",                                                      False,
-     "info_quotation_marks"],
-    [[],           [12, 16],                 "quotation_marks",             "^[\"`´']$",                                                 True,
-     "info_quotation_marks"],
-    [[17],         [12],                     "other_characters",            "^_$",                                                       False,
-     "info_other_characters"],
-    [[],           [12, 17],                 "other_characters",            "^[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]$", True,
-     "info_other_characters"],
-    [[12],         [],                       "special_characters",          "^\$",                                                       False,
-     "info_special_characters"],
-    [[],           [12, 13, 14, 15, 16, 17], "special_characters",          "^[^a-zäöüßA-ZÄÖÜ0-9 ]$",                                    True,
-     "info_special_characters"]
-]
-
 
 def get_array_part(selectables, answers):
     assert (len(answers) == len(question_array))
@@ -204,10 +142,6 @@ def get_array_part(selectables, answers):
 def get_compression_configuration(answers):
     array = get_array_part(compression_configuration_array, answers)
     return array[:, 0]
-
-
-def get_blob_configuration(answers):
-    return get_array_part(blob_configuration_array, answers)
 
 
 # def get_applicable_replacements(answers):
@@ -260,6 +194,6 @@ if __name__ == '__main__':
     max = [True, False, True, True, True, True, True, True, True,
         True, True, True,
         False, True, True, True, True, True]
-    max_compression = get_blob_configuration(answers=min)
-    print(max_compression)
+    #max_compression = get_blob_configuration(answers=min)
+    #print(max_compression)
 

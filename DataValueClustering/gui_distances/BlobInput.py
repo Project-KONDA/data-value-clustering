@@ -3,28 +3,29 @@ from tkinter import Tk, Button, Canvas, Menu, FLAT
 import numpy as np
 from PIL import Image, ImageTk
 
-from compression.compression import get_blob_configuration
 from gui.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
-from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix
+from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix, get_blob_configuration
 
 
 def input_blobs(config):
     blobs = BlobInput(config)
     result = blobs.get()
-    return result
+    return result  # TODO: return modified blob_configuration
 
 
 class BlobInput:
 
-    def __init__(self, chars_labels):
+    def __init__(self, config):
+        # config is array of form [label, regex, resizable, info, x, y, size]
 
         """Parameters"""
-        self.chars_labels = chars_labels
-        self.labels = chars_labels[:, 0]
-        self.regex = chars_labels[:, 1]
-        self.resizable = chars_labels[:, 2]
-        self.chars_info = chars_labels[:, 3]
+        self.chars_labels = config
+        self.labels = config[:, 0]
+        self.n = len(self.labels)
+        self.regex = config[:, 1]
+        self.resizable = config[:, 2]
+        self.chars_info = config[:, 3]
         self.canceled = False
 
         """Root"""
@@ -69,7 +70,9 @@ class BlobInput:
         self.canvas = Canvas(width=self.canvas_w, height=self.canvas_h,
                              highlightbackground="black")  # , background="alice blue")
         self.canvas.place(anchor='nw', x=self.gui_spacing, y=self.gui_spacing)
-        self.coordinates = create_coordinates(self.canvas_w//2, self.canvas_h//2, self.labels)  # array: [label, x, y, size]
+
+        # TODO: map coordinates to canvas instead of creating coordinates
+        self.coordinates = create_coordinates(self.canvas_w//2, self.canvas_h//2, self.n)  # array: [x, y]
 
         # garbage collector defense mechanism
 
@@ -96,9 +99,9 @@ class BlobInput:
         self.canvas.text = self.canvas.create_text(10, 10, text="", anchor="nw")
 
         """Build Blobs"""
-        self.blobs = np.empty(len(chars_labels), dtype=Blob)
+        self.blobs = np.empty(len(config), dtype=Blob)
         for i, c in reversed(list(enumerate(self.coordinates))):
-            self.blobs[i] = Blob(self, label=self.labels[i], x=c[0], y=c[1], size=self.image_sizes,
+            self.blobs[i] = Blob(self, label=self.labels[i], x=c[0], y=c[1], size=self.image_sizes, # TODO: extract size from config
                                  resizable=self.resizable[i], regex=self.regex[i], info=self.chars_info[i])
 
         """Buttons"""
@@ -217,7 +220,7 @@ class BlobInput:
                     distance_map[(i, j)] = round(
                         (blob_i.get_distance(blob=blob_j) * self.distance_factor), 2)
 
-        return distance_map
+        return distance_map  # TODO: return modified blob_configuration
 
     def close(self, canceled=False):
         """Close Tk Window"""
