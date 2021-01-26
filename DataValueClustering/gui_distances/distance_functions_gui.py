@@ -38,7 +38,7 @@ def distance_weighted_levenshtein(blob_configuration):
         ["Costmatrix Empty",
          lambda: input_costmatrix(num, empty=True)],
         ["BlobInput",
-         lambda: input_blobs(blob_configuration)],
+         lambda: input_blobs(blob_configuration)[0]],
     ])
 
     myDropdown = DropdownInput(titlex, list(labelsx), list([optionsx[:, 0]]))

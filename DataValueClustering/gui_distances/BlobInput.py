@@ -202,7 +202,7 @@ class BlobInput:
             self._drag_data["nearest"].scale(reset=True)
         self.canvas_blob_info(event)
 
-    def get(self):
+    def get_distance_map(self):
         """Calculate and return distance map"""
         if self.canceled:
             return {}
@@ -220,6 +220,9 @@ class BlobInput:
                         (blob_i.get_distance(blob=blob_j) * self.distance_factor), 2)
 
         return distance_map  # TODO: return modified blob_configuration
+
+    def get(self):
+        return self.get_distance_map(), self.get_config()
 
     def close(self, canceled=False):
         """Close Tk Window"""
@@ -271,8 +274,9 @@ if __name__ == '__main__':
                  True, False, False, False, False, False,
                  True]
     min_config = get_blob_configuration(min_blobs)
-    print(len(min_config), min_config)
-    print_cost_matrix(BlobInput(min_config).get())
+    # print(len(min_config), min_config)
+    costmap, config = BlobInput(min_config).get()
+    print_cost_matrix(costmap)
 
     # max_blobs = [False, False, True, True, True, True, True, True, True,
     #              True, True, True,

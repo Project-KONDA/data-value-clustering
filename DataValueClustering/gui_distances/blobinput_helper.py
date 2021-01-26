@@ -168,7 +168,6 @@ def get_blob_configuration(answers):
     coordinates_t = np.transpose(coordinates)
     blob_configuration_t = np.concatenate((blob_info_t, coordinates_t))  # [label, regex, resizable, info, x, y, size]
     blob_configuration = np.transpose(blob_configuration_t)
-    print(blob_configuration)
     return blob_configuration
 
 
