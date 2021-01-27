@@ -5,6 +5,7 @@ import numpy as np
 
 # create n coordinates of equal distance to middlepoint x|y clockwise
 from compression.compression import get_array_part
+from gui_compression.questions import question_array
 
 
 def create_coordinates(x, y, n):
@@ -163,7 +164,7 @@ blob_configuration_array = [
 
 
 def get_blob_configuration(answers):
-    blob_info = get_array_part(blob_configuration_array, answers)  # [label, regex, resizable, info]
+    blob_info = get_array_part(blob_configuration_array, question_array, answers)  # [label, regex, resizable, info]
     n = len(blob_info)
     coordinates = create_coordinates_relative(n)  # [x, y, size]
     blob_info_t = np.transpose(blob_info)
