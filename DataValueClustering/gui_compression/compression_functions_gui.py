@@ -18,6 +18,8 @@ def custom_full():
 # name, [method() -> (   [method(vals)->(vals, dict)], answers)]
 
 compression_functions = np.array([
+    ["max", max_compression_function],
+
     ["Atomatic", automatic],
     ["No Compression", lambda: (lambda values: (values, {}), list(np.full(len(question_array), False)))],
 
