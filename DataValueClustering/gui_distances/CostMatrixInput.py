@@ -10,7 +10,7 @@ def input_costmatrix(size, empty=False):
     assert (size in range(2, 21))
     myMatrix = CostMatrixInput(size)
     myMatrix.record_matrix(empty)
-    return myMatrix.matrix
+    return myMatrix.matrix  # TODO: return modified config
 
 
 class CostMatrixInput:
