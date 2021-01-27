@@ -133,7 +133,7 @@ compression_configuration_array = [
 ]
 
 
-def get_array_part(selectables, answers):
+def get_array_part(selectables, question_array, answers):
     assert (len(answers) == len(question_array))
     result = list()
     for line in selectables:
@@ -148,7 +148,7 @@ def get_array_part(selectables, answers):
 
 
 def get_compression_configuration(answers):
-    array = get_array_part(compression_configuration_array, answers)
+    array = get_array_part(compression_configuration_array, question_array, answers)
     return array[:, 0]
 
 
