@@ -2,7 +2,7 @@ from compression.compression import *
 
 
 # pass compression as compression_function to clustering.clustering.cluster
-from gui_compression.compression_questionnaire import automatic
+from gui_compression.compression_questionnaire import compression_configuration
 from gui_compression.questions import question_array
 
 
@@ -18,10 +18,10 @@ def custom_full():
 # name, [method() -> (   [method(vals)->(vals, dict)], answers)]
 
 compression_functions = np.array([
-    ["max", max_compression_function],
+    ["Manual Configuration", compression_configuration],
 
-    ["Atomatic", automatic],
     ["No Compression", lambda: (lambda values: (values, {}), list(np.full(len(question_array), False)))],
+    ["Maximum Compression", max_compression_function],
 
     ["letters, digits", char_compression_function],
     ["case-sensitive letters, digits", char_compression_case_sensitive_function],

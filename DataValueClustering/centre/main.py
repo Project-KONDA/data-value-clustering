@@ -46,7 +46,7 @@ class Main:
             self.extract_data()
 
         if self.compression_index != -1:
-            self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1]()
+            self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1](self.data)
         if self.distance_index != -1:
             self.blob_configuration = get_blob_configuration(self.compression_answers)  # [label, regex, resizable, info, x, y, size]
             self.distance_f, self.blob_configuration = self.l_distances[self.distance_index, 1](self.blob_configuration)
