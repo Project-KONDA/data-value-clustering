@@ -18,21 +18,21 @@ def custom_full():
 # name, [method() -> (   [method(vals)->(vals, dict)], answers)]
 
 compression_functions = np.array([
-    ["Manual Configuration", compression_configuration],
+    ["Manual Configuration", lambda data: compression_configuration (data)],
 
-    ["No Compression", lambda: (lambda values: (values, {}), list(np.full(len(question_array), False)))],
-    ["Maximum Compression", max_compression_function],
+    ["No Compression", lambda data: (lambda values: (values, {}), list(np.full(len(question_array), False)))],
+    ["Maximum Compression", lambda data: max_compression_function()],
 
-    ["letters, digits", char_compression_function],
-    ["case-sensitive letters, digits", char_compression_case_sensitive_function],
-    ["letter sequences and digit sequences", sequence_compression_function],
-    ["case-sensitive letter sequences and digit sequences", sequence_compression_case_sensitive_function],
-    ["letter sequences, digits", letter_sequence_compression_function],
-    ["letters, number sequences", number_sequence_compression_function],
-    ["words", word_compression_function],
-    ["words and decimal", word_decimal_compression_function],
-    ["sentence", word_sequence_compression_function],
+    ["letters, digits", lambda data: char_compression_function()],
+    ["case-sensitive letters, digits", lambda data: char_compression_case_sensitive_function()],
+    ["letter sequences and digit sequences", lambda data: sequence_compression_function()],
+    ["case-sensitive letter sequences and digit sequences", lambda data: sequence_compression_case_sensitive_function()],
+    ["letter sequences, digits", lambda data: letter_sequence_compression_function()],
+    ["letters, number sequences", lambda data: number_sequence_compression_function()],
+    ["words", lambda data: word_compression_function()],
+    ["words and decimal", lambda data: word_decimal_compression_function()],
+    ["sentence", lambda data: word_sequence_compression_function()],
 
-    # ["Custom Dictionary", custom_dictionary],
-    # ["Custom Full", custom_full]
+    # ["Custom Dictionary", lambda data: custom_dictionary()],
+    # ["Custom Full", lambda data: custom_full()]
 ])
