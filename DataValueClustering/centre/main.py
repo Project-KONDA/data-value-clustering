@@ -63,9 +63,10 @@ class Main:
         if self.distance_matrix is None:
             self.distance_matrix = calculate_distance_matrix(self.distance_f, self.values_compressed)
         # TODO: calculate condensed distance matrix?
+        # TODO: calculate min, max, median, avg?
 
         if self.cluster_index != -1:
-            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # TODO: pass answers and distance matrix
+            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # TODO: pass distance matrix
 
         print("Start clustering ...")
         # CLUSTERING
@@ -76,9 +77,13 @@ class Main:
         # CLUSTER VISUALISATION
         self.fancy_cluster_list, self. noise = fancy_cluster_representation(self.data, self.clusters)
         # TODO
+        # MDS scatter plot
         # print(cluster_list, noise)
 
         # CLUSTER VALIDATION
+        # TODO
+
+        # SATISFACTION QUESTIONNAIRE
         # TODO
 
         # SUGGEST DATA ENHANCEMENTS
