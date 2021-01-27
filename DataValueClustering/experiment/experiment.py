@@ -1,10 +1,9 @@
 import time
 
-from clustering.clustering import cluster
-
+from centre.main import Main
 from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
-from gui_clustering.cluster_algorithms_gui import cluster_dbscan
+from gui_clustering.cluster_algorithms_gui import cluster_dbscan, cluster_affinity
 from data_extraction.read_file import read_data_values_from_file
 
 midas_dates = "../data/midas_dates.txt"
@@ -17,7 +16,8 @@ def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
     # print(data)
 
     start = time.time()
-    cluster_list, noise = cluster(data, compression_f, distance_f, cluster_f)
+    main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
+    cluster_list, noise = main.fancy_cluster_list, main.noise
     end = time.time()
     print("Runtime = " + str(end - start))
 
@@ -63,4 +63,4 @@ def distance_weighted_levenshtein():
 
 
 if __name__ == '__main__':
-    run_clustering(midas_dates, 1000, sequence_compression_case_sensitive_function, distance_weighted_levenshtein(), cluster_affinity())
+    run_clustering(midas_dates, 1000, sequence_compression_case_sensitive_function()[0], distance_weighted_levenshtein(), cluster_affinity())
