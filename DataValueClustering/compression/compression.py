@@ -1,7 +1,7 @@
 import re
 import numpy as np
 
-from gui_compression.questions import question_array
+from gui_compression.questions import compression_question_array
 #from gui_distances.blobinput_helper import get_blob_configuration
 
 
@@ -148,7 +148,7 @@ def get_array_part(selectables, question_array, answers):
 
 
 def get_compression_configuration(answers):
-    array = get_array_part(compression_configuration_array, question_array, answers)
+    array = get_array_part(compression_configuration_array, compression_question_array, answers)
     return array[:, 0]
 
 

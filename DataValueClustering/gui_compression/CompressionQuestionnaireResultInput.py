@@ -55,7 +55,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config2 = gui_compression.questions.question_array
+    q_config2 = gui_compression.questions.compression_question_array
 
     qc = CompressionQuestionnaireResultInput(q_config2,
                                              ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",

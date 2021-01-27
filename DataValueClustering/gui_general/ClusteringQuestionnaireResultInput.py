@@ -6,7 +6,7 @@ import gui_clustering.clustering_questions
 from compression.compression import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from gui_clustering.algorithm_selection import algorithm_array
-from gui_clustering.clustering_questions import question_array
+from gui_clustering.clustering_questions import clustering_question_array
 
 
 def input_questionnaire_clustering(config, predefined_answers=None):
@@ -39,7 +39,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
 
     def apply(self):
         answers = self.get()[0]
-        self.suggested_algorithms = get_array_part(algorithm_array, question_array, answers)
+        self.suggested_algorithms = get_array_part(algorithm_array, clustering_question_array, answers)
 
         for i in range(len(self.result_widgets)):
             self.result_widgets[i].destroy()
@@ -65,7 +65,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config3 = gui_clustering.clustering_questions.question_array
+    q_config3 = gui_clustering.clustering_questions.clustering_question_array
 
     qc = ClusteringQuestionnaireResultInput(q_config3, [True, True, False, True, True, True])
     qc.run()

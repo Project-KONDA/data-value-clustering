@@ -1,4 +1,4 @@
-question_array = [
+clustering_question_array = [
     # dependencies, not-dependencies, name, default, question, explanation
 
     [[], [],    "fast",             False,  "Is fast clustering desired?",

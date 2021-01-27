@@ -140,7 +140,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config2 = gui_compression.questions.question_array
-    q_config3 = gui_clustering.clustering_questions.question_array
+    q_config2 = gui_compression.questions.compression_question_array
+    q_config3 = gui_clustering.clustering_questions.clustering_question_array
 
     print(QuestionnaireInput(title, q_config3).get())
