@@ -5,8 +5,9 @@ from PIL import Image, ImageTk
 
 from gui.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
-from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix, get_blob_configuration, \
+from gui_distances.blobinput_helper import get_blob_configuration, \
     create_coordinates_relative
+from gui_distances.costmapinput_helper import print_cost_map
 
 
 def input_blobs(config):
@@ -276,7 +277,7 @@ if __name__ == '__main__':
     min_config = get_blob_configuration(min_blobs)
     # print(len(min_config), min_config)
     costmap, config = BlobInput(min_config).get()
-    print_cost_matrix(costmap)
+    print_cost_map(costmap)
 
     # max_blobs = [False, False, True, True, True, True, True, True, True,
     #              True, True, True,

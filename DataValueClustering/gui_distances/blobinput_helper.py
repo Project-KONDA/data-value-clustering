@@ -45,58 +45,6 @@ def create_coordinates_relative(n):
     return array
 
 
-def matrix_is_valid(matrix, n=-1):
-    if type(matrix) is not type({}):
-        return False
-    if n < 0:
-        n = int(floor(sqrt(len(matrix))))
-    else:
-        if not n == int(floor(sqrt(len(matrix)))):
-            return False
-
-    if not len(matrix) == n * n + n + 1:
-        return False
-    # test Values - () is number
-    if () not in matrix:
-        return False
-    if not isinstance(matrix[()], float):
-        return False
-    # test Values - (i) is single-character regex
-    for i in range(n):
-        if i not in matrix:
-            return False
-        if not isinstance(matrix[i], str):
-            return False
-    # test Values - (i,j) is number
-    for i in range(n):
-        for j in range(n):
-            if (i, j) not in matrix:
-                return False
-            if not isinstance(matrix[(i, j)], float):
-                return False
-    return True
-
-
-def print_cost_matrix(matrix):
-    n = int(floor(sqrt(len(matrix))))
-    if not matrix_is_valid(matrix):
-        print("{}")
-        return
-    s = "{"
-    s += str(matrix[()])
-    print(s)
-    s = f'{"": <15}'
-    for i in range(n):
-        s += f'{str(matrix[i]): <11}  '
-    print(s)
-    for i in range(n):
-        s = f'{matrix[i]: <15}'
-        for j in range(n):
-            s += f'{str(matrix[(j, i)]): <11}  '
-        print(s)
-    print("}")
-
-
 blob_configuration_array = [
     # dependencies, not-dependencies, name, regex, resizable, info
     [[],           [],                       "none",                        "^$",                                                        False,

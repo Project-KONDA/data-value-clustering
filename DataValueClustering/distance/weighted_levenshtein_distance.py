@@ -28,7 +28,7 @@ weights = [
 
 
 def get_cost_map(rgx=regex, w=weights, weight_case_switch=weight_case):
-    # def get_cost_map(regex, matrix, weight=1):
+    # def get_cost_map(regex, map, weight=1):
     assert len(rgx) == len(w) == len(w[0])
     d = {}
     d[()] = weight_case_switch
