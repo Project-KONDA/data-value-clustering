@@ -1,8 +1,8 @@
-from gui_centre.cluster_representation import fancy_cluster_representation
+from centre.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
 from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_and_condensed_matrix
-from gui_general.DropdownInput import input_dropdown
+from gui.DropdownInput import input_dropdown
 from gui_clustering.clustering_choices import cluster_algorithms
 from gui_compression.compression_functions_gui import compression_functions
 from gui_distances.distance_functions_gui import distance_functions
@@ -11,8 +11,8 @@ from data_extraction.read_file import get_sources_in_experiment_data_directory
 
 class Main:
 
-    def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1,
-                 data=None, compression_f=None, distance_f=None, cluster_f=None):
+    def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
+                 compression_f=None, distance_f=None, cluster_f=None):
 
         self.l_data = get_sources_in_experiment_data_directory()
         self.l_compressions = compression_functions
@@ -46,8 +46,7 @@ class Main:
             self.extract_data()
 
         if self.compression_index != -1:
-            self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1](self.data)
-
+            self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1]()
         if self.distance_index != -1:
             self.blob_configuration = get_blob_configuration(self.compression_answers)  # [label, regex, resizable, info, x, y, size]
             self.distance_f, self.blob_configuration = self.l_distances[self.distance_index, 1](self.blob_configuration)

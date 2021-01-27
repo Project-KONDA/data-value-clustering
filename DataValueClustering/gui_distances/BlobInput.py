@@ -3,7 +3,7 @@ from tkinter import Tk, Button, Canvas, Menu, FLAT
 import numpy as np
 from PIL import Image, ImageTk
 
-from gui_general.help_popup_gui import menu_help_blob_input
+from gui.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
 from gui_distances.blobinput_helper import get_blob_configuration, \
     create_coordinates_relative

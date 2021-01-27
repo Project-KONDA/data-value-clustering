@@ -1,6 +1,6 @@
 import time
 
-from gui_centre.main import Main
+from centre.main import Main
 from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
 from gui_clustering.cluster_algorithms_gui import cluster_dbscan, cluster_affinity

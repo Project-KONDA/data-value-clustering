@@ -5,7 +5,7 @@ from distance.levenshtein_distance import levenshtein_distance
 from distance.longest_common_subsequence_distance import longest_common_subsequence_distance
 from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map
 
-from gui_general.DropdownInput import DropdownInput
+from gui.DropdownInput import DropdownInput
 from gui_distances.BlobInput import input_blobs
 from gui_distances.CostMapInput import input_costmap
 
@@ -38,11 +38,11 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
              input_costmap(regexes=blob_configuration[:, 1], costmap=costmap),
              blob_configuration)],
         ["Costmap",
-         lambda: (input_costmap(size=len(regexes=blob_configuration[:, 1]), regexes=blob_configuration[:, 1]),
+         lambda: (input_costmap(n=len(regexes=blob_configuration[:, 1]), regexes=blob_configuration[:, 1]),
                   blob_configuration)],
         ["Costmap Empty",
          lambda: (
-             input_costmap(size=len(blob_configuration), empty=True),
+             input_costmap(n=len(blob_configuration), empty=True),
              blob_configuration)],
 
         ["BlobInput",

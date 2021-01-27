@@ -3,7 +3,7 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar
 import numpy as np
 
 import gui_clustering.clustering_questions
-import gui_compression.compression_questions
+import gui_compression.questions
 from gui.ToolTip import CreateToolTip
 
 
@@ -77,7 +77,7 @@ class QuestionnaireInput:
             self.visible[i] = should_visible
 
     def should_be_visible(self, i):
-        """ test_clustering if question i should be visible"""
+        """ test if question i should be visible"""
         bool = True
         for d in self.config_dep[i]:
             bool &= self.answers[d].get() and self.visible[d]
@@ -137,7 +137,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config2 = gui_compression.compression_questions.compression_question_array
-    q_config3 = gui_clustering.clustering_questions.cluster_question_array
+    q_config2 = gui_compression.questions.question_array
+    q_config3 = gui_clustering.clustering_questions.question_array
 
     print(QuestionnaireInput(title, q_config3).get())

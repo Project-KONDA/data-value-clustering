@@ -4,9 +4,9 @@ import numpy as np
 
 import gui_clustering.clustering_questions
 from compression.compression import get_array_part
+from gui.QuestionnaireResultInput import QuestionnaireInputWithResult
 from gui_clustering.algorithm_selection import algorithm_array
 from gui_clustering.clustering_questions import question_array
-from gui_general.QuestionnaireResultInput import QuestionnaireInputWithResult
 
 
 def input_questionnaire_clustering(config, predefined_answers=None):
