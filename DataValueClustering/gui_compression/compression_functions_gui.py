@@ -1,7 +1,5 @@
 from compression.compression import *
 
-
-# pass compression as compression_function to clustering.clustering.cluster
 from gui_compression.compression_questionnaire import automatic
 from gui_compression.questions import question_array
 

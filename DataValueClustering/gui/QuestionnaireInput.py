@@ -3,10 +3,7 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar
 import numpy as np
 
 import gui_clustering.clustering_questions
-import gui_compression.compression_questionnaire
 import gui_compression.questions
-from gui_clustering import algorithm_selection
-from compression import compression
 from gui.ToolTip import CreateToolTip
 
 

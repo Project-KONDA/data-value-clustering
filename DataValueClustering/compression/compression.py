@@ -2,7 +2,6 @@ import re
 import numpy as np
 
 from gui_compression.questions import question_array
-#from gui_distances.blobinput_helper import get_blob_configuration
 
 
 def max_compression_function():

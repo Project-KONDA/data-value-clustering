@@ -1,6 +1,3 @@
-import numpy as np
-
-
 def dice_coefficient_distance(seq1, seq2):
     if not len(seq1) or not len(seq2): return 0.0
     if len(seq1) == 1:

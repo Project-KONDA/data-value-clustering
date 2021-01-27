@@ -3,7 +3,6 @@ from sklearn.cluster import OPTICS
 
 from centre.cluster_representation import fancy_cluster_representation
 from clustering import dbscan
-from distance.distance_matrix import calculate_distance_matrix
 
 
 def optics(distance_matrix, values,
