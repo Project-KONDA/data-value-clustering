@@ -1,7 +1,7 @@
 from compression.compression import *
 
 from gui_compression.compression_questionnaire import automatic
-from gui_compression.questions import question_array
+from gui_compression.compression_questions import compression_question_array
 
 
 def custom_dictionary():
@@ -18,8 +18,8 @@ def custom_full():
 compression_functions = np.array([
     ["max", max_compression_function],
 
-    ["Atomatic", automatic],
-    ["No Compression", lambda: (lambda values: (values, {}), list(np.full(len(question_array), False)))],
+    ["Atomatic", compression_algorithm_suggestions],
+    ["No Compression", lambda: (lambda values: (values, {}), list(np.full(len(compression_question_array), False)))],
 
     ["letters, digits", char_compression_function],
     ["case-sensitive letters, digits", char_compression_case_sensitive_function],
