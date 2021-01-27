@@ -7,13 +7,13 @@ from gui_general.QuestionnaireInputWithResult import QuestionnaireInputWithResul
 
 
 def input_questionnaire_compression(config, data, predefined_answers=None):
-    questionnaire = QuestionnaireInputCompression(config, data, predefined_answers)
+    questionnaire = CompressionQuestionnaireResultInput(config, data, predefined_answers)
     questionnaire.run()
     answers = questionnaire.get()
     return answers
 
 
-class QuestionnaireInputCompression(QuestionnaireInputWithResult):
+class CompressionQuestionnaireResultInput(QuestionnaireInputWithResult):
 
     def __init__(self, config, data, predefined_answers=None):
         self.help_text = "Compression of the first 100 data values:\n"
@@ -57,8 +57,8 @@ if __name__ == '__main__':
 
     q_config2 = gui_compression.questions.question_array
 
-    qc = QuestionnaireInputCompression(q_config2,
-                                        ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
+    qc = CompressionQuestionnaireResultInput(q_config2,
+                                             ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
                                          "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b",
                                          "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c",
                                          "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
