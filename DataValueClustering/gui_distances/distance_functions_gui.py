@@ -36,10 +36,11 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
     optionsx = np.array([
         ["Costmap Prefilled",
          lambda: (
-             input_costmap(regexes=blob_configuration[1], costmap=costmap),
+             input_costmap(regexes=blob_configuration[:, 1], costmap=costmap),
              blob_configuration)],
         ["Costmap",
-         lambda: (input_costmap(n=len(regexes=blob_configuration[1]), regexes=blob_configuration[1]), blob_configuration)],
+         lambda: (input_costmap(n=len(regexes=blob_configuration[:, 1]), regexes=blob_configuration[:, 1]),
+                  blob_configuration)],
         ["Costmap Empty",
          lambda: (
              input_costmap(n=len(blob_configuration), empty=True),

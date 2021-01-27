@@ -91,7 +91,7 @@ class Main:
     def extract_data(self):
         self.data = self.l_data[self.data_index, 1]()
         if len(self.data) > 1000:
-            self.data = self.data[0:1000]
+            self.data = self.data[0:100]
 
     def show_configuration_centre(self):
         title = "Configuration Centre"
