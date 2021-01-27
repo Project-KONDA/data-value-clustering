@@ -34,10 +34,10 @@ class Main:
         self.distance_matrix = None
 
         # Basic Configurations
-        if ((data_index == -1 or data is None)
-                and (compression_index == -1 or compression_f is None)
-                and (distance_index == -1 or distance_f is None)
-                and (cluster_index == -1 or cluster_f is None)):
+        if ((data_index == -1 and data is None)
+                or (compression_index == -1 and compression_f is None)
+                or (distance_index == -1 and distance_f is None)
+                or (cluster_index == -1 and cluster_f is None)):
             self.show_configuration_centre()
 
         # Specific Configurations
