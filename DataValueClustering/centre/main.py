@@ -49,7 +49,7 @@ class Main:
             self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1]()
         if self.distance_index != -1:
             self.blob_configuration = get_blob_configuration(self.compression_answers)  # [label, regex, resizable, info, x, y, size]
-            self.distance_f = self.l_distances[self.distance_index, 1](self.blob_configuration)  # TODO: return and save modified blob_configuration
+            self.distance_f, self.blob_configuration = self.l_distances[self.distance_index, 1](self.blob_configuration)
 
         # EXECUTION
 
