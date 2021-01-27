@@ -5,5 +5,6 @@ from gui_compression.questions import question_array
 
 def automatic():
     answers = input_questionnaire("Compression Configuration", question_array)
+    # TODO: live visualization of result
     return get_compression_method(answers), answers
 
