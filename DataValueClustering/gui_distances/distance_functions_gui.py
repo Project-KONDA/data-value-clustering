@@ -34,7 +34,7 @@ def distance_weighted_levenshtein(blob_configuration):
 
     optionsx = np.array([
         ["Costmatrix",
-         lambda: input_costmatrix(num)],
+         lambda: input_costmatrix(num)],  # TODO: pass blob_configuration
         ["Costmatrix Empty",
          lambda: input_costmatrix(num, empty=True)],
         ["BlobInput",
@@ -44,9 +44,9 @@ def distance_weighted_levenshtein(blob_configuration):
     myDropdown = DropdownInput(titlex, list(labelsx), list([optionsx[:, 0]]))
     answer, index = myDropdown.get()
 
-    cost_map = optionsx[index[0], 1]()  # TODO: return modified blob_configuration
+    cost_map, new_blob_configuration = optionsx[index[0], 1]()
 
-    return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)  # TODO: return modified blob_configuration
+    return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2), new_blob_configuration
 
 
 def automatic():
@@ -72,11 +72,11 @@ distance_functions = np.array([
     ["Weighted Levenshtein",
      distance_weighted_levenshtein],
     ["Levenshtein",
-     lambda blob_configuration: distance_levenshtein()],
+     lambda blob_configuration: (distance_levenshtein(), blob_configuration)],
     ["Longest Common Subsequence",
-     lambda blob_configuration: distance_longest_common_subsequence()],
+     lambda blob_configuration: (distance_longest_common_subsequence(), blob_configuration)],
     ["Dice",
-     lambda blob_configuration: distance_dice()],
+     lambda blob_configuration: (distance_dice(), blob_configuration)],
 ])
 
 if __name__ == "__main__":
