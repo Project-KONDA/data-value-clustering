@@ -1,4 +1,4 @@
-from gui_clustering.cluster_algorithms_gui import cluster_algorithms
+from gui_clustering.clustering_choices import cluster_algorithms
 from gui_compression.compression_functions_gui import compression_functions
 from gui_distances.distance_functions_gui import distance_functions
 from gui.DropdownInput import input_dropdown

@@ -4,14 +4,20 @@ import numpy as np
 import gui_compression.questions
 from compression.compression import get_compression_method
 from gui.QuestionnaireInputWithResult import QuestionnaireInputWithResult
-from gui_clustering import algorithm_selection
+
+
+def input_questionnaire_compression(config, data, predefined_answers=None):
+    questionnaire = QuestionnaireInputCompression(config, data, predefined_answers)
+    questionnaire.run()
+    answers = questionnaire.get()
+    return answers
 
 
 class QuestionnaireInputCompression(QuestionnaireInputWithResult):
 
-    def __init__(self, title, config, data, predefined_answers=None):
+    def __init__(self, config, data, predefined_answers=None):
         self.help_text = "Compression of the first 100 data values:\n"
-        super().__init__(title, config, predefined_answers)
+        super().__init__("Compression Configuration", config, predefined_answers)
         self.data = data
         self.update_visibility_and_result()
 
@@ -37,7 +43,6 @@ class QuestionnaireInputCompression(QuestionnaireInputWithResult):
 
 
 if __name__ == '__main__':
-    title = "myQuestions"
     q_config = np.array(
         # 0              1                 2     3        4         5             6
         # [dependencies, not-dependencies, name, default, question, explanation?, example?]
@@ -51,14 +56,13 @@ if __name__ == '__main__':
         dtype=object)
 
     q_config2 = gui_compression.questions.question_array
-    q_config3 = algorithm_selection.question_array
 
-    qc = QuestionnaireInputCompression(title, q_config2,
+    qc = QuestionnaireInputCompression(q_config2,
                                         ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
                                          "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b",
                                          "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c",
                                          "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
-                                         "b", "c", "?", "3", "1234"])
+                                         "b", "c", "?", "3", "1234"], None)
     qc.run()
 
     result = qc.get()

@@ -114,37 +114,3 @@ def clusters_from_compressed_values(distance_matrix, condensed_distance_matrix, 
     return list(range(0, n_clusters))
 
 
-def cluster_suggest():
-    # TODO
-
-    # show questionnaire
-    # answers = input_questionnaire("Clustering Algorithm Selection", question_array)
-
-    # suggested_algorithms = get_array_part(algorithm_array, answers)
-
-    # show suggested_algorithms
-
-    # let user select one of the suggested_algorithms
-
-    # execute configuration of selected algorithm, thus function in this module, and pass answers
-
-    pass
-
-
-cluster_algorithms = np.array([
-    ["Suggest",
-     cluster_suggest],
-    ["Hierarchical",
-     cluster_hierarchical],
-    ["KMedoids",
-     cluster_kmedoids],
-    ["DBSCAN",
-     cluster_dbscan],
-    ["Optics",
-     cluster_optics],
-    ["Affinity Propagation",
-     cluster_affinity],
-    ["Spectral Clustering",
-     cluster_spectral],
-    ["None", lambda: clusters_from_compressed_values]
-])

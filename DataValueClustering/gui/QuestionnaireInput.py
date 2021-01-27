@@ -2,6 +2,7 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar
 
 import numpy as np
 
+import gui_clustering.clustering_questions
 import gui_compression.compression_questionnaire
 import gui_compression.questions
 from gui_clustering import algorithm_selection
@@ -140,6 +141,6 @@ if __name__ == '__main__':
         dtype=object)
 
     q_config2 = gui_compression.questions.question_array
-    q_config3 = algorithm_selection.question_array
+    q_config3 = gui_clustering.clustering_questions.question_array
 
     print(QuestionnaireInput(title, q_config3).get())

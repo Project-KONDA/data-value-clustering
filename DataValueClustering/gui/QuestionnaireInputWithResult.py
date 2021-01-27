@@ -3,18 +3,8 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LE
 
 import numpy as np
 
-import gui_compression.compression_questionnaire
-import gui_compression.questions
-from compression.compression import get_compression_method
-from gui_clustering import algorithm_selection
-from compression import compression
 from gui.ToolTip import CreateToolTip
 
-
-def input_questionnaire_with_result(title, config):
-    questionnaire = QuestionnaireInputWithResult(title, config)
-    result = questionnaire.get()
-    return result
 
 class QuestionnaireInputWithResult(ABC):
 
