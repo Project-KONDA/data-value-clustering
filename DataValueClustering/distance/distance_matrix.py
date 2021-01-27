@@ -58,6 +58,40 @@ def get_symmetric(matrix):
     return symmetric_matrix
 
 
+def calculate_distance_and_condensed_matrix(distance_function, values):
+    size = len(values)
+    size_condesed = sum(range(size))
+
+    matrix = np.zeros((size, size))
+    condensed_matrix = np.zeros(size_condesed)
+
+    i = 0
+
+    min_distance = -np.inf
+    max_distance = np.inf
+
+    for y in range(size):
+        for x in range(size):
+            distance_x_y = distance_function(values[x], values[y])
+
+            if distance_x_y < min_distance:
+                min_distance = distance_x_y
+            if distance_x_y > max_distance:
+                max_distance = distance_x_y
+
+            matrix[x, y] = distance_x_y
+
+            if x >= y+1:
+                condensed_matrix[i] = distance_x_y
+                i += 1
+
+    assert (i == len(condensed_matrix))
+    if not is_valid_y(condensed_matrix):
+        condensed_matrix = None
+
+    return matrix, condensed_matrix, min_distance, max_distance
+
+
 def calculate_distance_matrix(distance_function, values):
     size = len(values)
     matrix = np.zeros((size, size))
