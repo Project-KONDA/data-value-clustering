@@ -38,7 +38,7 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
              input_costmap(regexes=blob_configuration[:, 1], costmap=costmap),
              blob_configuration)],
         ["Costmap",
-         lambda: (input_costmap(size=len(blob_configuration), regexes=blob_configuration[:, 1]),
+         lambda: (input_costmap(size=len(regexes=blob_configuration[:, 1]), regexes=blob_configuration[:, 1]),
                   blob_configuration)],
         ["Costmap Empty",
          lambda: (

@@ -6,7 +6,7 @@ import numpy as np
 from gui_general.ToolTip import CreateToolTip
 
 
-class QuestionnaireResultInput(ABC):
+class QuestionnaireInputWithResult(ABC):
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 

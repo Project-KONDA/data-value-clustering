@@ -4,27 +4,26 @@ import numpy as np
 
 import gui_clustering.clustering_questions
 from compression.compression import get_array_part
-
+from gui_clustering.algorithm_selection import algorithm_array
 from gui_clustering.clustering_questions import question_array
-from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
+from gui_general.QuestionnaireResultInput import QuestionnaireInputWithResult
 
 
 def input_questionnaire_clustering(config, predefined_answers=None):
-    questionnaire = QuestionnaireClusteringInput(config, predefined_answers)
+    questionnaire = QuestionnaireInputClustering(config, predefined_answers)
     questionnaire.run()
     answers, cluster_f = questionnaire.get()
     return answers, cluster_f
 
 
-class QuestionnaireClusteringInput(QuestionnaireResultInput):
+class QuestionnaireInputClustering(QuestionnaireInputWithResult):
 
     def __init__(self, config, predefined_answers=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
         super().__init__("Clustering Configuration", config, predefined_answers)
         self.choice = IntVar()
         self.choice.set(-1)
-        import gui_clustering
-        self.suggested_algorithms = gui_clustering.clustering_choices.cluster_algorithms[2:]
+        self.suggested_algorithms = algorithm_array[2:]
         self.update_visibility_and_result()
 
     def get(self):
@@ -40,7 +39,7 @@ class QuestionnaireClusteringInput(QuestionnaireResultInput):
 
     def apply(self):
         answers = self.get()[0]
-        self.suggested_algorithms = get_array_part(cluster_algorithms, question_array, answers)
+        self.suggested_algorithms = get_array_part(algorithm_array, question_array, answers)
 
         for i in range(len(self.result_widgets)):
             self.result_widgets[i].destroy()
@@ -68,7 +67,7 @@ if __name__ == '__main__':
 
     q_config3 = gui_clustering.clustering_questions.question_array
 
-    qc = QuestionnaireClusteringInput(q_config3, [True, True, False, True, True, True])
+    qc = QuestionnaireInputClustering(q_config3, [True, True, False, True, True, True])
     qc.run()
     result = qc.get()
 
