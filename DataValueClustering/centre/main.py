@@ -69,12 +69,12 @@ class Main:
 
         print("Start clustering ...")
         # CLUSTERING
-        clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)  # TODO: modify clustering algorithms such that they expect distance_matrix instead of distance_function
-        clusters = get_clusters_original_values(clusters_compressed, self.values_compressed, self.compression_f,
+        self.clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)  # TODO: modify clustering algorithms such that they expect distance_matrix instead of distance_function
+        self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
 
         # CLUSTER VISUALISATION
-        fancy_cluster_representation(self.data, clusters)
+        self.fancy_cluster_list, self. noise = fancy_cluster_representation(self.data, self.clusters)
         # TODO
         # print(cluster_list, noise)
 
