@@ -104,6 +104,7 @@ def print_cost_map(map):
 
 
 def preprocess_regexes(regexlist):
+    print(regexlist)
     assert (regexlist[0] == "^$")
     for i, regex in enumerate(regexlist):
         assert type(regex) is str
@@ -111,7 +112,7 @@ def preprocess_regexes(regexlist):
 
         r_len = len(regex)
         print(regex)
-        if re.search(regex, "^\^\[.*\]\$$") is not None:
+        if r_len > 2 and regex[1] == "[" and regex[r_len-2] == "]":
             regexlist[i] = regex[2:r_len - 2]
         else:
             regexlist[i] = regex[1:r_len - 1]

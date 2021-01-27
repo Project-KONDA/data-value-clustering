@@ -6,10 +6,10 @@ from gui_compression.questions import question_array
 
 
 def max_compression_function():
-    answers = [False, False, False, False, False, False, False, False, False,
-                 False, False, False,
-                 True, False, False, False, False, False,
-                 True]
+    answers = [True, True, True, True, True, True, True, True, True,
+        True, True, True,
+        True, False, False, False, False, False,
+        True]
     return get_compression_method(answers), answers
 
 
