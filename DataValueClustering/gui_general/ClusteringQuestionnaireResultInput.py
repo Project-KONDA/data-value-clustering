@@ -4,19 +4,19 @@ import numpy as np
 
 import gui_clustering.clustering_questions
 from compression.compression import get_array_part
-from gui_general.QuestionnaireInputWithResult import QuestionnaireInputWithResult
+from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from gui_clustering.algorithm_selection import algorithm_array
 from gui_clustering.clustering_questions import question_array
 
 
 def input_questionnaire_clustering(config, predefined_answers=None):
-    questionnaire = QuestionnaireInputClustering(config, predefined_answers)
+    questionnaire = ClusteringQuestionnaireResultInput(config, predefined_answers)
     questionnaire.run()
     answers, cluster_f = questionnaire.get()
     return answers, cluster_f
 
 
-class QuestionnaireInputClustering(QuestionnaireInputWithResult):
+class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
 
     def __init__(self, config, predefined_answers=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     q_config3 = gui_clustering.clustering_questions.question_array
 
-    qc = QuestionnaireInputClustering(q_config3, [True, True, False, True, True, True])
+    qc = ClusteringQuestionnaireResultInput(q_config3, [True, True, False, True, True, True])
     qc.run()
     result = qc.get()
 

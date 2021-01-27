@@ -3,7 +3,7 @@ from tkinter import StringVar, Label, LEFT
 import numpy as np
 import gui_compression.questions
 from compression.compression import get_compression_method
-from gui_general.QuestionnaireInputWithResult import QuestionnaireInputWithResult
+from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
 def input_questionnaire_compression(config, data, predefined_answers=None):
@@ -13,7 +13,7 @@ def input_questionnaire_compression(config, data, predefined_answers=None):
     return answers
 
 
-class CompressionQuestionnaireResultInput(QuestionnaireInputWithResult):
+class CompressionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def __init__(self, config, data, predefined_answers=None):
         self.help_text = "Compression of the first 100 data values:\n"
