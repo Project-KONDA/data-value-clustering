@@ -1,7 +1,7 @@
 from tkinter import *
 
 
-def menu_help_cost_matrix():
+def menu_help_cost_map():
     text = [
         "This view is designed to give full control over the configuration of distances between",
         "text values.",

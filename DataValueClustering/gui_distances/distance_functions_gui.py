@@ -8,7 +8,7 @@ from distance.weighted_levenshtein_distance import weighted_levenshtein_distance
 # pass method of this module as distance_function to clustering.clustering.cluster
 from gui.DropdownInput import DropdownInput, input_dropdown
 from gui_distances.BlobInput import BlobInput, input_blobs
-from gui_distances.CostMatrixInput import CostMatrixInput, input_costmatrix
+from gui_distances.CostMapInput import CostMapInput, input_costmap
 
 
 def distance_dice():
@@ -23,7 +23,8 @@ def distance_longest_common_subsequence():
     return longest_common_subsequence_distance
 
 
-def distance_weighted_levenshtein(blob_configuration):
+def distance_weighted_levenshtein(blob_configuration, costmap=None):
+    assert blob_configuration is not None
     # TODO: let user choose one of cost_maps and execute function
 
     titlex = "Choose a Cost Map"
@@ -33,10 +34,17 @@ def distance_weighted_levenshtein(blob_configuration):
     num = 5
 
     optionsx = np.array([
-        ["Costmatrix",
-         lambda: (input_costmatrix(num), blob_configuration)],
-        ["Costmatrix Empty",
-         lambda: (input_costmatrix(num, empty=True), blob_configuration)],
+        ["Costmap Prefilled",
+         lambda: (
+             input_costmap(regexes=blob_configuration[1], costmap=costmap),
+             blob_configuration)],
+        ["Costmap",
+         lambda: (input_costmap(n=len(regexes=blob_configuration[1]), regexes=blob_configuration[1]), blob_configuration)],
+        ["Costmap Empty",
+         lambda: (
+             input_costmap(n=len(blob_configuration), empty=True),
+             blob_configuration)],
+
         ["BlobInput",
          lambda: input_blobs(blob_configuration)],
     ])
