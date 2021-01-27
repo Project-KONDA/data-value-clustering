@@ -3,17 +3,17 @@ from tkinter import StringVar, Label, LEFT
 import numpy as np
 import gui_compression.compression_questions
 from compression.compression import get_compression_method
-from gui_general.QuestionnaireResultInput import QuestionnaireInputWithResult
+from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
 def input_questionnaire_compression(config, data, predefined_answers=None):
-    questionnaire = QuestionnaireInputCompression(config, data, predefined_answers)
+    questionnaire = QuestionnaireCompressionInput(config, data, predefined_answers)
     questionnaire.run()
     answers = questionnaire.get()
     return answers
 
 
-class QuestionnaireInputCompression(QuestionnaireInputWithResult):
+class QuestionnaireCompressionInput(QuestionnaireResultInput):
 
     def __init__(self, config, data, predefined_answers=None):
         self.help_text = "Compression of the first 100 data values:\n"
@@ -23,6 +23,8 @@ class QuestionnaireInputCompression(QuestionnaireInputWithResult):
 
     def apply(self):
         answers = self.get()
+        print(answers)
+
         compression_f = get_compression_method(answers)
         values_compressed, compression_dict = compression_f(self.data[0:100])
         for i in range(len(self.result_widgets)):
@@ -57,8 +59,8 @@ if __name__ == '__main__':
 
     q_config2 = gui_compression.compression_questions.compression_question_array
 
-    qc = QuestionnaireInputCompression(q_config2,
-                                        ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
+    qc = QuestionnaireCompressionInput(q_config2,
+                                       ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
                                          "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b",
                                          "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c",
                                          "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",

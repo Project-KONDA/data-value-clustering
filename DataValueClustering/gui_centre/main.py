@@ -1,9 +1,10 @@
+import gui_clustering
 from gui_centre.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
+from gui_clustering.clustering_choices import cluster_algorithms
 from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_and_condensed_matrix
 from gui_general.DropdownInput import input_dropdown
-from gui_clustering.clustering_choices import cluster_algorithms
 from gui_compression.compression_functions_gui import compression_functions
 from gui_distances.distance_functions_gui import distance_functions
 from data_extraction.read_file import get_sources_in_experiment_data_directory
