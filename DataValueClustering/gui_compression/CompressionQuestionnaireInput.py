@@ -3,7 +3,7 @@ from tkinter import StringVar, Label, LEFT
 import numpy as np
 import gui_compression.questions
 from compression.compression import get_compression_method
-from gui.QuestionnaireInputWithResult import QuestionnaireInputWithResult
+from gui.QuestionnaireResultInput import QuestionnaireInputWithResult
 
 
 def input_questionnaire_compression(config, data, predefined_answers=None):
