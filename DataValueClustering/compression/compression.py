@@ -5,6 +5,14 @@ from gui_compression.questions import question_array
 #from gui_distances.blobinput_helper import get_blob_configuration
 
 
+def max_compression_function():
+    answers = [False, False, False, False, False, False, False, False, False,
+                 False, False, False,
+                 True, False, False, False, False, False,
+                 True]
+    return get_compression_method(answers), answers
+
+
 def char_compression_function():
     # ["[a-zA-Z]", "e"], ["[0-9]", "0"]
     answers = [True, True, False, False, False, False, False, False, False,
