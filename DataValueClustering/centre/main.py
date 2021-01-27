@@ -1,7 +1,7 @@
 from centre.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
 from gui_distances.blobinput_helper import get_blob_configuration
-from distance.distance_matrix import calculate_distance_matrix
+from distance.distance_matrix import calculate_distance_matrix, calculate_distance_and_condensed_matrix
 from gui.DropdownInput import input_dropdown
 from gui_clustering.cluster_algorithms_gui import cluster_algorithms
 from gui_compression.compression_functions_gui import compression_functions
@@ -61,16 +61,15 @@ class Main:
         print("Calculate distance matrix ...")
         # DISTANCE
         if self.distance_matrix is None:
-            self.distance_matrix = calculate_distance_matrix(self.distance_f, self.values_compressed)
-        # TODO: calculate condensed distance matrix?
-        # TODO: calculate min, max, median, avg?
+            self.distance_matrix, self.condensed_distance_matrix, self.min_distance, self.max_distance = calculate_distance_and_condensed_matrix(self.distance_f, self.values_compressed)
+            # TODO: calculate affinity matrix?
 
         if self.cluster_index != -1:
-            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # TODO: pass distance matrix
+            self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # TODO: pass distance_matrix, min_distance, max_distance
 
         print("Start clustering ...")
         # CLUSTERING
-        self.clusters_compressed = self.cluster_f(self.distance_matrix, self.values_compressed)  # TODO: modify clustering algorithms such that they expect distance_matrix instead of distance_function
+        self.clusters_compressed = self.cluster_f(self.distance_matrix, self.condensed_distance_matrix, self.values_compressed)
         self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
 

@@ -25,9 +25,8 @@ initialization_array = [
 ]
 
 
-def kmedoids(distance_function, values, n_clusters=8, method='alternate', init='build', max_iter=None,
+def kmedoids(distance_matrix, values, n_clusters=8, method='alternate', init='build', max_iter=None,
              random_state=None):
-    distance_matrix = calculate_distance_matrix(distance_function, values)
     clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, init=init, max_iter=max_iter,
                         random_state=random_state).fit_predict(distance_matrix)
     # TODO: method=method is unexpected keyword argument ...

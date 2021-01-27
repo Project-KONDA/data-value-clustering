@@ -29,10 +29,9 @@ method_array = [
 ]
 
 
-def generate_linkage_matrix(distance_function, values, method):
-    cdm = calculate_condensed_distance_matrix(distance_function, values)
+def generate_linkage_matrix(condensed_distance_matrix, values, method):
     # c, coph_dists = cophenet(linkage_matrix, condensed_distance_matrix)
-    return linkage(cdm, method)
+    return linkage(condensed_distance_matrix, method)
 
 
 def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit):

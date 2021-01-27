@@ -15,18 +15,18 @@ def cluster_hierarchical():
     # TODO: ask user for 'method' argument
     method = 'single'
 
-    return lambda distance_function, values: cluster_hierarchical_helper(distance_function, values, method)
+    return lambda distance_matrix, condensed_distance_matrix, values: cluster_hierarchical_helper(condensed_distance_matrix, values, method)
 
 
-def cluster_hierarchical_helper(distance_function, values, method):
-    linkage_matrix = generate_linkage_matrix(distance_function, values, method)
+def cluster_hierarchical_helper(condensed_distance_matrix, values, method):
+    linkage_matrix = generate_linkage_matrix(condensed_distance_matrix, values, method)
     show_dendrogram(linkage_matrix, values)
 
     # TODO: ask user for additional arguments
     n_clusters = None  # TODO: support elbow method & Co.
     # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
     # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
-    distance_threshold = 6 # 15  # 3.8  # depends on distances
+    distance_threshold = 3.8 # 15  # 3.8  # depends on distances
     criterion = 'distance'
     # max number of clusters: 'maxclust', 'maxclust_monocrit'
     # threshold: 'distance', 'inconsistent', 'monocrit'
@@ -44,7 +44,7 @@ def cluster_kmedoids():
     init = 'heuristic'  # "if there are outliers in the dataset, use another initialization than build"
     max_iter = 300  # depends on efficiency vs. quality preference
 
-    return lambda distance_function, values: kmedoids(distance_function, values, n_clusters, method, init, max_iter,
+    return lambda distance_matrix, condensed_distance_matrix, values: kmedoids(distance_matrix, values, n_clusters, method, init, max_iter,
                                                       random_state=None)
 
 
@@ -58,7 +58,7 @@ def cluster_dbscan():
     leaf_size = 30
     n_jobs = None
 
-    return lambda distance_function, values: dbscan(distance_function, values, eps, min_samples, algorithm, leaf_size,
+    return lambda distance_matrix, condensed_distance_matrix, values: dbscan(distance_matrix, values, eps, min_samples, algorithm, leaf_size,
                                                     n_jobs)
 
 
@@ -75,7 +75,7 @@ def cluster_optics():
     leaf_size = 30
     n_jobs = None
 
-    return lambda distance_function, values: optics(distance_function, values, min_samples, max_eps, cluster_method,
+    return lambda distance_matrix, condensed_distance_matrix, values: optics(distance_matrix, values, min_samples, max_eps, cluster_method,
                                                     eps, xi, predecessor_correction, min_cluster_size, algorithm,
                                                     leaf_size, n_jobs)
 
@@ -89,7 +89,7 @@ def cluster_affinity():
     preference = None
     verbose = False
 
-    return lambda distance_function, values: affinity(distance_function, values, damping, max_iter, convergence_iter,
+    return lambda distance_matrix, condensed_distance_matrix, values: affinity(distance_matrix, values, damping, max_iter, convergence_iter,
                                                       copy, preference, verbose, random_state=None)
 
 
@@ -105,11 +105,11 @@ def cluster_spectral():
     assign_labels = 'kmeans'
     verbose = False
 
-    return lambda distance_function, values: spectral(distance_function, values, n_clusters, eigen_solver, n_components,
+    return lambda distance_matrix, condensed_distance_matrix, values: spectral(distance_matrix, values, n_clusters, eigen_solver, n_components,
                                                       random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
 
 
-def clusters_from_compressed_values(distance_function, values_compressed):
+def clusters_from_compressed_values(distance_matrix, condensed_distance_matrix, values_compressed):
     n_clusters = len(values_compressed)
     return list(range(0, n_clusters))
 

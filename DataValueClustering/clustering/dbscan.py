@@ -6,10 +6,9 @@ from centre.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_distance_matrix, get_condensed
 
 
-def dbscan(distance_function, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):
-    dm = calculate_distance_matrix(distance_function, values)
-    k_distance_graph(dm, min_samples)
-    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', algorithm=algorithm, leaf_size=leaf_size, n_jobs=n_jobs).fit_predict(dm)
+def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):
+    k_distance_graph(distance_matrix, min_samples)
+    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', algorithm=algorithm, leaf_size=leaf_size, n_jobs=n_jobs).fit_predict(distance_matrix)
     return clusters
 
 
