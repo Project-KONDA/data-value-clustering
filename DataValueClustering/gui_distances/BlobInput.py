@@ -11,8 +11,8 @@ from gui_distances.blobinput_helper import create_coordinates, print_cost_matrix
 
 def input_blobs(config):
     blobs = BlobInput(config)
-    result = blobs.get()
-    return result  # TODO: return modified blob_configuration
+    cost_map, new_config = blobs.get()
+    return cost_map, new_config
 
 
 class BlobInput:
