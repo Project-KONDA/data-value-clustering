@@ -3,7 +3,7 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LE
 
 import numpy as np
 
-from gui.ToolTip import CreateToolTip
+from gui_general.ToolTip import CreateToolTip
 
 
 class QuestionnaireInputWithResult(ABC):
