@@ -1,6 +1,7 @@
 import re
 import math
 
+import numpy as np
 from numpy.core.defchararray import lower
 from pip._vendor.msgpack.fallback import xrange
 

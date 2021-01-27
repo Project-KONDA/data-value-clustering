@@ -1,5 +1,6 @@
 from compression.compression import get_compression_method
-from gui_compression.CompressionQuestionnaireInput import input_questionnaire_compression
+from gui.QuestionnaireInput import input_questionnaire
+from gui.QuestionnaireInputCompression import input_questionnaire_compression
 from gui_compression.questions import question_array
 
 

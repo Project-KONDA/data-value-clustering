@@ -1,4 +1,4 @@
-from tkinter import LEFT, Radiobutton, IntVar
+from tkinter import StringVar, Label, LEFT, Radiobutton, IntVar
 
 import numpy as np
 
