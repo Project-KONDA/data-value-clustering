@@ -110,10 +110,7 @@ class CostMapInput:
             if i == 0 or i == self.n - 1 and self.add_rest:
                 self.regex[i].config(state='disabled')
             else:
-                if not empty:
-                    # text = self.example_labels[i] if i < len(self.example_labels) else: ""
-                    #
-                    # if self.map is not None:
+                if not empty and i < len(self.predefined_labels):
                     self.regex[i].insert(END, self.predefined_labels[i])
                     self.label_text[i] = self.predefined_labels[i]
                     self.label[i].configure(text=self.predefined_labels[i])
