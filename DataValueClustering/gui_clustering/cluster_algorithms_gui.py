@@ -11,6 +11,7 @@ from gui_clustering.dendrogram import show_dendrogram
 # pass method of this module as cluster_function to clustering.clustering.cluster
 
 def cluster_hierarchical():
+    # TODO: show questionnaire if not shown already
     # TODO: ask user for 'method' argument
     method = 'single'
 
@@ -36,6 +37,7 @@ def cluster_hierarchical_helper(distance_function, values, method):
 
 
 def cluster_kmedoids():
+    # TODO: show questionnaire if not shown already
     # TODO: ask user for arguments
     n_clusters = 7  # TODO: support elbow method
     method = 'alternate'  # TODO: unexpected keyword argument error
@@ -114,8 +116,18 @@ def clusters_from_compressed_values(distance_function, values_compressed):
 
 def cluster_suggest():
     # TODO
-    # use algorithm_selection with answers from compression questionnaire
-    # need to show questionnaire if not shown before
+
+    # show questionnaire
+    # answers = input_questionnaire("Clustering Algorithm Selection", question_array)
+
+    # suggested_algorithms = get_array_part(algorithm_array, answers)
+
+    # show suggested_algorithms
+
+    # let user select one of the suggested_algorithms
+
+    # execute configuration of selected algorithm, thus function in this module, and pass answers
+
     pass
 
 
