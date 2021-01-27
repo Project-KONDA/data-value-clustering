@@ -3,7 +3,7 @@ from compression.compression import *
 
 # pass compression as compression_function to clustering.clustering.cluster
 from gui_compression.compression_questionnaire import compression_configuration
-from gui_compression.questions import compression_question_array
+from gui_compression.compression_questions import compression_question_array
 
 
 def custom_dictionary():

@@ -4,7 +4,7 @@ import numpy as np
 
 import gui_clustering.clustering_questions
 import gui_compression.compression_questionnaire
-import gui_compression.questions
+import gui_compression.compression_questions
 from gui_clustering import algorithm_selection
 from compression import compression
 from gui_general.ToolTip import CreateToolTip
@@ -140,7 +140,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config2 = gui_compression.questions.compression_question_array
+    q_config2 = gui_compression.compression_questions.compression_question_array
     q_config3 = gui_clustering.clustering_questions.clustering_question_array
 
     print(QuestionnaireInput(title, q_config3).get())

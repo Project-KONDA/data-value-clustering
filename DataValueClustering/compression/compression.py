@@ -1,7 +1,7 @@
 import re
 import numpy as np
 
-from gui_compression.questions import compression_question_array
+from gui_compression.compression_questions import compression_question_array
 #from gui_distances.blobinput_helper import get_blob_configuration
 
 

@@ -5,7 +5,7 @@ import numpy as np
 
 # create n coordinates of equal distance to middlepoint x|y clockwise
 from compression.compression import get_array_part
-from gui_compression.questions import compression_question_array
+from gui_compression.compression_questions import compression_question_array
 
 
 def create_coordinates(x, y, n):
