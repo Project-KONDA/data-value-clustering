@@ -7,7 +7,7 @@ import gui_compression.compression_questionnaire
 import gui_compression.questions
 from gui_clustering import algorithm_selection
 from compression import compression
-from gui.ToolTip import CreateToolTip
+from gui_general.ToolTip import CreateToolTip
 
 
 def input_questionnaire(title, config):

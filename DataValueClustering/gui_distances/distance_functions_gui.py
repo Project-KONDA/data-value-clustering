@@ -6,7 +6,7 @@ from distance.longest_common_subsequence_distance import longest_common_subseque
 from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map
 
 # pass method of this module as distance_function to clustering.clustering.cluster
-from gui.DropdownInput import DropdownInput, input_dropdown
+from gui_general.DropdownInput import DropdownInput, input_dropdown
 from gui_distances.BlobInput import BlobInput, input_blobs
 from gui_distances.CostMapInput import CostMapInput, input_costmap
 

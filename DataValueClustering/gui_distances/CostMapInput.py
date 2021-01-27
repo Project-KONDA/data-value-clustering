@@ -1,7 +1,7 @@
 from tkinter import *
 import numpy as np
 
-from gui.help_popup_gui import menu_help_cost_map
+from gui_general.help_popup_gui import menu_help_cost_map
 from gui_distances.costmapinput_helper import validate_input_float, print_cost_map, character_escape, get_n_from_map, \
     preprocess_regexes, example_costmap, get_regexes_from_map
 

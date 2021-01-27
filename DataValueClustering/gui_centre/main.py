@@ -2,7 +2,7 @@ from gui_centre.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
 from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_and_condensed_matrix
-from gui.DropdownInput import input_dropdown
+from gui_general.DropdownInput import input_dropdown
 from gui_clustering.clustering_choices import cluster_algorithms
 from gui_compression.compression_functions_gui import compression_functions
 from gui_distances.distance_functions_gui import distance_functions
