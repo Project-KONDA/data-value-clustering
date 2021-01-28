@@ -149,7 +149,7 @@ def get_array_part(selectables, question_array, answers):
 
 def get_compression_configuration(answers):
     array = get_array_part(compression_configuration_array, compression_question_array, answers)
-    if not array:
+    if len(array.shape) < 2:
         return array
     return array[:, 0]
 
