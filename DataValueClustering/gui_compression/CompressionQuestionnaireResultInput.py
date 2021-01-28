@@ -3,6 +3,7 @@ from tkinter import StringVar, Label, LEFT
 import numpy as np
 import gui_compression.compression_questions
 from compression.compression import get_compression_method
+from gui_compression.compression_questions import compression_question_array
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
@@ -66,3 +67,8 @@ if __name__ == '__main__':
 
     result = qc.get()
     print(result)
+
+
+def compression_configuration(data, predefined_answers=None):
+    answers = input_questionnaire_compression(compression_question_array, data, predefined_answers)
+    return get_compression_method(answers), answers

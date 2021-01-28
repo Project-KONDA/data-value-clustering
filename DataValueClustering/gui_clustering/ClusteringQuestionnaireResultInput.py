@@ -72,3 +72,9 @@ if __name__ == '__main__':
     result = qc.get()
 
     print(result)
+
+
+def cluster_suggest():
+    predefined_answers = None  # TODO
+    answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
+    return cluster_f(answers)  # TODO: call directly or return function to main?
