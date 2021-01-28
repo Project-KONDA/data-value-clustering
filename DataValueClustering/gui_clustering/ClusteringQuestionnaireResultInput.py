@@ -9,6 +9,12 @@ from gui_clustering.algorithm_selection import algorithm_array
 from gui_clustering.clustering_questions import clustering_question_array
 
 
+def cluster_suggest():
+    predefined_answers = None  # TODO
+    answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
+    return cluster_f(answers)  # TODO: call directly or return function to main?
+
+
 def input_questionnaire_clustering(config, predefined_answers=None):
     questionnaire = ClusteringQuestionnaireResultInput(config, predefined_answers)
     questionnaire.run()
@@ -74,7 +80,3 @@ if __name__ == '__main__':
     print(result)
 
 
-def cluster_suggest():
-    predefined_answers = None  # TODO
-    answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
-    return cluster_f(answers)  # TODO: call directly or return function to main?

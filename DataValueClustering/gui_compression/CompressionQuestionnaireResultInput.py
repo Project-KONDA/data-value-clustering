@@ -7,6 +7,11 @@ from gui_compression.compression_questions import compression_question_array
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
+def compression_configuration(data, predefined_answers=None):
+    answers = input_questionnaire_compression(compression_question_array, data, predefined_answers)
+    return get_compression_method(answers), answers
+
+
 def input_questionnaire_compression(config, data, predefined_answers=None):
     questionnaire = CompressionQuestionnaireResultInput(config, data, predefined_answers)
     questionnaire.run()
@@ -67,8 +72,3 @@ if __name__ == '__main__':
 
     result = qc.get()
     print(result)
-
-
-def compression_configuration(data, predefined_answers=None):
-    answers = input_questionnaire_compression(compression_question_array, data, predefined_answers)
-    return get_compression_method(answers), answers
