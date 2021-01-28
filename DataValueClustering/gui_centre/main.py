@@ -66,6 +66,8 @@ class Main:
 
         if self.cluster_index != -1:
             self.cluster_f = cluster_algorithms[self.cluster_index, 1]()  # TODO: pass distance_matrix, min_distance, max_distance
+        # TODO: split algorithm selection and configuration calls?
+
 
         print("Start clustering ...")
         # CLUSTERING
@@ -74,10 +76,11 @@ class Main:
                                                 self.data)
 
         # CLUSTER VISUALISATION
-        self.fancy_cluster_list, self. noise = fancy_cluster_representation(self.data, self.clusters)
+        self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
+        self.print_result()
         # TODO
         # MDS scatter plot
-        # print(cluster_list, noise)
+
 
         # CLUSTER VALIDATION
         # TODO
@@ -87,6 +90,14 @@ class Main:
 
         # SUGGEST DATA ENHANCEMENTS
         # TODO
+
+    def print_result(self):
+        print("Clusters = ")
+        for i in range(len(self.fancy_cluster_list)):
+            print("\t" + str(self.fancy_cluster_list[i]))
+        print("]")
+        print("Noise = " + str(self.noise))
+        print("Number of clusters = " + str(len(self.fancy_cluster_list)))
 
     def extract_data(self):
         self.data = self.l_data[self.data_index, 1]()
