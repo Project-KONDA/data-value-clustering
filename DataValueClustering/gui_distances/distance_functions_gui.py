@@ -6,9 +6,9 @@ from distance.longest_common_subsequence_distance import longest_common_subseque
 from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map
 
 # pass method of this module as distance_function to clustering.clustering.cluster
-from gui_general.DropdownInput import DropdownInput, input_dropdown
-from gui_distances.BlobInput import BlobInput, input_blobs
-from gui_distances.CostMapInput import CostMapInput, input_costmap
+from gui_general.DropdownInput import DropdownInput
+from gui_distances.BlobInput import input_blobs
+from gui_distances.CostMapInput import input_costmap
 
 
 def distance_dice():
@@ -75,17 +75,6 @@ cost_maps = np.array([
     # TODO: add predefined cost maps
     ["Custom Full",
      custom_full]
-])
-
-distance_functions = np.array([
-    ["Weighted Levenshtein",
-     distance_weighted_levenshtein],
-    ["Levenshtein",
-     lambda blob_configuration: (distance_levenshtein(), blob_configuration)],
-    ["Longest Common Subsequence",
-     lambda blob_configuration: (distance_longest_common_subsequence(), blob_configuration)],
-    ["Dice",
-     lambda blob_configuration: (distance_dice(), blob_configuration)],
 ])
 
 if __name__ == "__main__":

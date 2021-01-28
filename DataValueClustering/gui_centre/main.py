@@ -5,7 +5,7 @@ from distance.distance_matrix import calculate_distance_and_condensed_matrix
 from gui_general.DropdownInput import input_dropdown
 from gui_clustering.clustering_choices import cluster_algorithms
 from gui_compression.compression_choices import compression_functions
-from gui_distances.distance_functions_gui import distance_functions
+from gui_distances.distance_choices import distance_functions
 from data_extraction.read_file import get_sources_in_experiment_data_directory
 
 

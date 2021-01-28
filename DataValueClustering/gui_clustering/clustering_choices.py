@@ -19,5 +19,6 @@ cluster_algorithms = np.array([
      cluster_affinity],
     ["Spectral Clustering",
      cluster_spectral],
-    ["None", lambda: clusters_from_compressed_values]
+    ["None",
+     lambda: clusters_from_compressed_values]
 ])
