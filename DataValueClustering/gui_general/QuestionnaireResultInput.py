@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LEFT, RIGHT, BOTH, GROOVE, font
+from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LEFT, RIGHT, BOTH, GROOVE, font, Canvas, \
+    Scrollbar
 
 import numpy as np
 
@@ -32,13 +33,43 @@ class QuestionnaireResultInput(ABC):
         self.root = Tk()
         self.root.title(title)
         self.root.config(bg='white')
+        self.root.grid_rowconfigure(0, minsize=400)
+
         self.question_frame = Frame(self.root, bg="white")
-        self.result_frame = Frame(self.root, bg="white")
+
         # self.button_frame = Frame(self.root, bg="blue")
         self.question_frame.grid(row=0, column=0, sticky='n')
-        self.result_frame.grid(row=0, column=1, sticky='n')
+        # self.result_frame.grid(row=0, column=1, sticky='n')
         # self.button_frame.grid(row=1, column=0, sticky='nswe', columnspan=2)
         self.result_widgets = []
+
+        self.canvas = Canvas(self.root, bg="red")
+        self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview, bg="yellow")
+        self.scrollable_frame = Frame(self.canvas, bg="blue")
+
+        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
+
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            )
+        )
+
+        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.canvas.grid(row=0, column=1, sticky='nswe')
+        self.scrollbar.grid(row=0, column=2, sticky='nswe')
+
+        # self.scrollable_frame.pack(fill=BOTH, expand=True)
+        # self.scrollable_frame.grid(row=0, column=1, sticky='ns')
+
+        # self.canvas.pack(side="left", fill="both", expand=True)
+        # self.scrollbar.pack(side="right", fill="y")
+
+        # self.result_frame = Frame(self.root, bg="white")
 
         self.labels = np.empty(self.n, dtype=Label)
         self.checks = np.empty(self.n, dtype=Checkbutton)
@@ -71,12 +102,15 @@ class QuestionnaireResultInput(ABC):
 
         self.result_caption = StringVar()
         self.result_caption.set(self.help_text)
-        self.result_caption_label = Label(self.result_frame, anchor='w', textvariable=self.result_caption, text="test", bg='white',
+        self.result_caption_label = Label(self.scrollable_frame, anchor='w', textvariable=self.result_caption, text="test", bg='white',
                                           fg="midnightblue", font=font.Font(size=14))
         self.result_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
 
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
         self.button.grid(row=1, column=0, sticky='nswe', columnspan=2)
+
+    def on_mousewheel(self, event):
+        self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
         self.root.mainloop()
