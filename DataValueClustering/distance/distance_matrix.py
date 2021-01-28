@@ -58,7 +58,7 @@ def get_symmetric(matrix):
     return symmetric_matrix
 
 
-def calculate_distance_and_condensed_matrix(distance_function, values):
+def calculate_distance_matrix_map(distance_function, values):
     size = len(values)
     size_condesed = sum(range(size))
 
@@ -90,7 +90,7 @@ def calculate_distance_and_condensed_matrix(distance_function, values):
     if not is_valid_y(condensed_matrix):
         condensed_matrix = None
 
-    return matrix, condensed_matrix, min_distance, max_distance
+    return {"distance_matrix" : matrix, "condensed_distance_matrix" : condensed_matrix, "min_distance" : min_distance, "max_distance" : max_distance}
 
 
 def calculate_distance_matrix(distance_function, values):
