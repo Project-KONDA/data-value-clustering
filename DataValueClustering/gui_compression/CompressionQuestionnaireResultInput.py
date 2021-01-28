@@ -29,17 +29,16 @@ class CompressionQuestionnaireResultInput(QuestionnaireResultInput):
             self.result_widgets[i].destroy()
 
         for i, key in enumerate(compression_dict):
-            if i < 20:  # TODO: Find better way to clip frame content
-                s1 = StringVar()
-                s1.set(key)
-                compression_target_label = Label(self.scrollable_frame, anchor='nw', textvariable=s1, bg='lemonchiffon')
-                compression_target_label.grid(row=i + 10, column=0, sticky='nwse')
-                self.result_widgets.append(compression_target_label)
-                s2 = StringVar()
-                s2.set(str(compression_dict[key])[1:len(str(compression_dict[key]))-1])
-                compression_source_label = Label(self.scrollable_frame, anchor='nw', textvariable=s2, bg='ivory', wraplength=400, justify=LEFT)
-                compression_source_label.grid(row=i + 10, column=1, sticky='nwse')
-                self.result_widgets.append(compression_source_label)
+            s1 = StringVar()
+            s1.set(key)
+            compression_target_label = Label(self.scrollable_frame, anchor='nw', textvariable=s1, bg='lemonchiffon')
+            compression_target_label.grid(row=i + 10, column=0, sticky='nwse')
+            self.result_widgets.append(compression_target_label)
+            s2 = StringVar()
+            s2.set(str(compression_dict[key])[1:len(str(compression_dict[key]))-1])
+            compression_source_label = Label(self.scrollable_frame, anchor='nw', textvariable=s2, bg='ivory', wraplength=540, justify=LEFT)  # TODO: calculate wraplength
+            compression_source_label.grid(row=i + 10, column=1, sticky='nwse')
+            self.result_widgets.append(compression_source_label)
 
 
 if __name__ == '__main__':
@@ -58,8 +57,8 @@ if __name__ == '__main__':
     q_config2 = gui_compression.compression_questions.compression_question_array
 
     qc = CompressionQuestionnaireResultInput(q_config2,
-                                             ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
-                                         "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b",
+                                             ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
+                                         "k", "l", "m", "n", "o", "p", "q", "r", "a", "b", "c", "a", "b", "c", "a", "b",
                                          "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c",
                                          "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
                                          "b", "c", "?", "3", "1234"], None)

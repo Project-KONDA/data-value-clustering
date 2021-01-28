@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LEFT, RIGHT, BOTH, GROOVE, font, Canvas, \
-    Scrollbar
+    Scrollbar, FLAT
 
 import numpy as np
 
@@ -18,6 +18,10 @@ class QuestionnaireResultInput(ABC):
         self.m = len(self.config[0])
         self.check_config()
 
+        self.checks = np.empty(self.n, dtype=Checkbutton)
+        self.answers = np.empty(self.n, dtype=IntVar)
+        self.result_widgets = []
+
         # Variables
         self.config_dep = self.config[:, 0]
         self.config_notdep = self.config[:, 1]
@@ -29,88 +33,68 @@ class QuestionnaireResultInput(ABC):
         self.config_question = self.config[:, 4]
         self.config_notes = self.config[:, 5] if self.m > 5 else None
 
-        # GUI
+        # root:
         self.root = Tk()
         self.root.title(title)
         self.root.config(bg='white')
-        self.root.grid_rowconfigure(0, minsize=400)
+        self.root.grid_rowconfigure(1, minsize=400)
+        self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 
+        # caption left side:
+        self.question_caption = StringVar()
+        self.question_caption.set("Please answer the following questions:")
+        self.question_caption_label = Label(self.root, anchor='w', textvariable=self.question_caption, text="test", bg='white',
+                                            font=font.Font(size=14))
+        self.question_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
+
+        # question checkboxes:
         self.question_frame = Frame(self.root, bg="white")
+        self.question_frame.grid(row=1, column=0, sticky='nw')
 
-        # self.button_frame = Frame(self.root, bg="blue")
-        self.question_frame.grid(row=0, column=0, sticky='n')
-        # self.result_frame.grid(row=0, column=1, sticky='n')
-        # self.button_frame.grid(row=1, column=0, sticky='nswe', columnspan=2)
-        self.result_widgets = []
+        for i, question in enumerate(self.config_question):
+            self.answers[i] = IntVar()
+            self.answers[i].set(int(self.config_default[i]))
+            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white', text=question, anchor='nw')
 
-        self.canvas = Canvas(self.root, bg="red")
-        self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview, bg="yellow")
-        self.scrollable_frame = Frame(self.canvas, bg="blue")
+            if self.m > 5:
+                message = str(self.config_notes[i])
+                CreateToolTip(self.checks[i], text=message)
+                # self.labels[i].bind("<Enter>", (lambda event, i2=i: self.on_label_enter(event, i2)))
+                # self.labels[i].bind("<Leave>", (lambda event, i2=i: self.on_label_leave(event, i2)))
 
+        self.visible = np.full(self.n, False)
+        self.update_visibility()
+
+        # caption right side:
+        self.result_caption = StringVar()
+        self.result_caption.set(self.help_text)
+        self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, text="test", bg='white',
+                                          font=font.Font(size=14))
+        self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
+
+        # scrollable result:
+        self.canvas = Canvas(self.root, bg="white", highlightthickness=0)
+        self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-
+        self.scrollable_frame = Frame(self.canvas)
         self.scrollable_frame.bind(
             "<Configure>",
             lambda e: self.canvas.configure(
                 scrollregion=self.canvas.bbox("all")
             )
         )
-
         self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.grid(row=1, column=1, sticky='nswe')
+        self.scrollbar.grid(row=1, column=2, sticky='nswe')
 
-        self.canvas.grid(row=0, column=1, sticky='nswe')
-        self.scrollbar.grid(row=0, column=2, sticky='nswe')
-
-        # self.scrollable_frame.pack(fill=BOTH, expand=True)
-        # self.scrollable_frame.grid(row=0, column=1, sticky='ns')
-
-        # self.canvas.pack(side="left", fill="both", expand=True)
-        # self.scrollbar.pack(side="right", fill="y")
-
-        # self.result_frame = Frame(self.root, bg="white")
-
-        self.labels = np.empty(self.n, dtype=Label)
-        self.checks = np.empty(self.n, dtype=Checkbutton)
-        self.answers = np.empty(self.n, dtype=IntVar)
-        self.questions = np.empty(self.n, dtype=StringVar)
-
-        self.question_caption = StringVar()
-        self.question_caption.set("Please answer the following questions:")
-        self.question_caption_label = Label(self.question_frame, anchor='w', textvariable=self.question_caption, text="test", bg='white',
-                                            fg="midnightblue", font=font.Font(size=14))
-        self.question_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
-
-        # Initialize Widgets
-        for i, question in enumerate(self.questions):
-            self.questions[i] = StringVar()
-            self.questions[i].set(self.config_question[i])
-            self.labels[i] = Label(self.question_frame, width=100, anchor='nw', textvariable=self.questions[i], text=question, bg='white')
-            if self.m > 5:
-                message = str(self.config_notes[i])
-                CreateToolTip(self.labels[i], text=message)
-                # self.labels[i].bind("<Enter>", (lambda event, i2=i: self.on_label_enter(event, i2)))
-                # self.labels[i].bind("<Leave>", (lambda event, i2=i: self.on_label_leave(event, i2)))
-
-            self.answers[i] = IntVar()
-            self.answers[i].set(int(self.config_default[i]))
-            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white')
-
-        self.visible = np.full(self.n, False)
-        self.update_visibility()
-
-        self.result_caption = StringVar()
-        self.result_caption.set(self.help_text)
-        self.result_caption_label = Label(self.scrollable_frame, anchor='w', textvariable=self.result_caption, text="test", bg='white',
-                                          fg="midnightblue", font=font.Font(size=14))
-        self.result_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
-
+        # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
-        self.button.grid(row=1, column=0, sticky='nswe', columnspan=2)
+        self.button.grid(row=2, column=0, sticky='nswe', columnspan=3)
 
     def on_mousewheel(self, event):
-        self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
+        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
+            self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
         self.root.mainloop()
@@ -120,10 +104,8 @@ class QuestionnaireResultInput(ABC):
             is_visible = self.visible[i]
             should_visible = self.should_be_visible(i)
             if not is_visible and should_visible:
-                self.labels[i].grid(row=i + 5, column=0, sticky='nw')
-                self.checks[i].grid(row=i + 5, column=1)
+                self.checks[i].grid(row=i + 5, column=0, sticky='nw')
             if is_visible and not should_visible:
-                self.labels[i].grid_forget()
                 self.checks[i].grid_forget()
                 self.answers[i].set(False)
             self.visible[i] = should_visible
