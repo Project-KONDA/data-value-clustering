@@ -44,7 +44,7 @@ class QuestionnaireResultInput(ABC):
         self.question_caption = StringVar()
         self.question_caption.set("Please answer the following questions:")
         self.question_caption_label = Label(self.root, anchor='w', textvariable=self.question_caption, text="test", bg='white',
-                                            font=font.Font(size=14))
+                                            font=font.Font(size=14), padx=5)
         self.question_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
 
         # question checkboxes:
@@ -54,7 +54,7 @@ class QuestionnaireResultInput(ABC):
         for i, question in enumerate(self.config_question):
             self.answers[i] = IntVar()
             self.answers[i].set(int(self.config_default[i]))
-            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white', text=question, anchor='nw')
+            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white', text=question, anchor='nw', padx=20)
 
             if self.m > 5:
                 message = str(self.config_notes[i])
@@ -69,7 +69,7 @@ class QuestionnaireResultInput(ABC):
         self.result_caption = StringVar()
         self.result_caption.set(self.help_text)
         self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, text="test", bg='white',
-                                          font=font.Font(size=14))
+                                          font=font.Font(size=14), padx=5)
         self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
 
         # scrollable result:

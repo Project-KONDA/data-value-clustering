@@ -1,4 +1,4 @@
-from gui_general.ClusteringQuestionnaireResultInput import input_questionnaire_clustering
+from gui_clustering.ClusteringQuestionnaireResultInput import input_questionnaire_clustering
 from gui_clustering.clustering_questions import clustering_question_array
 
 
