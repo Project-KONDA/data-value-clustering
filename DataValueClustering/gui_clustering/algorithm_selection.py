@@ -7,9 +7,9 @@ algorithm_array = [
 
     [[], [2],           "Hierarchical",            cluster_hierarchical],
     [[], [2, 4],        "KMedoids",                cluster_kmedoids],
-    [[], [1,3],         "DBSCAN",                  lambda answers: cluster_dbscan()],
-    [[], [1],           "Optics",                  lambda answers: cluster_optics()],
-    [[], [0,1,2,4],     "Affinity Propagation",    lambda answers: cluster_affinity()],
-    [[], [0,1,2,5],     "Spectral Clustering",     lambda answers: cluster_spectral()],
+    [[], [1,3],         "DBSCAN",                  cluster_dbscan],
+    [[], [1],           "Optics",                  cluster_optics],
+    [[], [0,1,2,4],     "Affinity Propagation",    cluster_affinity],
+    [[], [0,1,2,5],     "Spectral Clustering",     cluster_spectral],
 
 ]

@@ -10,12 +10,12 @@ from gui_clustering.dendrogram import show_dendrogram
 
 # pass method of this module as cluster_function to clustering.clustering.cluster
 
-def cluster_hierarchical(answers):
+def cluster_hierarchical(cluster_answers, distance_matrix_map):
     # TODO: show questionnaire if not shown already
     # TODO: ask user for 'method' argument
     method = 'single'
 
-    return lambda distance_matrix, condensed_distance_matrix, values: cluster_hierarchical_helper(condensed_distance_matrix, values, method)
+    return lambda values: cluster_hierarchical_helper(distance_matrix_map["condensed_distance_matrix"], values, method)
 
 
 def cluster_hierarchical_helper(condensed_distance_matrix, values, method):
@@ -36,7 +36,7 @@ def cluster_hierarchical_helper(condensed_distance_matrix, values, method):
     return hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit)
 
 
-def cluster_kmedoids(answers):
+def cluster_kmedoids(cluster_answers, distance_matrix_map):
     # TODO: show questionnaire if not shown already
     # TODO: ask user for arguments
     n_clusters = 7  # TODO: support elbow method
@@ -44,11 +44,11 @@ def cluster_kmedoids(answers):
     init = 'heuristic'  # "if there are outliers in the dataset, use another initialization than build"
     max_iter = 300  # depends on efficiency vs. quality preference
 
-    return lambda distance_matrix, condensed_distance_matrix, values: kmedoids(distance_matrix, values, n_clusters, method, init, max_iter,
+    return lambda values: kmedoids(distance_matrix_map["distance_matrix"], values, n_clusters, method, init, max_iter,
                                                       random_state=None)
 
 
-def cluster_dbscan():
+def cluster_dbscan(cluster_answers, distance_matrix_map):
     # TODO: ask user for arguments
     # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     # TODO: and https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
@@ -58,11 +58,11 @@ def cluster_dbscan():
     leaf_size = 30
     n_jobs = None
 
-    return lambda distance_matrix, condensed_distance_matrix, values: dbscan(distance_matrix, values, eps, min_samples, algorithm, leaf_size,
+    return lambda values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, algorithm, leaf_size,
                                                     n_jobs)
 
 
-def cluster_optics():
+def cluster_optics(cluster_answers, distance_matrix_map):
     # TODO: ask user for arguments
     min_samples = 2
     max_eps = np.inf
@@ -75,12 +75,12 @@ def cluster_optics():
     leaf_size = 30
     n_jobs = None
 
-    return lambda distance_matrix, condensed_distance_matrix, values: optics(distance_matrix, values, min_samples, max_eps, cluster_method,
+    return lambda values: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, cluster_method,
                                                     eps, xi, predecessor_correction, min_cluster_size, algorithm,
                                                     leaf_size, n_jobs)
 
 
-def cluster_affinity():
+def cluster_affinity(cluster_answers, distance_matrix_map):
     # TODO: ask user for arguments
     damping = 0.99
     max_iter = 200
@@ -89,11 +89,11 @@ def cluster_affinity():
     preference = None
     verbose = False
 
-    return lambda distance_matrix, condensed_distance_matrix, values: affinity(distance_matrix, values, damping, max_iter, convergence_iter,
+    return lambda values: affinity(distance_matrix_map["distance_matrix"], values, damping, max_iter, convergence_iter,
                                                       copy, preference, verbose, random_state=None)
 
 
-def cluster_spectral():
+def cluster_spectral(cluster_answers, distance_matrix_map):
     # TODO: ask user for arguments
     n_clusters = 5
     eigen_solver = None
@@ -105,12 +105,12 @@ def cluster_spectral():
     assign_labels = 'kmeans'
     verbose = False
 
-    return lambda distance_matrix, condensed_distance_matrix, values: spectral(distance_matrix, values, n_clusters, eigen_solver, n_components,
+    return lambda values: spectral(distance_matrix_map["distance_matrix"], values, n_clusters, eigen_solver, n_components,
                                                       random_state, n_init, gamma, eigen_tol, assign_labels, verbose)
 
 
-def clusters_from_compressed_values(distance_matrix, condensed_distance_matrix, values_compressed):
-    n_clusters = len(values_compressed)
-    return list(range(0, n_clusters))
+def clusters_from_compressed_values(cluster_answers, distance_matrix_map):
+    return lambda values: list(range(0, len(values)))
+
 
 
