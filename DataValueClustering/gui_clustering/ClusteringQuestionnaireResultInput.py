@@ -3,7 +3,7 @@ from tkinter import StringVar, Label, LEFT, Radiobutton, IntVar
 import numpy as np
 
 import gui_clustering.clustering_questions
-from compression.compression import get_array_part
+from util.question_result_array_util import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from gui_clustering.algorithm_selection import algorithm_array
 from gui_clustering.clustering_questions import clustering_question_array

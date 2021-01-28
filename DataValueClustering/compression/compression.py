@@ -3,6 +3,7 @@ import numpy as np
 
 from gui_compression.compression_questions import compression_question_array
 #from gui_distances.blobinput_helper import get_blob_configuration
+from util.question_result_array_util import get_array_part
 
 
 def max_compression_function():
@@ -131,20 +132,6 @@ compression_configuration_array = [
     [[17],         [12],   lambda v: re.sub("[^a-zäöüßáàéèíìóòúùA-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]", "_", v), ],  # "_",  "other_characters",            "[^a-zäöüßA-ZÄÖÜ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|]"],  # 17
     [[12],         [],     lambda v: re.sub("[^a-zäöüßáàéèíìóòúùA-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ0-9 ]", "$", v),                                    ],  # "\$", "special_characters",          "[^a-zäöüßA-ZÄÖÜ0-9 ]"]  # 18
 ]
-
-
-def get_array_part(selectables, question_array, answers):
-    assert (len(answers) == len(question_array))
-    result = list()
-    for line in selectables:
-        apply = True
-        for dep in line[0]:  # check positive dependencies
-            apply = apply and answers[dep]
-        for not_dep in line[1]:  # check negative dependencies
-            apply = apply and not (answers[not_dep])
-        if apply:
-            result.append(line[2:])
-    return np.array(result, dtype=object)
 
 
 def get_compression_configuration(answers):
