@@ -2,7 +2,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from matplotlib import pyplot as plt
 
-from gui_centre.cluster_representation import fancy_cluster_representation
+from gui_center.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_distance_matrix, get_condensed
 
 

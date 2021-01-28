@@ -1,6 +1,6 @@
 from sklearn.cluster import AffinityPropagation
 
-from gui_centre.cluster_representation import fancy_cluster_representation
+from gui_center.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
 import numpy as np
 

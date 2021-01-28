@@ -1,4 +1,4 @@
-from gui_centre.cluster_representation import fancy_cluster_representation
+from gui_center.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
 from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_and_condensed_matrix
