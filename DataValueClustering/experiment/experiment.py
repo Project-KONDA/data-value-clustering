@@ -3,7 +3,7 @@ import time
 from gui_centre.main import Main
 from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
-from gui_clustering.cluster_algorithms_gui import cluster_dbscan, cluster_affinity
+from gui_cluster_configuration.cluster_algorithms_gui import cluster_affinity
 from data_extraction.read_file import read_data_values_from_file
 
 midas_dates = "../data/midas_dates.txt"

@@ -2,7 +2,7 @@ from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar
 
 import numpy as np
 
-import gui_clustering.clustering_questions
+import gui_cluster_selection.clustering_questions
 import gui_compression.compression_questions
 from gui_general.ToolTip import CreateToolTip
 
@@ -138,6 +138,6 @@ if __name__ == '__main__':
         dtype=object)
 
     q_config2 = gui_compression.compression_questions.compression_question_array
-    q_config3 = gui_clustering.clustering_questions.clustering_question_array
+    q_config3 = gui_cluster_selection.clustering_questions.clustering_question_array
 
     print(QuestionnaireInput(title, q_config3).get())

@@ -1,12 +1,12 @@
-from tkinter import StringVar, Label, LEFT, Radiobutton, IntVar
+from tkinter import Radiobutton, IntVar
 
 import numpy as np
 
-import gui_clustering.clustering_questions
+import gui_cluster_selection.clustering_questions
 from util.question_result_array_util import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
-from gui_clustering.algorithm_selection import algorithm_array
-from gui_clustering.clustering_questions import clustering_question_array
+from gui_cluster_selection.algorithm_selection import algorithm_array
+from gui_cluster_selection.clustering_questions import clustering_question_array
 
 
 def cluster_suggest():
@@ -52,7 +52,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
 
         for i, algorithm in enumerate(self.suggested_algorithms):
             radio_button = Radiobutton(self.scrollable_result_frame, text=algorithm[0], padx=20, variable=self.choice,
-                                       command=self.show_choice, value=i, justify=LEFT)
+                                       command=self.show_choice, value=i, justify='left')
             radio_button.grid(row=i + 10, column=0, sticky='w')
             self.result_widgets.append(radio_button)
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
          [[0], [1], "name6", False, "question6?"]],
         dtype=object)
 
-    q_config3 = gui_clustering.clustering_questions.clustering_question_array
+    q_config3 = gui_cluster_selection.clustering_questions.clustering_question_array
 
     qc = ClusteringQuestionnaireResultInput(q_config3, [True, True, False, True, True, True])
     qc.run()

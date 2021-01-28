@@ -5,7 +5,7 @@ from clustering.optics import *
 from clustering.affinity_propagation import *
 from clustering.spectral import *
 
-from gui_clustering.dendrogram import show_dendrogram
+from gui_cluster_configuration.dendrogram import show_dendrogram
 
 
 # pass method of this module as cluster_function to clustering.clustering.cluster

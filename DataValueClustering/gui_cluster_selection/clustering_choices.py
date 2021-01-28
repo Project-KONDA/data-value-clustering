@@ -1,8 +1,8 @@
 import numpy as np
 
-from gui_clustering.cluster_algorithms_gui import cluster_hierarchical, cluster_kmedoids, cluster_dbscan, \
+from gui_cluster_configuration.cluster_algorithms_gui import cluster_hierarchical, cluster_kmedoids, cluster_dbscan, \
     cluster_optics, cluster_affinity, cluster_spectral, clusters_from_compressed_values
-from gui_clustering.ClusteringQuestionnaireResultInput import cluster_suggest
+from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 
 cluster_algorithms = np.array([
     ["Suggest",
