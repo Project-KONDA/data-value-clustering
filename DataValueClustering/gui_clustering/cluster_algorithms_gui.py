@@ -10,7 +10,7 @@ from gui_clustering.dendrogram import show_dendrogram
 
 # pass method of this module as cluster_function to clustering.clustering.cluster
 
-def cluster_hierarchical():
+def cluster_hierarchical(answers):
     # TODO: show questionnaire if not shown already
     # TODO: ask user for 'method' argument
     method = 'single'
@@ -36,7 +36,7 @@ def cluster_hierarchical_helper(condensed_distance_matrix, values, method):
     return hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit)
 
 
-def cluster_kmedoids():
+def cluster_kmedoids(answers):
     # TODO: show questionnaire if not shown already
     # TODO: ask user for arguments
     n_clusters = 7  # TODO: support elbow method
