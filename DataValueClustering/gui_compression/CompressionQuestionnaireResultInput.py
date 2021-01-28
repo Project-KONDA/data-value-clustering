@@ -31,12 +31,12 @@ class CompressionQuestionnaireResultInput(QuestionnaireResultInput):
         for i, key in enumerate(compression_dict):
             s1 = StringVar()
             s1.set(key)
-            compression_target_label = Label(self.scrollable_frame, anchor='nw', textvariable=s1, bg='lemonchiffon')
+            compression_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1, bg='lemonchiffon')
             compression_target_label.grid(row=i + 10, column=0, sticky='nwse')
             self.result_widgets.append(compression_target_label)
             s2 = StringVar()
             s2.set(str(compression_dict[key])[1:len(str(compression_dict[key]))-1])
-            compression_source_label = Label(self.scrollable_frame, anchor='nw', textvariable=s2, bg='ivory', wraplength=540, justify=LEFT)  # TODO: calculate wraplength
+            compression_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory', wraplength=540, justify=LEFT)  # TODO: calculate wraplength
             compression_source_label.grid(row=i + 10, column=1, sticky='nwse')
             self.result_widgets.append(compression_source_label)
 

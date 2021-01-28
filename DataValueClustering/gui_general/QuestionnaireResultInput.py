@@ -76,14 +76,14 @@ class QuestionnaireResultInput(ABC):
         self.canvas = Canvas(self.root, bg="white", highlightthickness=0)
         self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-        self.scrollable_frame = Frame(self.canvas)
-        self.scrollable_frame.bind(
+        self.scrollable_result_frame = Frame(self.canvas)
+        self.scrollable_result_frame.bind(
             "<Configure>",
             lambda e: self.canvas.configure(
                 scrollregion=self.canvas.bbox("all")
             )
         )
-        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_result_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.canvas.grid(row=1, column=1, sticky='nswe')
         self.scrollbar.grid(row=1, column=2, sticky='nswe')
@@ -93,7 +93,7 @@ class QuestionnaireResultInput(ABC):
         self.button.grid(row=2, column=0, sticky='nswe', columnspan=3)
 
     def on_mousewheel(self, event):
-        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
+        if self.scrollable_result_frame.winfo_height() > self.canvas.winfo_height():
             self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):

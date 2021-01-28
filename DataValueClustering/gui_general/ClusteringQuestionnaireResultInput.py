@@ -45,7 +45,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
             self.result_widgets[i].destroy()
 
         for i, algorithm in enumerate(self.suggested_algorithms):
-            radio_button = Radiobutton(self.scrollable_frame, text=algorithm[0], padx=20, variable=self.choice,
+            radio_button = Radiobutton(self.scrollable_result_frame, text=algorithm[0], padx=20, variable=self.choice,
                                        command=self.show_choice, value=i, justify=LEFT)
             radio_button.grid(row=i + 10, column=0, sticky='w')
             self.result_widgets.append(radio_button)
