@@ -24,8 +24,10 @@ class ClusterConfigurationInput:
         self.parameters = np.empty(self.n, dtype=ClusteringParameter)
 
         # scrollable canvas:
-        self.canvas = Canvas(self.root, bg="white", highlightthickness=0, width=self.root.winfo_screenwidth() / 25 + self.root.winfo_screenwidth() / 3 + 12)
-        self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
+        self.canvas_border = Frame(self.root, bd=2, relief='groove')
+        self.canvas_border.grid_rowconfigure(0, weight=1)
+        self.canvas = Canvas(self.canvas_border, bg='white', highlightthickness=0, width=self.root.winfo_screenwidth() / 25 + self.root.winfo_screenwidth() / 3 + 12)
+        self.scrollbar = Scrollbar(self.canvas_border, orient="vertical", command=self.canvas.yview)
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
         self.scrollable_frame = Frame(self.canvas)
         self.scrollable_frame.bind(
@@ -40,7 +42,7 @@ class ClusterConfigurationInput:
         # caption:
         self.label_text = StringVar()
         self.label_text.set("Please specify the following parameters")
-        self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='white',
+        self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='SystemButtonFace',
                            font=font.Font(size=14))
 
 
@@ -63,14 +65,14 @@ class ClusterConfigurationInput:
     def record_parameters(self):
 
         self.label.grid(row=0, column=0, sticky='w', pady=5, padx=5)
-
-        self.canvas.grid(row=1, column=0, sticky='nswe')
-        self.scrollbar.grid(row=1, column=1, sticky='nswe')
+        self.canvas_border.grid(row=1, column=0, sticky='nswe')
+        self.canvas.grid(row=0, column=0, sticky='nswe')
+        self.scrollbar.grid(row=0, column=1, sticky='nswe')
 
         for i, param in enumerate(self.parameters):
             param.frame.grid(row=i+1, column=0, sticky='nswe', pady=5, padx=5)
 
-        self.button.grid(row=2, column=0, sticky='nswe', columnspan=2)
+        self.button.grid(row=2, column=0, sticky='nswe')
 
         self.root.mainloop()
         pass
