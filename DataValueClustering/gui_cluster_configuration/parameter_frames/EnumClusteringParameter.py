@@ -1,5 +1,4 @@
-from tkinter import Scale, HORIZONTAL, BooleanVar, Checkbutton, Label, StringVar, IntVar, font, NORMAL, DISABLED, \
-    DoubleVar, OptionMenu, Radiobutton
+from tkinter import Scale, IntVar, Radiobutton
 
 import numpy as np
 
@@ -9,8 +8,8 @@ from gui_general.ToolTip import CreateToolTip
 
 
 def create_enum_frame(name, explanation, dropdown_options, suggestions, deactivatable=False):
-    return lambda parent: EnumClusteringParameter(parent, name, explanation, dropdown_options, suggestions,
-                                                  deactivatable)
+    return lambda parent: EnumClusteringParameter(
+        parent, name, explanation, dropdown_options, suggestions, deactivatable)
 
 
 class EnumClusteringParameter(ClusteringParameter):
@@ -60,16 +59,16 @@ class EnumClusteringParameter(ClusteringParameter):
         else:
             for i, button in enumerate(self.radiobuttons):
                 self.radiobuttons[i].config(state='disabled')
-                self.radiobuttons[i].config(fg="red", bg='grey90')
+                self.radiobuttons[i].config(bg='grey90')  # fg
 
     def recolor(self):
         for i, button in enumerate(self.radiobuttons):
             self.radiobuttons[i].config(state='normal')
             is_suggested = self.option_labels[i] in self.suggestions
             if is_suggested:
-                self.radiobuttons[i].config( bg='#f0fff0') # fg="green",
+                self.radiobuttons[i].config( bg='#f0fff0')  # fg
             else:
-                self.radiobuttons[i].config(bg='#fff0f0') # fg="red",
+                self.radiobuttons[i].config(bg='#fff0f0')  # fg
 
     def get(self):
         return self.option_labels[self.choice.get()]
@@ -81,9 +80,13 @@ if __name__ == "__main__":
     options2 = np.array([["0", "00"], ["1", "11"], ["2", "22"]])
     suggestions2 = ["0"]
 
-    i = create_enum_frame("My Param", "This is a test parameter.", options1, suggestions1, False)
-    j = create_enum_frame("My Param", "This is a test parameter.", options2, suggestions2, True)
-    k = create_enum_frame("My Param", "This is a test parameter.", options1, suggestions1, True)
-    l = create_enum_frame("My Param", "This is a test parameter.", options2, suggestions2, False)
-    r = ClusterConfigurationInput("Test", [i, j, k, l])
-    print(r.get())
+    enum1 = create_enum_frame(
+        "My Param", "This is a test parameter.", options1, suggestions1, False)
+    enum2 = create_enum_frame(
+        "My Param", "This is a test parameter.", options2, suggestions2, True)
+    enum3 = create_enum_frame(
+        "My Param", "This is a test parameter.", options1, suggestions1, True)
+    enum4 = create_enum_frame(
+        "My Param", "This is a test parameter.", options2, suggestions2, False)
+    enum_input = ClusterConfigurationInput("Test", [enum1, enum2, enum3, enum4])
+    print(enum_input.get())
