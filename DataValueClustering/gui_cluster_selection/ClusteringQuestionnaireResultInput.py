@@ -1,4 +1,4 @@
-from tkinter import Radiobutton, IntVar
+from tkinter import Radiobutton, IntVar, NORMAL, DISABLED
 
 import numpy as np
 
@@ -27,34 +27,44 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     def __init__(self, config, predefined_answers=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
         super().__init__("Clustering Configuration", config, predefined_answers)
+        self.algorithms = np.array(algorithm_array, dtype=object)
         self.choice = IntVar()
         self.choice.set(-1)
-        self.suggested_algorithms = algorithm_array[2:]
+        self.radio_buttons = np.empty(len(self.algorithms), dtype=Radiobutton)
+        self.build_result_frame()
         self.update_visibility_and_result()
+
+    def build_result_frame(self):
+        for i, algorithm in enumerate(self.algorithms):
+            self.radio_buttons[i] = Radiobutton(self.scrollable_result_frame, text=algorithm[2], padx=20, variable=self.choice,
+                                       value=i, justify='left')
+            self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
 
     def get(self):
         answers = super().get()
         if self.choice.get() >= 0:
-            selected_algorithm_f = self.suggested_algorithms[self.choice.get()][1]
+            selected_algorithm_f = self.algorithms[self.choice.get()][3]
         else:
             selected_algorithm_f = None
         return answers, selected_algorithm_f
 
-    def show_choice(self):
-        print(self.choice.get())
-
     def apply(self):
         answers = self.get()[0]
-        self.suggested_algorithms = get_array_part(algorithm_array, clustering_question_array, answers)
+        suggested_algorithms = get_array_part(self.algorithms, clustering_question_array, answers)
+        suggested_algorithms_names = self.get_suggested_algorithm_names(suggested_algorithms)
 
-        for i in range(len(self.result_widgets)):
-            self.result_widgets[i].destroy()
+        for i, button in enumerate(self.radio_buttons):
+            if self.algorithms[i, 2] in suggested_algorithms_names:
+                button.config(state=NORMAL)
+            else:
+                button.config(state=DISABLED)
 
-        for i, algorithm in enumerate(self.suggested_algorithms):
-            radio_button = Radiobutton(self.scrollable_result_frame, text=algorithm[0], padx=20, variable=self.choice,
-                                       command=self.show_choice, value=i, justify='left')
-            radio_button.grid(row=i + 10, column=0, sticky='w')
-            self.result_widgets.append(radio_button)
+    def get_suggested_algorithm_names(self, suggested_algorithms):
+        if len(suggested_algorithms.shape) == 2:
+            suggested_algorithms_names = suggested_algorithms[:, 0]
+        else:
+            suggested_algorithms_names = []
+        return suggested_algorithms_names
 
 
 if __name__ == '__main__':
