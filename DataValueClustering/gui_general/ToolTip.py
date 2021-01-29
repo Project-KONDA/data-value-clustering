@@ -32,11 +32,13 @@ class ToolTip(object):
             tw.destroy()
 
 
-def CreateToolTip(widget, text):
+def CreateToolTip(widget, text="", textfunction=None):
     toolTip = ToolTip(widget)
+    if textfunction is None:
+        textfunction = lambda: text
 
     def enter(event):
-        toolTip.showtip(text)
+        toolTip.showtip(textfunction())
 
     def leave(event):
         toolTip.hidetip()

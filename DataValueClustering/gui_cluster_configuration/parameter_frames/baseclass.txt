@@ -1,0 +1,28 @@
+from tkinter import Scale, HORIZONTAL, BooleanVar, Checkbutton, Label, StringVar, IntVar, font, NORMAL, DISABLED, \
+    DoubleVar
+
+from gui_cluster_configuration.ClusteringParameterInput import ClusterConfigurationInput
+from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
+
+
+def create______frame(name, explanation, ,):
+    return lambda parent: _____ClusteringParameter(parent, name, explanation, , deactivatable)
+
+class _____ClusteringParameter(ClusteringParameter):
+
+    def __init__(self, parent, name, explanation, , deactivatable=False):
+        super().__init__(parent, name, explanation, deactivatable)
+
+
+
+    def get(self):
+        return self.value_var.get()
+
+
+if __name__ == "__main__":
+    i = create______frame("My Param", "This is a test parameter.", , False)
+    j = create______frame("My Param", "This is a test parameter.", , True)
+    k = create______frame("My Param", "This is a test parameter.", , False)
+    l = create______frame("My Param", "This is a test parameter.", , True)
+    r = ClusterConfigurationInput("Test", [i, j, k, l])
+    print(r.get())

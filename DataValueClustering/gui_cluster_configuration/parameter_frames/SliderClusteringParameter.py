@@ -5,7 +5,7 @@ from gui_cluster_configuration.ClusteringParameterInput import ClusterConfigurat
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def create_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False):
+def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False):
     return lambda parent: SliderClusteringParameter(parent, name, explanation, mini, maxi, default, resolution, deactivatable)
 
 class SliderClusteringParameter(ClusteringParameter):
@@ -33,7 +33,7 @@ class SliderClusteringParameter(ClusteringParameter):
 
     def change_checked(self):
         super().change_checked()
-        if self.isActivated.get() == 1:
+        if self.is_activated.get() == 1:
             self.slider.config(state=NORMAL, fg="black", troughcolor="SystemScrollbar")
         else:
             self.slider.config(state=DISABLED, fg="grey", troughcolor="grey90")
@@ -43,9 +43,9 @@ class SliderClusteringParameter(ClusteringParameter):
 
 
 if __name__ == "__main__":
-    i = create_frame("My Param", "This is a test parameter.", 1, 10, 4, 1, False)
-    j = create_frame("My Param", "This is a test parameter.", 1, 30, 4, 2, True)
-    k = create_frame("My Param", "This is a test parameter.", 1.0, 10.0, 2.0, 0.01, False)
-    l = create_frame("My Param", "This is a test parameter.", 10.0, 14.0, 5.0, 0.1, True)
+    i = create_slider_frame("My Param", "This is a test parameter.", 1, 10, 4, 1, False)
+    j = create_slider_frame("My Param", "This is a test parameter.", 1, 30, 4, 2, True)
+    k = create_slider_frame("My Param", "This is a test parameter.", 1.0, 10.0, 2.0, 0.01, False)
+    l = create_slider_frame("My Param", "This is a test parameter.", 10.0, 14.0, 5.0, 0.1, True)
     r = ClusterConfigurationInput("Test", [i, j, k, l])
     print(r.get())
