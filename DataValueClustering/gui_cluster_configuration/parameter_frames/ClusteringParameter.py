@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
-from tkinter import Frame, GROOVE, IntVar, Checkbutton, StringVar, Label, font, NORMAL, DISABLED
+from tkinter import Frame, IntVar, Checkbutton, StringVar, Label, font
 
 
 class ClusteringParameter(ABC):
 
-    def __init__(self, parent, name, explanation, deactivatable):
-        self.frame = Frame(parent, highlightthickness=1, highlightbackground="grey", bg='white')
-        self.frame.grid_columnconfigure(0, minsize=self.frame.winfo_screenwidth() / 25)
-        self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() / 3)
+    def __init__(self, parent, name, explanation, deactivatable=False):
+        self.frame = Frame(parent, highlightthickness=1, highlightbackground='grey', bg='white')
+        self.frame.grid_columnconfigure(0, minsize=self.frame.winfo_screenwidth() // 25)
+        self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() // 3)
 
+        self.root = parent
         self.name = name
         self.explanation = explanation
         self.deactivatable = deactivatable
@@ -18,10 +19,10 @@ class ClusteringParameter(ABC):
         # check box:
         if deactivatable:
             self.is_activated = IntVar()
-            self.is_activated.set(1)
-            self.check_activ = Checkbutton(self.frame, variable=self.is_activated, command=self.change_checked, bg='white',
-                                           anchor='nw', padx=20)
-            self.check_activ.grid(row=0, column=0, sticky='w')
+            self.is_activated.set(int(True))
+            self.check_active = Checkbutton(self.frame, variable=self.is_activated, command=self.change_checked,
+                                            bg='white', anchor='nw', padx=20)
+            self.check_active.grid(row=0, column=0, sticky='w')
 
         # name label:
         self.label_text = StringVar()
@@ -37,23 +38,18 @@ class ClusteringParameter(ABC):
                                        wraplength=500)
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
-
     def change_checked(self):
         if self.is_activated.get() == 1:
-            self.label.config(state=NORMAL, bg='white')
-            self.label_explanation.config(state=NORMAL, bg='white')
+            self.label.config(state='normal', bg='white')
+            self.label_explanation.config(state='normal', bg='white')
             self.frame.config(bg='white')
-            self.check_activ.config(bg='white')
+            self.check_active.config(bg='white')
         else:
-            self.label.config(state=DISABLED, bg='grey90')
-            self.label_explanation.config(state=DISABLED, bg='grey90')
+            self.label.config(state='disabled', bg='grey90')
+            self.label_explanation.config(state='disabled', bg='grey90')
             self.frame.config(bg='grey90')
-            self.check_activ.config(bg='grey90')
+            self.check_active.config(bg='grey90')
 
     @abstractmethod
     def get(self):
         pass
-
-
-
-
