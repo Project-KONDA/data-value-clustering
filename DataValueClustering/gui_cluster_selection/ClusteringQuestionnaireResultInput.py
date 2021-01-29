@@ -52,12 +52,13 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         answers = self.get()[0]
         suggested_algorithms = get_array_part(self.algorithms, clustering_question_array, answers)
         suggested_algorithms_names = self.get_suggested_algorithm_names(suggested_algorithms)
-
         for i, button in enumerate(self.radio_buttons):
             if self.algorithms[i, 2] in suggested_algorithms_names:
                 button.config(state=NORMAL)
             else:
                 button.config(state=DISABLED)
+                if self.choice.get() == i:
+                    self.choice.set(-1)
 
     def get_suggested_algorithm_names(self, suggested_algorithms):
         if len(suggested_algorithms.shape) == 2:
