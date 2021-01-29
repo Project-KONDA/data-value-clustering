@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LEFT, RIGHT, BOTH, GROOVE, font, Canvas, \
-    Scrollbar, FLAT
+    Scrollbar, FLAT, NORMAL, DISABLED
 
 import numpy as np
 
@@ -54,7 +54,7 @@ class QuestionnaireResultInput(ABC):
             self.answers[i] = IntVar()
             self.answers[i].set(int(self.config_default[i]))
             self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white', text=question, anchor='nw', padx=20)
-
+            self.checks[i].grid(row=i + 5, column=0, sticky='nw')
             if self.m > 5:
                 message = str(self.config_notes[i])
                 CreateToolTip(self.checks[i], text=message)
@@ -103,9 +103,11 @@ class QuestionnaireResultInput(ABC):
             is_visible = self.visible[i]
             should_visible = self.should_be_visible(i)
             if not is_visible and should_visible:
-                self.checks[i].grid(row=i + 5, column=0, sticky='nw')
+                self.checks[i].config(state=NORMAL)
+                # self.checks[i].grid(row=i + 5, column=0, sticky='nw')
             if is_visible and not should_visible:
-                self.checks[i].grid_forget()
+                self.checks[i].config(state=DISABLED)
+                # self.checks[i].grid_forget()
                 self.answers[i].set(False)
             self.visible[i] = should_visible
 
