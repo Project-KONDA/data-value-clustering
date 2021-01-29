@@ -14,6 +14,12 @@ class _____ClusteringParameter(ClusteringParameter):
         super().__init__(parent, name, explanation, deactivatable)
 
 
+    def change_checked(self):
+        super().change_checked()
+        if self.is_activated.get() == 1:
+            pass
+        else:
+            pass
 
     def get(self):
         return self.value_var.get()
