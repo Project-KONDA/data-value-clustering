@@ -19,9 +19,9 @@ class ClusteringParameter(ABC):
         if deactivatable:
             self.is_activated = IntVar()
             self.is_activated.set(1)
-            self.check = Checkbutton(self.frame, variable=self.is_activated, command=self.change_checked, bg='white',
-                                     anchor='nw', padx=20)
-            self.check.grid(row=0, column=0, sticky='w')
+            self.check_activ = Checkbutton(self.frame, variable=self.is_activated, command=self.change_checked, bg='white',
+                                           anchor='nw', padx=20)
+            self.check_activ.grid(row=0, column=0, sticky='w')
 
         # name label:
         self.label_text = StringVar()
@@ -43,12 +43,12 @@ class ClusteringParameter(ABC):
             self.label.config(state=NORMAL, bg='white')
             self.label_explanation.config(state=NORMAL, bg='white')
             self.frame.config(bg='white')
-            self.check.config(bg='white')
+            self.check_activ.config(bg='white')
         else:
             self.label.config(state=DISABLED, bg='grey90')
             self.label_explanation.config(state=DISABLED, bg='grey90')
             self.frame.config(bg='grey90')
-            self.check.config(bg='grey90')
+            self.check_activ.config(bg='grey90')
 
     @abstractmethod
     def get(self):
