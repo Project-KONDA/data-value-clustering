@@ -12,7 +12,7 @@ from gui_cluster_selection.clustering_questions import clustering_question_array
 def cluster_suggest():
     predefined_answers = None  # TODO
     answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
-    return answers, cluster_f  # TODO: call directly or return function to main?
+    return answers, cluster_f
 
 
 def input_questionnaire_clustering(config, predefined_answers=None):
