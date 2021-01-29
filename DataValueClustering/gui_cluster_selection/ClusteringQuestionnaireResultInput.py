@@ -61,11 +61,9 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
 
     def get_suggested_algorithm_names(self, suggested_algorithms):
         if len(suggested_algorithms.shape) == 2:
-            suggested_algorithms_names = suggested_algorithms[:, 0]
+            return suggested_algorithms[:, 0]
         else:
-            suggested_algorithms_names = []
-        return suggested_algorithms_names
-
+            return []
 
 if __name__ == '__main__':
     title = "myQuestions"
