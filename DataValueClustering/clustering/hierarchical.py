@@ -12,19 +12,20 @@ from distance.distance_matrix import calculate_condensed_distance_matrix, get_co
 #     return lambda distance_function, values_compressed: hierarchical(distance_function, values_compressed,
 #                                                                      n_clusters, distance_threshold, method, criterion,
 #                                                                      depth, monocrit)
-
+from gui_cluster_selection.clustering_questions import clustering_question_array
+from util.question_result_array_util import get_array_part
 
 method_array = [
     # dependencies, not-dependencies, value
     # suggest value if none of the 'not-dependencies' questions were answered with True
 
-    [[], [], "single"],
-    [[], [4], "complete"],
-    [[], [4,5], "ward"],
-    [[], [], "average"],
-    [[], [], "weighted"],  # 4
-    [[], [], "centroid"],
-    [[], [], "median"],  # 4
+    [[], [], "single", "The minimum distance between contained samples. Will yield long chain-like clusters."],
+    [[], [4], "complete", "The minimum distance between contained samples. Will yield small globular clusters."],
+    [[], [4,5], "ward", "The sum of squared deviations from samples to centroids. Will yield globular clusters of similar size."],
+    [[], [], "average", "The average distance between contained samples. Will yield globular clusters of similar variance."],
+    [[], [], "weighted", "The arithmetic mean of the average distances between contained samples."],  # 4
+    [[], [], "centroid", "The distance between centroids."],
+    [[], [], "median", "The distance between centroids calculated as the average of the old centroids."],  # 4
 
 ]
 
@@ -48,15 +49,18 @@ def decrease_by_one(clusters):
 
 
 def method_config(answers):
+    # enum
     name = "method"
     explanation = "Method for calculating the distance between clusters."
     values = method_array[:, 2]
-    suggestion_values = ""  # TODO: calculate from answers and method_array
+    explanations = method_array[:, 3]
+    suggestion_values = get_array_part(method_array, clustering_question_array, answers)
 
-    return name, explanation, values, suggestion_values
+    return name, explanation, values, explanations, suggestion_values
 
 
 def n_clusters_config(no_values):
+    # int or range
     name = "n_clusters"
     explanation = "Maximum number of clusters created. Higher values will yield more clusters."
     min_n_clusters = 2
@@ -65,11 +69,11 @@ def n_clusters_config(no_values):
     return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
 
 
-def distance_threshold_config(linkage_matrix, distance_matrix):  # or pass condensed_distance_matrix instead?
+def distance_threshold_config(linkage_matrix, min_distance):
+    # float
     name = "distance_threshold"
     explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
-    condensed = get_condensed(distance_matrix)
-    min_n_clusters = min_distance(condensed)
-    max_n_clusters = linkage_matrix[len(linkage_matrix)-1, 2] - 0.01
-    suggestion_value = (max_n_clusters-min_n_clusters)/2
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
+    min_distance_threshold = min_distance
+    max_distance_threshold = linkage_matrix[len(linkage_matrix)-1, 2] - 0.01
+    suggestion_value = (max_distance_threshold - min_distance_threshold)/2
+    return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value
