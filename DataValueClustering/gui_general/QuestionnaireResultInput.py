@@ -20,7 +20,6 @@ class QuestionnaireResultInput(ABC):
 
         self.checks = np.empty(self.n, dtype=Checkbutton)
         self.answers = np.empty(self.n, dtype=IntVar)
-        self.result_widgets = []
 
         # Variables
         self.config_dep = self.config[:, 0]

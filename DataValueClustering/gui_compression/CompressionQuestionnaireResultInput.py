@@ -25,26 +25,27 @@ class CompressionQuestionnaireResultInput(QuestionnaireResultInput):
         self.help_text = "Compression of the first 100 data values:\n"
         super().__init__("Compression Configuration", config, predefined_answers)
         self.data = data
+        self.labels = []
         self.update_visibility_and_result()
 
     def apply(self):
         answers = self.get()
         compression_f = get_compression_method(answers)
         values_compressed, compression_dict = compression_f(self.data[0:100])
-        for i in range(len(self.result_widgets)):
-            self.result_widgets[i].destroy()
+        for i in range(len(self.labels)):
+            self.labels[i].destroy()
 
         for i, key in enumerate(compression_dict):
             s1 = StringVar()
             s1.set(key)
             compression_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1, bg='lemonchiffon')
             compression_target_label.grid(row=i + 10, column=0, sticky='nwse')
-            self.result_widgets.append(compression_target_label)
+            self.labels.append(compression_target_label)
             s2 = StringVar()
             s2.set(str(compression_dict[key])[1:len(str(compression_dict[key]))-1])
             compression_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory', wraplength=540, justify=LEFT)  # TODO: calculate wraplength
             compression_source_label.grid(row=i + 10, column=1, sticky='nwse')
-            self.result_widgets.append(compression_source_label)
+            self.labels.append(compression_source_label)
 
 
 if __name__ == '__main__':
