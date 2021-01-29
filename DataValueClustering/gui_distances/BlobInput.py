@@ -236,8 +236,8 @@ class BlobInput:
         new_coordinates = create_coordinates_relative(self.n)
 
         for i in range(self.n):
-            for j in range (3):
-                configuration[i, j+4] = new_coordinates[i,j]
+            for j in range(3):
+                configuration[i, j+4] = new_coordinates[i, j]
 
         self.root.destroy()
         self.__init__(configuration)

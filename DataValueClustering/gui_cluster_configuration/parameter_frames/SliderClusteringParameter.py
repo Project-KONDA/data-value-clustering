@@ -33,7 +33,7 @@ class SliderClusteringParameter(ClusteringParameter):
 
     def change_checked(self):
         super().change_checked()
-        if self.isActivated.get() == 1:
+        if self.is_activated.get() == 1:
             self.slider.config(state=NORMAL, fg="black", troughcolor="SystemScrollbar")
         else:
             self.slider.config(state=DISABLED, fg="grey", troughcolor="grey90")
