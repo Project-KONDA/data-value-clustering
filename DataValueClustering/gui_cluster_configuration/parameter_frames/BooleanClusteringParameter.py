@@ -1,6 +1,5 @@
 from tkinter import IntVar, Checkbutton
 
-from gui_cluster_configuration.ClusteringParameterInput import ClusterConfigurationInput
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
@@ -33,6 +32,7 @@ class BooleanClusteringParameter(ClusteringParameter):
 
 
 if __name__ == "__main__":
+    import gui_cluster_configuration
     bool1 = create_boolean_frame(
         "My Param 1", "This is a test parameter.", True, False)
     bool2 = create_boolean_frame(
@@ -41,5 +41,5 @@ if __name__ == "__main__":
         "My Param 3", "This is a test parameter.", False, False)
     bool4 = create_boolean_frame(
         "My Param 4", "This is a test parameter.", False, True)
-    bool_input = ClusterConfigurationInput("Test", [bool1, bool2, bool3, bool4])
+    bool_input = gui_cluster_configuration.get_configuration_parameters("Test", [bool1, bool2, bool3, bool4])
     print(bool_input.get())

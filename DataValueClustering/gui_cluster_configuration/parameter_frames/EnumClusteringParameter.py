@@ -1,8 +1,7 @@
-from tkinter import Scale, IntVar, Radiobutton
+from tkinter import IntVar, Radiobutton
 
 import numpy as np
 
-from gui_cluster_configuration.ClusteringParameterInput import ClusterConfigurationInput
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 from gui_general.ToolTip import CreateToolTip
 
@@ -75,6 +74,7 @@ class EnumClusteringParameter(ClusteringParameter):
 
 
 if __name__ == "__main__":
+    import gui_cluster_configuration
     options1 = np.array([["a", "AA"], ["b", "BB"], ["c", "CC"]])
     suggestions1 = ["a", "b"]
     options2 = np.array([["0", "00"], ["1", "11"], ["2", "22"]])
@@ -88,5 +88,5 @@ if __name__ == "__main__":
         "My Param", "This is a test parameter.", options1, suggestions1, True)
     enum4 = create_enum_frame(
         "My Param", "This is a test parameter.", options2, suggestions2, False)
-    enum_input = ClusterConfigurationInput("Test", [enum1, enum2, enum3, enum4])
+    enum_input = gui_cluster_configuration.get_configuration_parameters("Test", [enum1, enum2, enum3, enum4])
     print(enum_input.get())

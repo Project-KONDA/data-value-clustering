@@ -1,6 +1,5 @@
 from tkinter import Scale, IntVar, DoubleVar
 
-from gui_cluster_configuration.ClusteringParameterInput import ClusterConfigurationInput
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
@@ -45,6 +44,7 @@ class SliderClusteringParameter(ClusteringParameter):
 
 
 if __name__ == '__main__':
+    import gui_cluster_configuration
     slide1 = create_slider_frame(
         "My Param", "This is a test parameter.", 1, 10, 4, 1, False)
     slide2 = create_slider_frame(
@@ -53,5 +53,5 @@ if __name__ == '__main__':
         "My Param", "This is a test parameter.", 1.0, 10.0, 2.0, 0.01, False)
     slide4 = create_slider_frame(
         "My Param", "This is a test parameter.", 10.0, 14.0, 5.0, 0.1, True)
-    slide_input = ClusterConfigurationInput("Test", [slide1, slide2, slide3, slide4])
+    slide_input = gui_cluster_configuration.get_configuration_parameters("Test", [slide1, slide2, slide3, slide4])
     print(slide_input.get())

@@ -80,4 +80,27 @@ class ClusterConfigurationInput:
 
 
 if __name__ == "__main__":
-    ClusterConfigurationInput("Test", list())
+    import gui_cluster_configuration
+
+    explanation = "This is a test parameter."
+    bool_param1 = gui_cluster_configuration.parameter_frames.BooleanClusteringParameter.create_boolean_frame(
+        "First Boolean Parameter", explanation, True, True)
+    bool_param2 = gui_cluster_configuration.parameter_frames.BooleanClusteringParameter.create_boolean_frame(
+        "Second Boolean Parameter", explanation, True, False)
+
+    enum1_options = np.array([["a", "AA"], ["b", "BB"], ["c", "CC"]])
+    enum1_suggestions = ["a", "b"]
+    enum2_options = np.array([["0", "00"], ["1", "11"], ["2", "22"]])
+    enum2_suggestions = ["0"]
+    enum_param1 = gui_cluster_configuration.parameter_frames.EnumClusteringParameter.create_enum_frame(
+        "First Enumeration Parameter", explanation, enum1_options, enum1_suggestions, True)
+    enum_param2 = gui_cluster_configuration.parameter_frames.EnumClusteringParameter.create_enum_frame(
+        "Second Enumeration Parameter", explanation, enum2_options, enum2_suggestions, False)
+
+    slider_param1 = gui_cluster_configuration.parameter_frames.SliderClusteringParameter.create_slider_frame(
+        "First Slider Parameter", explanation, 1, 30, 4, 2, True)
+    slider_param2 = gui_cluster_configuration.parameter_frames.SliderClusteringParameter.create_slider_frame(
+        "Second Slider Parameter", explanation, 1.0, 10.0, 2.0, 0.01, False)
+
+    param_list = [bool_param1, bool_param2, enum_param1, enum_param2, slider_param1, slider_param2]
+    get_configuration_parameters("Test", param_list)
