@@ -104,4 +104,5 @@ if __name__ == "__main__":
         "Second Slider Parameter", explanation, 1.0, 10.0, 2.0, 0.01, False)
 
     param_list = [bool_param1, bool_param2, enum_param1, enum_param2, slider_param1, slider_param2]
-    get_configuration_parameters("Test", param_list)
+    params = get_configuration_parameters("Test", param_list)
+    print(params)

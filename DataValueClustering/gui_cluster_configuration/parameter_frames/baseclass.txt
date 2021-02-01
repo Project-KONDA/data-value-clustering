@@ -25,6 +25,7 @@ class _____ClusteringParameter(ClusteringParameter):
 
     def get(self):
         # TODO
+        return _____ if self.is_activated.get() else None
 
 
 if __name__ == "__main__":

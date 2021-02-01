@@ -67,7 +67,7 @@ class EnumClusteringParameter(ClusteringParameter):
                 self.radiobuttons[i].config(bg='grey90')  # fg
 
     def get(self):
-        return self.option_labels[self.choice.get()] if self.is_activated else None
+        return self.option_labels[self.choice.get()] if self.is_activated.get() else None
 
 
 if __name__ == "__main__":

@@ -42,7 +42,7 @@ class SliderClusteringParameter(ClusteringParameter):
             self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
 
     def get(self):
-        return self.value_var.get() if self.is_activated else None
+        return self.value_var.get() if self.is_activated.get() else None
 
 
 if __name__ == '__main__':
@@ -56,4 +56,4 @@ if __name__ == '__main__':
     slide4 = create_slider_frame(
         "My Param", "This is a test parameter.", 10.0, 14.0, 5.0, 0.1, True)
     slide_input = gui_cluster_configuration.get_configuration_parameters("Test", [slide1, slide2, slide3, slide4])
-    print(slide_input.get())
+    print(slide_input)

@@ -26,7 +26,7 @@ def cluster_hierarchical_helper(condensed_distance_matrix, values, method):
     n_clusters = None  # TODO: support elbow method & Co.
     # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
     # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
-    distance_threshold = 3.8 # 15  # 3.8  # depends on distances
+    distance_threshold = 3.8  # 15  # 3.8  # depends on distances
     criterion = 'distance'
     # max number of clusters: 'maxclust', 'maxclust_monocrit'
     # threshold: 'distance', 'inconsistent', 'monocrit'

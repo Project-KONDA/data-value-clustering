@@ -19,6 +19,8 @@ class BooleanClusteringParameter(ClusteringParameter):
 
         self.check_boolean = Checkbutton(self.frame, variable=self.value_var, bg='white', anchor='nw', padx=20)
         self.check_boolean.grid(row=0, column=1, sticky='se')
+        # self.check_boolean.grid(row=2, column=1, sticky='nw')
+
 
         self. update_active()
 
@@ -30,7 +32,7 @@ class BooleanClusteringParameter(ClusteringParameter):
             self.check_boolean.config(state='disabled', bg='grey90')
 
     def get(self):
-        return bool(self.value_var.get()) if self.is_activated else None
+        return bool(self.value_var.get()) if self.is_activated.get() else None
 
 
 if __name__ == "__main__":
