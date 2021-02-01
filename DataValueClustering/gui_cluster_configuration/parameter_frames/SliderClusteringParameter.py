@@ -32,15 +32,17 @@ class SliderClusteringParameter(ClusteringParameter):
                             bg='white', highlightthickness=0, resolution=self.resolution)
         self.slider.grid(row=2, column=1, sticky='w')
 
-    def change_checked(self):
-        super().change_checked()
+        self. update_active()
+
+    def update_active(self):
+        super().update_active()
         if self.is_activated.get() == 1:
             self.slider.config(state='normal', fg='black', troughcolor='SystemScrollbar', bg='white')
         else:
             self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
 
     def get(self):
-        return self.value_var.get()
+        return self.value_var.get() if self.is_activated else None
 
 
 if __name__ == '__main__':

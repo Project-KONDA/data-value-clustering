@@ -14,13 +14,14 @@ class ClusteringParameter(ABC):
         self.explanation = explanation
         self.deactivatable = deactivatable
 
+        self.is_activated = IntVar()
+        self.is_activated.set(int(not deactivatable))
+
         # define frame content:
 
         # check box:
-        if deactivatable:
-            self.is_activated = IntVar()
-            self.is_activated.set(int(True))
-            self.check_active = Checkbutton(self.frame, variable=self.is_activated, command=self.change_checked,
+        if self.deactivatable:
+            self.check_active = Checkbutton(self.frame, variable=self.is_activated, command=self.update_active,
                                             bg='white', anchor='nw', padx=20)
             self.check_active.grid(row=0, column=0, sticky='w')
 
@@ -38,12 +39,13 @@ class ClusteringParameter(ABC):
                                        wraplength=500)
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
-    def change_checked(self):
+    def update_active(self):
         if self.is_activated.get() == 1:
             self.label.config(state='normal', bg='white')
             self.label_explanation.config(state='normal', bg='white')
             self.frame.config(bg='white')
-            self.check_active.config(bg='white')
+            if self.deactivatable:
+                self.check_active.config(bg='white')
         else:
             self.label.config(state='disabled', bg='grey90')
             self.label_explanation.config(state='disabled', bg='grey90')

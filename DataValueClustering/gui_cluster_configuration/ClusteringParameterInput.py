@@ -17,6 +17,7 @@ class ClusterConfigurationInput:
         self.root.resizable(False, True)
         self.root.minsize(200, 200)
         self.root.grid_rowconfigure(1, weight=1)
+        self.root.config(bg='white')
 
         self.parameter_frame_inits = parameter_frame_inits
         self.n = len(self.parameter_frame_inits)
@@ -38,7 +39,7 @@ class ClusterConfigurationInput:
         # caption:
         self.label_text = StringVar()
         self.label_text.set("Please specify the following parameters")
-        self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='SystemButtonFace',
+        self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='white',
                            font=font.Font(size=14))
 
         # button:

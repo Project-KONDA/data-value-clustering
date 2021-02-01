@@ -38,7 +38,7 @@ class EnumClusteringParameter(ClusteringParameter):
             CreateToolTip(self.radiobuttons[i], option[1])
             self.radiobuttons[i].grid(row=i + 10, column=1, sticky='nswe')
 
-        self.recolor()
+        self. update_active()
 
         # self.value_var = StringVar()
         # self.value_var.set(self.default)
@@ -51,26 +51,23 @@ class EnumClusteringParameter(ClusteringParameter):
     # def get_current_index(self):
     #     return list(self.options).index(self.value_var.get())
 
-    def change_checked(self):
-        super().change_checked()
+    def update_active(self):
+        super().update_active()
         if self.is_activated.get() == 1:
-            self.recolor()
+            for i, button in enumerate(self.radiobuttons):
+                self.radiobuttons[i].config(state='normal')
+                is_suggested = self.option_labels[i] in self.suggestions
+                if is_suggested:
+                    self.radiobuttons[i].config(bg='#f0fff0')  # fg
+                else:
+                    self.radiobuttons[i].config(bg='#fff0f0')  # fg
         else:
             for i, button in enumerate(self.radiobuttons):
                 self.radiobuttons[i].config(state='disabled')
                 self.radiobuttons[i].config(bg='grey90')  # fg
 
-    def recolor(self):
-        for i, button in enumerate(self.radiobuttons):
-            self.radiobuttons[i].config(state='normal')
-            is_suggested = self.option_labels[i] in self.suggestions
-            if is_suggested:
-                self.radiobuttons[i].config( bg='#f0fff0')  # fg
-            else:
-                self.radiobuttons[i].config(bg='#fff0f0')  # fg
-
     def get(self):
-        return self.option_labels[self.choice.get()]
+        return self.option_labels[self.choice.get()] if self.is_activated else None
 
 
 if __name__ == "__main__":
