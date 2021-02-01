@@ -1,34 +1,38 @@
-from tkinter import Scale, HORIZONTAL, BooleanVar, Checkbutton, Label, StringVar, IntVar, font, NORMAL, DISABLED, \
-    DoubleVar
-
-from gui_cluster_configuration.ClusteringParameterInput import ClusterConfigurationInput
+from tkinter import  # TODO
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
-
-def create______frame(name, explanation, ,):
-    return lambda parent: _____ClusteringParameter(parent, name, explanation, , deactivatable)
+# TODO, import this in __init__:
+def create______frame(name, explanation, ,):  # TODO
+    return lambda parent: _____ClusteringParameter(parent, name, explanation, , deactivatable)  # TODO
 
 class _____ClusteringParameter(ClusteringParameter):
 
-    def __init__(self, parent, name, explanation, , deactivatable=False):
+    def __init__(self, parent, name, explanation, , deactivatable=False):  # TODO
         super().__init__(parent, name, explanation, deactivatable)
 
+        # TODO
 
-    def change_checked(self):
-        super().change_checked()
+        self.update_active()
+
+
+    def update_active(self):
+        super().update_active()
         if self.is_activated.get() == 1:
-            pass
+            # TODO
+
         else:
-            pass
+            # TODO
 
     def get(self):
-        return self.value_var.get()
+        # TODO
 
 
 if __name__ == "__main__":
-    i = create______frame("My Param", "This is a test parameter.", , False)
-    j = create______frame("My Param", "This is a test parameter.", , True)
-    k = create______frame("My Param", "This is a test parameter.", , False)
-    l = create______frame("My Param", "This is a test parameter.", , True)
-    r = ClusterConfigurationInput("Test", [i, j, k, l])
-    print(r.get())
+    import gui_cluster_configuration
+    # TODO
+    ____1 = create______frame("My Param", "This is a test parameter.", , False)
+    ____2 = create______frame("My Param", "This is a test parameter.", , True)
+    ____3 = create______frame("My Param", "This is a test parameter.", , False)
+    ____4 = create______frame("My Param", "This is a test parameter.", , True)
+    _____input = ClusterConfigurationInput("Test", [____1, ____2, ____3, ____4])
+    print(_____input.get())
