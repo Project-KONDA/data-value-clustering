@@ -7,8 +7,7 @@ from distance.weighted_levenshtein_distance import weighted_levenshtein_distance
 
 # pass method of this module as distance_function to clustering.clustering.cluster
 from gui_general.DropdownInput import DropdownInput
-from gui_distances.BlobInput import input_blobs
-from gui_distances.CostMapInput import input_costmap
+from gui_distances import input_blobs, input_costmap
 
 
 def distance_dice():
