@@ -14,7 +14,7 @@ def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', le
 
 def dbscan_min_samples_config(no_values, answers):
     # int
-    name = "min_samples"
+    name = "dbscan_min_samples"
     explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be. "
     min_min_samples = 3
     max_min_samples = no_values
@@ -28,7 +28,7 @@ def dbscan_min_samples_config(no_values, answers):
 
 def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min_samples
     # float
-    name = "eps"
+    name = "dbscan_eps"
     explanation = "The maximum distance between two samples belonging to the same cluster." \
                   "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
                   "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
@@ -55,20 +55,39 @@ def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min
 
 def dbscan_algorithm_config():
     # enum
-    # return name, explanation, options, suggestion_values
-     pass
+    name = "dbscan_algorithm"  # TODO
+    explanation = ""  # TODO
+    options = np.array([['auto', ""],
+                        ['brute', ""],
+                        ['kd_tree', ""],
+                        ['ball_tree', ""]])  # TODO
+    suggestions = ['auto']  # TODO
+    deactivatable = False
+    return name, explanation, options, suggestions, deactivatable
 
 
 def dbscan_leaf_size_config():
-    # int
-    # return name, explanation, min_min_samples, max_min_samples, suggestion_value
-    pass
+    # int slider
+    name = "dbscan_leaf_size"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def dbscan_n_jobs_config():
-    # int
-    # return name, explanation, min_min_samples, max_min_samples, suggestion_value
-    pass
+    # int slider
+    name = "dbscan_n_jobs"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def k_distance_graph(distance_matrix, k):

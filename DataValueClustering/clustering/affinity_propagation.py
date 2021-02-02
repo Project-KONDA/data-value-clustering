@@ -15,7 +15,7 @@ def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_ite
 
 def affinity_damping_config():
     # float
-    name = "damping"
+    name = "affinity_damping"
     explanation = "Higher values will yield less clusters."
     min_damping = 0.5
     max_damping = 0.99
@@ -27,7 +27,7 @@ def affinity_damping_config():
 def affinity_preference_config(affinity_matrix):
     # float
     # it is advised to start with a preference equal to the median of the input similarities (= default)
-    name = "preference"
+    name = "affinity_preference"
     explanation = "Lower values will yield less clusters."
     min_preference = 0  # TODO
     max_preference = np.inf  # TODO
@@ -39,22 +39,37 @@ def affinity_preference_config(affinity_matrix):
 
 def affinity_max_iter_config(answers):
     # int
-    # return name, explanation, min_preference, max_preference, suggestion_value
-    pass
+    name = "affinity_max_iter"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def affinity_convergence_iter_config():
     # int
     # increase for more clusters?
-    # return name, explanation, min_preference, max_preference, suggestion_value
-    pass
+    name = "affinity_convergence_iter"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def affinity_copy_config():
     # bool
     # TODO: remove?
-    # return name, explanation, default
-    pass
+    name = "affinity_copy"  # TODO
+    explanation = ""  # TODO
+    default = True  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, default, deactivatable
 
 
 if __name__ == '__main__':

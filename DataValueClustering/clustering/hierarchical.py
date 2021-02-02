@@ -82,16 +82,26 @@ def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
 
 def hierarchical_criterion_config():
     # enum
-    # return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value, resolution
-    pass
+    name = "criterion"  # TODO
+    explanation = ""  # TODO
+    options = [["", ""]]  # TODO
+    suggestions = [""]  # TODO
+    deactivatable = True  # TODO
+
+    return name, explanation, options, suggestions, deactivatable
 
 
 def hierarchical_depth_config():
     # only activated if criterion = 'inconsistent'
     # int slider
+    name = "depth"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
     deactivatable = True
-    # return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value, deactivatable
-    pass
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def hierarchical_monocrit_config():

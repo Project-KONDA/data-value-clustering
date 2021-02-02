@@ -51,16 +51,24 @@ def kmedoids_method_config(answers):
     # not supported by KMedoids anymore
     pass
 
+
 def kmedoids_init_config(answers):
     # enum
     name = "heuristic"
     explanation = "Initialization method for medoids."
-    options = initialization_array[:, (2,3)]
+    options = initialization_array[:, (2, 3)]
     suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)
 
     return name, explanation, options, suggestion_values
 
+
 def kmedoids_max_iter_config():
     # int
-    # return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
-    pass
+    name = "kmedoids_max_iter"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable

@@ -27,44 +27,74 @@ def optics_max_eps_config():
     # "reducing max_eps will result in shorter run times"
 
     # see DBSCAN
-    # return ??
-    pass
+    name = "optics_max_eps"  # TODO
+    explanation = ""  # TODO
+    mini = 0.  # TODO
+    maxi = 2.  # TODO
+    default = 1.  # TODO
+    resolution = 0.01  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable
+
 
 def optics_cluster_method_config():
     # enum
-    # return name, explanation, options, suggestion_values
-    pass
+    name = "optics_cluster_method"  # TODO
+    explanation = ""  # TODO
+    options = np.array([["dbscan", ""],
+                        ["xi", ""]])  # TODO
+    suggestions = ["dbscan"]  # TODO
+    deactivatable = False
+    return name, explanation, options, suggestions, deactivatable
 
 
 def optics_eps_config():
     # float
     # Used only when cluster_method='dbscan'
+    name = "optics_eps"  # TODO
+    explanation = ""  # TODO
+    mini = 0.  # TODO
+    maxi = 2.  # TODO
+    default = 1.  # TODO
     resolution = 0.01
     deactivatable = True
-    # return name, explanation, min_eps, max_eps, suggestion_value, resolution, deactivatable
-    pass
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def optics_xi_config():
     # float
     # Used only when cluster_method='xi'
+    name = "optics_xi"  # TODO
+    explanation = ""  # TODO
+    mini = 0.  # TODO
+    maxi = 2.  # TODO
+    default = 1.  # TODO
+    resolution = 0.01  # TODO
     deactivatable = True
-    # return name, explanation, min_eps, max_eps, suggestion_value, resolution, deactivatable
-    pass
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def optics_predecessor_correction_config():
     # bool
     # This parameter has minimal effect on most datasets. Used only when cluster_method='xi'.
-    # return name, explanation, default
-    pass
+    name = "optics_predecessor_correction"  # TODO
+    explanation = ""  # TODO
+    default = True  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, default, deactivatable
 
 
 def optics_min_cluster_size_config():
     # int
     # Used only when cluster_method='xi'.
-    # return name, explanation, min_min_samples, max_min_samples, suggestion_value
-    pass
+    name = "optics_min_cluster"  # TODO
+    explanation = ""  # TODO
+    mini = 0  # TODO
+    maxi = 2  # TODO
+    default = 1  # TODO
+    resolution = 1  # TODO
+    deactivatable = True  # TODO
+    return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def optics_algorithm_config():
