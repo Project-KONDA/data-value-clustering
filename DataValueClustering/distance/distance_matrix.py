@@ -90,7 +90,7 @@ def calculate_distance_matrix_map(distance_function, values):
     if not is_valid_y(condensed_matrix):
         condensed_matrix = None
 
-    affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
+    affinity_matrix = calculate_affinity_matrix_from_distance_matrix(matrix)
 
     return {"distance_matrix": matrix,
             "condensed_distance_matrix": condensed_matrix,

@@ -178,6 +178,8 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
     algorithm, leaf_size, n_jobs \
         = get_configuration_parameters("", frames)
 
+    if not max_eps:
+        max_eps = np.inf
     return lambda: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, cluster_method,
                           eps, xi, predecessor_correction, min_cluster_size, algorithm,
                           leaf_size, n_jobs)
