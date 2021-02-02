@@ -206,15 +206,11 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
     preference_info = affinity_preference_config(distance_matrix_map["affinity_matrix"])
     preference_frame = create_slider_frame(*preference_info)
 
-    # verbose = False
-    verbose_info = affinity_verbose_config()
-    verbose_frame = create_boolean_frame(*verbose_info)
-
-    frames = [damping_frame, max_iter_frames, convergence_iter_frame, copy_frame, preference_frame, verbose_frame]
-    damping, max_iter, convergence_iter, copy, preference, verbose = get_configuration_parameters("", frames)
+    frames = [damping_frame, max_iter_frames, convergence_iter_frame, copy_frame, preference_frame]
+    damping, max_iter, convergence_iter, copy, preference = get_configuration_parameters("", frames)
 
     return lambda: affinity(distance_matrix_map["affinity_matrix"], values, damping, max_iter, convergence_iter,
-                            copy, preference, verbose, random_state=None)
+                            copy, preference)
 
 
 def cluster_spectral(cluster_answers, distance_matrix_map, values):
@@ -251,17 +247,13 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
     assign_labels_info = spectral_assign_labels_config()
     assign_labels_frame = create_enum_frame(*assign_labels_info)
 
-    # verbose = False
-    verbose_info = spectral_verbose_config()
-    verbose_frame = create_boolean_frame(*verbose_info)
-
     frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame, gamma_frame,
-              eigen_tol_frame, assign_labels_frame, verbose_frame]
-    n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels, verbose \
+              eigen_tol_frame, assign_labels_frame]
+    n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels \
         = get_configuration_parameters("", frames)
 
     return lambda: spectral(distance_matrix_map["affinity_matrix"], values, n_clusters, eigen_solver,
-                            n_components, n_init, gamma, eigen_tol, assign_labels, verbose)
+                            n_components, n_init, gamma, eigen_tol, assign_labels)
 
 
 def clusters_from_compressed_values(cluster_answers, distance_matrix_map, values):
