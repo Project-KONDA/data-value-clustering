@@ -54,6 +54,9 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
 
     cost_map, new_blob_configuration = optionsx[index[0], 1]()
 
+    if cost_map is None:
+        quit()
+
     return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2), new_blob_configuration
 
 

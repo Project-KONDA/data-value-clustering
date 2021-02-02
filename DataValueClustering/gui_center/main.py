@@ -14,6 +14,8 @@ class Main:
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
                  compression_f=None, distance_f=None, cluster_f=None):
 
+        print("Initializing ...")
+
         self.l_data = get_sources_in_experiment_data_directory()
         self.l_compressions = compression_functions
         self.l_distances = distance_functions
@@ -38,7 +40,10 @@ class Main:
                 or (compression_index == -1 and compression_f is None)
                 or (distance_index == -1 and distance_f is None)
                 or (cluster_index == -1 and cluster_f is None)):
+            print("Basic Configurations ...")
             self.show_configuration_centre()
+
+        print("Data preprocessing ...")
 
         # Specific Configurations
         # self.extract_configurations()
@@ -48,7 +53,8 @@ class Main:
         if self.compression_index != -1:
             self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1](self.data)
         if self.distance_index != -1:
-            self.blob_configuration = get_blob_configuration(self.compression_answers)  # [label, regex, resizable, info, x, y, size]
+            self.blob_configuration = get_blob_configuration(self.compression_answers)
+            # [label, regex, resizable, info, x, y, size]
             self.distance_f, self.blob_configuration = self.l_distances[self.distance_index, 1](self.blob_configuration)
 
         # EXECUTION
@@ -66,6 +72,9 @@ class Main:
         if self.cluster_index != -1:
             self.cluster_answers, self.cluster_config_f = cluster_algorithms[self.cluster_index, 1]()
 
+        if self.cluster_config_f is None:
+            quit()
+
         # clustering parameter configuration:
         self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
 
@@ -80,7 +89,6 @@ class Main:
         self.print_result()
         # TODO
         # MDS scatter plot
-
 
         # CLUSTER VALIDATION
         # TODO
