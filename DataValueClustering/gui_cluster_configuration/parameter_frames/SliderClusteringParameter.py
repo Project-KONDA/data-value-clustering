@@ -14,7 +14,7 @@ class SliderClusteringParameter(ClusteringParameter):
         super().__init__(parent, name, explanation, deactivatable)
 
         assert type(mini) == type(maxi) == type(default) == type(resolution)
-        assert type(mini) is int or type(maxi) is float
+        assert type(resolution) is int or type(resolution) is float
 
         self.mini = mini
         self.maxi = maxi
