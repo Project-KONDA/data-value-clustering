@@ -13,6 +13,7 @@ def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', le
 
 
 def dbscan_min_samples_config(no_values, answers):
+    # int
     name = "min_samples"
     explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be. "
     min_min_samples = 3
@@ -26,6 +27,7 @@ def dbscan_min_samples_config(no_values, answers):
 
 
 def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min_samples
+    # float
     name = "eps"
     explanation = "The maximum distance between two samples belonging to the same cluster." \
                   "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
@@ -47,18 +49,25 @@ def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min
 
     min_eps = min(get_condensed(distance_matrix))
     suggestion_value = min_eps
-    return name, explanation, min_eps, max_eps, suggestion_value
+    resolution = 0.01
+    return name, explanation, min_eps, max_eps, suggestion_value, resolution
 
 
 def dbscan_algorithm_config():
+    # enum
+    # return name, explanation, options, suggestion_values
      pass
 
 
 def dbscan_leaf_size_config():
+    # int
+    # return name, explanation, min_min_samples, max_min_samples, suggestion_value
     pass
 
 
 def dbscan_n_jobs_config():
+    # int
+    # return name, explanation, min_min_samples, max_min_samples, suggestion_value
     pass
 
 

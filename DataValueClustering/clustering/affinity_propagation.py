@@ -5,49 +5,55 @@ from distance.distance_matrix import calculate_affinity_matrix, calculate_affini
 import numpy as np
 
 
-def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None,
-             verbose=False, random_state=None):
+def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None):
     # affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
     clusters = AffinityPropagation(
         affinity='precomputed', damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, copy=copy,
-        preference=preference, verbose=verbose, random_state=random_state
-    ).fit_predict(affinity_matrix)
+        preference=preference).fit_predict(affinity_matrix)
     return clusters
 
 
 def affinity_damping_config():
+    # float
     name = "damping"
     explanation = "Higher values will yield less clusters."
     min_damping = 0.5
     max_damping = 0.99
     suggestion_value = 0.5
-    return name, explanation, min_damping, max_damping, suggestion_value
+    resolution = 0.01
+    return name, explanation, min_damping, max_damping, suggestion_value, resolution
 
 
 def affinity_preference_config(affinity_matrix):
+    # float
     # it is advised to start with a preference equal to the median of the input similarities (= default)
     name = "preference"
     explanation = "Lower values will yield less clusters."
     min_preference = 0  # TODO
     max_preference = np.inf  # TODO
     suggestion_value = np.median(affinity_matrix)  # = default
-    return name, explanation, min_preference, max_preference, suggestion_value
+    resolution = 0.01
+    deactivatable = True
+    return name, explanation, min_preference, max_preference, suggestion_value, resolution, deactivatable
 
 
 def affinity_max_iter_config(answers):
+    # int
+    # return name, explanation, min_preference, max_preference, suggestion_value
     pass
 
 
 def affinity_convergence_iter_config():
+    # int
     # increase for more clusters?
+    # return name, explanation, min_preference, max_preference, suggestion_value
     pass
 
 
 def affinity_copy_config():
-    pass
-
-
-def affinity_verbose_config():
+    # bool
+    # TODO: remove?
+    # return name, explanation, default
     pass
 
 

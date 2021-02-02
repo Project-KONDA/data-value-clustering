@@ -54,9 +54,7 @@ def hierarchical_method_config(answers):
     explanation = "Method for calculating the distance between clusters."
     options = method_array[:, (2, 3)]
     suggestion_values = get_array_part(method_array, clustering_question_array, answers)
-    deactivatable = False
-
-    return name, explanation, options, suggestion_values, deactivatable
+    return name, explanation, options, suggestion_values
 
 
 def hierarchical_n_clusters_config(no_values):
@@ -66,7 +64,8 @@ def hierarchical_n_clusters_config(no_values):
     min_n_clusters = 2
     max_n_clusters = no_values
     suggestion_value = min(7, no_values / 2)
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value
+    deactivatable = True
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, deactivatable
 
 
 def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
@@ -76,18 +75,28 @@ def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
     min_distance_threshold = min_distance
     max_distance_threshold = linkage_matrix[len(linkage_matrix) - 1, 2] - 0.01
     suggestion_value = (max_distance_threshold - min_distance_threshold) / 2
-    return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value
+    resolution = 0.01
+    deactivatable = True
+    return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value, resolution, deactivatable
 
 
 def hierarchical_criterion_config():
+    # enum
+    # return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value, resolution
     pass
 
 
 def hierarchical_depth_config():
+    # only activated if criterion = 'inconsistent'
+    # int slider
+    deactivatable = True
+    # return name, explanation, min_distance_threshold, max_distance_threshold, suggestion_value, deactivatable
     pass
 
 
 def hierarchical_monocrit_config():
+    # vector
+    # return ??
     pass
 
 
