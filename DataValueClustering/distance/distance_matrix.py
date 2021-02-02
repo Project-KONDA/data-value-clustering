@@ -90,7 +90,13 @@ def calculate_distance_matrix_map(distance_function, values):
     if not is_valid_y(condensed_matrix):
         condensed_matrix = None
 
-    return {"distance_matrix" : matrix, "condensed_distance_matrix" : condensed_matrix, "min_distance" : min_distance, "max_distance" : max_distance}
+    affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
+
+    return {"distance_matrix": matrix,
+            "condensed_distance_matrix": condensed_matrix,
+            "affinity_matrix": affinity_matrix,
+            "min_distance": min_distance,
+            "max_distance": max_distance}
 
 
 def calculate_distance_matrix(distance_function, values):

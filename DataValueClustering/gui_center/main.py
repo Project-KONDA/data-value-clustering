@@ -67,11 +67,11 @@ class Main:
             self.cluster_answers, self.cluster_config_f = cluster_algorithms[self.cluster_index, 1]()
 
         # clustering parameter configuration:
-        self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map)
+        self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
 
         print("Start clustering ...")
         # CLUSTERING
-        self.clusters_compressed = self.cluster_f(self.values_compressed)
+        self.clusters_compressed = self.cluster_f()
         self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
 

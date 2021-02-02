@@ -42,12 +42,15 @@ def kmedoids_args(n_clusters=8, method='alternate', init='build', max_iter=None,
                                                                  random_state)
 
 
-def n_clusters_config(no_values):
+def kmedoids_n_clusters_config(no_values):
     # int or range
-    return hierarchical.n_clusters_config(no_values)
+    return hierarchical.hierarchical_n_clusters_config(no_values)
 
 
-def init_config(answers):
+def kmedoids_method_config(answers):
+    pass
+
+def kmedoids_init_config(answers):
     # enum
     name = "heuristic"
     explanation = "Initialization method for medoids."
@@ -56,3 +59,6 @@ def init_config(answers):
     suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)
 
     return name, explanation, values, explanations, suggestion_values
+
+def kmedoids_max_iter_config():
+    pass

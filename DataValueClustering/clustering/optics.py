@@ -16,16 +16,47 @@ def optics(distance_matrix, values,
     return clusters
 
 
-def min_samples_config(no_values, answers):
-    return dbscan.min_samples_config(no_values, answers)
+def optics_min_samples_config(no_values, answers):
+    return dbscan.dbscan_min_samples_config(no_values, answers)
 
 
-def max_eps_config():
+def optics_max_eps_config():
     # default value of np.inf will identify clusters across all scales
     # reducing max_eps will result in shorter run times
 
     # see DBSCAN
 
+    pass
+
+def optics_cluster_method_config():
+    pass
+
+
+def optics_eps_config():
+    pass
+
+
+def optics_xi_config():
+    pass
+
+
+def optics_predecessor_correction_config():
+    pass
+
+
+def optics_min_cluster_size_config():
+    pass
+
+
+def optics_algorithm_config():
+    pass
+
+
+def optics_leaf_size_config():
+    pass
+
+
+def optics_n_jobs_config():
     pass
 
 

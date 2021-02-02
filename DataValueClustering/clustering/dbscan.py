@@ -12,7 +12,7 @@ def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', le
     return clusters
 
 
-def min_samples_config(no_values, answers):
+def dbscan_min_samples_config(no_values, answers):
     name = "min_samples"
     explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be. "
     min_min_samples = 3
@@ -25,7 +25,7 @@ def min_samples_config(no_values, answers):
     return name, explanation, min_min_samples, max_min_samples, suggestion_value
 
 
-def eps_config(distance_matrix, no_values, min_samples):
+def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min_samples
     name = "eps"
     explanation = "The maximum distance between two samples belonging to the same cluster." \
                   "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
@@ -47,8 +47,19 @@ def eps_config(distance_matrix, no_values, min_samples):
 
     min_eps = min(get_condensed(distance_matrix))
     suggestion_value = min_eps
-
     return name, explanation, min_eps, max_eps, suggestion_value
+
+
+def dbscan_algorithm_config():
+     pass
+
+
+def dbscan_leaf_size_config():
+    pass
+
+
+def dbscan_n_jobs_config():
+    pass
 
 
 def k_distance_graph(distance_matrix, k):
@@ -62,7 +73,6 @@ def k_distance_graph(distance_matrix, k):
     distances_sorted = np.sort(distances)
     plt.plot(distances_sorted)
     plt.show()
-
 
 
 if __name__ == '__main__':

@@ -4,9 +4,10 @@ from gui_center.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
 import numpy as np
 
-def affinity(distance_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None,
+
+def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None,
              verbose=False, random_state=None):
-    affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
+    # affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
     clusters = AffinityPropagation(
         affinity='precomputed', damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, copy=copy,
         preference=preference, verbose=verbose, random_state=random_state
@@ -14,7 +15,7 @@ def affinity(distance_matrix, values, damping=0.5, max_iter=200, convergence_ite
     return clusters
 
 
-def damping_config():
+def affinity_damping_config():
     name = "damping"
     explanation = "Higher values will yield less clusters."
     min_damping = 0.5
@@ -23,7 +24,7 @@ def damping_config():
     return name, explanation, min_damping, max_damping, suggestion_value
 
 
-def preference_config(affinity_matrix):
+def affinity_preference_config(affinity_matrix):
     # it is advised to start with a preference equal to the median of the input similarities (= default)
     name = "preference"
     explanation = "Lower values will yield less clusters."
@@ -33,12 +34,20 @@ def preference_config(affinity_matrix):
     return name, explanation, min_preference, max_preference, suggestion_value
 
 
-def max_iter_config(answers):
+def affinity_max_iter_config(answers):
     pass
 
 
-def convergence_iter(answers):
+def affinity_convergence_iter_config():
     # increase for more clusters?
+    pass
+
+
+def affinity_copy_config():
+    pass
+
+
+def affinity_verbose_config():
     pass
 
 
@@ -48,3 +57,4 @@ if __name__ == '__main__':
         c = affinity(lambda a, b: abs(a - b), v, convergence_iter=50, damping=0.9)
         # print(c)
         print(fancy_cluster_representation(v, c))
+
