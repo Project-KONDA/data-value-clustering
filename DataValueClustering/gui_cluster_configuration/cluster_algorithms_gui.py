@@ -29,7 +29,7 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
 
     param_frames = [method_frame]
     method, = get_configuration_parameters(
-        "Hierarchical Clustering Configuration Part 1/2", param_frames)
+        "Hierarchical Clustering Configuration Part 1/2", param_frames, [])
 
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method)
     show_dendrogram(linkage_matrix, values)
@@ -62,8 +62,12 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     # monocrit_frame = create_vector_input(*monocrit_info)
 
     frames = [n_clusters_frame, distance_threshold_frame, criterion_frame, depth_frame]
+    dependencies2 = [
+        ["n_clusters","distance_threshold",'activation_activation', False],
+        ["distance_threshold","n_clusters", 'activation_activation', False]
+    ]
     n_clusters, distance_threshold, criterion, depth = \
-        get_configuration_parameters("", frames)
+        get_configuration_parameters("", frames, dependencies2)
 
     return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
@@ -247,6 +251,9 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
               eigen_tol_frame, assign_labels_frame]
     n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels \
         = get_configuration_parameters("", frames)
+
+    if not n_components:
+        n_components = n_clusters
 
     return spectral(values, n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels)
 
