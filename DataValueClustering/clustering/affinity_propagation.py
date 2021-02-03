@@ -13,6 +13,11 @@ def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_ite
     return clusters
 
 
+def affinity_args(damping, max_iter, convergence_iter, copy, preference):
+    return lambda distance_matrix_map, values: affinity(distance_matrix_map["affinity_matrix"], values, damping, max_iter, convergence_iter,
+                            copy, preference)
+
+
 def affinity_damping_config():
     # float
     name = "affinity_damping"

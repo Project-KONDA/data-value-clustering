@@ -27,18 +27,15 @@ initialization_array = [
 ]
 
 
-def kmedoids(distance_matrix, values, n_clusters=8, method='alternate', init='heuristic', max_iter=100):
+def kmedoids(distance_matrix, values, n_clusters=8, init='heuristic', max_iter=200):  # method not supported anymore
     clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, init=init, max_iter=max_iter).fit_predict(distance_matrix)
     # TODO: method=method is unexpected keyword argument ...
-    # method=method,
     return clusters
 
 
-def kmedoids_args(n_clusters=8, method='alternate', init='build', max_iter=None,
-                  random_state=None):
-    return lambda distance_function, values_compressed: kmedoids(distance_function, values_compressed,
-                                                                 n_clusters, method, init, max_iter,
-                                                                 random_state)
+def kmedoids_args(n_clusters=8, init='heuristic', max_iter=200):
+    return lambda distance_matrix_map, values: kmedoids(distance_matrix_map["distance_matrix"], values,
+                                                        n_clusters, init, max_iter)
 
 
 def kmedoids_n_clusters_config(no_values):

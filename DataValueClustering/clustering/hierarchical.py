@@ -6,12 +6,16 @@ from util.question_result_array_util import get_array_part
 #                  depth=2, monocrit=None):
 #     pass
 #
-#
-# def hierarchical_args(n_clusters, distance_threshold, method='single', criterion='inconsistent', depth=2,
-#                       monocrit=None):
-#     return lambda distance_function, values_compressed: hierarchical(distance_function, values_compressed,
-#                                                                      n_clusters, distance_threshold, method, criterion,
-#                                                                      depth, monocrit)
+
+def hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold,
+                                                               criterion, depth=2, monocrit=None):
+    return lambda distance_matrix_map, values: hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold,
+                                                               criterion, depth, monocrit)
+
+
+def hierarchical_args(method, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
+    return lambda distance_matrix_map, values: hierarchical_lm(generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method), values,
+                                                               n_clusters, distance_threshold, criterion, depth, monocrit)
 
 method_array = [
     # dependencies, not-dependencies, value

@@ -12,6 +12,10 @@ def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', le
     return clusters
 
 
+def dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs):
+    return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, algorithm, leaf_size, n_jobs)
+
+
 def dbscan_min_samples_config(no_values, answers):
     # int
     name = "dbscan_min_samples"

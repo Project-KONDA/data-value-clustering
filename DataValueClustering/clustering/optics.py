@@ -16,6 +16,12 @@ def optics(distance_matrix, values,
     return clusters
 
 
+def optics_args(min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, algorithm,
+                          leaf_size, n_jobs):
+    return lambda distance_matrix_map, values: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, cluster_method,
+                          eps, xi, predecessor_correction, min_cluster_size, algorithm, leaf_size, n_jobs)
+
+
 def optics_min_samples_config(no_values, answers):
     # int
     return dbscan.dbscan_min_samples_config(no_values, answers)

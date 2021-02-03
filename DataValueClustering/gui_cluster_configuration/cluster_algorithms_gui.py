@@ -1,8 +1,8 @@
 from clustering.hierarchical import generate_linkage_matrix, hierarchical_lm, hierarchical_method_config, \
     hierarchical_distance_threshold_config, \
-    hierarchical_depth_config, hierarchical_criterion_config, hierarchical_n_clusters_config
-from clustering.kmedoids import kmedoids, kmedoids_init_config, kmedoids_n_clusters_config, kmedoids_method_config, \
-    kmedoids_max_iter_config
+    hierarchical_depth_config, hierarchical_criterion_config, hierarchical_n_clusters_config, hierarchical_lm_args
+from clustering.kmedoids import kmedoids, kmedoids_init_config, kmedoids_n_clusters_config, \
+    kmedoids_max_iter_config, kmedoids_args
 from clustering.dbscan import *
 from clustering.optics import *
 from clustering.affinity_propagation import *
@@ -65,7 +65,7 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     n_clusters, distance_threshold, criterion, depth = \
         get_configuration_parameters("", frames)
 
-    return lambda distance_matrix_map, values: hierarchical_lm(distance_matrix_map['linkage_matrix'], values, n_clusters, distance_threshold, criterion, depth, None)
+    return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
 
 def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
@@ -76,9 +76,9 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
     n_clusters_info = kmedoids_n_clusters_config(len(values))
     n_clusters_frame = create_slider_frame(*n_clusters_info)
 
-    # method = 'alternate'  # TODO: unexpected keyword argument error
-    method_info = kmedoids_method_config(cluster_answers)
-    method_frame = create_enum_frame(*method_info)
+    # # method = 'alternate'  # TODO: unexpected keyword argument error
+    # method_info = kmedoids_method_config(cluster_answers)
+    # method_frame = create_enum_frame(*method_info)
 
     # init = 'heuristic'  # "if there are outliers in the dataset, use another initialization than build"
     init_info = kmedoids_init_config(cluster_answers)
@@ -88,12 +88,12 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
     max_iter_info = kmedoids_max_iter_config()
     max_iter_frame = create_slider_frame(*max_iter_info)
 
-    frames = [n_clusters_frame, method_frame, init_frame, max_iter_frame]
+    frames = [n_clusters_frame, init_frame, max_iter_frame]
 
     n_clusters, method, init, max_iter = \
         get_configuration_parameters("", frames)
 
-    return lambda distance_matrix_map, values: kmedoids(distance_matrix_map["distance_matrix"], values, n_clusters, method, init, max_iter)
+    return kmedoids_args(n_clusters, init, max_iter)
 
 
 def cluster_dbscan(cluster_answers, distance_matrix_map, values):
@@ -108,6 +108,7 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
     # eps = 4.8  # depends on distances
     eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], len(values))  # TODO: , min_samples)
     eps_frame = create_slider_frame(*eps_info)
+    # TODO: plot k_distance_graph
 
     # algorithm = 'auto'
     algorithm_info = dbscan_algorithm_config()
@@ -124,8 +125,7 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
     frames = [min_samples_frame, eps_frame, algorithm_frame, leaf_size_frame, n_jobs_frame]
     min_samples, eps, algorithm, leaf_size, n_jobs = get_configuration_parameters("", frames)
 
-    return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, algorithm, leaf_size,
-                          n_jobs)
+    return dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs)
 
 
 def cluster_optics(cluster_answers, distance_matrix_map, values):
@@ -179,7 +179,7 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
 
     if not max_eps:
         max_eps = np.inf
-    return lambda distance_matrix_map, values: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, cluster_method,
+    return optics_args(min_samples, max_eps, cluster_method,
                           eps, xi, predecessor_correction, min_cluster_size, algorithm,
                           leaf_size, n_jobs)
 
@@ -210,8 +210,7 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
     frames = [damping_frame, max_iter_frames, convergence_iter_frame, copy_frame, preference_frame]
     damping, max_iter, convergence_iter, copy, preference = get_configuration_parameters("", frames)
 
-    return lambda distance_matrix_map, values: affinity(distance_matrix_map["affinity_matrix"], values, damping, max_iter, convergence_iter,
-                            copy, preference)
+    return affinity_args(damping, max_iter, convergence_iter, copy, preference)
 
 
 def cluster_spectral(cluster_answers, distance_matrix_map, values):
@@ -227,10 +226,6 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
     # n_components = n_clusters
     n_components_info = spectral_n_components_config()
     n_components_frame = create_slider_frame(*n_components_info)
-
-    # random_state = None
-    # random_state_info = spectral_random_state_config()
-    # random_state_frame = create_(*random_state_info)
 
     # n_init = 10
     n_init_info = spectral_n_init_config()
@@ -253,8 +248,7 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
     n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels \
         = get_configuration_parameters("", frames)
 
-    return lambda distance_matrix_map, values: spectral(distance_matrix_map["affinity_matrix"], values, n_clusters, eigen_solver,
-                            n_components, n_init, gamma, eigen_tol, assign_labels)
+    return spectral(values, n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels)
 
 
 def clusters_from_compressed_values(cluster_answers, distance_matrix_map, values):
