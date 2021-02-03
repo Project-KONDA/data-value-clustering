@@ -67,15 +67,15 @@ def calculate_distance_matrix_map(distance_function, values):
 
     i = 0
 
-    min_distance = -np.inf
-    max_distance = np.inf
+    min_distance = np.inf
+    max_distance = 0
 
     for y in range(size):
         for x in range(size):
             distance_x_y = distance_function(values[x], values[y])
 
             if distance_x_y < min_distance:
-                min_distance = distance_x_y
+                min_distance = float(distance_x_y)
             if distance_x_y > max_distance:
                 max_distance = distance_x_y
 
