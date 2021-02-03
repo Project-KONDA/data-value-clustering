@@ -1,6 +1,7 @@
 from scipy.cluster.hierarchy import linkage, fcluster
 from gui_cluster_selection.clustering_questions import clustering_question_array
 from util.question_result_array_util import get_array_part
+import numpy as np
 
 # def hierarchical(distance_function, values, n_clusters, distance_threshold, method='single', criterion='inconsistent',
 #                  depth=2, monocrit=None):
