@@ -4,14 +4,14 @@ import numpy as np
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def get_configuration_parameters(title, parameter_frame_inits):
-    input = ClusterConfigurationInput(title, parameter_frame_inits)
+def get_configuration_parameters(title, parameter_frame_inits, dependencies):
+    input = ClusterConfigurationInput(title, parameter_frame_inits, dependencies)
     return input.get()
 
 
 class ClusterConfigurationInput:
 
-    def __init__(self, title, parameter_frame_inits):
+    def __init__(self, title, parameter_frame_inits, dependencies):
         self.root = Tk()
         self.root.title(title)
         self.root.resizable(False, True)
@@ -21,6 +21,7 @@ class ClusterConfigurationInput:
 
         self.parameter_frame_inits = parameter_frame_inits
         self.n = len(self.parameter_frame_inits)
+        self.dependencies = dependencies
         self.parameters = np.empty(self.n, dtype=ClusteringParameter)
 
         # scrollable canvas:
@@ -48,8 +49,18 @@ class ClusterConfigurationInput:
         for i, frame_init in enumerate(self.parameter_frame_inits):
             self.parameters[i] = frame_init(self.scrollable_frame)
 
+        for i, dep in enumerate(self.dependencies):
+            print(str(dep))
+            param1 = self.get_frame_with_name(dep[0])
+            param2 = self.get_frame_with_name(dep[1])
+            param1.add_dependency(param2, dep[2], dep[3])
+
         self.record_parameters()
-        pass
+
+    def get_frame_with_name(self, name):
+        for i, param in enumerate(self.parameters):
+            if param.name == name:
+                return param
 
     def on_mousewheel(self, event):
         if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
@@ -71,12 +82,11 @@ class ClusterConfigurationInput:
         self.button.grid(row=2, column=0, sticky='nsew')
 
         self.root.mainloop()
-        pass
 
     def get(self):
         parameter_values = ()
         for i, param in enumerate(self.parameters):
-            parameter_values += (param.get(),)
+            parameter_values += (param.get_result(),)
         return parameter_values
 
 
