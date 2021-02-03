@@ -49,7 +49,7 @@ class BlobInput:
         # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
         self.root.config(bg='black')
         self.root.bind_all("<Escape>", lambda event: self.close(True))
-        self.root.bind_all("<Return>", lambda event: self.close())
+        self.root.bind_all("<Return>", self.close)
 
         """Menu"""
         self.menu = Menu(self.root)

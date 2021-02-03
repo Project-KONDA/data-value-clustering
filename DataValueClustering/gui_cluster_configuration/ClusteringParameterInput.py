@@ -19,6 +19,8 @@ class ClusterConfigurationInput:
         self.root.grid_rowconfigure(1, weight=1)
         self.root.config(bg='white')
 
+        self.root.bind_all("<Return>", self.close)
+
         self.parameter_frame_inits = parameter_frame_inits
         self.n = len(self.parameter_frame_inits)
         self.dependencies = dependencies
@@ -66,7 +68,7 @@ class ClusterConfigurationInput:
         if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
             self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
 
-    def close(self):
+    def close(self, event=None):
         self.root.destroy()
 
     def record_parameters(self):

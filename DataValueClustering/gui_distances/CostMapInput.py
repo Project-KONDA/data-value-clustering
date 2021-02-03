@@ -29,6 +29,8 @@ class CostMapInput:
         self.root = Tk()
         self.value_entries = np.full((self.n, self.n), Entry(self.root))
 
+        self.root.bind_all("<Return>", self.button_click_output_map)
+
         self.regex = np.full(self.n, None)
         self.label = np.full(self.n, None)
         self.label_text = np.full(self.n, "", dtype=object)
@@ -170,7 +172,7 @@ class CostMapInput:
                 else:
                     self.map[(i, j)] = 1. + (i != j)
 
-    def button_click_output_map(self):
+    def button_click_output_map(self, event=None):
         self.build_output_map()
         self.root.destroy()
 

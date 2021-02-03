@@ -39,6 +39,8 @@ class QuestionnaireResultInput(ABC):
         self.root.grid_rowconfigure(1, minsize=400)
         self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 
+        self.root.bind_all("<Return>", self.close)
+
         # caption left side:
         self.question_caption = StringVar()
         self.question_caption.set("Please answer the following questions:")
@@ -133,7 +135,7 @@ class QuestionnaireResultInput(ABC):
             answers.append(v.get() == 1)
         return answers
 
-    def close(self):
+    def close(self, event=None):
         self.root.destroy()
 
     @abstractmethod

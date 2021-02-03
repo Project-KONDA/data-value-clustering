@@ -32,6 +32,8 @@ class DropdownInput:
         self.option_menu = np.empty(self.num, dtype=OptionMenu)
         # self.optionmenu = np.full(self.num, OptionMenu(self.root))
 
+        self.root.bind_all("<Return>", self.close)
+
         self.answers = np.empty(self.num, dtype=StringVar)
 
         # self.root.geometry("570x110")
@@ -51,7 +53,7 @@ class DropdownInput:
 
         self.root.mainloop()
 
-    def close(self):
+    def close(self, event=None):
         self.root.destroy()
 
     def get(self):

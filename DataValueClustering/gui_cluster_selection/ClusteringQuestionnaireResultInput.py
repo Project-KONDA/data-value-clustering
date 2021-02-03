@@ -40,7 +40,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
                                        value=i, justify='left')
             self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
 
-    def close(self):
+    def close(self, event=None):
         answers, algorithm = self.get()
         if algorithm is None:
             self.result_caption_label.config(fg="red")
