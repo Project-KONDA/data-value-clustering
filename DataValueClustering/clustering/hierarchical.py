@@ -68,9 +68,10 @@ def hierarchical_n_clusters_config(no_values):
     explanation = "Maximum number of clusters created. Higher values will yield more clusters."
     min_n_clusters = 2
     max_n_clusters = no_values
-    suggestion_value = min(7, no_values / 2)
+    suggestion_value = min(7, no_values // 2)
+    resolution = 1
     deactivatable = True
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, deactivatable
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable
 
 
 def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
@@ -79,7 +80,7 @@ def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
     name = "distance_threshold"
     explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
     min_distance_threshold = min_distance
-    max_distance_threshold = linkage_matrix[len(linkage_matrix) - 1, 2] - 0.01
+    max_distance_threshold = float(linkage_matrix[len(linkage_matrix) - 1, 2] - 0.01)
     suggestion_value = (max_distance_threshold - min_distance_threshold) / 2
     resolution = 0.01
     deactivatable = True
