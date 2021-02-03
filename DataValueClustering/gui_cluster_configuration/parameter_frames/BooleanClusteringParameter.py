@@ -32,7 +32,7 @@ class BooleanClusteringParameter(ClusteringParameter):
         super().deactivate()
         self.check_boolean.config(state='disabled', bg='grey90')
 
-    def get(self):
+    def get_result(self):
         return bool(self.value_var.get()) if self.is_activated.get() else None
 
 
@@ -47,4 +47,4 @@ if __name__ == "__main__":
     bool4 = create_boolean_frame(
         "My Param 4", "This is a test parameter.", False, True)
     bool_input = gui_cluster_configuration.get_configuration_parameters("Test", [bool1, bool2, bool3, bool4])
-    print(bool_input.get())
+    print(bool_input.get_result())

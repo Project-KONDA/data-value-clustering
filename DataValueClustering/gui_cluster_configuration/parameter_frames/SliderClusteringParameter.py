@@ -13,7 +13,7 @@ class SliderClusteringParameter(ClusteringParameter):
     def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False):
         super().__init__(parent, name, explanation, deactivatable)
 
-        assert type(mini) == type(maxi) == type(default) == type(resolution)
+        assert type(mini) == type(maxi) == type(default) == type(resolution), str(name) + str(type(mini)) + str(type(maxi)) + str(type(default)) + str(type(resolution))
         assert type(resolution) is int or type(resolution) is float
 
         self.mini = mini
@@ -25,14 +25,26 @@ class SliderClusteringParameter(ClusteringParameter):
         if type(self.resolution) is int:
             self.value_var = IntVar()
             self.value_var.set(default)
+            # self.mini = round(self.mini)
         else:
             self.value_var = DoubleVar()
             self.value_var.set(default)
-        self.slider = Scale(self.frame, from_=mini, to=maxi, orient='horizontal', variable=self.value_var, length=400,
-                            bg='white', highlightthickness=0, resolution=self.resolution)
+        self.slider = Scale(self.frame, from_=mini, to=maxi, orient='horizontal', variable=self.value_var, command=self.update_slider, length=400,
+                            bg='white', highlightthickness=0, resolution=self.resolution, tickinterval=maxi-mini)
         self.slider.grid(row=2, column=1, sticky='w')
 
-        self. update_active()
+        self.update_active()
+
+    def update_slider(self, event):
+        self.update_dependency('slider_value_slider_max')
+
+    def update_dependency(self, type):
+        super().update_dependency(type)
+        if type == 'enum_value_activation':
+            for i, dep in enumerate(self.dependencies[type]):
+                [other_param, dependency_param] = dep
+                other_param.maxi = dependency_param(self.value_var.get())
+                other_param.slider.config(to=other_param.maxi)
 
     def activate(self):
         super().activate()
@@ -42,7 +54,7 @@ class SliderClusteringParameter(ClusteringParameter):
         super().deactivate()
         self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
 
-    def get(self):
+    def get_result(self):
         return self.value_var.get() if self.is_activated.get() else None
 
 

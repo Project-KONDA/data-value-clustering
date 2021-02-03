@@ -19,12 +19,12 @@ class EnumClusteringParameter(ClusteringParameter):
         assert len(suggestions) > 0
         self.suggestions = suggestions
 
-        self.options = np.array(options, dtype=object)
+        self.options = options
         self.n = len(self.options)
         self.option_labels = self.options[:, 0]
         self.option_explanation = self.options[:, 1]
 
-        self.default = np.where(self.option_labels == suggestions[0]) # self.option_labels.index(suggestions[0])
+        self.default = np.where(self.option_labels == self.suggestions[0])[0][0]
         self.radiobuttons = np.empty(self.n, Radiobutton)
         self.choice = IntVar()
         self.choice.set(self.default)
@@ -33,7 +33,7 @@ class EnumClusteringParameter(ClusteringParameter):
             is_suggested = option[0] in self.suggestions
             text = option[0]  # if not is_suggested else "♣ " + option[0]
             self.radiobuttons[i] = Radiobutton(self.frame, text=text,
-                                               padx=20, variable=self.choice, value=i, justify='left', anchor='w')
+                                               padx=20, variable=self.choice, command=self.update_enum, value=i, justify='left', anchor='w')
 
             CreateToolTip(self.radiobuttons[i], option[1])
             self.radiobuttons[i].grid(row=i + 10, column=1, sticky='nswe')
@@ -51,6 +51,28 @@ class EnumClusteringParameter(ClusteringParameter):
     # def get_current_index(self):
     #     return list(self.options).index(self.value_var.get())
 
+    def update_options(self, new_options):
+        assert len(new_options) > 0
+        for i, o in self.options:
+            if o in new_options:
+                self.radiobuttons[i].config(state='normal')
+            else:
+                self.radiobuttons[i].config(state='disabled')
+        if not self.options[self.choice.get()] in new_options:
+            self.choice.set(np.where(self.option_labels == new_options[0])[0][0])
+
+    def update_enum(self):
+        self.update_dependency('enum_value_activation')
+
+    def update_dependency(self, type):
+        super().update_dependency(type)
+        if type == 'enum_value_activation':
+            for i, dep in enumerate(self.dependencies[type]):
+                [other_param, dependency_param] = dep
+                activated = dependency_param[self.options[self.choice]]
+                other_param.is_activated.set(activated)
+                other_param.update_active()
+
     def activate(self):
         super().activate()
         for i, button in enumerate(self.radiobuttons):
@@ -67,7 +89,7 @@ class EnumClusteringParameter(ClusteringParameter):
             self.radiobuttons[i].config(state='disabled')
             self.radiobuttons[i].config(bg='grey90')  # fg
 
-    def get(self):
+    def get_result(self):
         return self.option_labels[self.choice.get()] if self.is_activated.get() else None
 
 
@@ -87,4 +109,4 @@ if __name__ == "__main__":
     enum4 = create_enum_frame(
         "My Param", "This is a test parameter.", options2, suggestions2, False)
     enum_input = gui_cluster_configuration.get_configuration_parameters("Test", [enum1, enum2, enum3, enum4])
-    print(enum_input.get())
+    print(enum_input.get_result())

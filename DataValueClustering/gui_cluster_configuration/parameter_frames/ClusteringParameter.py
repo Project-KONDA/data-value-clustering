@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from tkinter import Frame, IntVar, Checkbutton, StringVar, Label, font
 
+# from gui_cluster_configuration.parameter_frames import EnumClusteringParameter, SliderClusteringParameter
+
 
 class ClusteringParameter(ABC):
 
@@ -13,6 +15,8 @@ class ClusteringParameter(ABC):
         self.name = name
         self.explanation = explanation
         self.deactivatable = deactivatable
+
+        self.dependencies = {'activation_activation': [], 'activation_enum': [], 'enum_value_activation': [], 'slider_value_slider_max': []}
 
         self.is_activated = IntVar()
         self.is_activated.set(int(not deactivatable))
@@ -39,19 +43,48 @@ class ClusteringParameter(ABC):
                                        wraplength=500)
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
+    def add_dependency(self, other_param, type, dependency_param):
+        assert type in ['activation_activation', 'activation_enum', 'enum_value_activation', 'slider_value_slider_max']
+        # assert not(type=='activation_enum') or other_param is EnumClusteringParameter
+        # assert not(type=='enum_value_activation') or self is EnumClusteringParameter
+        # assert not (type == 'slider_value_slider_max') or (self is SliderClusteringParameter and other_param is SliderClusteringParameter)
+        self.dependencies[type].append([other_param, dependency_param])
+
     def update_active(self):
         if self.is_activated.get() == 1:
             self.activate()
         else:
             self.deactivate()
+        self.update_dependency('activation_activation')
+        self.update_dependency('activation_enum')
+
+    def update_dependency(self, type):
+        if type == 'activation_activation':
+            for i, dep in enumerate(self.dependencies[type]):
+                [other_param, dependency_param] = dep
+                activate = self.is_activated.get() == dependency_param
+                if activate:
+                    other_param.activate()
+                else:
+                    other_param.deactivate()
+        elif type == 'activation_enum':
+            for i, dep in enumerate(self.dependencies[type]):
+                [other_param, dependency_param] = dep
+                other_param.update_options(dependency_param[self.is_activated])
+        # elif type == 'enum_value_activation':
+        #     pass
+        # elif type == 'slider_value_slider_max':
+        #     pass
 
     def deactivate(self):
+        self.is_activated.set(int(False))
         self.label.config(state='disabled', bg='grey90')
         self.label_explanation.config(state='disabled', bg='grey90')
         self.frame.config(bg='grey90')
         self.check_active.config(bg='grey90')
 
     def activate(self):
+        self.is_activated.set(int(True))
         self.label.config(state='normal', bg='white')
         self.label_explanation.config(state='normal', bg='white')
         self.frame.config(bg='white')
@@ -59,5 +92,5 @@ class ClusteringParameter(ABC):
             self.check_active.config(bg='white')
 
     @abstractmethod
-    def get(self):
+    def get_result(self):
         pass
