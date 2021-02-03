@@ -58,7 +58,7 @@ def hierarchical_method_config(answers):
     name = "method"
     explanation = "Method for calculating the distance between clusters."
     options = method_array[:, (2, 3)]
-    suggestion_values = get_array_part(method_array, clustering_question_array, answers)
+    suggestion_values = get_array_part(method_array, clustering_question_array, answers)[:,0]
     return name, explanation, options, suggestion_values
 
 
@@ -94,14 +94,14 @@ def hierarchical_criterion_config():
     # if distance_threshold then 'inconsistent’, ‘distance’ or ‘monocrit'
     name = "criterion"
     explanation = "The criterion to use in forming flat clusters from the hierarchical clustering tree."
-    options = [
+    options = np.array([
         ["inconsistent", ""],
         ["distance", ""],
         ["maxclust", ""],
         ["monocrit", ""],
         ["maxclust_monocrit", ""],
-    ]  # TODO
-    suggestions = [""]  # TODO
+    ], dtype=object)  # TODO
+    suggestions = ["distance", "maxclust"]  # TODO
     deactivatable = False
 
     return name, explanation, options, suggestions, deactivatable
