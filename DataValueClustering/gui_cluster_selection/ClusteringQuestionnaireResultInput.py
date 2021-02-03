@@ -50,7 +50,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     def get(self):
         answers = super().get()
         if self.choice.get() >= 0:
-            selected_algorithm_f = self.algorithms[self.choice.get()][3]
+            selected_algorithm_f = self.algorithms[self.choice.get(), 3]
         else:
             selected_algorithm_f = None
         return answers, selected_algorithm_f
