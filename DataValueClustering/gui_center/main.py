@@ -69,18 +69,18 @@ class Main:
         if self.distance_matrix is None:
             self.distance_matrix_map = calculate_distance_matrix_map(self.distance_f, self.values_compressed)
 
-        if self.cluster_index != -1:
+        if self.cluster_index != -1 and self.cluster_f is None:
             self.cluster_answers, self.cluster_config_f = cluster_algorithms[self.cluster_index, 1]()
-
-        if self.cluster_config_f is None:
-            quit()
+            if self.cluster_config_f is None:
+                quit()
 
         # clustering parameter configuration:
-        self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
+        if self.cluster_f is None:
+            self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
 
         print("Start clustering ...")
         # CLUSTERING
-        self.clusters_compressed = self.cluster_f()
+        self.clusters_compressed = self.cluster_f(self.distance_matrix_map, self.values_compressed)
         self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
 
