@@ -1,6 +1,7 @@
 from sklearn_extra.cluster import KMedoids
 
 from clustering import hierarchical
+import numpy as np
 from distance.distance_matrix import calculate_distance_matrix
 from gui_cluster_selection.clustering_questions import clustering_question_array
 from util.question_result_array_util import get_array_part
@@ -26,10 +27,8 @@ initialization_array = [
 ]
 
 
-def kmedoids(distance_matrix, values, n_clusters=8, method='alternate', init='build', max_iter=None,
-             random_state=None):
-    clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, init=init, max_iter=max_iter,
-                        random_state=random_state).fit_predict(distance_matrix)
+def kmedoids(distance_matrix, values, n_clusters=8, method='alternate', init='heuristic', max_iter=100):
+    clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, init=init, max_iter=max_iter).fit_predict(distance_matrix)
     # TODO: method=method is unexpected keyword argument ...
     # method=method,
     return clusters
