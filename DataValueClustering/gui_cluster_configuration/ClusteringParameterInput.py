@@ -74,9 +74,9 @@ class ClusterConfigurationInput:
         pass
 
     def get(self):
-        parameter_values = list()
+        parameter_values = ()
         for i, param in enumerate(self.parameters):
-            parameter_values.append(param.get())
+            parameter_values += (param.get(),)
         return parameter_values
 
 
