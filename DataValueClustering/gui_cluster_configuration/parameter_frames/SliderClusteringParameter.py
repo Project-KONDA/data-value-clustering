@@ -3,15 +3,15 @@ from tkinter import Scale, IntVar, DoubleVar
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False):
+def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False):
     return lambda parent: SliderClusteringParameter(
-        parent, name, explanation, mini, maxi, default, resolution, deactivatable)
+        parent, name, explanation, mini, maxi, default, resolution, deactivatable, default_active)
 
 
 class SliderClusteringParameter(ClusteringParameter):
 
-    def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False):
-        super().__init__(parent, name, explanation, deactivatable)
+    def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active =False):
+        super().__init__(parent, name, explanation, deactivatable, default_active)
 
         assert type(mini) == type(maxi) == type(default) == type(resolution), str(name) + str(type(mini)) + str(type(maxi)) + str(type(default)) + str(type(resolution))
         assert type(resolution) is int or type(resolution) is float

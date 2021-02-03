@@ -6,7 +6,7 @@ from tkinter import Frame, IntVar, Checkbutton, StringVar, Label, font
 
 class ClusteringParameter(ABC):
 
-    def __init__(self, parent, name, explanation, deactivatable=False):
+    def __init__(self, parent, name, explanation, deactivatable=False, default_active=False):
         self.frame = Frame(parent, highlightthickness=1, highlightbackground='grey', bg='white')
         self.frame.grid_columnconfigure(0, minsize=self.frame.winfo_screenwidth() // 25)
         self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() // 3)
@@ -19,7 +19,7 @@ class ClusteringParameter(ABC):
         self.dependencies = {'activation_activation': [], 'activation_enum': [], 'enum_value_activation': [], 'slider_value_slider_max': []}
 
         self.is_activated = IntVar()
-        self.is_activated.set(int(not deactivatable))
+        self.is_activated.set(int(not deactivatable or default_active))
 
         # define frame content:
 

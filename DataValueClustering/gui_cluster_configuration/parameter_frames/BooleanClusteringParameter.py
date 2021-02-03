@@ -3,15 +3,15 @@ from tkinter import IntVar, Checkbutton
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def create_boolean_frame(name, explanation, default, deactivatable=False):
+def create_boolean_frame(name, explanation, default, deactivatable=False, default_active=False):
     return lambda parent: BooleanClusteringParameter(
-        parent, name, explanation, default, deactivatable)
+        parent, name, explanation, default, deactivatable, default_active)
 
 
 class BooleanClusteringParameter(ClusteringParameter):
 
-    def __init__(self, parent, name, explanation, default, deactivatable=False):
-        super().__init__(parent, name, explanation, deactivatable)
+    def __init__(self, parent, name, explanation, default, deactivatable=False, default_active=False):
+        super().__init__(parent, name, explanation, deactivatable, default_active)
         self.default = default
 
         self.value_var = IntVar()

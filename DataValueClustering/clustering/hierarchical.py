@@ -72,7 +72,8 @@ def hierarchical_n_clusters_config(no_values):
     suggestion_value = min(7, no_values // 2)
     resolution = 1
     deactivatable = True
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable
+    default_active = True
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable, default_active
 
 
 def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
