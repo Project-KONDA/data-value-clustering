@@ -29,7 +29,7 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
 
     param_frames = [method_frame]
     method, = get_configuration_parameters(
-        "Hierarchical Clustering Configuration Part 1/2", param_frames, [])
+        "Hierarchical Clustering Configuration Part 1/2", param_frames)
 
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method)
     show_dendrogram(linkage_matrix, values)
