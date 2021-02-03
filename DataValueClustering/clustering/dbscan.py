@@ -19,7 +19,7 @@ def dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs):
 def dbscan_min_samples_config(no_values, answers):
     # int
     name = "dbscan_min_samples"
-    explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be. "
+    explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be."
     min_min_samples = 3
     max_min_samples = no_values
     suggestion_value = min_min_samples
@@ -71,12 +71,13 @@ def dbscan_algorithm_config():
 
 
 def dbscan_leaf_size_config():
+    # only activated if algorithm='ball_tree' or 'kd_tree'
     # int slider
     name = "dbscan_leaf_size"  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
-    default = 1  # TODO
+    default = 30
     resolution = 1  # TODO
     deactivatable = True  # TODO
     return name, explanation, mini, maxi, default, resolution, deactivatable

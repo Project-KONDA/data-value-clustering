@@ -39,7 +39,7 @@ def generate_linkage_matrix(condensed_distance_matrix, values, method):
     return linkage(condensed_distance_matrix, method)
 
 
-def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth, monocrit):
+def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
     if not (n_clusters is None):
         return decrease_by_one(fcluster(linkage_matrix, n_clusters, criterion, depth, None, monocrit))
     elif not (distance_threshold is None):
@@ -63,6 +63,7 @@ def hierarchical_method_config(answers):
 
 def hierarchical_n_clusters_config(no_values):
     # int or range
+    # activation xor with distance_threshold
     name = "n_clusters"
     explanation = "Maximum number of clusters created. Higher values will yield more clusters."
     min_n_clusters = 2
@@ -74,6 +75,7 @@ def hierarchical_n_clusters_config(no_values):
 
 def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
     # float
+    # activation xor with n_clusters
     name = "distance_threshold"
     explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
     min_distance_threshold = min_distance
@@ -86,29 +88,38 @@ def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
 
 def hierarchical_criterion_config():
     # enum
-    name = "criterion"  # TODO
-    explanation = ""  # TODO
-    options = [["", ""]]  # TODO
+    # if n_clusters then 'maxclust' or 'maxclust_monocrit'
+    # if distance_threshold then 'inconsistent’, ‘distance’ or ‘monocrit'
+    name = "criterion"
+    explanation = "The criterion to use in forming flat clusters from the hierarchical clustering tree."
+    options = [
+        ["inconsistent", ""],
+        ["distance", ""],
+        ["maxclust", ""],
+        ["monocrit", ""],
+        ["maxclust_monocrit", ""],
+    ]  # TODO
     suggestions = [""]  # TODO
-    deactivatable = True  # TODO
+    deactivatable = False
 
     return name, explanation, options, suggestions, deactivatable
 
 
 def hierarchical_depth_config():
-    # only activated if criterion = 'inconsistent'
+    # only activated if criterion = 'inconsistent', then mandatory
     # int slider
     name = "depth"  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
-    maxi = 2  # TODO
-    default = 1  # TODO
-    resolution = 1  # TODO
-    deactivatable = True
+    maxi = 5  # TODO
+    default = 2
+    resolution = 1
+    deactivatable = True  # TODO
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def hierarchical_monocrit_config():
+    # only activated if criterion = 'monocrit' or 'maxclust_monocrit'
     # vector
     # return ??
     pass

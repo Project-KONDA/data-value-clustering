@@ -31,12 +31,13 @@ def optics_max_eps_config():
     # float or inf
     # "default value of np.inf will identify clusters across all scales"
     # "reducing max_eps will result in shorter run times"
+    # TODO: does optics correspond to dbscan if max_eps is not np.inf?
 
     # see DBSCAN
     name = "optics_max_eps"  # TODO
-    explanation = ""  # TODO
+    explanation = "Default value of infinite will identify clusters across all scales. Reducing max_eps will result in shorter run times."
     mini = 0.  # TODO
-    maxi = 2.  # TODO
+    maxi = 2.  # TODO: handle infinity
     default = 1.  # TODO
     resolution = 0.01  # TODO
     deactivatable = True  # TODO
@@ -49,7 +50,7 @@ def optics_cluster_method_config():
     explanation = ""  # TODO
     options = np.array([["dbscan", ""],
                         ["xi", ""]])  # TODO
-    suggestions = ["dbscan"]  # TODO
+    suggestions = ["xi"]  # TODO
     deactivatable = False
     return name, explanation, options, suggestions, deactivatable
 
@@ -61,7 +62,7 @@ def optics_eps_config():
     explanation = ""  # TODO
     mini = 0.  # TODO
     maxi = 2.  # TODO
-    default = 1.  # TODO
+    default = 1.  # TODO: default same value as max_eps
     resolution = 0.01
     deactivatable = True
     return name, explanation, mini, maxi, default, resolution, deactivatable
@@ -72,9 +73,9 @@ def optics_xi_config():
     # Used only when cluster_method='xi'
     name = "optics_xi"  # TODO
     explanation = ""  # TODO
-    mini = 0.  # TODO
-    maxi = 2.  # TODO
-    default = 1.  # TODO
+    mini = 0.
+    maxi = 1.
+    default = 0.05
     resolution = 0.01  # TODO
     deactivatable = True
     return name, explanation, mini, maxi, default, resolution, deactivatable
@@ -93,13 +94,14 @@ def optics_predecessor_correction_config():
 def optics_min_cluster_size_config():
     # int
     # Used only when cluster_method='xi'.
+    # If None, the value of min_samples is used instead
     name = "optics_min_cluster"  # TODO
     explanation = ""  # TODO
-    mini = 0  # TODO
+    mini = 2
     maxi = 2  # TODO
     default = 1  # TODO
     resolution = 1  # TODO
-    deactivatable = True  # TODO
+    deactivatable = True
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
