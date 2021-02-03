@@ -41,16 +41,22 @@ class ClusteringParameter(ABC):
 
     def update_active(self):
         if self.is_activated.get() == 1:
-            self.label.config(state='normal', bg='white')
-            self.label_explanation.config(state='normal', bg='white')
-            self.frame.config(bg='white')
-            if self.deactivatable:
-                self.check_active.config(bg='white')
+            self.activate()
         else:
-            self.label.config(state='disabled', bg='grey90')
-            self.label_explanation.config(state='disabled', bg='grey90')
-            self.frame.config(bg='grey90')
-            self.check_active.config(bg='grey90')
+            self.deactivate()
+
+    def deactivate(self):
+        self.label.config(state='disabled', bg='grey90')
+        self.label_explanation.config(state='disabled', bg='grey90')
+        self.frame.config(bg='grey90')
+        self.check_active.config(bg='grey90')
+
+    def activate(self):
+        self.label.config(state='normal', bg='white')
+        self.label_explanation.config(state='normal', bg='white')
+        self.frame.config(bg='white')
+        if self.deactivatable:
+            self.check_active.config(bg='white')
 
     @abstractmethod
     def get(self):

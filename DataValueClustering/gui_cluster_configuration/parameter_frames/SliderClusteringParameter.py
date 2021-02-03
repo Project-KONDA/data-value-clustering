@@ -34,12 +34,13 @@ class SliderClusteringParameter(ClusteringParameter):
 
         self. update_active()
 
-    def update_active(self):
-        super().update_active()
-        if self.is_activated.get() == 1:
-            self.slider.config(state='normal', fg='black', troughcolor='SystemScrollbar', bg='white')
-        else:
-            self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
+    def activate(self):
+        super().activate()
+        self.slider.config(state='normal', fg='black', troughcolor='SystemScrollbar', bg='white')
+
+    def deactivate(self):
+        super().deactivate()
+        self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
 
     def get(self):
         return self.value_var.get() if self.is_activated.get() else None

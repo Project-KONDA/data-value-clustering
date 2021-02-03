@@ -22,14 +22,15 @@ class BooleanClusteringParameter(ClusteringParameter):
         # self.check_boolean.grid(row=2, column=1, sticky='nw')
 
 
-        self. update_active()
+        self.update_active()
 
-    def update_active(self):
-        super().update_active()
-        if self.is_activated.get() == 1:
-            self.check_boolean.config(state='normal', bg='white')
-        else:
-            self.check_boolean.config(state='disabled', bg='grey90')
+    def activate(self):
+        super().activate()
+        self.check_boolean.config(state='normal', bg='white')
+
+    def deactivate(self):
+        super().deactivate()
+        self.check_boolean.config(state='disabled', bg='grey90')
 
     def get(self):
         return bool(self.value_var.get()) if self.is_activated.get() else None

@@ -51,20 +51,21 @@ class EnumClusteringParameter(ClusteringParameter):
     # def get_current_index(self):
     #     return list(self.options).index(self.value_var.get())
 
-    def update_active(self):
-        super().update_active()
-        if self.is_activated.get() == 1:
-            for i, button in enumerate(self.radiobuttons):
-                self.radiobuttons[i].config(state='normal')
-                is_suggested = self.option_labels[i] in self.suggestions
-                if is_suggested:
-                    self.radiobuttons[i].config(bg='#f0fff0')  # fg
-                else:
-                    self.radiobuttons[i].config(bg='#fff0f0')  # fg
-        else:
-            for i, button in enumerate(self.radiobuttons):
-                self.radiobuttons[i].config(state='disabled')
-                self.radiobuttons[i].config(bg='grey90')  # fg
+    def activate(self):
+        super().activate()
+        for i, button in enumerate(self.radiobuttons):
+            self.radiobuttons[i].config(state='normal')
+            is_suggested = self.option_labels[i] in self.suggestions
+            if is_suggested:
+                self.radiobuttons[i].config(bg='#f0fff0')  # fg
+            else:
+                self.radiobuttons[i].config(bg='#fff0f0')  # fg
+
+    def deactivate(self):
+        super().deactivate()
+        for i, button in enumerate(self.radiobuttons):
+            self.radiobuttons[i].config(state='disabled')
+            self.radiobuttons[i].config(bg='grey90')  # fg
 
     def get(self):
         return self.option_labels[self.choice.get()] if self.is_activated.get() else None
