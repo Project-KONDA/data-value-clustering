@@ -83,6 +83,7 @@ class ClusterConfigurationInput:
 
         self.button.grid(row=2, column=0, sticky='nsew')
 
+        self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
     def get(self):

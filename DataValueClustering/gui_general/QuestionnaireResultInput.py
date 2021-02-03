@@ -98,6 +98,7 @@ class QuestionnaireResultInput(ABC):
             self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
+        self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
     def update_visibility(self):

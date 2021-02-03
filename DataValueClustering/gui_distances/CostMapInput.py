@@ -143,6 +143,7 @@ class CostMapInput:
                justify=RIGHT, width=5 * self.n + 15, background='snow'
                ).grid(row=self.n + 12, column=2, columnspan=self.n + 2)
 
+        self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
     def build_output_map(self):

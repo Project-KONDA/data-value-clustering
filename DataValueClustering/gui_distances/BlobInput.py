@@ -126,6 +126,8 @@ class BlobInput:
                                 image=self.button_image_ok)
         # self.button_ok.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
         self.button_ok.place(anchor='se', x=self.w - self.gui_spacing - 1, y=self.h - self.gui_spacing)
+
+        self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
     def canvas_blob_info(self, event):

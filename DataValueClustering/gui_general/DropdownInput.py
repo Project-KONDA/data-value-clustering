@@ -51,6 +51,7 @@ class DropdownInput:
         self.button = Button(self.root, text='OK', command=self.close)
         self.button.grid(sticky='nswe', row=self.num + 6, column=3, columnspan=2)
 
+        self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
     def close(self, event=None):
