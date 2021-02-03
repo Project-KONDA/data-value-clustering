@@ -19,12 +19,12 @@ class EnumClusteringParameter(ClusteringParameter):
         assert len(suggestions) > 0
         self.suggestions = suggestions
 
-        self.options = options
+        self.options = np.array(options, dtype=object)
         self.n = len(self.options)
-        self.option_labels = options[:, 0]
-        self.option_explanation = options[:, 1]
+        self.option_labels = self.options[:, 0]
+        self.option_explanation = self.options[:, 1]
 
-        self.default = list(self.option_labels).index(suggestions[0])
+        self.default = np.where(self.option_labels == suggestions[0]) # self.option_labels.index(suggestions[0])
         self.radiobuttons = np.empty(self.n, Radiobutton)
         self.choice = IntVar()
         self.choice.set(self.default)
