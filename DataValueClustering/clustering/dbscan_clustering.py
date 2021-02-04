@@ -1,9 +1,8 @@
 from sklearn.cluster import DBSCAN
 import numpy as np
-from matplotlib import pyplot as plt
 
 from gui_center.cluster_representation import fancy_cluster_representation
-from distance.distance_matrix import calculate_distance_matrix, get_condensed
+from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
 
 N_JOBS = "n_jobs"
 LEAF_SIZE = "leaf_size"
@@ -13,7 +12,7 @@ MIN_SAMPLES = "min_samples"
 
 
 def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):
-    k_distance_graph(distance_matrix, min_samples)
+    show_k_distance_graph(distance_matrix, min_samples)
     clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', algorithm=algorithm, leaf_size=leaf_size, n_jobs=n_jobs).fit_predict(distance_matrix)
     return clusters
 
@@ -100,19 +99,6 @@ def dbscan_n_jobs_config():
     resolution = 1  # TODO
     deactivatable = True  # TODO
     return name, explanation, mini, maxi, default, resolution, deactivatable
-
-
-def k_distance_graph(distance_matrix, k):
-    distances = np.empty(len(distance_matrix), dtype=float)
-    for i in range(len(distance_matrix)):
-        d = distance_matrix[i, :]
-        sorted = np.sort(d)
-        # distances[i] = sum(sorted[0:k-1])/k
-        distances[i] = sum(sorted[1:k + 1]) / k
-        # distances[i] = sorted[k+1]
-    distances_sorted = np.sort(distances)
-    plt.plot(distances_sorted)
-    plt.show()
 
 
 if __name__ == '__main__':
