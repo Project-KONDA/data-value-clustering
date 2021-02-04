@@ -9,6 +9,8 @@ from gui_distances.distance_choices import distance_functions
 from data_extraction.read_file import get_sources_in_experiment_data_directory
 
 
+MAX_VALUES = 1000
+
 class Main:
 
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
@@ -109,8 +111,8 @@ class Main:
 
     def extract_data(self):
         self.data = self.l_data[self.data_index, 1]()
-        if len(self.data) > 1000:
-            self.data = self.data[0:100]
+        if len(self.data) > MAX_VALUES:
+            self.data = self.data[:MAX_VALUES]
 
     def show_configuration_centre(self):
         title = "Configuration Centre"

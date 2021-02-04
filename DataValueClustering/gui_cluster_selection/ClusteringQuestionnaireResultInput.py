@@ -29,7 +29,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         super().__init__("Clustering Configuration", config, predefined_answers)
         self.algorithms = np.array(algorithm_array, dtype=object)
         self.choice = IntVar()
-        self.choice.set(-1)
+        self.choice.set(0)
         self.radio_buttons = np.empty(len(self.algorithms), dtype=Radiobutton)
         self.build_result_frame()
         self.update_visibility_and_result()

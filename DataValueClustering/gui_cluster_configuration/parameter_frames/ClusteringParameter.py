@@ -44,8 +44,8 @@ class ClusteringParameter(ABC):
         # explanation label:
         self.explanation_text = StringVar()
         self.explanation_text.set(self.explanation)
-        self.label_explanation = Label(self.frame, anchor='w', textvariable=self.explanation_text, bg='white', padx=5,
-                                       wraplength=500)
+        self.label_explanation = Label(self.frame, anchor='nw', textvariable=self.explanation_text, bg='white', padx=5,
+                                       wraplength=500, justify='left')
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
     def add_dependency(self, other_param, type, dependency_param):
