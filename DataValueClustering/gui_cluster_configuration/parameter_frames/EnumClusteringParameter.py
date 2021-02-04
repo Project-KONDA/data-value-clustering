@@ -62,6 +62,7 @@ class EnumClusteringParameter(ClusteringParameter):
                 self.radiobuttons[i].config(state='disabled')
         if not self.option_labels[self.choice.get()] in new_options:
             self.choice.set(np.where(self.option_labels == new_options[0])[0][0])
+            self.update_enum()
 
     def update_enum(self):
         self.update_dependency('enum_value_activation')
