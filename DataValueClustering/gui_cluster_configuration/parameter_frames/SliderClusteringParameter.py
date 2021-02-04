@@ -36,6 +36,10 @@ class SliderClusteringParameter(ClusteringParameter):
 
         # self.update_active()
 
+    def update_active(self):
+        super().update_active()
+        self.update_dependency(DEPENDENCY_VALUE_SLIDER_MAX)
+
     def update_slider(self, event):
         self.update_dependency(DEPENDENCY_VALUE_SLIDER_MAX)
 

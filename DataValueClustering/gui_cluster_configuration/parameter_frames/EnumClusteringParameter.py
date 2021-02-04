@@ -78,6 +78,10 @@ class EnumClusteringParameter(ClusteringParameter):
                 other_param.is_activated.set(activated)
                 other_param.update_active()
 
+    def update_active(self):
+        super().update_active()
+        self.update_dependency(DEPENDENCY_ENUM_ACTIVATION)
+
     def activate(self):
         super().activate()
         for i, button in enumerate(self.radiobuttons):
