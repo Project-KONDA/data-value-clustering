@@ -12,4 +12,13 @@ def show_k_distance_graph(distance_matrix, k):
         # distances[i] = sorted[k+1]
     distances_sorted = np.sort(distances)
     plt.plot(distances_sorted)
+
+    def quit_figure(event):
+        if event.key == 'enter':
+            plt.close(event.canvas.figure)
+
+    plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)
+
+    print ("showing k_distance graph ...")
+
     plt.show()
