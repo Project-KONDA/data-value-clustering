@@ -85,7 +85,7 @@ if __name__ == '__main__':
         dbscan_args(eps=3, min_samples=3, algorithm='auto', leaf_size=30, n_jobs=None),
         optics_args(min_samples=3, max_eps=np.inf, cluster_method='xi', eps=None, xi=0.05, predecessor_correction=True, min_cluster_size=None, algorithm='auto', leaf_size=30, n_jobs=None),
         affinity_args(damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None),
-        spectral_args(n_clusters=7, eigen_solver=None, n_components=8, n_init=10, gamma=1.0, eigen_tol=0.0, assign_labels='kmeans')
+        spectral_args(n_clusters=7, eigen_solver=None, n_components=8, n_init=10, eigen_tol=0.0, assign_labels='kmeans')
     ]
 
     data_fields = [

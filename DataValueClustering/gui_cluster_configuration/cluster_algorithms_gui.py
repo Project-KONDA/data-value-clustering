@@ -35,8 +35,6 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method)
     show_dendrogram(linkage_matrix, values)
 
-    # TODO: ask user for additional arguments
-
     # n_clusters = None  # TODO: support elbow method & Co.
     n_clusters_info = hierarchical_n_clusters_config(len(values))
     n_clusters_frame = create_slider_frame(*n_clusters_info)
@@ -79,7 +77,6 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
 
 def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
     # TODO: show questionnaire if not shown already
-    # TODO: ask user for arguments
 
     # n_clusters = 7  # TODO: support elbow method
     n_clusters_info = kmedoids_n_clusters_config(len(values))
@@ -118,7 +115,7 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
     min_samples_frame = create_slider_frame(*min_samples_info)
 
     # eps = 4.8  # depends on distances
-    eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"])  # TODO: , min_samples)
+    eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"])
     eps_frame = create_slider_frame(*eps_info)
     # TODO: plot k_distance_graph
 
@@ -145,7 +142,6 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
 
 
 def cluster_optics(cluster_answers, distance_matrix_map, values):
-    # TODO: ask user for arguments
     # min_samples = 2
     min_samples_info = optics_min_samples_config(len(values), cluster_answers)
     min_samples_frame = create_slider_frame(*min_samples_info)
@@ -208,8 +204,6 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
 
 
 def cluster_affinity(cluster_answers, distance_matrix_map, values):
-    # TODO: ask user for arguments
-
     # damping = 0.99
     damping_info = affinity_damping_config()
     damping_frame = create_slider_frame(*damping_info)
@@ -246,7 +240,6 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
 
 
 def cluster_spectral(cluster_answers, distance_matrix_map, values):
-    # TODO: ask user for arguments
     # n_clusters = 5
     n_clusters_info = spectral_n_clusters_config(len(values))
     n_clusters_frame = create_slider_frame(*n_clusters_info)
@@ -263,10 +256,6 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
     n_init_info = spectral_n_init_config()
     n_init_frame = create_slider_frame(*n_init_info)
 
-    # gamma = 1.0
-    gamma_info = spectral_gamma_config()
-    gamma_frame = create_slider_frame(*gamma_info)
-
     # eigen_tol = 0.0
     eigen_tol_info = spectral_eigen_tol_config()
     eigen_tol_frame = create_slider_frame(*eigen_tol_info)
@@ -275,18 +264,18 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
     assign_labels_info = spectral_assign_labels_config()
     assign_labels_frame = create_enum_frame(*assign_labels_info)
 
-    frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame, gamma_frame,
+    frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame,
               eigen_tol_frame, assign_labels_frame]
     dependencies = [
         [spectral.EIGEN_SOLVER, spectral.EIGEN_TOL, DEPENDENCY_ENUM_ACTIVATION, {'lobpcg': False, 'amg': False, 'arpack': True}],
     ]
-    n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels \
+    n_clusters, eigen_solver, n_components, n_init, eigen_tol, assign_labels \
         = get_configuration_parameters("", frames, dependencies)
 
     if not n_components:
         n_components = n_clusters
 
-    return spectral(values, n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels)
+    return spectral(values, n_clusters, eigen_solver, n_components, n_init, eigen_tol, assign_labels)
 
 
 def clusters_from_compressed_values(cluster_answers, distance_matrix_map, values):

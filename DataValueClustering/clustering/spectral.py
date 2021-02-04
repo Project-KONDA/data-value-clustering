@@ -11,17 +11,17 @@ N_CLUSTERS = "n_clusters"
 
 
 def spectral(affinity_matrix, values, n_clusters=8, eigen_solver=None, n_components=8, n_init=10,
-             gamma=1.0, eigen_tol=0.0, assign_labels='kmeans'):
+             eigen_tol=0.0, assign_labels='kmeans'):
     # affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
     clusters = SpectralClustering(n_clusters=n_clusters, eigen_solver=eigen_solver, n_components=n_components,
-                                  n_init=n_init, gamma=gamma, affinity='precomputed',
+                                  n_init=n_init, affinity='precomputed',
                                   eigen_tol=eigen_tol, assign_labels=assign_labels).fit_predict(affinity_matrix)
     return clusters
 
 
-def spectral_args(n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels):
+def spectral_args(n_clusters, eigen_solver, n_components, n_init, eigen_tol, assign_labels):
     return lambda distance_matrix_map, values: spectral(distance_matrix_map["affinity_matrix"], values, n_clusters, eigen_solver,
-                            n_components, n_init, gamma, eigen_tol, assign_labels)
+                            n_components, n_init, eigen_tol, assign_labels)
 
 
 def spectral_n_clusters_config(no_values):
@@ -69,19 +69,6 @@ def spectral_n_init_config():
     default = 1  # TODO
     resolution = 1  # TODO
     deactivatable = True
-    return name, explanation, mini, maxi, default, resolution, deactivatable
-
-
-def spectral_gamma_config():
-    # float
-    # TODO: remove?
-    name = "spectral_gamma"  # TODO
-    explanation = ""  # TODO
-    mini = 0.  # TODO
-    maxi = 2.  # TODO
-    default = 1.  # TODO
-    resolution = 0.01  # TODO
-    deactivatable = True  # TODO
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
