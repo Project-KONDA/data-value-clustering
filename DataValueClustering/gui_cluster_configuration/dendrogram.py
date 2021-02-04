@@ -16,5 +16,13 @@ def show_dendrogram(clusters, labels=None):
                    labels=labels,
                    distance_sort='descending',
                    show_leaf_counts=True)
+
+    def quit_figure(event):
+        if event.key == 'enter':
+            plt.close(event.canvas.figure)
+
+    plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)
+
     print("showing dendrogram ...")
     plt.show()
+
