@@ -109,13 +109,13 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
     # TODO: ask user for arguments
     # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     # TODO: and https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
-
+    n_values = len(values)
     # min_samples = 3  # depends on number of values
-    min_samples_info = dbscan_min_samples_config(len(values), cluster_answers)
+    min_samples_info = dbscan_min_samples_config(n_values, cluster_answers)
     min_samples_frame = create_slider_frame(*min_samples_info)
 
     # eps = 4.8  # depends on distances
-    eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"])
+    eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"], n_values)
     eps_frame = create_slider_frame(*eps_info)
     # TODO: plot k_distance_graph
 

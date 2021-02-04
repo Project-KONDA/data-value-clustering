@@ -25,8 +25,8 @@ def dbscan_min_samples_config(no_values, answers):
     # int
     name = MIN_SAMPLES
     explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be."
-    min_min_samples = 3
-    max_min_samples = no_values - 2
+    min_min_samples = max(1, min(3, no_values))
+    max_min_samples = max(3, no_values-2)
     suggestion_value = min_min_samples
 
     # However, larger values are usually better for data sets with noise and will yield more significant clusters
@@ -35,7 +35,7 @@ def dbscan_min_samples_config(no_values, answers):
     return name, explanation, min_min_samples, max_min_samples, suggestion_value
 
 
-def dbscan_eps_config(distance_matrix, min_distance):
+def dbscan_eps_config(distance_matrix, min_distance, no_values):
     # float
     name = EPS
     explanation = "The maximum distance between two samples belonging to the same cluster." \
@@ -45,7 +45,7 @@ def dbscan_eps_config(distance_matrix, min_distance):
 
     # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
-    max_eps = calculate_eps_max(distance_matrix, 3)  # 3 is min_min_samples
+    max_eps = calculate_eps_max(distance_matrix, max(1, min(3, no_values)))  # 3 is min_min_samples
     min_eps = max(min_distance, 0.01)
     suggestion_value = min_eps
     resolution = 0.01
@@ -82,10 +82,10 @@ def dbscan_leaf_size_config():
     name = LEAF_SIZE  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
-    maxi = 2  # TODO
+    maxi = 100  # TODO
     default = 30
-    resolution = 1  # TODO
-    deactivatable = True  # TODO
+    resolution = 1
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 

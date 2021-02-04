@@ -124,7 +124,7 @@ def hierarchical_depth_config():
     maxi = 5  # TODO
     default = 2
     resolution = 1
-    deactivatable = True  # TODO
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 

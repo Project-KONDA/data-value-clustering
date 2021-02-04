@@ -11,7 +11,7 @@ DEPENDENCY_ACTIVATION_ACTIVATION = 'activation_activation'
 
 class ClusteringParameter(ABC):
 
-    def __init__(self, parent, name, explanation, deactivatable=False, default_active=False):
+    def __init__(self, parent, name, explanation, deactivatable=False, reverse_default_active=False):
         self.frame = Frame(parent, highlightthickness=1, highlightbackground='grey', bg='white')
         self.frame.grid_columnconfigure(0, minsize=self.frame.winfo_screenwidth() // 25)
         self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() // 3)
@@ -24,7 +24,7 @@ class ClusteringParameter(ABC):
         self.dependencies = {'activation_activation': [], 'activation_enum': [], 'enum_value_activation': [], 'slider_value_slider_max': []}
 
         self.is_activated = IntVar()
-        self.is_activated.set(int(not deactivatable or default_active))
+        self.is_activated.set(int(deactivatable == reverse_default_active))
 
         # define frame content:
 
@@ -86,7 +86,8 @@ class ClusteringParameter(ABC):
         self.label.config(state='disabled', bg='grey90')
         self.label_explanation.config(state='disabled', bg='grey90')
         self.frame.config(bg='grey90')
-        self.check_active.config(bg='grey90')
+        if self.deactivatable:
+            self.check_active.config(bg='grey90')
 
     def activate(self):
         self.is_activated.set(int(True))

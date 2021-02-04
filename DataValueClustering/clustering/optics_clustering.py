@@ -71,7 +71,7 @@ def optics_eps_config():
     maxi = 2.  # TODO
     default = 1.  # TODO: default same value as max_eps
     resolution = 0.01
-    deactivatable = True
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 

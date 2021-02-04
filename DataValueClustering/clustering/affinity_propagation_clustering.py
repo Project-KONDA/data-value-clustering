@@ -60,7 +60,7 @@ def affinity_max_iter_config(answers):
     maxi = 500
     default = 200
     resolution = 1
-    deactivatable = False  # TODO
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
