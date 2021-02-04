@@ -1,0 +1,2 @@
+from validation.cophenetic_distance import cophenetic_distance
+from validation.silhouette_coefficient import plot_silhouette_analysis
