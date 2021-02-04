@@ -1,6 +1,7 @@
 from tkinter import Scale, IntVar, DoubleVar
 
-from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
+from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter, \
+    DEPENDENCY_VALUE_SLIDER_MAX
 
 
 def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False):
@@ -36,11 +37,11 @@ class SliderClusteringParameter(ClusteringParameter):
         # self.update_active()
 
     def update_slider(self, event):
-        self.update_dependency('slider_value_slider_max')
+        self.update_dependency(DEPENDENCY_VALUE_SLIDER_MAX)
 
     def update_dependency(self, type):
         super().update_dependency(type)
-        if type == 'slider_value_slider_max':
+        if type == DEPENDENCY_VALUE_SLIDER_MAX:
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
                 other_param.maxi = dependency_param(self.value_var.get())

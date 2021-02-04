@@ -2,7 +2,8 @@ from tkinter import IntVar, Radiobutton
 
 import numpy as np
 
-from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
+from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter, \
+    DEPENDENCY_ENUM_ACTIVATION
 from gui_general.ToolTip import CreateToolTip
 
 
@@ -65,11 +66,11 @@ class EnumClusteringParameter(ClusteringParameter):
             self.update_enum()
 
     def update_enum(self):
-        self.update_dependency('enum_value_activation')
+        self.update_dependency(DEPENDENCY_ENUM_ACTIVATION)
 
     def update_dependency(self, type):
         super().update_dependency(type)
-        if type == 'enum_value_activation':
+        if type == DEPENDENCY_ENUM_ACTIVATION:
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
                 activated = dependency_param[self.option_labels[self.choice.get()]]

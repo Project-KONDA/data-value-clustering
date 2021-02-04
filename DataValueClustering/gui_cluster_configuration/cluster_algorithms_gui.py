@@ -11,6 +11,9 @@ from gui_cluster_configuration.parameter_frames import create_enum_frame, create
 
 
 # pass method of this module as cluster_function to clustering.clustering.cluster
+from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPENDENCY_ACTIVATION_ACTIVATION, \
+    DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION
+
 
 def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     if cluster_answers is None:
@@ -61,11 +64,11 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
 
     frames = [n_clusters_frame, distance_threshold_frame, criterion_frame, depth_frame]
     dependencies2 = [
-        [hierarchical.N_CLUSTERS, hierarchical.THRESHOLD, 'activation_activation', False],
-        [hierarchical.THRESHOLD, hierarchical.N_CLUSTERS, 'activation_activation', False],
-        [hierarchical.N_CLUSTERS, hierarchical.CRITERION, 'activation_enum', {True: ['maxclust', 'maxclust_monocrit'], False: ['distance', 'inconsistent', 'monocrit']}],
-        [hierarchical.THRESHOLD, hierarchical.CRITERION, 'activation_enum', {True: ['distance', 'inconsistent', 'monocrit'], False: ['maxclust', 'maxclust_monocrit']}],
-        [hierarchical.CRITERION, hierarchical.DEPTH, 'enum_value_activation', {'inconsistent': True, 'maxclust': False, 'maxclust_monocrit': False, 'distance': False, 'monocrit': False}],
+        [hierarchical.N_CLUSTERS, hierarchical.THRESHOLD, DEPENDENCY_ACTIVATION_ACTIVATION, False],
+        [hierarchical.THRESHOLD, hierarchical.N_CLUSTERS, DEPENDENCY_ACTIVATION_ACTIVATION, False],
+        [hierarchical.N_CLUSTERS, hierarchical.CRITERION, DEPENDENCY_ACTIVATION_ENUM, {True: ['maxclust', 'maxclust_monocrit'], False: ['distance', 'inconsistent', 'monocrit']}],
+        [hierarchical.THRESHOLD, hierarchical.CRITERION, DEPENDENCY_ACTIVATION_ENUM, {True: ['distance', 'inconsistent', 'monocrit'], False: ['maxclust', 'maxclust_monocrit']}],
+        [hierarchical.CRITERION, hierarchical.DEPTH, DEPENDENCY_ENUM_ACTIVATION, {'inconsistent': True, 'maxclust': False, 'maxclust_monocrit': False, 'distance': False, 'monocrit': False}],
         # [hierarchical.CRITERION, hierarchical.MONOCRIT, 'enum_value_activation', {'inconsistent': False, 'maxclust': False, 'maxclust_monocrit': True, 'distance': False, 'monocrit': True}]
     ]
     n_clusters, distance_threshold, criterion, depth = \
@@ -133,8 +136,8 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
 
     frames = [min_samples_frame, eps_frame, algorithm_frame, leaf_size_frame, n_jobs_frame]
     dependencies = [
-        [dbscan.ALGORITHM, dbscan.LEAF_SIZE, 'enum_value_activation', {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
-        [dbscan.MIN_SAMPLES, dbscan.EPS, 'slider_value_slider_max', lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
+        [dbscan.ALGORITHM, dbscan.LEAF_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
+        [dbscan.MIN_SAMPLES, dbscan.EPS, DEPENDENCY_ACTIVATION_ACTIVATION, lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
     ]
     min_samples, eps, algorithm, leaf_size, n_jobs = get_configuration_parameters("", frames, dependencies)
 
@@ -187,11 +190,11 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
               predecessor_correction_frame, min_cluster_size_frame, algorithm_frame, leaf_size_frame,
               n_jobs_frame]
     dependencies = [
-        [dbscan.ALGORITHM, dbscan.LEAF_SIZE, 'enum_value_activation', {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
-        [optics.EPS, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': True, 'xi': False}],
-        [optics.XI, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': False, 'xi': True}],
-        [optics.PREDECESSOR_CORRECTION, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': False, 'xi': True}],
-        [optics.MIN_CLUSTER_SIZE, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': False, 'xi': True}],
+        [dbscan.ALGORITHM, dbscan.LEAF_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
+        [optics.EPS, optics.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
+        [optics.XI, optics.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [optics.PREDECESSOR_CORRECTION, optics.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [optics.MIN_CLUSTER_SIZE, optics.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
     ]
     min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
     algorithm, leaf_size, n_jobs \
@@ -229,7 +232,7 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
 
     frames = [damping_frame, max_iter_frames, convergence_iter_frame, copy_frame, preference_frame]
     dependencies = [
-        [affinity_propagation.MAX_ITER, affinity_propagation.CONVERGENCE_ITER, 'slider_value_slider_max', lambda new_max_iter: new_max_iter],
+        [affinity_propagation.MAX_ITER, affinity_propagation.CONVERGENCE_ITER, DEPENDENCY_ACTIVATION_ACTIVATION, lambda new_max_iter: new_max_iter],
     ]
     damping, max_iter, convergence_iter, copy, preference = get_configuration_parameters("", frames, dependencies)
 
@@ -275,7 +278,7 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
     frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame, gamma_frame,
               eigen_tol_frame, assign_labels_frame]
     dependencies = [
-        [spectral.EIGEN_SOLVER, spectral.EIGEN_TOL, 'enum_value_activation', {'lobpcg': False, 'amg': False, 'arpack': True}],
+        [spectral.EIGEN_SOLVER, spectral.EIGEN_TOL, DEPENDENCY_ENUM_ACTIVATION, {'lobpcg': False, 'amg': False, 'arpack': True}],
     ]
     n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels \
         = get_configuration_parameters("", frames, dependencies)

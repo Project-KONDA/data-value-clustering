@@ -3,6 +3,11 @@ from tkinter import Frame, IntVar, Checkbutton, StringVar, Label, font
 
 # from gui_cluster_configuration.parameter_frames import EnumClusteringParameter, SliderClusteringParameter
 
+DEPENDENCY_VALUE_SLIDER_MAX = 'slider_value_slider_max'
+DEPENDENCY_ENUM_ACTIVATION = 'enum_value_activation'
+DEPENDENCY_ACTIVATION_ENUM = 'activation_enum'
+DEPENDENCY_ACTIVATION_ACTIVATION = 'activation_activation'
+
 
 class ClusteringParameter(ABC):
 
@@ -44,7 +49,7 @@ class ClusteringParameter(ABC):
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
     def add_dependency(self, other_param, type, dependency_param):
-        assert type in ['activation_activation', 'activation_enum', 'enum_value_activation', 'slider_value_slider_max']
+        assert type in [DEPENDENCY_ACTIVATION_ACTIVATION, DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX]
         # assert not(type=='activation_enum') or other_param is EnumClusteringParameter
         # assert not(type=='enum_value_activation') or self is EnumClusteringParameter
         # assert not (type == 'slider_value_slider_max') or (self is SliderClusteringParameter and other_param is SliderClusteringParameter)
@@ -55,11 +60,11 @@ class ClusteringParameter(ABC):
             self.activate()
         else:
             self.deactivate()
-        self.update_dependency('activation_activation')
-        self.update_dependency('activation_enum')
+        self.update_dependency(DEPENDENCY_ACTIVATION_ACTIVATION)
+        self.update_dependency(DEPENDENCY_ACTIVATION_ENUM)
 
     def update_dependency(self, type):
-        if type == 'activation_activation':
+        if type == DEPENDENCY_ACTIVATION_ACTIVATION:
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
                 activate = self.is_activated.get() == dependency_param
@@ -67,7 +72,7 @@ class ClusteringParameter(ABC):
                     other_param.activate()
                 else:
                     other_param.deactivate()
-        elif type == 'activation_enum':
+        elif type == DEPENDENCY_ACTIVATION_ENUM:
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
                 other_param.update_options(dependency_param[self.is_activated.get()])
