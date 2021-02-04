@@ -57,6 +57,9 @@ class ClusterConfigurationInput:
             param2 = self.get_frame_with_name(dep[1])
             param1.add_dependency(param2, dep[2], dep[3])
 
+        for i, p in enumerate(self.parameters):
+            p.update_active()
+
         self.record_parameters()
 
     def get_frame_with_name(self, name):

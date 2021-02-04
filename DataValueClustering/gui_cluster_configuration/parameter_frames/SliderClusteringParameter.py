@@ -33,7 +33,7 @@ class SliderClusteringParameter(ClusteringParameter):
                             bg='white', highlightthickness=0, resolution=self.resolution, tickinterval=maxi-mini)
         self.slider.grid(row=2, column=1, sticky='w')
 
-        self.update_active()
+        # self.update_active()
 
     def update_slider(self, event):
         self.update_dependency('slider_value_slider_max')
