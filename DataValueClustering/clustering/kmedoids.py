@@ -52,17 +52,20 @@ def kmedoids_n_clusters_config(no_values):
 
 def kmedoids_init_config(answers):
     # enum
-    name = "heuristic"
+    name = HEURISTIC
     explanation = "Initialization method for medoids."
     options = initialization_array[:, (2, 3)]
-    suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)
+    if answers is None:
+        suggestion_values = ["heuristic"]
+    else:
+        suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)
 
     return name, explanation, options, suggestion_values
 
 
 def kmedoids_max_iter_config():
     # int
-    name = "kmedoids_max_iter"  # TODO
+    name = MAX_ITER  # TODO
     explanation = "Maximum number of iterations. Higher values will yield longer runtimes. In case of zero, only the initialization is computed."
     mini = 0
     maxi = 1000  # TODO
