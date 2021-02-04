@@ -18,10 +18,10 @@ def dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs):
 
 def dbscan_min_samples_config(no_values, answers):
     # int
-    name = "dbscan_min_samples"
+    name = "min_samples"
     explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be."
     min_min_samples = 3
-    max_min_samples = no_values
+    max_min_samples = no_values - 2
     suggestion_value = min_min_samples
 
     # However, larger values are usually better for data sets with noise and will yield more significant clusters
@@ -30,9 +30,9 @@ def dbscan_min_samples_config(no_values, answers):
     return name, explanation, min_min_samples, max_min_samples, suggestion_value
 
 
-def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min_samples
+def dbscan_eps_config(distance_matrix, min_distance):
     # float
-    name = "dbscan_eps"
+    name = "eps"
     explanation = "The maximum distance between two samples belonging to the same cluster." \
                   "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
                   "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
@@ -40,26 +40,27 @@ def dbscan_eps_config(distance_matrix, no_values, min_samples=None): # TODO: min
 
     # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
-    if not (min_samples is None):
-        k = min_samples
-        distances = np.empty(len(distance_matrix), dtype=float)
-        for i in range(len(distance_matrix)):
-            d = distance_matrix[i, :]
-            sorted = np.sort(d)
-            distances[i] = sorted[k + 1]
-        max_eps = max(distances)
-    else:
-        max_eps = np.amax(distance_matrix)
-
-    min_eps = min(get_condensed(distance_matrix))
+    max_eps = calculate_eps_max(distance_matrix, 3)  # 3 is min_min_samples
+    min_eps = min_distance
     suggestion_value = min_eps
     resolution = 0.01
     return name, explanation, min_eps, max_eps, suggestion_value, resolution
 
 
+def calculate_eps_max(distance_matrix, min_samples):
+    k = min_samples
+    distances = np.empty(len(distance_matrix), dtype=float)
+    for i in range(len(distance_matrix)):
+        d = distance_matrix[i, :]
+        sorted = np.sort(d)
+        distances[i] = sorted[k + 1]
+    max_eps = max(distances)
+    return float(max_eps)
+
+
 def dbscan_algorithm_config():
     # enum
-    name = "dbscan_algorithm"  # TODO
+    name = "algorithm"  # TODO
     explanation = ""  # TODO
     options = np.array([['auto', ""],
                         ['brute', ""],
@@ -73,7 +74,7 @@ def dbscan_algorithm_config():
 def dbscan_leaf_size_config():
     # only activated if algorithm='ball_tree' or 'kd_tree'
     # int slider
-    name = "dbscan_leaf_size"  # TODO
+    name = "leaf_size"  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
@@ -85,7 +86,7 @@ def dbscan_leaf_size_config():
 
 def dbscan_n_jobs_config():
     # int slider
-    name = "dbscan_n_jobs"  # TODO
+    name = "n_jobs"  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
