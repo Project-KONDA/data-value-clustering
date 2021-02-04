@@ -70,7 +70,7 @@ class ClusteringParameter(ABC):
         elif type == 'activation_enum':
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
-                other_param.update_options(dependency_param[self.is_activated])
+                other_param.update_options(dependency_param[self.is_activated.get()])
         # elif type == 'enum_value_activation':
         #     pass
         # elif type == 'slider_value_slider_max':

@@ -53,12 +53,12 @@ class EnumClusteringParameter(ClusteringParameter):
 
     def update_options(self, new_options):
         assert len(new_options) > 0
-        for i, o in self.options:
+        for i, o in enumerate(self.option_labels):
             if o in new_options:
                 self.radiobuttons[i].config(state='normal')
             else:
                 self.radiobuttons[i].config(state='disabled')
-        if not self.options[self.choice.get()] in new_options:
+        if not self.option_labels[self.choice.get()] in new_options:
             self.choice.set(np.where(self.option_labels == new_options[0])[0][0])
 
     def update_enum(self):
@@ -69,7 +69,7 @@ class EnumClusteringParameter(ClusteringParameter):
         if type == 'enum_value_activation':
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
-                activated = dependency_param[self.options[self.choice]]
+                activated = dependency_param[self.option_labels[self.choice.get()]]
                 other_param.is_activated.set(activated)
                 other_param.update_active()
 

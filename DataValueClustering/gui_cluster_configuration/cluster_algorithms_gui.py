@@ -17,7 +17,8 @@ from gui_cluster_configuration.parameter_frames import create_enum_frame, create
 
 def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     if cluster_answers is None:
-        cluster_answers = not None
+        cluster_answers = None
+        # cluster_answers = not None
         # TODO: show questionnaire if not shown already
         # somewhat similar to:
         # answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
