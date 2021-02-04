@@ -1,19 +1,16 @@
-from clustering.hierarchical import generate_linkage_matrix, hierarchical_lm, hierarchical_method_config, \
-    hierarchical_distance_threshold_config, \
-    hierarchical_depth_config, hierarchical_criterion_config, hierarchical_n_clusters_config, hierarchical_lm_args
-from clustering.kmedoids import kmedoids, kmedoids_init_config, kmedoids_n_clusters_config, \
-    kmedoids_max_iter_config, kmedoids_args
+from clustering import hierarchical, affinity_propagation, dbscan, optics, spectral, kmedoids
+from clustering.hierarchical import *
+from clustering.kmedoids import *
 from clustering.dbscan import *
 from clustering.optics import *
 from clustering.affinity_propagation import *
 from clustering.spectral import *
 from gui_cluster_configuration import get_configuration_parameters
-
 from gui_cluster_configuration.dendrogram import show_dendrogram
-
-# pass method of this module as cluster_function to clustering.clustering.cluster
 from gui_cluster_configuration.parameter_frames import create_enum_frame, create_slider_frame, create_boolean_frame
 
+
+# pass method of this module as cluster_function to clustering.clustering.cluster
 
 def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     if cluster_answers is None:
@@ -64,12 +61,12 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
 
     frames = [n_clusters_frame, distance_threshold_frame, criterion_frame, depth_frame]
     dependencies2 = [
-        ["n_clusters","distance_threshold",'activation_activation', False],
-        ["distance_threshold","n_clusters", 'activation_activation', False],
-        ["n_clusters", "criterion", 'activation_enum', {True: ['maxclust', 'maxclust_monocrit'], False: ['distance', 'inconsistent', 'monocrit']}],
-        ["distance_threshold", "criterion", 'activation_enum', {True: ['distance', 'inconsistent', 'monocrit'], False: ['maxclust', 'maxclust_monocrit']}],
-        ["criterion", "depth", 'enum_value_activation', {'inconsistent': True, 'maxclust': False, 'maxclust_monocrit': False, 'distance': False, 'monocrit': False}],
-        # ["criterion", "monocrit", 'enum_value_activation', {'inconsistent': False, 'maxclust': False, 'maxclust_monocrit': True, 'distance': False, 'monocrit': True}]
+        [hierarchical.N_CLUSTERS, hierarchical.THRESHOLD, 'activation_activation', False],
+        [hierarchical.THRESHOLD, hierarchical.N_CLUSTERS, 'activation_activation', False],
+        [hierarchical.N_CLUSTERS, hierarchical.CRITERION, 'activation_enum', {True: ['maxclust', 'maxclust_monocrit'], False: ['distance', 'inconsistent', 'monocrit']}],
+        [hierarchical.THRESHOLD, hierarchical.CRITERION, 'activation_enum', {True: ['distance', 'inconsistent', 'monocrit'], False: ['maxclust', 'maxclust_monocrit']}],
+        [hierarchical.CRITERION, hierarchical.DEPTH, 'enum_value_activation', {'inconsistent': True, 'maxclust': False, 'maxclust_monocrit': False, 'distance': False, 'monocrit': False}],
+        # [hierarchical.CRITERION, hierarchical.MONOCRIT, 'enum_value_activation', {'inconsistent': False, 'maxclust': False, 'maxclust_monocrit': True, 'distance': False, 'monocrit': True}]
     ]
     n_clusters, distance_threshold, criterion, depth = \
         get_configuration_parameters("", frames, dependencies2)
@@ -99,8 +96,11 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
 
     frames = [n_clusters_frame, init_frame, max_iter_frame]
 
-    n_clusters, method, init, max_iter = \
+    n_clusters, init, max_iter = \
         get_configuration_parameters("", frames, [])
+
+    if not max_iter:
+        max_iter = 200
 
     return kmedoids_args(n_clusters, init, max_iter)
 
@@ -133,8 +133,8 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
 
     frames = [min_samples_frame, eps_frame, algorithm_frame, leaf_size_frame, n_jobs_frame]
     dependencies = [
-        ["algorithm", "leaf_size", 'enum_value_activation', {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
-        ["min_samples", "eps", 'slider_value_slider_max', lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
+        [dbscan.ALGORITHM, dbscan.LEAF_SIZE, 'enum_value_activation', {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
+        [dbscan.MIN_SAMPLES, dbscan.EPS, 'slider_value_slider_max', lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
     ]
     min_samples, eps, algorithm, leaf_size, n_jobs = get_configuration_parameters("", frames, dependencies)
 
@@ -187,7 +187,11 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
               predecessor_correction_frame, min_cluster_size_frame, algorithm_frame, leaf_size_frame,
               n_jobs_frame]
     dependencies = [
-        ["algorithm", "leaf_size", 'enum_value_activation', {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
+        [dbscan.ALGORITHM, dbscan.LEAF_SIZE, 'enum_value_activation', {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
+        [optics.EPS, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': True, 'xi': False}],
+        [optics.XI, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': False, 'xi': True}],
+        [optics.PREDECESSOR_CORRECTION, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': False, 'xi': True}],
+        [optics.MIN_CLUSTER_SIZE, optics.CLUSTER_METHOD, 'enum_value_activation', {'dbscan': False, 'xi': True}],
     ]
     min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
     algorithm, leaf_size, n_jobs \
@@ -224,8 +228,16 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
     preference_frame = create_slider_frame(*preference_info)
 
     frames = [damping_frame, max_iter_frames, convergence_iter_frame, copy_frame, preference_frame]
-    dependencies = []
+    dependencies = [
+        [affinity_propagation.MAX_ITER, affinity_propagation.CONVERGENCE_ITER, 'slider_value_slider_max', lambda new_max_iter: new_max_iter],
+    ]
     damping, max_iter, convergence_iter, copy, preference = get_configuration_parameters("", frames, dependencies)
+
+    if not max_iter:
+        max_iter = 200
+
+    if not convergence_iter:
+        convergence_iter = 15
 
     return affinity_args(damping, max_iter, convergence_iter, copy, preference)
 
@@ -262,7 +274,9 @@ def cluster_spectral(cluster_answers, distance_matrix_map, values):
 
     frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame, gamma_frame,
               eigen_tol_frame, assign_labels_frame]
-    dependencies = []
+    dependencies = [
+        [spectral.EIGEN_SOLVER, spectral.EIGEN_TOL, 'enum_value_activation', {'lobpcg': False, 'amg': False, 'arpack': True}],
+    ]
     n_clusters, eigen_solver, n_components, n_init, gamma, eigen_tol, assign_labels \
         = get_configuration_parameters("", frames, dependencies)
 

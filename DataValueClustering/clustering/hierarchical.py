@@ -3,10 +3,14 @@ from gui_cluster_selection.clustering_questions import clustering_question_array
 from util.question_result_array_util import get_array_part
 import numpy as np
 
-# def hierarchical(distance_function, values, n_clusters, distance_threshold, method='single', criterion='inconsistent',
-#                  depth=2, monocrit=None):
-#     pass
-#
+
+MONOCRIT = "monocrit"
+DEPTH = "depth"
+CRITERION = "criterion"
+THRESHOLD = "distance_threshold"
+N_CLUSTERS = "n_clusters"
+METHOD = "method"
+
 
 def hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold,
                                                                criterion, depth=2, monocrit=None):
@@ -55,7 +59,7 @@ def decrease_by_one(clusters):
 
 def hierarchical_method_config(answers):
     # enum
-    name = "method"
+    name = METHOD
     explanation = "Method for calculating the distance between clusters."
     options = method_array[:, (2, 3)]
     if answers is None:
@@ -68,7 +72,7 @@ def hierarchical_method_config(answers):
 def hierarchical_n_clusters_config(no_values):
     # int or range
     # activation xor with distance_threshold
-    name = "n_clusters"
+    name = N_CLUSTERS
     explanation = "Maximum number of clusters created. Higher values will yield more clusters."
     min_n_clusters = 2
     max_n_clusters = no_values
@@ -82,7 +86,7 @@ def hierarchical_n_clusters_config(no_values):
 def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
     # float
     # activation xor with n_clusters
-    name = "distance_threshold"
+    name = THRESHOLD
     explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
     min_distance_threshold = min_distance
     max_distance_threshold = float(linkage_matrix[len(linkage_matrix) - 1, 2] - 0.01)
@@ -96,7 +100,7 @@ def hierarchical_criterion_config():
     # enum
     # if n_clusters then 'maxclust' or 'maxclust_monocrit'
     # if distance_threshold then 'inconsistent’, ‘distance’ or ‘monocrit'
-    name = "criterion"
+    name = CRITERION
     explanation = "The criterion to use in forming flat clusters from the hierarchical clustering tree."
     options = np.array([
         ["inconsistent", ""],
@@ -114,7 +118,7 @@ def hierarchical_criterion_config():
 def hierarchical_depth_config():
     # only activated if criterion = 'inconsistent', then mandatory
     # int slider
-    name = "depth"  # TODO
+    name = DEPTH  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 5  # TODO
@@ -125,6 +129,7 @@ def hierarchical_depth_config():
 
 
 def hierarchical_monocrit_config():
+    name = MONOCRIT
     # only activated if criterion = 'monocrit' or 'maxclust_monocrit'
     # vector
     # return ??

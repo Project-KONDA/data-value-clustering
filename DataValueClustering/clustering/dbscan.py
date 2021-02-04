@@ -5,6 +5,12 @@ from matplotlib import pyplot as plt
 from gui_center.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_distance_matrix, get_condensed
 
+N_JOBS = "n_jobs"
+LEAF_SIZE = "leaf_size"
+ALGORITHM = "algorithm"
+EPS = "eps"
+MIN_SAMPLES = "min_samples"
+
 
 def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):
     k_distance_graph(distance_matrix, min_samples)
@@ -18,7 +24,7 @@ def dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs):
 
 def dbscan_min_samples_config(no_values, answers):
     # int
-    name = "min_samples"
+    name = MIN_SAMPLES
     explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be."
     min_min_samples = 3
     max_min_samples = no_values - 2
@@ -32,7 +38,7 @@ def dbscan_min_samples_config(no_values, answers):
 
 def dbscan_eps_config(distance_matrix, min_distance):
     # float
-    name = "eps"
+    name = EPS
     explanation = "The maximum distance between two samples belonging to the same cluster." \
                   "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
                   "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
@@ -60,7 +66,7 @@ def calculate_eps_max(distance_matrix, min_samples):
 
 def dbscan_algorithm_config():
     # enum
-    name = "algorithm"  # TODO
+    name = ALGORITHM  # TODO
     explanation = ""  # TODO
     options = np.array([['auto', ""],
                         ['brute', ""],
@@ -74,7 +80,7 @@ def dbscan_algorithm_config():
 def dbscan_leaf_size_config():
     # only activated if algorithm='ball_tree' or 'kd_tree'
     # int slider
-    name = "leaf_size"  # TODO
+    name = LEAF_SIZE  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
@@ -86,7 +92,7 @@ def dbscan_leaf_size_config():
 
 def dbscan_n_jobs_config():
     # int slider
-    name = "n_jobs"  # TODO
+    name = N_JOBS  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO

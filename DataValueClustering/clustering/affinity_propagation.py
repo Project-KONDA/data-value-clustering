@@ -4,6 +4,12 @@ from gui_center.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
 import numpy as np
 
+COPY = "affinity_copy"
+CONVERGENCE_ITER = "affinity_convergence_iter"
+MAX_ITER = "affinity_max_iter"
+PREFERENCE = "affinity_preference"
+DAMPING = "affinity_damping"
+
 
 def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None):
     # affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
@@ -20,7 +26,7 @@ def affinity_args(damping, max_iter, convergence_iter, copy, preference):
 
 def affinity_damping_config():
     # float
-    name = "affinity_damping"
+    name = DAMPING
     explanation = "Higher values will yield less clusters."
     min_damping = 0.5
     max_damping = 0.99
@@ -32,11 +38,11 @@ def affinity_damping_config():
 def affinity_preference_config(affinity_matrix):
     # float
     # it is advised to start with a preference equal to the median of the input similarities (= default)
-    name = "affinity_preference"
+    name = PREFERENCE
     explanation = "Lower values will yield less clusters."
-    min_preference = 0  # TODO
-    max_preference = np.inf  # TODO
-    suggestion_value = np.median(affinity_matrix)  # = default
+    min_preference = 0.0  # TODO
+    max_preference = 100.0  # TODO
+    suggestion_value = float(np.median(affinity_matrix))  # = default
     resolution = 0.01
     deactivatable = True
     return name, explanation, min_preference, max_preference, suggestion_value, resolution, deactivatable
@@ -44,7 +50,7 @@ def affinity_preference_config(affinity_matrix):
 
 def affinity_max_iter_config(answers):
     # int
-    name = "affinity_max_iter"  # TODO
+    name = MAX_ITER  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
@@ -57,7 +63,7 @@ def affinity_max_iter_config(answers):
 def affinity_convergence_iter_config():
     # int
     # increase for more clusters?
-    name = "affinity_convergence_iter"  # TODO
+    name = CONVERGENCE_ITER  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
@@ -70,7 +76,7 @@ def affinity_convergence_iter_config():
 def affinity_copy_config():
     # bool
     # TODO: remove?
-    name = "affinity_copy"  # TODO
+    name = COPY  # TODO
     explanation = ""  # TODO
     default = True  # TODO
     deactivatable = True  # TODO

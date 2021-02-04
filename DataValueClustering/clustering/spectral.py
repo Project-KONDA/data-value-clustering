@@ -2,6 +2,13 @@ from sklearn.cluster import SpectralClustering
 
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
 
+ASSIGN_LABELS = "assign_labels"
+EIGEN_TOL = "eigen_tol"
+N_INIT = "n_init"
+N_COMPONENTS = "n_components"
+EIGEN_SOLVER = "eigen_solver"
+N_CLUSTERS = "n_clusters"
+
 
 def spectral(affinity_matrix, values, n_clusters=8, eigen_solver=None, n_components=8, n_init=10,
              gamma=1.0, eigen_tol=0.0, assign_labels='kmeans'):
@@ -19,7 +26,7 @@ def spectral_args(n_clusters, eigen_solver, n_components, n_init, gamma, eigen_t
 
 def spectral_n_clusters_config(no_values):
     # int or range
-    name = " spectral_n_clusters"
+    name = N_CLUSTERS
     explanation = "Maximum number of clusters created. Higher values will yield more clusters."
     min_n_clusters = 2
     max_n_clusters = no_values
@@ -29,9 +36,13 @@ def spectral_n_clusters_config(no_values):
 
 def spectral_eigen_solver_config():
     # enum
-    name = "spectral_eigen_solver"  # TODO
+    name = EIGEN_SOLVER  # TODO
     explanation = ""  # TODO
-    options = [["", ""]]  # TODO
+    options = [
+        ["arpack", ""],
+        ["lobpcg", ""],
+        ["amg", ""]
+    ]  # TODO
     suggestions = [""]  # TODO
     deactivatable = True
     return name, explanation, options, suggestions, deactivatable
@@ -39,7 +50,7 @@ def spectral_eigen_solver_config():
 
 def spectral_n_components_config():
     # int
-    name = "spectral_n_components"  # TODO
+    name = N_COMPONENTS  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
@@ -51,7 +62,7 @@ def spectral_n_components_config():
 
 def spectral_n_init_config():
     # int
-    name = "spectral_n_init"  # TODO
+    name = N_INIT  # TODO
     explanation = ""  # TODO
     mini = 0  # TODO
     maxi = 2  # TODO
@@ -77,7 +88,7 @@ def spectral_gamma_config():
 def spectral_eigen_tol_config():
     # float
     # when eigen_solver='arpack'
-    name = "spectral_eigen_tol"  # TODO
+    name = EIGEN_TOL  # TODO
     explanation = ""  # TODO
     mini = 0.  # TODO
     maxi = 2.  # TODO
@@ -91,7 +102,7 @@ def spectral_assign_labels_config():
     # enum
     #  k-means can be applied and is a popular choice. But it can also be sensitive to initialization.
     #  Discretization is another approach which is less sensitive to random initialization.
-    name = "spectral_assign_labels"  # TODO
+    name = ASSIGN_LABELS  # TODO
     explanation = ""  # TODO
     options = [["", ""]]  # TODO
     suggestions = [""]  # TODO

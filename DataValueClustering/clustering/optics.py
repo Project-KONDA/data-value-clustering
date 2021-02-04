@@ -5,6 +5,13 @@ from gui_center.cluster_representation import fancy_cluster_representation
 from clustering import dbscan
 from distance.distance_matrix import calculate_distance_matrix
 
+MIN_CLUSTER_SIZE = "min_cluster"
+PREDECESSOR_CORRECTION = "predecessor_correction"
+XI = "xi"
+EPS = "eps"
+CLUSTER_METHOD = "cluster_method"
+MAX_EPS = "max_eps"
+
 
 def optics(distance_matrix, values,
            min_samples=5, max_eps=np.inf, cluster_method='xi', eps=None,
@@ -34,7 +41,7 @@ def optics_max_eps_config():
     # TODO: does optics correspond to dbscan if max_eps is not np.inf?
 
     # see DBSCAN
-    name = "optics_max_eps"  # TODO
+    name = MAX_EPS  # TODO
     explanation = "Default value of infinite will identify clusters across all scales. Reducing max_eps will result in shorter run times."
     mini = 0.  # TODO
     maxi = 2.  # TODO: handle infinity
@@ -46,7 +53,7 @@ def optics_max_eps_config():
 
 def optics_cluster_method_config():
     # enum
-    name = "optics_cluster_method"  # TODO
+    name = CLUSTER_METHOD  # TODO
     explanation = ""  # TODO
     options = np.array([["dbscan", ""],
                         ["xi", ""]])  # TODO
@@ -58,7 +65,7 @@ def optics_cluster_method_config():
 def optics_eps_config():
     # float
     # Used only when cluster_method='dbscan'
-    name = "optics_eps"  # TODO
+    name = EPS  # TODO
     explanation = ""  # TODO
     mini = 0.  # TODO
     maxi = 2.  # TODO
@@ -71,7 +78,7 @@ def optics_eps_config():
 def optics_xi_config():
     # float
     # Used only when cluster_method='xi'
-    name = "optics_xi"  # TODO
+    name = XI  # TODO
     explanation = ""  # TODO
     mini = 0.
     maxi = 1.
@@ -84,7 +91,7 @@ def optics_xi_config():
 def optics_predecessor_correction_config():
     # bool
     # This parameter has minimal effect on most datasets. Used only when cluster_method='xi'.
-    name = "optics_predecessor_correction"  # TODO
+    name = PREDECESSOR_CORRECTION  # TODO
     explanation = ""  # TODO
     default = True  # TODO
     deactivatable = True  # TODO
@@ -95,7 +102,7 @@ def optics_min_cluster_size_config():
     # int
     # Used only when cluster_method='xi'.
     # If None, the value of min_samples is used instead
-    name = "optics_min_cluster"  # TODO
+    name = MIN_CLUSTER_SIZE  # TODO
     explanation = ""  # TODO
     mini = 2
     maxi = 2  # TODO

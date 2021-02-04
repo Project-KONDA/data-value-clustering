@@ -14,6 +14,8 @@ from util.question_result_array_util import get_array_part
 #     [[], [], "alternate"],
 #
 # ]
+MAX_ITER = "max_iter"
+HEURISTIC = "heuristic"
 
 initialization_array = np.array([
     # dependencies, not-dependencies, value
