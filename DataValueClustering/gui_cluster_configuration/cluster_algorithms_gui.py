@@ -65,7 +65,10 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     frames = [n_clusters_frame, distance_threshold_frame, criterion_frame, depth_frame]
     dependencies2 = [
         ["n_clusters","distance_threshold",'activation_activation', False],
-        ["distance_threshold","n_clusters", 'activation_activation', False]
+        ["distance_threshold","n_clusters", 'activation_activation', False],
+        ["n_clusters", "criterion", 'activation_enum', {True: ['maxclust', 'maxclust_monocrit'], False: ['distance', 'inconsistent', 'monocrit']}],
+        ["distance_threshold", "criterion", 'activation_enum', {True: ['distance', 'inconsistent', 'monocrit'], False: ['maxclust', 'maxclust_monocrit']}],
+        ["criterion", "depth", 'enum_value_activation', {'inconsistent': True, 'maxclust': False, 'maxclust_monocrit': False, 'distance': False, 'monocrit': False}]
     ]
     n_clusters, distance_threshold, criterion, depth = \
         get_configuration_parameters("", frames, dependencies2)
