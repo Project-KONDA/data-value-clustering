@@ -1,12 +1,12 @@
 import time
 import numpy as np
 
-from clustering.affinity_propagation import affinity, affinity_args
-from clustering.dbscan import dbscan, dbscan_args
-from clustering.hierarchical import hierarchical_lm, generate_linkage_matrix, hierarchical_lm_args, hierarchical_args
-from clustering.kmedoids import kmedoids, kmedoids_args
-from clustering.optics import optics, optics_args
-from clustering.spectral import spectral, spectral_args
+from clustering.affinity_propagation_clustering import affinity, affinity_args
+from clustering.dbscan_clustering import dbscan, dbscan_args
+from clustering.hierarchical_clustering import hierarchical_lm, generate_linkage_matrix, hierarchical_lm_args, hierarchical_args
+from clustering.kmedoids_clustering import kmedoids, kmedoids_args
+from clustering.optics_clustering import optics, optics_args
+from clustering.spectral_clustering import spectral, spectral_args
 from gui_center.main import Main
 from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance

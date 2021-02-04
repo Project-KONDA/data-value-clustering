@@ -17,7 +17,7 @@ class EnumClusteringParameter(ClusteringParameter):
     def __init__(self, parent, name, explanation, options, suggestions, deactivatable=False, default_active=False):
         super().__init__(parent, name, explanation, deactivatable, default_active)
 
-        assert len(suggestions) > 0
+        assert len(suggestions) > 0, name
         self.suggestions = suggestions
 
         self.options = options
@@ -26,7 +26,11 @@ class EnumClusteringParameter(ClusteringParameter):
         self.option_explanation = self.options[:, 1]
         self.option_labels_activated = self.option_labels
 
-        self.default = np.where(self.option_labels == self.suggestions[0])[0][0]
+        try:
+            self.default = np.where(self.option_labels == self.suggestions[0])[0][0]
+        except IndexError:
+            raise ValueError("Suggestions of parameter " + name + " are not correct: " + str(suggestions))
+
         self.radiobuttons = np.empty(self.n, Radiobutton)
         self.choice = IntVar()
         self.choice.set(self.default)
@@ -35,7 +39,8 @@ class EnumClusteringParameter(ClusteringParameter):
             is_suggested = option[0] in self.suggestions
             text = option[0]  # if not is_suggested else "♣ " + option[0]
             self.radiobuttons[i] = Radiobutton(self.frame, text=text,
-                                               padx=20, variable=self.choice, command=self.update_enum, value=i, justify='left', anchor='w')
+                                               padx=20, variable=self.choice, command=self.update_enum, value=i,
+                                               justify='left', anchor='w')
 
             CreateToolTip(self.radiobuttons[i], option[1])
             self.radiobuttons[i].grid(row=i + 10, column=1, sticky='nswe')

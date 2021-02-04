@@ -11,17 +11,17 @@ PREFERENCE = "affinity_preference"
 DAMPING = "affinity_damping"
 
 
-def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None):
+def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, preference=None):
     # affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
     clusters = AffinityPropagation(
-        affinity='precomputed', damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, copy=copy,
+        affinity='precomputed', damping=damping, max_iter=max_iter, convergence_iter=convergence_iter,
         preference=preference).fit_predict(affinity_matrix)
     return clusters
 
 
-def affinity_args(damping, max_iter, convergence_iter, copy, preference):
+def affinity_args(damping, max_iter, convergence_iter, preference):
     return lambda distance_matrix_map, values: affinity(distance_matrix_map["affinity_matrix"], values, damping,
-                                                        max_iter, convergence_iter, copy, preference)
+                                                        max_iter, convergence_iter, preference)
 
 
 def affinity_damping_config():

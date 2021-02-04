@@ -1,6 +1,6 @@
 from sklearn_extra.cluster import KMedoids
 
-from clustering import hierarchical
+from clustering import hierarchical_clustering
 import numpy as np
 from distance.distance_matrix import calculate_distance_matrix
 from gui_cluster_selection.clustering_questions import clustering_question_array
@@ -42,7 +42,7 @@ def kmedoids_args(n_clusters=8, init='heuristic', max_iter=200):
 
 def kmedoids_n_clusters_config(no_values):
     # int or range
-    return hierarchical.hierarchical_n_clusters_config(no_values)
+    return hierarchical_clustering.hierarchical_n_clusters_config(no_values)
 
 
 # def kmedoids_method_config(answers):
@@ -58,7 +58,7 @@ def kmedoids_init_config(answers):
     if answers is None:
         suggestion_values = ["heuristic"]
     else:
-        suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)
+        suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)[:, 0]
 
     return name, explanation, options, suggestion_values
 

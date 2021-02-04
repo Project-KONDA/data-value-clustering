@@ -2,11 +2,11 @@ from tkinter import Radiobutton, IntVar, NORMAL, DISABLED
 
 import numpy as np
 
-import gui_cluster_selection.clustering_questions
-from util.question_result_array_util import get_array_part
-from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
+import gui_cluster_selection
 from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_cluster_selection.clustering_questions import clustering_question_array
+from util.question_result_array_util import get_array_part
+from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
 def cluster_suggest():
@@ -72,6 +72,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
             return suggested_algorithms[:, 0]
         else:
             return []
+
 
 if __name__ == '__main__':
     title = "myQuestions"

@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.cluster import OPTICS
 
 from gui_center.cluster_representation import fancy_cluster_representation
-from clustering import dbscan
+from clustering import dbscan_clustering
 from distance.distance_matrix import calculate_distance_matrix
 
 MIN_CLUSTER_SIZE = "min_cluster"
@@ -31,7 +31,7 @@ def optics_args(min_samples, max_eps, cluster_method, eps, xi, predecessor_corre
 
 def optics_min_samples_config(no_values, answers):
     # int
-    return dbscan.dbscan_min_samples_config(no_values, answers)
+    return dbscan_clustering.dbscan_min_samples_config(no_values, answers)
 
 
 def optics_max_eps_config():
@@ -84,7 +84,7 @@ def optics_xi_config():
     maxi = 1.
     default = 0.05
     resolution = 0.01  # TODO
-    deactivatable = True
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
@@ -114,17 +114,17 @@ def optics_min_cluster_size_config():
 
 def optics_algorithm_config():
     # enum
-    return dbscan.dbscan_algorithm_config()
+    return dbscan_clustering.dbscan_algorithm_config()
 
 
 def optics_leaf_size_config():
     # int
-    return dbscan.dbscan_leaf_size_config()
+    return dbscan_clustering.dbscan_leaf_size_config()
 
 
 def optics_n_jobs_config():
     # int
-    return dbscan.dbscan_n_jobs_config()
+    return dbscan_clustering.dbscan_n_jobs_config()
 
 
 if __name__ == '__main__':

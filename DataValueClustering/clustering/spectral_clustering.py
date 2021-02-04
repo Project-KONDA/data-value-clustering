@@ -1,3 +1,4 @@
+import numpy as np
 from sklearn.cluster import SpectralClustering
 
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
@@ -31,19 +32,20 @@ def spectral_n_clusters_config(no_values):
     min_n_clusters = 2
     max_n_clusters = no_values
     suggestion_value = min(7, no_values // 2)
+    resolution = 1
     deactivatable = False
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, deactivatable
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable
 
 
 def spectral_eigen_solver_config():
     # enum
     name = EIGEN_SOLVER  # TODO
     explanation = "Eigenvalue decomposition strategy."  # TODO
-    options = [
+    options = np.array([
         ['arpack', "Default Value."],
         ['lobpcg', ""],
         ['amg', "Faster, but partially instable."]
-    ]  # TODO
+    ], dtype=str)  # TODO
     suggestions = ['arpack']  # TODO
     deactivatable = False  # If None 'arpack' is used
     return name, explanation, options, suggestions, deactivatable
@@ -70,7 +72,7 @@ def spectral_n_init_config(no_values):
     maxi = no_values
     default = 10  # TODO
     resolution = 1  # TODO
-    deactivatable = True
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
@@ -93,8 +95,12 @@ def spectral_assign_labels_config():
     #  Discretization is another approach which is less sensitive to random initialization.
     name = ASSIGN_LABELS  # TODO
     explanation = "Strategy to use to assign labels in the embedding space."  # TODO
-    options = [['kmeans', ""],
-               ['discretize', ""]]  # TODO
+
+    options = np.array([
+        ['kmeans', ""],
+        ['discretize', ""]
+    ], dtype=str)  # TODO
     suggestions = ['kmeans']  # TODO
     deactivatable = False
     return name, explanation, options, suggestions, deactivatable
+
