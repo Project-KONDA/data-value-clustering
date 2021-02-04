@@ -61,14 +61,10 @@ class EnumClusteringParameter(ClusteringParameter):
     def update_options(self, new_options):
         self.option_labels_activated = new_options
         assert len(new_options) > 0
-        for i, o in enumerate(self.option_labels):
-            if o in new_options:
-                self.radiobuttons[i].config(state='normal')
-            else:
-                self.radiobuttons[i].config(state='disabled')
+        self.update_active()
         if not self.option_labels[self.choice.get()] in new_options:
             self.choice.set(np.where(self.option_labels == new_options[0])[0][0])
-            self.update_enum()
+            self.update_dependency(DEPENDENCY_ENUM_ACTIVATION)
 
     def update_enum(self):
         self.update_dependency(DEPENDENCY_ENUM_ACTIVATION)
@@ -85,12 +81,18 @@ class EnumClusteringParameter(ClusteringParameter):
     def activate(self):
         super().activate()
         for i, button in enumerate(self.radiobuttons):
-            self.update_options(self.option_labels_activated)
+            # self.update_options(self.option_labels_activated)
             is_suggested = self.option_labels[i] in self.suggestions
-            if is_suggested:
-                self.radiobuttons[i].config(bg='#f0fff0')  # fg
+            is_active_label = (self.option_labels[i] in self.option_labels_activated)
+            if is_active_label:
+                button.config(state='normal')
+                if is_suggested:
+                    button.config(bg='#f0fff0')  # fg
+                else:
+                    button.config(bg='#fff0f0')  # fg
             else:
-                self.radiobuttons[i].config(bg='#fff0f0')  # fg
+                button.config(bg='#ffffff')  # fg
+                button.config(state='disabled')
 
     def deactivate(self):
         super().deactivate()
