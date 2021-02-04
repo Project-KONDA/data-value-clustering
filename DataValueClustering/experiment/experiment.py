@@ -8,7 +8,7 @@ from clustering.kmedoids import kmedoids, kmedoids_args
 from clustering.optics import optics, optics_args
 from clustering.spectral import spectral, spectral_args
 from gui_center.main import Main
-from compression.compression import sequence_compression_case_sensitive_function
+from compression.compression import sequence_compression_case_sensitive_function, word_sequence_compression_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
 from gui_cluster_configuration.cluster_algorithms_gui import cluster_affinity, cluster_kmedoids, cluster_dbscan
 from data_extraction.read_file import read_data_values_from_file
@@ -16,6 +16,10 @@ from data_extraction.read_file import read_data_values_from_file
 midas_dates = "../data/midas_dates.txt"
 midas_artist_names = "../data/midas_artist_names.txt"
 midas_measurements = "../data/midas_measurement.txt"
+
+lido_titles = "../data/lido_titles.txt"
+lido_attribution_qualifier = "../data/lido_attribution_qualifier.txt"
+lido_measurement_unit = "../data/lido_measurement_unit.txt"
 
 
 def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
@@ -64,12 +68,45 @@ def distance_configuration_1(dates):
         [3, 3, 3, 3, 3, 3]
     ]
 
+    weights_titles = [
+        [0, 1, 2, 4, 3, 3],
+        [1, 0, 1, 4, 3, 3],
+        [2, 1, 0, 4, 3, 3],
+        [4, 4, 4, 0, 3, 3],
+        [3, 3, 3, 3, 0, 3],
+        [3, 3, 3, 3, 3, 3]
+    ]
+    weights_attribution = [
+        [0, 1, 2, 4, 3, 3],
+        [1, 0, 1, 4, 3, 3],
+        [2, 1, 0, 4, 3, 3],
+        [4, 4, 4, 0, 3, 3],
+        [3, 3, 3, 3, 0, 3],
+        [3, 3, 3, 3, 3, 3]
+    ]
+    weights_units = [
+        [0, 1, 2, 4, 3, 3],
+        [1, 0, 1, 4, 3, 3],
+        [2, 1, 0, 4, 3, 3],
+        [4, 4, 4, 0, 3, 3],
+        [3, 3, 3, 3, 0, 3],
+        [3, 3, 3, 3, 3, 3]
+    ]
+
+    # TODO: specify weight matrices for lido data
+
     if dates == 0:
         weights = weights_dates
     elif dates == 1:
         weights = weights_measurements
     elif dates == 2:
         weights = weights_artist_names
+    elif dates == 3:
+        weights = weights_titles
+    elif dates == 4:
+        weights = weights_attribution
+    elif dates == 5:
+        weights = weights_units
     else:
         raise ValueError('Data index out of range.')
 
@@ -91,8 +128,11 @@ if __name__ == '__main__':
     data_fields = [
         midas_dates,
         midas_measurements,
-        midas_artist_names
+        midas_artist_names,
+        lido_titles,
+        lido_attribution_qualifier,
+        lido_measurement_unit
     ]
 
-    data_i = 0
-    run_clustering(data_fields[data_i], 1000, sequence_compression_case_sensitive_function()[0], distance_configuration_1(data_i), algorithm_configurations[0])
+    data_i = 4
+    run_clustering(data_fields[data_i], 1000, word_sequence_compression_function()[0], distance_configuration_1(data_i), algorithm_configurations[0])
