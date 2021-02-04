@@ -40,11 +40,11 @@ class SliderClusteringParameter(ClusteringParameter):
 
     def update_dependency(self, type):
         super().update_dependency(type)
-        if type == 'enum_value_activation':
+        if type == 'slider_value_slider_max':
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
                 other_param.maxi = dependency_param(self.value_var.get())
-                other_param.slider.config(to=other_param.maxi)
+                other_param.slider.config(to=other_param.maxi, tickinterval=other_param.maxi-other_param.mini)
 
     def activate(self):
         super().activate()
