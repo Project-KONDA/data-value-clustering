@@ -2,16 +2,19 @@ from scipy.cluster.hierarchy import dendrogram
 from matplotlib import pyplot as plt
 
 
-def show_dendrogram(clusters, labels=None):
-    plt.figure(figsize=(10, 7))
+def show_dendrogram(linkage_matrix, labels=None):
+    fig = plt.figure(figsize=(10, 7))
+    fig.canvas.set_window_title('Dendrogram')
+    fig.suptitle('Dendrogram')
+
     if labels is None:
-        dendrogram(clusters,
+        dendrogram(linkage_matrix,
                    orientation='right',
                    distance_sort='descending',
                    show_leaf_counts=True)
 
     else:
-        dendrogram(clusters,
+        dendrogram(linkage_matrix,
                    orientation='right',
                    labels=labels,
                    distance_sort='descending',
