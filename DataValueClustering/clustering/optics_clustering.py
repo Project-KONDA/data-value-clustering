@@ -5,7 +5,7 @@ from gui_center.cluster_representation import fancy_cluster_representation
 from clustering import dbscan_clustering
 from distance.distance_matrix import calculate_distance_matrix
 
-MIN_CLUSTER_SIZE = "min_cluster"
+MIN_CLUSTER_SIZE = "min_cluster_size"
 PREDECESSOR_CORRECTION = "predecessor_correction"
 XI = "xi"
 EPS = "eps"
@@ -94,7 +94,7 @@ def optics_predecessor_correction_config():
     name = PREDECESSOR_CORRECTION  # TODO
     explanation = ""  # TODO
     default = True  # TODO
-    deactivatable = True  # TODO
+    deactivatable = False
     return name, explanation, default, deactivatable
 
 
