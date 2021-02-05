@@ -1,5 +1,12 @@
 import numpy as np
 
+from clustering.affinity_propagation_clustering import affinity_args
+from clustering.dbscan_clustering import dbscan_args
+from clustering.hierarchical_clustering import hierarchical_args
+from clustering.kmedoids_clustering import kmedoids_args
+from clustering.optics_clustering import optics_args
+from clustering.spectral_clustering import spectral_args
+
 
 def get_clusters_original_values(clusters_compressed, values_compressed, compression_function, values):
     size = len(values)
@@ -11,5 +18,15 @@ def get_clusters_original_values(clusters_compressed, values_compressed, compres
         clusters_original_values[k] = clusters_compressed[index]
     assert max(clusters_original_values) == max(clusters_compressed)
     return clusters_original_values  # one dimensional array
+
+
+clustering_args_functions = {
+    "hierarchical": hierarchical_args,
+    "kmedoids": kmedoids_args,
+    "dbscan": dbscan_args,
+    "optics": optics_args,
+    "affinity": affinity_args,
+    "spectral": spectral_args
+}
 
 
