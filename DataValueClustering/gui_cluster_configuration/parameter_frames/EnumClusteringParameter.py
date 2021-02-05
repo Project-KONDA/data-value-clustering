@@ -76,6 +76,12 @@ class EnumClusteringParameter(ClusteringParameter):
                 [other_param, dependency_param] = dep
                 activated = dependency_param[self.option_labels[self.choice.get()]]
                 other_param.is_activated.set(activated)
+                if other_param.deactivatable:
+                    if activated:
+                        other_param.check_active.config(state='normal')
+                    else:
+                        other_param.check_active.config(state='disabled')
+
                 other_param.update_active()
 
     def update_active(self):
