@@ -1,4 +1,6 @@
 from scipy.cluster.hierarchy import linkage, fcluster
+
+from gui_cluster_configuration.dendrogram import show_dendrogram
 from gui_cluster_selection.clustering_questions import clustering_question_array
 from util.question_result_array_util import get_array_part
 import numpy as np
