@@ -84,7 +84,7 @@ def calculate_distance_matrix_map(distance_function, values):
             if x >= y+1:
                 condensed_matrix[i] = distance_x_y
                 i += 1
-        print("...", round(y/size * 100, 1), "%")
+        print("...", round((y+1)/size * 100, 1), "%")
 
     assert (i == len(condensed_matrix))
     if not is_valid_y(condensed_matrix):
