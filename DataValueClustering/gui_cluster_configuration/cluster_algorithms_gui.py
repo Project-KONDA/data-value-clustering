@@ -5,7 +5,7 @@ from clustering.dbscan_clustering import *
 from clustering.optics_clustering import *
 from clustering.affinity_propagation_clustering import *
 from clustering.spectral_clustering import *
-from gui_cluster_configuration import get_configuration_parameters
+from gui_cluster_configuration.ClusteringParameterInput import get_configuration_parameters
 from gui_cluster_configuration.dendrogram import show_dendrogram
 from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
 from gui_cluster_configuration.parameter_frames import create_enum_frame, create_slider_frame, create_boolean_frame
