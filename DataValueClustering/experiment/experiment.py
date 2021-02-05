@@ -109,7 +109,7 @@ def distance_configuration_1(dates):
     else:
         raise ValueError('Data index out of range.')
 
-    cost_map = get_cost_map(regex, weights, weight_case)
+    cost_map = get_cost_map(weight_case, regex, weights)
 
     return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)
 

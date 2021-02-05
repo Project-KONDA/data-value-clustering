@@ -27,11 +27,10 @@ weights = [
     [8, 8, 8, 8, 8, 8]]
 
 
-def get_cost_map(rgx=regex, w=weights, weight_case_switch=weight_case):
+def get_cost_map(weight_case_switch=weight_case, rgx=regex, w=weights):
     # def get_cost_map(regex, map, weight=1):
     assert len(rgx) == len(w) == len(w[0])
-    d = {}
-    d[()] = weight_case_switch
+    d = {(()): weight_case_switch}
     for i in range(len(rgx)):
         d[(i)] = rgx[i]
     for i in range(len(rgx)):
@@ -40,8 +39,30 @@ def get_cost_map(rgx=regex, w=weights, weight_case_switch=weight_case):
     return d
 
 
+def split_cost_map(cost_map=get_cost_map()):
+    n = get_costmap_num(cost_map)
+    costmap_case = cost_map[()]
+
+    costmap_regex = []
+    for i in xrange(n):
+        costmap_regex.append(cost_map[i])
+
+    costmap_weights = []
+
+    for i in xrange(n):
+        costmap_weights.append([])
+        for j in xrange(n):
+            costmap_weights[i].append(cost_map[(i, j)])
+
+    return costmap_case, costmap_regex, costmap_weights
+
+
 def match(regex, string):
     return re.match("^" + regex + "$", string) is not None
+
+
+def get_costmap_num(cost_map):
+    return math.floor(math.sqrt(len(cost_map)))
 
 
 def get_costmap_index(cost_map, c):
@@ -49,7 +70,7 @@ def get_costmap_index(cost_map, c):
         return -1
     num = math.floor(math.sqrt(len(cost_map)))
     for i in range(num):
-        if match (cost_map[i], c):
+        if match(cost_map[i], c):
             return i
     print("Error when trying to identify: " + c)
     return AssertionError
@@ -94,7 +115,7 @@ def weighted_levenshtein_distance(cost_map, s1, s2):
 
 if __name__ == "__main__":
     map = get_cost_map()
-    #print(match(" ", " "))
+    # print(match(" ", " "))
     #      != None)
     print(get_costmap_index(map, ""))
     print(get_costmap_index(map, "a"))
@@ -104,5 +125,3 @@ if __name__ == "__main__":
     print(get_costmap_index(map, "-"))
 
     print(map)
-
-
