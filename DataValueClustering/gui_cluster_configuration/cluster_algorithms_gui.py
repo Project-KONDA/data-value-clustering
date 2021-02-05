@@ -167,10 +167,10 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
               predecessor_correction_frame, min_cluster_size_frame,
               n_jobs_frame]
     dependencies = [
-        [optics_clustering.EPS, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
-        [optics_clustering.XI, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
-        [optics_clustering.PREDECESSOR_CORRECTION, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
-        [optics_clustering.MIN_CLUSTER_SIZE, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [optics_clustering.CLUSTER_METHOD, optics_clustering.EPS, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
+        [optics_clustering.CLUSTER_METHOD, optics_clustering.XI, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [optics_clustering.CLUSTER_METHOD, optics_clustering.PREDECESSOR_CORRECTION, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [optics_clustering.CLUSTER_METHOD, optics_clustering.MIN_CLUSTER_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
     ]
     min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
     n_jobs \
