@@ -4,15 +4,15 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import Clust
     DEPENDENCY_VALUE_SLIDER_MAX
 
 
-def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False):
+def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False, plot_function=None):
     return lambda parent: SliderClusteringParameter(
-        parent, name, explanation, mini, maxi, default, resolution, deactivatable, default_active)
+        parent, name, explanation, mini, maxi, default, resolution, deactivatable, default_active, plot_function)
 
 
 class SliderClusteringParameter(ClusteringParameter):
 
-    def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active =False):
-        super().__init__(parent, name, explanation, deactivatable, default_active)
+    def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False, plot_function=None):
+        super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
         assert type(mini) == type(maxi) == type(default) == type(resolution), str(name) + str(type(mini)) + str(type(maxi)) + str(type(default)) + str(type(resolution))
         assert type(resolution) is int or type(resolution) is float

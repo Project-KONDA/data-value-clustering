@@ -3,23 +3,23 @@ from tkinter import IntVar, Checkbutton
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def create_boolean_frame(name, explanation, default, deactivatable=False, default_active=False):
+def create_boolean_frame(name, explanation, default, deactivatable=False, default_active=False, plot_function=None):
     return lambda parent: BooleanClusteringParameter(
-        parent, name, explanation, default, deactivatable, default_active)
+        parent, name, explanation, default, deactivatable, default_active, plot_function)
 
 
 class BooleanClusteringParameter(ClusteringParameter):
 
-    def __init__(self, parent, name, explanation, default, deactivatable=False, default_active=False):
-        super().__init__(parent, name, explanation, deactivatable, default_active)
+    def __init__(self, parent, name, explanation, default, deactivatable=False, default_active=False, plot_function=None):
+        super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
         self.default = default
 
         self.value_var = IntVar()
         self.value_var.set(int(self.default))
 
         self.check_boolean = Checkbutton(self.frame, variable=self.value_var, bg='white', anchor='nw', padx=20)
-        self.check_boolean.grid(row=0, column=1, sticky='se')
-        # self.check_boolean.grid(row=2, column=1, sticky='nw')
+        # self.check_boolean.grid(row=0, column=1, sticky='se')
+        self.check_boolean.grid(row=2, column=1, sticky='nw')
 
 
         self.update_active()

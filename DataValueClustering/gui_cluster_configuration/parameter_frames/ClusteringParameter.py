@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from tkinter import Frame, IntVar, Checkbutton, StringVar, Label, font
+from tkinter import Frame, IntVar, Checkbutton, StringVar, Label, font, Button
 
 # from gui_cluster_configuration.parameter_frames import EnumClusteringParameter, SliderClusteringParameter
 
@@ -11,7 +11,7 @@ DEPENDENCY_ACTIVATION_ACTIVATION = 'activation_activation'
 
 class ClusteringParameter(ABC):
 
-    def __init__(self, parent, name, explanation, deactivatable=False, reverse_default_active=False):
+    def __init__(self, parent, name, explanation, deactivatable=False, reverse_default_active=False, plot_function=None):
         self.frame = Frame(parent, highlightthickness=1, highlightbackground='grey', bg='white')
         self.frame.grid_columnconfigure(0, minsize=self.frame.winfo_screenwidth() // 25)
         self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() // 3)
@@ -20,6 +20,7 @@ class ClusteringParameter(ABC):
         self.name = name
         self.explanation = explanation
         self.deactivatable = deactivatable
+        self.plot_function = plot_function
 
         self.dependencies = {'activation_activation': [], 'activation_enum': [], 'enum_value_activation': [], 'slider_value_slider_max': []}
 
@@ -47,6 +48,14 @@ class ClusteringParameter(ABC):
         self.label_explanation = Label(self.frame, anchor='nw', textvariable=self.explanation_text, bg='white', padx=5,
                                        wraplength=500, justify='left')
         self.label_explanation.grid(row=1, column=1, sticky='w')
+
+        # plot
+        if plot_function:
+            self.plot_button = Button(self.frame, anchor='nw', text="Show plot", command=self.plot_button_pressed)
+            self.plot_button.grid(row=0, column=1, sticky='ne', padx=5, pady=5)
+
+    def plot_button_pressed(self):
+        self.plot_function(self.get_result())
 
     def add_dependency(self, other_param, type, dependency_param):
         assert type in [DEPENDENCY_ACTIVATION_ACTIVATION, DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX]

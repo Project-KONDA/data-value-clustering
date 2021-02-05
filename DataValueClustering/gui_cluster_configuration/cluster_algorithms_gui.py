@@ -7,6 +7,7 @@ from clustering.affinity_propagation_clustering import *
 from clustering.spectral_clustering import *
 from gui_cluster_configuration import get_configuration_parameters
 from gui_cluster_configuration.dendrogram import show_dendrogram
+from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
 from gui_cluster_configuration.parameter_frames import create_enum_frame, create_slider_frame, create_boolean_frame
 
 
@@ -33,18 +34,17 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
         "Hierarchical Clustering Configuration Part 1/2", param_frames, [])
 
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method)
-    show_dendrogram(linkage_matrix, values)
 
     # n_clusters = None  # TODO: support elbow method & Co.
     n_clusters_info = hierarchical_n_clusters_config(len(values))
-    n_clusters_frame = create_slider_frame(*n_clusters_info)
+    n_clusters_frame = create_slider_frame(*n_clusters_info, plot_function=lambda current_value: show_dendrogram(linkage_matrix, values))
     # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
     # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
 
     # distance_threshold = 3.8  # 15  # 3.8  # depends on distances
     distance_threshold_info = hierarchical_distance_threshold_config(linkage_matrix,
                                                                      distance_matrix_map["min_distance"])
-    distance_threshold_frame = create_slider_frame(*distance_threshold_info)
+    distance_threshold_frame = create_slider_frame(*distance_threshold_info, plot_function=lambda current_value: show_dendrogram(linkage_matrix, values))
 
     # criterion = 'distance'
     criterion_info = hierarchical_criterion_config()
@@ -103,18 +103,16 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
 
 
 def cluster_dbscan(cluster_answers, distance_matrix_map, values):
-    # TODO: ask user for arguments
     # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     # TODO: and https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
     n_values = len(values)
     # min_samples = 3  # depends on number of values
     min_samples_info = dbscan_min_samples_config(n_values, cluster_answers)
-    min_samples_frame = create_slider_frame(*min_samples_info)
+    min_samples_frame = create_slider_frame(*min_samples_info, plot_function=lambda current_value: show_k_distance_graph(distance_matrix_map["distance_matrix"], current_value))
 
     # eps = 4.8  # depends on distances
     eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"], n_values)
     eps_frame = create_slider_frame(*eps_info)
-    # TODO: plot k_distance_graph
 
     # n_jobs = None
     n_jobs_info = dbscan_n_jobs_config()

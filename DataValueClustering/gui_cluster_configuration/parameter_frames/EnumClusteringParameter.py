@@ -7,15 +7,15 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import Clust
 from gui_general.ToolTip import CreateToolTip
 
 
-def create_enum_frame(name, explanation, dropdown_options, suggestions, deactivatable=False, default_active=False):
+def create_enum_frame(name, explanation, dropdown_options, suggestions, deactivatable=False, default_active=False, plot_function=None):
     return lambda parent: EnumClusteringParameter(
-        parent, name, explanation, dropdown_options, suggestions, deactivatable, default_active)
+        parent, name, explanation, dropdown_options, suggestions, deactivatable, default_active, plot_function)
 
 
 class EnumClusteringParameter(ClusteringParameter):
 
-    def __init__(self, parent, name, explanation, options, suggestions, deactivatable=False, default_active=False):
-        super().__init__(parent, name, explanation, deactivatable, default_active)
+    def __init__(self, parent, name, explanation, options, suggestions, deactivatable=False, default_active=False, plot_function=None):
+        super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
         assert len(suggestions) > 0, name
         self.suggestions = suggestions
