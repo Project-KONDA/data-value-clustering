@@ -13,6 +13,8 @@ def show_k_distance_graph(distance_matrix, k):
     distances_sorted = np.sort(distances)
     plt.plot(distances_sorted)
 
+    plt.title('K-Distance Graph')
+
     def quit_figure(event):
         if event.key == 'enter':
             plt.close(event.canvas.figure)
