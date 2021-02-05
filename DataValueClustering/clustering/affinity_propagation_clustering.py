@@ -75,7 +75,7 @@ def affinity_convergence_iter_config():
     maxi = 100
     default = 15
     resolution = 1
-    deactivatable = True  # TODO
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 

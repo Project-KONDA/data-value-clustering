@@ -71,5 +71,5 @@ def kmedoids_max_iter_config():
     maxi = 1000  # TODO
     default = 200  # TODO
     resolution = 1
-    deactivatable = True  # TODO
+    deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable

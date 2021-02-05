@@ -99,9 +99,6 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
     n_clusters, init, max_iter = \
         get_configuration_parameters("", frames, [])
 
-    if not max_iter:
-        max_iter = 200
-
     return kmedoids_args(n_clusters, init, max_iter)
 
 
@@ -208,12 +205,6 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
         [affinity_propagation_clustering.MAX_ITER, affinity_propagation_clustering.CONVERGENCE_ITER, DEPENDENCY_VALUE_SLIDER_MAX, lambda new_max_iter: new_max_iter],
     ]
     damping, max_iter, convergence_iter, preference = get_configuration_parameters("", frames, dependencies)
-
-    if not max_iter:
-        max_iter = 200
-
-    if not convergence_iter:
-        convergence_iter = 15
 
     return affinity_args(damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, preference=preference)
 
