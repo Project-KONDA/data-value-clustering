@@ -5,7 +5,10 @@ from sklearn.manifold import MDS
 from distance.distance_matrix import get_symmetric
 
 
-def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed):
+def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed, savepath=None, show=True):
+    if not show and savepath is None:
+        return
+    
     symmetric_distance_matrix = get_symmetric(distance_matrix)
     n_clusters = max(clusters_compressed) + 1
     n_compressed_values = len(clusters_compressed)
@@ -29,16 +32,28 @@ def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compresse
     for i, val in enumerate(values_compressed):
         plt.annotate(val, (out[i, 0], out[i, 1]))
 
+    def quit_figure(event):
+        if event.key == 'enter':
+            plt.close(event.canvas.figure)
+
+    plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)
+
     plt.axis('equal')
-    plt.show()
+    if savepath != None:
+        savepath += ".png"
+        plt.savefig(savepath)
+        print("Saved as png in: " + savepath)
+
+    if show:
+        plt.show()
 
 
 if __name__ == "__main__":
     values_compressed = ["a", "1", "?"]
     distance_matrix = np.array([
-        [0,1,2],
-        [0,0,1.5],
-        [0,0,0]
+        [0, 1, 2],
+        [0, 0, 1.5],
+        [0, 0, 0]
     ])
-    clusters_compressed = [0,1,2]
+    clusters_compressed = [0, 1, 2]
     show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed)

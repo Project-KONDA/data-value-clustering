@@ -21,6 +21,6 @@ def show_k_distance_graph(distance_matrix, k):
 
     plt.gcf().canvas.mpl_connect('key_press_event', quit_figure)
 
-    print ("showing k_distance graph ...")
+    print("showing k_distance graph ...")
 
     plt.show()

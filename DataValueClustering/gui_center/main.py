@@ -7,14 +7,14 @@ from gui_cluster_selection.clustering_choices import cluster_algorithms
 from gui_compression.compression_choices import compression_functions
 from gui_distances.distance_choices import distance_functions
 from data_extraction.read_file import get_sources_in_experiment_data_directory
-
+from gui_result import show_mds_scatter_plot
 
 MAX_VALUES = 1000
 
 class Main:
 
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
-                 compression_f=None, distance_f=None, cluster_f=None):
+                 compression_f=None, distance_f=None, cluster_f=None, scatter_plot_save_path=None):
 
         print("Initializing ...")
 
@@ -89,8 +89,11 @@ class Main:
         # CLUSTER VISUALISATION
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
         self.print_result()
+
         # TODO
         # MDS scatter plot
+        show_mds_scatter_plot(self.values_compressed, self.distance_matrix_map["distance_matrix"], self.clusters_compressed, savepath=scatter_plot_save_path)
+        # , "..\experiment\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
         # TODO
