@@ -2,7 +2,7 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 
 from gui_center.cluster_representation import fancy_cluster_representation
-from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
+# from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
 
 N_JOBS = "n_jobs"
 LEAF_SIZE = "leaf_size"
@@ -11,14 +11,14 @@ EPS = "eps"
 MIN_SAMPLES = "min_samples"
 
 
-def dbscan(distance_matrix, values, eps=0.5, min_samples=5, algorithm='auto', leaf_size=30, n_jobs=None):
-    show_k_distance_graph(distance_matrix, min_samples)
-    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', algorithm=algorithm, leaf_size=leaf_size, n_jobs=n_jobs).fit_predict(distance_matrix)
+def dbscan(distance_matrix, values, eps=0.5, min_samples=5, n_jobs=None):
+    # show_k_distance_graph(distance_matrix, min_samples)
+    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', n_jobs=n_jobs).fit_predict(distance_matrix)
     return clusters
 
 
-def dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs):
-    return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, algorithm, leaf_size, n_jobs)
+def dbscan_args(eps, min_samples, n_jobs):
+    return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, n_jobs)
 
 
 def dbscan_min_samples_config(no_values, answers):
@@ -63,17 +63,17 @@ def calculate_eps_max(distance_matrix, min_samples):
     return float(max_eps)
 
 
-def dbscan_algorithm_config():
-    # enum
-    name = ALGORITHM  # TODO
-    explanation = ""  # TODO
-    options = np.array([['auto', ""],
-                        ['brute', ""],
-                        ['kd_tree', ""],
-                        ['ball_tree', ""]])  # TODO
-    suggestions = ['auto']  # TODO
-    deactivatable = False
-    return name, explanation, options, suggestions, deactivatable
+# def dbscan_algorithm_config():
+#     # enum
+#     name = ALGORITHM  # TODO
+#     explanation = ""  # TODO
+#     options = np.array([['auto', ""],
+#                         ['brute', ""],
+#                         ['kd_tree', ""],
+#                         ['ball_tree', ""]])  # TODO
+#     suggestions = ['auto']  # TODO
+#     deactivatable = False
+#     return name, explanation, options, suggestions, deactivatable
 
 
 def dbscan_leaf_size_config():

@@ -15,18 +15,18 @@ MAX_EPS = "max_eps"
 
 def optics(distance_matrix, values,
            min_samples=5, max_eps=np.inf, cluster_method='xi', eps=None,
-           xi=0.05, predecessor_correction=True, min_cluster_size=None, algorithm='auto', leaf_size=30, n_jobs=None):
+           xi=0.05, predecessor_correction=True, min_cluster_size=None, n_jobs=None):
     clusters = OPTICS(
         min_samples=min_samples, metric='precomputed', max_eps=max_eps, cluster_method=cluster_method, eps=eps,
-        xi=xi, predecessor_correction=predecessor_correction, min_cluster_size=min_cluster_size, algorithm=algorithm,
-        leaf_size=leaf_size, n_jobs=n_jobs).fit_predict(distance_matrix)
+        xi=xi, predecessor_correction=predecessor_correction, min_cluster_size=min_cluster_size,
+        n_jobs=n_jobs).fit_predict(distance_matrix)
     return clusters
 
 
-def optics_args(min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, algorithm,
-                          leaf_size, n_jobs):
+def optics_args(min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size,
+                          n_jobs):
     return lambda distance_matrix_map, values: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, cluster_method,
-                          eps, xi, predecessor_correction, min_cluster_size, algorithm, leaf_size, n_jobs)
+                          eps, xi, predecessor_correction, min_cluster_size, n_jobs)
 
 
 def optics_min_samples_config(no_values, answers):
@@ -112,9 +112,9 @@ def optics_min_cluster_size_config():
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
-def optics_algorithm_config():
-    # enum
-    return dbscan_clustering.dbscan_algorithm_config()
+# def optics_algorithm_config():
+#     # enum
+#     return dbscan_clustering.dbscan_algorithm_config()
 
 
 def optics_leaf_size_config():

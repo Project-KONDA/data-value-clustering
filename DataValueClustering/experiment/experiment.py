@@ -1,16 +1,15 @@
 import time
 import numpy as np
 
-from clustering.affinity_propagation_clustering import affinity, affinity_args
-from clustering.dbscan_clustering import dbscan, dbscan_args
-from clustering.hierarchical_clustering import hierarchical_lm, generate_linkage_matrix, hierarchical_lm_args, hierarchical_args
-from clustering.kmedoids_clustering import kmedoids, kmedoids_args
-from clustering.optics_clustering import optics, optics_args
-from clustering.spectral_clustering import spectral, spectral_args
+from clustering.affinity_propagation_clustering import affinity_args
+from clustering.dbscan_clustering import dbscan_args
+from clustering.hierarchical_clustering import hierarchical_args
+from clustering.kmedoids_clustering import kmedoids_args
+from clustering.optics_clustering import optics_args
+from clustering.spectral_clustering import spectral_args
 from gui_center.main import Main
 from compression.compression import sequence_compression_case_sensitive_function, word_sequence_compression_function
 from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
-from gui_cluster_configuration.cluster_algorithms_gui import cluster_affinity, cluster_kmedoids, cluster_dbscan
 from data_extraction.read_file import read_data_values_from_file
 
 midas_dates = "../data/midas_dates.txt"
@@ -119,9 +118,9 @@ if __name__ == '__main__':
     algorithm_configurations = [
         hierarchical_args(method='single', n_clusters=7, distance_threshold=None, criterion='maxclust', depth=None, monocrit=None),
         kmedoids_args(n_clusters=7, init='heuristic', max_iter=200),
-        dbscan_args(eps=3, min_samples=3, algorithm='auto', leaf_size=30, n_jobs=None),
-        optics_args(min_samples=3, max_eps=np.inf, cluster_method='xi', eps=None, xi=0.05, predecessor_correction=True, min_cluster_size=None, algorithm='auto', leaf_size=30, n_jobs=None),
-        affinity_args(damping=0.5, max_iter=200, convergence_iter=15, copy=True, preference=None),
+        dbscan_args(eps=3, min_samples=3, n_jobs=None),
+        optics_args(min_samples=3, max_eps=np.inf, cluster_method='xi', eps=None, xi=0.05, predecessor_correction=True, min_cluster_size=None, n_jobs=None),
+        affinity_args(damping=0.5, max_iter=200, convergence_iter=15, preference=None),
         spectral_args(n_clusters=7, eigen_solver=None, n_components=8, n_init=10, eigen_tol=0.0, assign_labels='kmeans')
     ]
 
@@ -134,5 +133,5 @@ if __name__ == '__main__':
         lido_measurement_unit
     ]
 
-    data_i = 4
-    run_clustering(data_fields[data_i], 1000, word_sequence_compression_function()[0], distance_configuration_1(data_i), algorithm_configurations[0])
+    data_i = 0
+    run_clustering(data_fields[data_i], 1000, word_sequence_compression_function()[0], distance_configuration_1(data_i), algorithm_configurations[3])

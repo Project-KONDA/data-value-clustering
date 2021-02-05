@@ -119,28 +119,18 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
     eps_frame = create_slider_frame(*eps_info)
     # TODO: plot k_distance_graph
 
-    # algorithm = 'auto'
-    algorithm_info = dbscan_algorithm_config()
-    algorithm_frame = create_enum_frame(*algorithm_info)
-
-    # leaf_size = 30
-    leaf_size_info = dbscan_leaf_size_config()
-    leaf_size_frame = create_slider_frame(*leaf_size_info)
-
     # n_jobs = None
     n_jobs_info = dbscan_n_jobs_config()
     n_jobs_frame = create_slider_frame(*n_jobs_info)
 
-    frames = [min_samples_frame, eps_frame, algorithm_frame, leaf_size_frame, n_jobs_frame]
+    frames = [min_samples_frame, eps_frame, n_jobs_frame]
     dependencies = [
-        [dbscan_clustering.ALGORITHM, dbscan_clustering.LEAF_SIZE, DEPENDENCY_ENUM_ACTIVATION,
-         {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
         [dbscan_clustering.MIN_SAMPLES, dbscan_clustering.EPS, DEPENDENCY_VALUE_SLIDER_MAX,
          lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
     ]
-    min_samples, eps, algorithm, leaf_size, n_jobs = get_configuration_parameters("", frames, dependencies)
+    min_samples, eps, n_jobs = get_configuration_parameters("", frames, dependencies)
 
-    return dbscan_args(eps, min_samples, algorithm, leaf_size, n_jobs)
+    return dbscan_args(eps, min_samples, n_jobs)
 
 
 def cluster_optics(cluster_answers, distance_matrix_map, values):
@@ -172,37 +162,28 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
     min_cluster_size_info = optics_min_cluster_size_config()
     min_cluster_size_frame = create_slider_frame(*min_cluster_size_info)
 
-    # algorithm = 'auto'
-    algorithm_info = optics_algorithm_config()
-    algorithm_frame = create_enum_frame(*algorithm_info)
-
-    # leaf_size = 30
-    leaf_size_info = optics_leaf_size_config()
-    leaf_size_frame = create_slider_frame(*leaf_size_info)
-
     # n_jobs = None
     n_jobs_info = optics_n_jobs_config()
     n_jobs_frame = create_slider_frame(*n_jobs_info)
 
     frames = [min_samples_frame, max_eps_frame, cluster_method_frame, eps_frame, xi_frame,
-              predecessor_correction_frame, min_cluster_size_frame, algorithm_frame, leaf_size_frame,
+              predecessor_correction_frame, min_cluster_size_frame,
               n_jobs_frame]
     dependencies = [
-        [dbscan_clustering.ALGORITHM, dbscan_clustering.LEAF_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'ball_tree': True, 'kd_tree': True, 'auto': False, 'brute': False}],
         [optics_clustering.EPS, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
         [optics_clustering.XI, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
         [optics_clustering.PREDECESSOR_CORRECTION, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
         [optics_clustering.MIN_CLUSTER_SIZE, optics_clustering.CLUSTER_METHOD, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
     ]
     min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
-    algorithm, leaf_size, n_jobs \
+    n_jobs \
         = get_configuration_parameters("", frames, dependencies)
 
     if not max_eps:
         max_eps = np.inf
     return optics_args(min_samples, max_eps, cluster_method,
-                          eps, xi, predecessor_correction, min_cluster_size, algorithm,
-                          leaf_size, n_jobs)
+                          eps, xi, predecessor_correction, min_cluster_size,
+                          n_jobs)
 
 
 def cluster_affinity(cluster_answers, distance_matrix_map, values):
