@@ -18,10 +18,10 @@ def custom_full():
 # name, [method() -> (   [method(vals)->(vals, dict)], answers)]
 
 compression_functions = np.array([
+    ["Maximum Compression", lambda data: max_compression_function()],
     ["Manual Configuration", lambda data: compression_configuration (data)],
 
     ["No Compression", lambda data: (lambda values: (values, {}), list(np.full(len(compression_question_array), False)))],
-    ["Maximum Compression", lambda data: max_compression_function()],
 
     ["letters, digits", lambda data: char_compression_function()],
     ["case-sensitive letters, digits", lambda data: char_compression_case_sensitive_function()],
