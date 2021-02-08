@@ -98,7 +98,7 @@ class ExecutionConfiguration(object):
 
     def execute(self):
         # extract data
-        data = read_data_values_from_file(self.data_path)
+        data = read_data_values_from_file(self.data_path)[0:1000]
 
         # get_compression
         compression_f = self.get_compression()
@@ -113,11 +113,11 @@ class ExecutionConfiguration(object):
 
         # TODO: save result
 
-        self.fancy_cluster_list = main.fancy_cluster_list
+        self.cluster_list = main.fancy_cluster_list
         self.noise = main.noise
-        self.timedelta_total = main.timedelta_total
-        self.timedelta_distance = main.timedelta_distance
-        self.timedelta_cluster = main.timedelta_cluster
+        self.time_total = str(main.timedelta_total)
+        self.time_distance = str(main.timedelta_distance)
+        self.time_cluster = str(main.timedelta_cluster)
 
 if __name__ == '__main__':
 
