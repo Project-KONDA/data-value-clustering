@@ -64,7 +64,6 @@ class ExecutionConfiguration(object):
             self.json_file_name = self.target_file_name + ".json"
             self.picture_file_name = self.target_file_name + ".png"
 
-
     def __eq__(self, other):
         json_self = self.toJSON().replace(self.target_file_name, "")
         json_other = other.toJSON().replace(other.target_file_name, "")
@@ -114,6 +113,11 @@ class ExecutionConfiguration(object):
 
         # TODO: save result
 
+        self.fancy_cluster_list = main.fancy_cluster_list
+        self.noise = main.noise
+        self.timedelta_total = main.timedelta_total
+        self.timedelta_distance = main.timedelta_distance
+        self.timedelta_cluster = main.timedelta_cluster
 
 if __name__ == '__main__':
 

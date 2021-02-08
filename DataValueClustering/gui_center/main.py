@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from gui_center.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values
 from gui_distances.blobinput_helper import get_blob_configuration
@@ -16,6 +18,7 @@ class Main:
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
                  compression_f=None, distance_f=None, cluster_f=None, scatter_plot_save_path=None):
 
+        self.time_start = datetime.now()
         print("Initializing ...")
 
         self.l_data = get_sources_in_experiment_data_directory()
@@ -61,15 +64,19 @@ class Main:
 
         # EXECUTION
 
-        print("Calculate compression ...")
         # COMPRESSION
+        print("Calculate compression ...")
+        self.time_compressing_start = datetime.now()
         if self.values_compressed is None or self.compression_dict is None:
             self.values_compressed, self.compression_dict = self.compression_f(self.data)
+        self.time_compressing_end = datetime.now()
 
-        print("Calculate distance matrix ...")
         # DISTANCE
+        print("Calculate distance matrix ...")
         if self.distance_matrix is None:
+            self.time_distance_start = datetime.now()
             self.distance_matrix_map = calculate_distance_matrix_map(self.distance_f, self.values_compressed)
+            self.time_distance_end = datetime.now()
 
         if self.cluster_index != -1 and self.cluster_f is None:
             self.cluster_answers, self.cluster_config_f = cluster_algorithms[self.cluster_index, 1]()
@@ -80,11 +87,19 @@ class Main:
         if self.cluster_f is None:
             self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
 
-        print("Start clustering ...")
         # CLUSTERING
+        print("Start clustering ...")
+        self.time_cluster_start = datetime.now()
         self.clusters_compressed = self.cluster_f(self.distance_matrix_map, self.values_compressed)
         self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
+        self.time_cluster_end = datetime.now()
+
+        print("Finalizing ...")
+        self.time_end = datetime.now()
+        self.timedelta_total = self.time_end - self.time_start
+        self.timedelta_distance = self.time_distance_end - self.time_distance_start
+        self.timedelta_cluster = self.time_cluster_end - self.time_cluster_start
 
         # CLUSTER VISUALISATION
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
@@ -105,12 +120,16 @@ class Main:
         # TODO
 
     def print_result(self):
-        print("Clusters = ")
+        print("Clusters:")
         for i in range(len(self.fancy_cluster_list)):
             print("\t" + str(self.fancy_cluster_list[i]))
         print("]")
-        print("Noise = " + str(self.noise))
-        print("Number of clusters = " + str(len(self.fancy_cluster_list)))
+        print("Noise:", str(self.noise))
+        print("Number of clusters::", str(len(self.fancy_cluster_list)))
+        print("Time Total:", self.timedelta_total)
+        print("Time Distance-Matrix:", self.timedelta_distance)
+        print("Time Clustering:", self.timedelta_cluster)
+
 
     def extract_data(self):
         self.data = self.l_data[self.data_index, 1]()
