@@ -51,6 +51,12 @@ class DropdownInput:
         self.button = Button(self.root, text='OK', command=self.close)
         self.button.grid(sticky='nswe', row=self.num + 6, column=3, columnspan=2)
 
+        # Center Window on Screen
+        self.root.update_idletasks()
+        midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
+        midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
+        self.root.geometry(f"+%s+%s" % (midx, midy))
+
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
