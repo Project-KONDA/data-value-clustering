@@ -40,7 +40,7 @@ def ExecutionConfigurationFromParams(data_path, compression_answers, distance_fu
 
     dict = {
         "data_path": data_path,
-        "data_name": re.sub(".*/", "", data_path),
+        "data_name": re.sub("\..*", "", re.sub(".*/", "", data_path)),
         "compression_answers": compression_answers,
         "distance_func": distance_func,
         "algorithm": algorithm,
