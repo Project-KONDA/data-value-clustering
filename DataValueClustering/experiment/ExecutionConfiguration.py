@@ -117,8 +117,6 @@ class ExecutionConfiguration(object):
 
         main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
 
-        # TODO: save result
-
         self.cluster_list = main.fancy_cluster_list
         self.noise = main.noise
         self.time_total = str(main.timedelta_total)
