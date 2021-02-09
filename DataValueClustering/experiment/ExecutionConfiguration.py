@@ -120,6 +120,7 @@ class ExecutionConfiguration(object):
         self.cluster_list = main.fancy_cluster_list
         self.noise = main.noise
         self.time_total = str(main.timedelta_total)
+        self.time_compression = str(main.timedelta_compression)
         self.time_distance = str(main.timedelta_distance)
         self.time_cluster = str(main.timedelta_cluster)
 

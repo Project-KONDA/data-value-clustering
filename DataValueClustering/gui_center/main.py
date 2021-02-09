@@ -101,6 +101,7 @@ class Main:
         print("Finalizing ...")
         self.time_end = datetime.now()
         self.timedelta_total = self.time_end - self.time_start
+        self.timedelta_compression = self.time_compressing_end - self.time_compressing_start
         self.timedelta_distance = self.time_distance_end - self.time_distance_start
         self.timedelta_cluster = self.time_cluster_end - self.time_cluster_start
 
@@ -130,6 +131,7 @@ class Main:
         print("Noise:", str(self.noise))
         print("Number of clusters::", str(len(self.fancy_cluster_list)))
         print("Time Total:", self.timedelta_total)
+        print("Time Compression:", self.timedelta_compression)
         print("Time Distance-Matrix:", self.timedelta_distance)
         print("Time Clustering:", self.timedelta_cluster)
 
