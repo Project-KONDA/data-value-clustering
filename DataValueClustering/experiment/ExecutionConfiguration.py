@@ -100,7 +100,7 @@ class ExecutionConfiguration(object):
         return json_text
 
     def generate_filename(self):
-        return self.algorithm + datetime.now().strftime("%Y%m%d-%H%M%S")
+        return self.data_name + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
     def execute(self):
         # extract data
