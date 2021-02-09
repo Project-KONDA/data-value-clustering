@@ -58,11 +58,17 @@ class ExecutionConfiguration(object):
     def __init__(self, dict):
         for key, value in dict.items():
             setattr(self, key, value)
+        self.validate_params()
 
         if not hasattr(self, "target_file_name"):
             self.target_file_name = self.generate_filename()
             self.json_file_name = self.target_file_name + ".json"
             self.picture_file_name = self.target_file_name + ".png"
+
+    def validate_params(self):
+        for p in self.algorithm_params:
+            assert len(p) == 2
+            assert type(p[0]) is str, p[0]
 
     def __eq__(self, other):
         json_self = self.toJSON().replace(self.target_file_name, "")
@@ -107,7 +113,7 @@ class ExecutionConfiguration(object):
         distance_f = distance_functions[self.distance_func](self.get_costmap())
 
         # specify cluster function with parameters
-        cluster_f = clustering_args_functions[self.algorithm](**self.algorithm_params)
+        cluster_f = clustering_args_functions[self.algorithm](**self.params_to_dict())
 
         main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
 
@@ -118,6 +124,12 @@ class ExecutionConfiguration(object):
         self.time_total = str(main.timedelta_total)
         self.time_distance = str(main.timedelta_distance)
         self.time_cluster = str(main.timedelta_cluster)
+
+    def params_to_dict(self):
+        dict = {}
+        for p in self.algorithm_params:
+            dict[p[0]] = p[1]
+        return dict
 
 if __name__ == '__main__':
 
@@ -140,7 +152,8 @@ if __name__ == '__main__':
     costmap = get_cost_map(weight_case, regex, weights_dates)
     # clustering
     algorithm = "dbscan"
-    algorithm_params = {"eps": 3, "min_samples": 3, "n_jobs": None}
+    # algorithm_params = {"eps": 3, "min_samples": 3, "n_jobs": None}
+    algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
 
     """INITIALIZE"""
     object = ExecutionConfigurationFromParams("../data/midas_dates.txt", compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
