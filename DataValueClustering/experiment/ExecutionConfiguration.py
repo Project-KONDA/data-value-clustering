@@ -85,10 +85,10 @@ class ExecutionConfiguration(object):
             return None
         return get_cost_map(self.costmap_case, self.costmap_regex, self.costmap_weights)
 
-    def save(self):
+    def save(self, path):
         output_text = self.toJSON()
 
-        f = open(self.json_file_name, "w")
+        f = open(path + self.json_file_name, "w")
         f.write(output_text)
         f.close()
 
