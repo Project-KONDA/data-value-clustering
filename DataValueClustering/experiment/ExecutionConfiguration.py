@@ -160,9 +160,10 @@ if __name__ == '__main__':
     object.execute()
 
     """SAVE"""
-    object.save()
+    object.save("../data/")
 
     """LOAD"""
-    # load = load_ExecutionConfiguration(target_file_name)
+    load = load_ExecutionConfiguration("../data/dbscan20210209-103005")
+    load.execute()
     # print(object is load, object == load)
     # print(type(load), load)
