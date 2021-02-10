@@ -116,13 +116,13 @@ def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, 
 
 
 @jit(nopython=True)
-def get_cost_map_indices(costmap_regex, s):
-    indices = np.empty(len(s), dtype=np.int64)
+def get_cost_map_indices(cost_map_regex, s):
+    n = len(s)
+    indices = np.empty(n, dtype=np.int64)
+    n -= 1
     for i, c in enumerate(s):
-        indices[i] = -1
-        print("i_loop:  ", i, c)
-        for j, row in enumerate(costmap_regex):
-            print("     j_loop:  ", j, row)
+        indices[i] = n
+        for j, row in enumerate(cost_map_regex):
             for r in row:
                 if r == c:
                     indices[i] = j
@@ -130,7 +130,6 @@ def get_cost_map_indices(costmap_regex, s):
             else:
                 continue
             break
-    print("get_indices of ", s, ":", indices)
     return indices
 
 
