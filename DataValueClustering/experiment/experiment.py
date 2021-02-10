@@ -9,7 +9,8 @@ from clustering.optics_clustering import optics_args
 from clustering.spectral_clustering import spectral_args
 from gui_center.main import Main
 from compression.compression import sequence_compression_case_sensitive_function, word_sequence_compression_function
-from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance
+from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance, \
+    get_weighted_levenshtein_distance
 from data_extraction.read_file import read_data_values_from_file
 
 midas_dates = "../data/midas_dates.txt"
@@ -25,11 +26,11 @@ def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
     data = read_data_values_from_file(file_path)[0:data_limit]
     # print(data)
 
-    start = time.time()
+    # start = time.time()
     main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
     cluster_list, noise = main.fancy_cluster_list, main.noise
-    end = time.time()
-    print("Runtime = " + str(end - start))
+    # end = time.time()
+    # print("Runtime = " + str(end - start))
 
     # print("Clusters = ")
     # for i in range(len(cluster_list)):
@@ -111,7 +112,7 @@ def distance_configuration_1(dates):
 
     cost_map = get_cost_map(weight_case, regex, weights)
 
-    return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2)
+    return get_weighted_levenshtein_distance(cost_map)
 
 
 if __name__ == '__main__':
@@ -134,4 +135,8 @@ if __name__ == '__main__':
     ]
 
     data_i = 0
-    run_clustering(data_fields[data_i], 1000, word_sequence_compression_function()[0], distance_configuration_1(data_i), algorithm_configurations[3])
+    f = lambda: run_clustering(data_fields[data_i], 1000, word_sequence_compression_function()[0], distance_configuration_1(data_i), algorithm_configurations[3])
+
+    f()
+    print("---------------------------------")
+    f()
