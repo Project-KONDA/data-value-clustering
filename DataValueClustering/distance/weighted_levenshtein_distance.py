@@ -47,6 +47,13 @@ def split_cost_map(cost_map=get_cost_map()):
     costmap_regex = []
     for i in xrange(n):
         costmap_regex.append(cost_map[i])
+    costmap_regex_len = len(costmap_regex)
+    costmap_regex_max = max(map(len, costmap_regex))
+
+    regex_np = np.full((costmap_regex_len, costmap_regex_max), '', dtype=str)
+    for i, reg in enumerate(costmap_regex):
+        for j, r in enumerate(reg):
+            regex_np[i, j] = r
 
     costmap_weights = []
 
@@ -55,12 +62,14 @@ def split_cost_map(cost_map=get_cost_map()):
         for j in xrange(n):
             costmap_weights[i].append(cost_map[(i, j)])
 
-    return costmap_case, costmap_regex, costmap_weights
+    costmap_weights = np.array(costmap_weights)
+
+    return costmap_case, regex_np, costmap_weights
 
 
 def regex_to_list(regex):
     n = len(regex)
-    assert regex[0] == '^' and regex[n-1] == '$'
+    assert regex[0] == '^' and regex[n - 1] == '$'
     chars = []
 
 
@@ -70,6 +79,7 @@ def match(regex, string):
 
 def get_costmap_num(cost_map):
     return math.floor(math.sqrt(len(cost_map)))
+
 
 @jit(nopython=True)
 def get_costmap_index(cost_map, c):
