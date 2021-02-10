@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 
 from scipy.spatial.distance import is_valid_y
@@ -137,23 +139,45 @@ def calculate_affinity_matrix_from_distance_matrix(distance_matrix):
 
 
 if __name__ == "__main__":
-    from gui_distances.matrix_plots import plot_box, plot_histogram, plot_image, plot_at_y
+    # from gui_distances.matrix_plots import plot_box, plot_histogram, plot_image, plot_at_y
+    #
+    # distance_matrix = np.array([
+    #     [0, 1,  2,   1.5],
+    #     [0, 0,  1.5, 1.3],
+    #     [0, 0,  0.5, 1.1],
+    #     [0, 0,  0,   0]
+    # ])
+    #
+    # condensed_matrix = get_condensed(distance_matrix)
+    #
+    # print(min_distance(condensed_matrix))
+    # print(max_distance(condensed_matrix))
+    # print(avg_distance(condensed_matrix))
+    #
+    # plot_image(distance_matrix)
+    #
+    # plot_box(condensed_matrix)
+    # plot_histogram(condensed_matrix)
+    # plot_at_y(condensed_matrix)
 
-    distance_matrix = np.array([
-        [0, 1,  2,   1.5],
-        [0, 0,  1.5, 1.3],
-        [0, 0,  0.5, 1.1],
-        [0, 0,  0,   0]
-    ])
+    from weighted_levenshtein_distance import weighted_levenshtein_distance, get_cost_map
 
-    condensed_matrix = get_condensed(distance_matrix)
+    distance_function = lambda s1, s2: weighted_levenshtein_distance(
+        get_cost_map(), s1, s2
+    )
 
-    print(min_distance(condensed_matrix))
-    print(max_distance(condensed_matrix))
-    print(avg_distance(condensed_matrix))
+    values = np.array(["a", "1", "Test007", "JamesBond007", "Hallo"], dtype=np.str)
 
-    plot_image(distance_matrix)
-
-    plot_box(condensed_matrix)
-    plot_histogram(condensed_matrix)
-    plot_at_y(condensed_matrix)
+    start = datetime.now()
+    x = calculate_distance_matrix_map(
+        distance_function,
+        values
+    )
+    print("Compile:", datetime.now()-start, ":", x)
+    # print(type(b))
+    start = datetime.now()
+    x = calculate_distance_matrix_map(
+        distance_function,
+        values
+    )
+    print("Normal:", datetime.now() - start, ":", x)
