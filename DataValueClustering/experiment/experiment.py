@@ -25,11 +25,11 @@ def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
     data = read_data_values_from_file(file_path)[0:data_limit]
     # print(data)
 
-    start = time.time()
+    # start = time.time()
     main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
     cluster_list, noise = main.fancy_cluster_list, main.noise
-    end = time.time()
-    print("Runtime = " + str(end - start))
+    # end = time.time()
+    # print("Runtime = " + str(end - start))
 
     # print("Clusters = ")
     # for i in range(len(cluster_list)):
