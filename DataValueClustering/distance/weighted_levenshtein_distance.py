@@ -96,14 +96,13 @@ def get_costmap_index(cost_map, c):
 
 
 @jit(nopython=True)
-def get_cost(costmap_case, costmap_regex, costmap_weights, c1, c2):
+def get_cost(cost_map_case, cost_map_weights, c1, index1, c2, index2):
     if c1 == c2:
         return 0
-    if lower(c1) == lower(c2):
-        return cost_map[()]
-    k1 = get_costmap_index(cost_map, c1)  # TODO: remove
-    k2 = get_costmap_index(cost_map, c2)  # TODO: remove
-    return cost_map[(k1, k2)]
+    if c1.lower() == c2.lower():
+        return cost_map_case
+    cost = cost_map_weights[index1, index2]
+    return cost
 
 
 def get_weighted_levenshtein_distance(cost_map):
