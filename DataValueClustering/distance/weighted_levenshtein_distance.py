@@ -1,5 +1,6 @@
 import re
 import math
+from datetime import datetime
 
 import numpy as np
 from numpy.core.defchararray import lower
@@ -114,14 +115,14 @@ def weighted_levenshtein_distance(cost_map, s1, s2):
 
 
 if __name__ == "__main__":
-    map = get_cost_map()
-    # print(match(" ", " "))
-    #      != None)
-    print(get_costmap_index(map, ""))
-    print(get_costmap_index(map, "a"))
-    print(get_costmap_index(map, "A"))
-    print(get_costmap_index(map, "1"))
-    print(get_costmap_index(map, " "))
-    print(get_costmap_index(map, "-"))
+    start = datetime.now()
+    x = weighted_levenshtein_distance(get_cost_map(), "aax", "a1")
+    print("Compile:", datetime.now()-start, ":", x)
 
-    print(map)
+    teststrings = ["a", "1", "Test007", "JamesBond007", "X Æ A-XII"]
+
+    for i in teststrings:
+        for j in teststrings:
+            start = datetime.now()
+            x = weighted_levenshtein_distance(get_cost_map(), i, j)
+            print(datetime.now()-start, i, "to", j, ":", x)
