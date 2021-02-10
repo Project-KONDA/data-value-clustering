@@ -45,6 +45,7 @@ def split_cost_map(cost_map=get_cost_map()):
     n = get_costmap_num(cost_map)
     costmap_case = cost_map[()]
 
+
     costmap_regex = []
     for i in xrange(n):
         costmap_regex.append(cost_map[i])
@@ -110,12 +111,6 @@ def get_weighted_levenshtein_distance(cost_map):
     return lambda s1, s2: weighted_levenshtein_distance(*split_cost_map(cost_map), s1, s2)
 
 
-def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, s1, s2):
-    s1 = tuple(s1)
-    s2 = tuple(s2)
-    return weighted_levenshtein_distance_jit(costmap_case, costmap_regex, costmap_weights, s1, s2)
-
-
 @jit(nopython=True)
 def get_cost_map_indices(cost_map_regex, s):
     n = len(s)
@@ -131,12 +126,12 @@ def get_cost_map_indices(cost_map_regex, s):
             else:
                 continue
             break
-    print(indices, s)
+    # print(indices, s)
     return indices
 
 
 @jit(nopython=True)
-def weighted_levenshtein_distance_jit(costmap_case, costmap_regex, costmap_weights, s1, s2):
+def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, s1, s2):
     l1 = len(s1)
     l2 = len(s2)
     indices1 = get_cost_map_indices(costmap_regex, s1)
