@@ -3,7 +3,8 @@ import numpy as np
 from distance.dice_coefficient import dice_coefficient_distance
 from distance.levenshtein_distance import levenshtein_distance
 from distance.longest_common_subsequence_distance import longest_common_subsequence_distance
-from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map
+from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map, \
+    get_weighted_levenshtein_distance
 
 # pass method of this module as distance_function to clustering.clustering.cluster
 from gui_general.DropdownInput import DropdownInput
@@ -33,6 +34,8 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
     num = 5
 
     optionsx = np.array([
+        ["BlobInput",
+         lambda: input_blobs(blob_configuration)],
         ["Costmap Prefilled",
          lambda: (
              input_costmap(regexes=blob_configuration[:, 1], costmap=costmap),
@@ -44,9 +47,6 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
          lambda: (
              input_costmap(size=len(blob_configuration), empty=True),
              blob_configuration)],
-
-        ["BlobInput",
-         lambda: input_blobs(blob_configuration)],
     ])
 
     myDropdown = DropdownInput(titlex, list(labelsx), list([optionsx[:, 0]]))
@@ -57,7 +57,7 @@ def distance_weighted_levenshtein(blob_configuration, costmap=None):
     if cost_map is None:
         quit()
 
-    return lambda s1, s2: weighted_levenshtein_distance(cost_map, s1, s2), new_blob_configuration
+    return get_weighted_levenshtein_distance(cost_map), new_blob_configuration
 
 
 def automatic():

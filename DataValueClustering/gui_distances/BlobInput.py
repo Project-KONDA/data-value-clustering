@@ -48,7 +48,7 @@ class BlobInput:
         # self.root.minsize(400, 300)
         # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
         self.root.config(bg='black')
-        self.root.bind_all("<Escape>", lambda event: self.close(True))
+        self.root.bind_all("<Escape>", lambda event: self.close(event, True))
         self.root.bind_all("<Return>", self.close)
 
         """Menu"""
@@ -227,7 +227,7 @@ class BlobInput:
     def get(self):
         return self.get_distance_map(), self.get_config()
 
-    def close(self, canceled=False):
+    def close(self, event=None, canceled=False):
         """Close Tk Window"""
         self.canceled = canceled
         self.root.destroy()
