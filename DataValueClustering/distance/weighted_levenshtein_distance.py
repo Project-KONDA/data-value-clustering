@@ -95,7 +95,8 @@ def get_costmap_index(cost_map, c):
     raise ValueError("Error when trying to identify: " + c)
 
 
-def get_cost(cost_map, c1, c2):
+@jit(nopython=True)
+def get_cost(costmap_case, costmap_regex, costmap_weights, c1, c2):
     if c1 == c2:
         return 0
     if lower(c1) == lower(c2):
@@ -136,9 +137,9 @@ def get_cost_map_indices(costmap_regex, s):
 
 @jit(nopython=True)
 def weighted_levenshtein_distance_jit(costmap_case, costmap_regex, costmap_weights, s1, s2):
-    print(costmap_regex)
-    i1 = get_indices(costmap_regex, s1)
-    i2 = get_indices(costmap_regex, s2)
+    # print(costmap_regex)
+    indices1 = get_cost_map_indices(costmap_regex, s1)
+    indices2 = get_cost_map_indices(costmap_regex, s2)
 
     # TODO: use i1 and i2
 
@@ -150,7 +151,7 @@ def weighted_levenshtein_distance_jit(costmap_case, costmap_regex, costmap_weigh
     d[0, 0] = 0
 
     for i in xrange(1, l1+1):
-        d[i, 0] = d[i - 1, 0] + get_cost(costmap_case, costmap_regex, costmap_weights, s1[i-1], "")
+        d[i, 0] = d[i - 1, 0] + get_cost(costmap_case, costmap_regex, costmap_weights, s1[i - 1], indices1[i-1], "", -1)
     #    print(i, -1, d[(i, -1)])
 
     for j in xrange(1, l2+1):
@@ -205,6 +206,6 @@ if __name__ == "__main__":
     # print(np.array(weights))
     # t = ("a", "b")
     # print(t[0])
-    weighted_levenshtein_distance(get_cost_map(),"haus","maus")
+    get_weighted_levenshtein_distance(get_cost_map())("#baÄz$0\9", "xaAzZ019")
     # t = ('', ('[', 'a', '-', 'z', 'ä', 'ö', 'ü', 'ß', ']'), ('[', 'A', '-', 'Z', 'Ä', 'Ö', 'Ü', ']'), ('[', '0', '-', '9', ']'), (' ',), ('[', '\\', '$', '\\', '&', '\\', '+', ',', ':', ';', '=', '\\', '?', '@', '\\', '#', '\\', '|', "'", '<', '>', '\\', '.', '\\', '-', '\\', '^', '\\', '*', '\\', '(', '\\', ')', '%', '!', '/', ']'))
     # print(t[1])
