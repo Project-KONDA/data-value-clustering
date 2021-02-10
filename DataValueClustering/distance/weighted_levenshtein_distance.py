@@ -135,38 +135,30 @@ def get_cost_map_indices(cost_map_regex, s):
 
 @jit(nopython=True)
 def weighted_levenshtein_distance_jit(costmap_case, costmap_regex, costmap_weights, s1, s2):
-    # print(costmap_regex)
-    indices1 = get_cost_map_indices(costmap_regex, s1)
-    indices2 = get_cost_map_indices(costmap_regex, s2)
-
-    # TODO: use i1 and i2
-
     l1 = len(s1)
     l2 = len(s2)
-
-    d = np.empty((l1+1, l2+1), dtype=float)
-
+    indices1 = get_cost_map_indices(costmap_regex, s1)
+    indices2 = get_cost_map_indices(costmap_regex, s2)
+    d = np.empty((l1 + 1, l2 + 1), dtype=np.float64)
     d[0, 0] = 0
 
-    for i in xrange(1, l1+1):
-        d[i, 0] = d[i - 1, 0] + get_cost(costmap_case, costmap_regex, costmap_weights, s1[i - 1], indices1[i-1], "", -1)
-    #    print(i, -1, d[(i, -1)])
+    for i in xrange(1, l1 + 1):
+        d[i, 0] = d[i - 1, 0] + get_cost(costmap_case, costmap_weights, s1[i - 1], indices1[i - 1], "", 0)
 
-    for j in xrange(1, l2+1):
-        d[0, j] = d[0, j - 1] + get_cost(costmap_case, costmap_regex, costmap_weights, "", s2[j-1])
-    #    print(-1, j, d[(-1, j)])
+    for j in xrange(1, l2 + 1):
+        d[0, j] = d[0, j - 1] + get_cost(costmap_case, costmap_weights, "", 0, s2[j - 1], indices2[j - 1])
 
-    for i in xrange(1, l1+1):
-        for j in xrange(1, l2+1):
+    for i in xrange(1, l1 + 1):
+        for j in xrange(1, l2 + 1):
             d[i, j] = min(
-                d[i - 1, j] + get_cost(costmap_case, costmap_regex, costmap_weights, s1[i-1], ""),  # deletion
-                d[i, j - 1] + get_cost(costmap_case, costmap_regex, costmap_weights, "", s2[j-1]),  # insertion
-                d[i - 1, j - 1] + get_cost(costmap_case, costmap_regex, costmap_weights, s1[i-1], s2[j-1]),  # substitution
+                d[i - 1, j] + get_cost(costmap_case, costmap_weights, s1[i - 1], indices1[i - 1], "", 0),  # deletion
+                d[i, j - 1] + get_cost(costmap_case, costmap_weights, "", 0, s2[j - 1], indices2[j - 1]),  # insertion
+                d[i - 1, j - 1] + get_cost(costmap_case, costmap_weights, s1[i - 1], indices1[i - 1], s2[j - 1],
+                                           indices2[j - 1]),  # substitution
             )
-    #        print(i, j, d[(i, j)])
     #        if i and j and s1[i] == s2[j - 1] and s1[i - 1] == s2[j]:
     #            d[(i, j)] = min(d[(i, j)], d[i - 2, j - 2] + weight_swap)  # transposition
-    return d[l1 - 1, l2 - 1]
+    return d[l1, l2]
 
 
 if __name__ == "__main__":
