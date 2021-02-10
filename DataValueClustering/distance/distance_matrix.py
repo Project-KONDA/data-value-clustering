@@ -47,21 +47,14 @@ def calculate_distance_matrix_map(distance_function, values, size):
 
 
 @njit
-def calculate_distance_matrix_map_jit(distance_function, values, size):
+def calculate_distance_matrix_map_jit(distance_function, values):
+    size = len(values)
     size_condensed = 0
     for si in range(size):
         size_condensed += si
 
     matrix = np.zeros((size, size), dtype=np.float64)
     condensed_matrix = np.zeros(size_condensed, dtype=np.float64)
-
-    # THIS IS FOR TESTING NUMBA PROBLEMS WHEN COMBINING DISTANCE MATRIX AND WEIGHTED LEVENSTIEN DISTANCE
-    # for i in range(len(values)):
-    #     vx = values[i]
-    # vy = values[0]
-    # result = 0  # distance_function(values[1], values[2])
-    # return result, values[0], "c", "d", "e"
-    # # return "a", "b", "c", "d", "e"
 
     i = 0
 
@@ -70,8 +63,8 @@ def calculate_distance_matrix_map_jit(distance_function, values, size):
 
     for y in range(size):
         for x in range(size):
-            vx = values[x]
-            vy = values[y]
+            vx = str(values[x])  # numba needs str
+            vy = str(values[y])  # numba needs str
             distance_x_y = distance_function(vx, vy)
 
             if distance_x_y < min_distance:
@@ -188,7 +181,6 @@ if __name__ == "__main__":
 
     a, b, c, d, e = calculate_distance_matrix_map(
         distance_function,
-        values,
-        len(values)
+        values
     )
     print(type(b))
