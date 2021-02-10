@@ -1,5 +1,5 @@
-from distance import levenshtein_distance, longest_common_subsequence_distance, dice_coefficient_distance, \
-    weighted_levenshtein_distance
+from distance import levenshtein_distance, longest_common_subsequence_distance, dice_coefficient_distance
+from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
 
 distance_functions = {
     "distance_weighted_levenshtein":

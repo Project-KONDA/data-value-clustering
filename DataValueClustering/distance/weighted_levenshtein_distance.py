@@ -3,7 +3,8 @@ import math
 from datetime import datetime
 
 import numpy as np
-from numba import jit
+from numba import jit, njit
+import numba as nb
 from numpy.core.defchararray import lower
 from pip._vendor.msgpack.fallback import xrange
 
@@ -108,7 +109,13 @@ def get_cost(cost_map_case, cost_map_weights, c1, index1, c2, index2):
 
 
 def get_weighted_levenshtein_distance(cost_map):
-    return lambda s1, s2: weighted_levenshtein_distance(*split_cost_map(cost_map), s1, s2)
+    case, regex, weight = split_cost_map(cost_map)
+
+    @njit
+    def distance_function(s1, s2):
+        return weighted_levenshtein_distance(case, regex, weight, s1, s2)
+
+    return distance_function
 
 
 @jit(nopython=True)
