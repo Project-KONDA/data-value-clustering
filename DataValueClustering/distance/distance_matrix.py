@@ -39,8 +39,8 @@ def get_symmetric(matrix):
     return symmetric_matrix
 
 
-def calculate_distance_matrix_map(distance_function, values, size):
-    dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, values, size)
+def calculate_distance_matrix_map(distance_function, values):
+    dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, values)
     return {"distance_matrix": dm,
             "condensed_distance_matrix": cdm,
             "affinity_matrix": am,
