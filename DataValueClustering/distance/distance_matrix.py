@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 from numba import njit
 import numba as nb
@@ -179,8 +181,18 @@ if __name__ == "__main__":
 
     values = np.array(["a", "1", "Test007", "JamesBond007", "X Æ A-XII"], dtype=np.str)
 
-    a, b, c, d, e = calculate_distance_matrix_map(
+    start = datetime.now()
+    x = calculate_distance_matrix_map(
         distance_function,
         values
     )
-    print(type(b))
+    print("Compile:", datetime.now()-start, ":", x)
+    # print(type(b))
+    start = datetime.now()
+    x = calculate_distance_matrix_map(
+        distance_function,
+        values
+    )
+    print("Normal:", datetime.now() - start, ":", x)
+
+
