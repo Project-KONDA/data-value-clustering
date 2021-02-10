@@ -179,7 +179,7 @@ if __name__ == "__main__":
         get_cost_map()
     )
 
-    values = np.array(["a", "1", "Test007", "JamesBond007", "X Æ A-XII"], dtype=np.str)
+    values = np.array(["a", "1", "Test007", "JamesBond007", "Hallo"], dtype=np.str)
 
     start = datetime.now()
     x = calculate_distance_matrix_map(
