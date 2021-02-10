@@ -13,6 +13,7 @@ from gui_result import show_mds_scatter_plot
 
 MAX_VALUES = 1000
 
+
 class Main:
 
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
@@ -41,10 +42,10 @@ class Main:
         self.distance_matrix = None
 
         # Basic Configurations
-        if ((data_index == -1 and data is None)
-                or (compression_index == -1 and compression_f is None)
-                or (distance_index == -1 and distance_f is None)
-                or (cluster_index == -1 and cluster_f is None)):
+        if ((self.data_index == -1 and self.data is None)
+                or (self.compression_index == -1 and self.compression_f is None)
+                or (self.distance_index == -1 and self.distance_f is None)
+                or (self.cluster_index == -1 and self.cluster_f is None)):
             print("Basic Configurations ...")
             self.show_configuration_centre()
 
@@ -57,6 +58,7 @@ class Main:
 
         if self.compression_index != -1:
             self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1](self.data)
+
         if self.distance_index != -1:
             self.blob_configuration = get_blob_configuration(self.compression_answers)
             # [label, regex, resizable, info, x, y, size]
@@ -78,12 +80,13 @@ class Main:
             self.distance_matrix_map = calculate_distance_matrix_map(self.distance_f, self.values_compressed)
             self.time_distance_end = datetime.now()
 
+        # CLUSTERING PARAMETER CONFIGURATION
+
         if self.cluster_index != -1 and self.cluster_f is None:
             self.cluster_answers, self.cluster_config_f = cluster_algorithms[self.cluster_index, 1]()
             if self.cluster_config_f is None:
                 quit()
 
-        # clustering parameter configuration:
         if self.cluster_f is None:
             self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
 
@@ -98,6 +101,7 @@ class Main:
         print("Finalizing ...")
         self.time_end = datetime.now()
         self.timedelta_total = self.time_end - self.time_start
+        self.timedelta_compression = self.time_compressing_end - self.time_compressing_start
         self.timedelta_distance = self.time_distance_end - self.time_distance_start
         self.timedelta_cluster = self.time_cluster_end - self.time_cluster_start
 
@@ -127,14 +131,9 @@ class Main:
         print("Noise:", str(self.noise))
         print("Number of clusters::", str(len(self.fancy_cluster_list)))
         print("Time Total:", self.timedelta_total)
+        print("Time Compression:", self.timedelta_compression)
         print("Time Distance-Matrix:", self.timedelta_distance)
         print("Time Clustering:", self.timedelta_cluster)
-
-
-    def extract_data(self):
-        self.data = self.l_data[self.data_index, 1]()
-        if len(self.data) > MAX_VALUES:
-            self.data = self.data[:MAX_VALUES]
 
     def show_configuration_centre(self):
         title = "Configuration Centre"
@@ -149,6 +148,11 @@ class Main:
         answers, answer_indexes = input_dropdown(title, labels, matrix, current_indexes)
         assert (len(answer_indexes) == 4)
         [self.data_index, self.compression_index, self.distance_index, self.cluster_index] = answer_indexes
+
+    def extract_data(self):
+        self.data = self.l_data[self.data_index, 1]()
+        if len(self.data) > MAX_VALUES:
+            self.data = self.data[:MAX_VALUES]
 
 
 if __name__ == '__main__':

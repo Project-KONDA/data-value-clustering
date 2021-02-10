@@ -98,6 +98,12 @@ class QuestionnaireResultInput(ABC):
             self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
+        # Center Window on Screen
+        self.root.update_idletasks()
+        midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
+        midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
+        self.root.geometry(f"+%s+%s" % (midx, midy))
+
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 

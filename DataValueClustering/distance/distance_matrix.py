@@ -1,29 +1,6 @@
 import numpy as np
-from matplotlib import pyplot as plt
 
 from scipy.spatial.distance import is_valid_y
-
-
-def plot_box(condensed_matrix):
-    plt.boxplot(condensed_matrix)
-    plt.show()
-
-
-def plot_histogram(condensed_matrix):
-    n_bins = len(np.array(list(set(condensed_matrix))))
-    plt.hist(condensed_matrix, bins=n_bins)
-    plt.show()
-
-
-def plot_image(matrix):
-    plt.imshow(matrix)
-    plt.colorbar()
-    plt.show()
-
-
-def plot_at_y(condensed_matrix):
-    plt.plot(condensed_matrix, np.zeros_like(condensed_matrix), '.',)
-    plt.show()
 
 
 def get_condensed(matrix):
@@ -160,6 +137,8 @@ def calculate_affinity_matrix_from_distance_matrix(distance_matrix):
 
 
 if __name__ == "__main__":
+    from gui_distances.matrix_plots import plot_box, plot_histogram, plot_image, plot_at_y
+
     distance_matrix = np.array([
         [0, 1,  2,   1.5],
         [0, 0,  1.5, 1.3],

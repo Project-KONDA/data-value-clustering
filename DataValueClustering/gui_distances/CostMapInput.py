@@ -70,7 +70,7 @@ class CostMapInput:
         width = 220 + 48 * self.n  # 300 #270 # 240
         # width = max(470, 220 + 48 * self.n)  # 300 #270 # 240
         height = 55 + 19 * self.n  # 130 # 110 # 90
-        width_text = str(width) + "x" + str(height)
+        width_text = f"{width}x{height}"
         self.root.geometry(width_text)
 
         menu = Menu(self.root)
@@ -142,6 +142,12 @@ class CostMapInput:
         Button(self.root, text='OK', command=self.button_click_output_map,
                justify=RIGHT, width=5 * self.n + 15, background='snow'
                ).grid(row=self.n + 12, column=2, columnspan=self.n + 2)
+
+        # Center Window on Screen
+        self.root.update_idletasks()
+        midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
+        midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
+        self.root.geometry(f"+%s+%s" % (midx, midy))
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
