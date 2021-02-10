@@ -1,5 +1,6 @@
 import re
 import math
+from datetime import datetime
 
 import numpy as np
 from numba import jit
@@ -18,7 +19,7 @@ def suggest_cost_map():
 
 # example cost map components:
 weight_case = 1
-regex = ["", "[a-zäöüß]", "[A-ZÄÖÜ]", "[0-9]", " ", "[\$\&\+,:;=\?@\#\|'<>\.\-\^\*\(\)%!/]"]
+regex = ["", "abcdefghijklmnopqrstuvwxyzäöüß", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ", "0123456789", " ", "\$\&\+,:;=\?@\#\|'<>\.\-\^\*\(\)%!/"]
 weights = [
     [0, 1, 2, 4, 4, 8],
     [1, 0, 1, 4, 4, 8],
@@ -119,9 +120,9 @@ def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, 
 def get_cost_map_indices(cost_map_regex, s):
     n = len(s)
     indices = np.empty(n, dtype=np.int64)
-    n -= 1
+    n2 = len(cost_map_regex)-1
     for i, c in enumerate(s):
-        indices[i] = n
+        indices[i] = n2
         for j, row in enumerate(cost_map_regex):
             for r in row:
                 if r == c:
@@ -130,6 +131,7 @@ def get_cost_map_indices(cost_map_regex, s):
             else:
                 continue
             break
+    print(indices, s)
     return indices
 
 
@@ -196,6 +198,18 @@ if __name__ == "__main__":
     # print(np.array(weights))
     # t = ("a", "b")
     # print(t[0])
-    get_weighted_levenshtein_distance(get_cost_map())("#baÄz$0\9", "xaAzZ019")
+
+    start = datetime.now()
+    x = get_weighted_levenshtein_distance(get_cost_map())("aax", "a1")
+    print("Compile:", datetime.now()-start, ":", x)
+
+    teststrings = ["a", "1", "Test007", "JamesBond007", "X Æ A-XII"]
+
+    for i in teststrings:
+        for j in teststrings:
+            start = datetime.now()
+            x = get_weighted_levenshtein_distance(get_cost_map())(i, j)
+            print(datetime.now()-start, i, "to", j, ":", x)
     # t = ('', ('[', 'a', '-', 'z', 'ä', 'ö', 'ü', 'ß', ']'), ('[', 'A', '-', 'Z', 'Ä', 'Ö', 'Ü', ']'), ('[', '0', '-', '9', ']'), (' ',), ('[', '\\', '$', '\\', '&', '\\', '+', ',', ':', ';', '=', '\\', '?', '@', '\\', '#', '\\', '|', "'", '<', '>', '\\', '.', '\\', '-', '\\', '^', '\\', '*', '\\', '(', '\\', ')', '%', '!', '/', ']'))
     # print(t[1])
+#
