@@ -105,19 +105,14 @@ def get_cost(cost_map, c1, c2):
     return cost_map[(k1, k2)]
 
 
-def weighted_levenshtein_distance(cost_map, s1, s2):
-    costmap_case, costmap_regex, costmap_weights = split_cost_map(cost_map)
-    costmap_char_list = []  # TODO: use np array instead
-    for regex in costmap_regex:
-        if regex == "":
-            costmap_char_list.append(("",))
-        else:
-            costmap_char_list.append(tuple(regex))
-    costmap_char_list = tuple(costmap_char_list)
-    costmap_weights = np.array(costmap_weights)
+def get_weighted_levenshtein_distance(cost_map):
+    return lambda s1, s2: weighted_levenshtein_distance(*split_cost_map(cost_map), s1, s2)
+
+
+def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, s1, s2):
     s1 = tuple(s1)
     s2 = tuple(s2)
-    return weighted_levenshtein_distance_jit(costmap_case, costmap_char_list, costmap_weights, s1, s2)
+    return weighted_levenshtein_distance_jit(costmap_case, costmap_regex, costmap_weights, s1, s2)
 
 
 @jit(nopython=True)
