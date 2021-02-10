@@ -199,8 +199,10 @@ if __name__ == "__main__":
     # t = ("a", "b")
     # print(t[0])
 
+    function = get_weighted_levenshtein_distance(get_cost_map())
+
     start = datetime.now()
-    x = get_weighted_levenshtein_distance(get_cost_map())("aax", "a1")
+    x = function("aax", "a1")
     print("Compile:", datetime.now()-start, ":", x)
 
     teststrings = ["a", "1", "Test007", "JamesBond007", "X Æ A-XII"]
@@ -208,7 +210,7 @@ if __name__ == "__main__":
     for i in teststrings:
         for j in teststrings:
             start = datetime.now()
-            x = get_weighted_levenshtein_distance(get_cost_map())(i, j)
+            x = function(i, j)
             print(datetime.now()-start, i, "to", j, ":", x)
     # t = ('', ('[', 'a', '-', 'z', 'ä', 'ö', 'ü', 'ß', ']'), ('[', 'A', '-', 'Z', 'Ä', 'Ö', 'Ü', ']'), ('[', '0', '-', '9', ']'), (' ',), ('[', '\\', '$', '\\', '&', '\\', '+', ',', ':', ';', '=', '\\', '?', '@', '\\', '#', '\\', '|', "'", '<', '>', '\\', '.', '\\', '-', '\\', '^', '\\', '*', '\\', '(', '\\', ')', '%', '!', '/', ']'))
     # print(t[1])
