@@ -3,7 +3,7 @@ import math
 from datetime import datetime
 
 import numpy as np
-from numba import jit, njit
+from numba import jit, njit, prange
 import numba as nb
 from numpy.core.defchararray import lower
 from pip._vendor.msgpack.fallback import xrange
@@ -45,7 +45,6 @@ def get_cost_map(weight_case_switch=weight_case, rgx=regex, w=weights):
 def split_cost_map(cost_map=get_cost_map()):
     n = get_costmap_num(cost_map)
     costmap_case = cost_map[()]
-
 
     costmap_regex = []
     for i in xrange(n):
@@ -118,12 +117,13 @@ def get_weighted_levenshtein_distance(cost_map):
     return distance_function
 
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True)
 def get_cost_map_indices(cost_map_regex, s):
     n = len(s)
     indices = np.empty(n, dtype=np.int64)
-    n2 = len(cost_map_regex)-1
-    for i, c in enumerate(s):
+    n2 = len(cost_map_regex) - 1
+    for i in prange(n):
+        c = s[i]
         indices[i] = n2
         for j, row in enumerate(cost_map_regex):
             for r in row:
@@ -138,7 +138,7 @@ def get_cost_map_indices(cost_map_regex, s):
 
 
 @jit(nopython=True)
-def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, s1, s2):
+def weighted_levenshtein_distance_sequential(costmap_case, costmap_regex, costmap_weights, s1, s2):
     l1 = len(s1)
     l2 = len(s2)
     indices1 = get_cost_map_indices(costmap_regex, s1)
@@ -162,6 +162,45 @@ def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, 
             )
     #        if i and j and s1[i] == s2[j - 1] and s1[i - 1] == s2[j]:
     #            d[(i, j)] = min(d[(i, j)], d[i - 2, j - 2] + weight_swap)  # transposition
+    return d[l1, l2]
+
+
+@jit(nopython=True, parallel=True)
+def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, s1, s2):
+    l1 = len(s1)
+    l2 = len(s2)
+    indices1 = get_cost_map_indices(costmap_regex, s1)
+    indices2 = get_cost_map_indices(costmap_regex, s2)
+
+    d = np.empty((l1 + 1, l2 + 1), dtype=np.float64)
+    d[0, 0] = 0
+
+    n_diagonale = l1 + l2 + 1
+    for diag in xrange(1, n_diagonale):
+
+        # order from left to right: x,y in [(0|dia), (dia|0)]
+        minx = 0 if diag < l2 else diag - l2
+        maxx = l1 + 1 if diag > l1 else diag + 1
+
+        for x in prange(minx, maxx):  # loop over all matrix-fields in diagonale
+            y = diag - x
+
+            if x == 0:  # initialize top row
+                d[0, y] = d[0, y - 1] + get_cost(costmap_case, costmap_weights, "", 0, s2[y - 1], indices2[y - 1])
+
+            elif y == 0:  # initialize left column
+                d[x, 0] = d[x - 1, 0] + get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1], "", 0)
+
+            else:
+                delete = d[x - 1, y] + get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1], "", 0)
+                insert = d[x, y - 1] + get_cost(costmap_case, costmap_weights, "", 0, s2[y - 1], indices2[y - 1])
+                substitute = d[x - 1, y - 1] + get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1],
+                                                        s2[y - 1], indices2[y - 1])
+                d[x, y] = min(delete, insert, substitute)
+
+                # if x and y and s1[x] == s2[y - 1] and s1[x - 1] == s2[y]:
+                #     d[x, y] = min(d[x, y], d[y - 2, y - 2] + weight_swap)  # transposition
+
     return d[l1, l2]
 
 
@@ -205,15 +244,18 @@ if __name__ == "__main__":
 
     start = datetime.now()
     x = function("aax", "a1")
-    print("Compile:", datetime.now()-start, ":", x)
+    print("Compile:", datetime.now() - start, ":", x)
 
-    teststrings = ["a", "1", "Test007", "JamesBond007", "X Æ A-XII"]
+    teststrings = ["a", "1", "Test00pü2ü9386h%%!Test00pü2ü9386h%%!7", "JamesBond007", "X Æ A-XII"]
 
     for i in teststrings:
         for j in teststrings:
             start = datetime.now()
             x = function(i, j)
-            print(datetime.now()-start, i, "to", j, ":", x)
+            print(datetime.now() - start, i, "to", j, ":", x)
+
+    # function("Jame", "01a!")
+
     # t = ('', ('[', 'a', '-', 'z', 'ä', 'ö', 'ü', 'ß', ']'), ('[', 'A', '-', 'Z', 'Ä', 'Ö', 'Ü', ']'), ('[', '0', '-', '9', ']'), (' ',), ('[', '\\', '$', '\\', '&', '\\', '+', ',', ':', ';', '=', '\\', '?', '@', '\\', '#', '\\', '|', "'", '<', '>', '\\', '.', '\\', '-', '\\', '^', '\\', '*', '\\', '(', '\\', ')', '%', '!', '/', ']'))
     # print(t[1])
 #
