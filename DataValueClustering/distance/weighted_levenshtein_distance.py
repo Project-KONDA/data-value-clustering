@@ -172,11 +172,22 @@ def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, 
     indices1 = get_cost_map_indices(costmap_regex, s1)
     indices2 = get_cost_map_indices(costmap_regex, s2)
 
+    c = np.empty((l1 + 1, l2 + 1), dtype=np.float64)
+
+    for x in prange(l1 + 1):
+        for y in prange(l2 + 1):
+            if x == 0:
+                c[0, y] = get_cost(costmap_case, costmap_weights, "", 0, s2[y - 1], indices2[y - 1])
+            elif y == 0:
+                c[x, y] = get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1], "", 0)
+            else:
+                c[x, y] = get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1], s2[y - 1],
+                                   indices2[y - 1])
+
     d = np.empty((l1 + 1, l2 + 1), dtype=np.float64)
     d[0, 0] = 0
 
-    n_diagonale = l1 + l2 + 1
-    for diag in xrange(1, n_diagonale):
+    for diag in xrange(1, l1 + l2 + 1):
 
         # order from left to right: x,y in [(0|dia), (dia|0)]
         minx = 0 if diag < l2 else diag - l2
@@ -186,16 +197,15 @@ def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, 
             y = diag - x
 
             if x == 0:  # initialize top row
-                d[0, y] = d[0, y - 1] + get_cost(costmap_case, costmap_weights, "", 0, s2[y - 1], indices2[y - 1])
+                d[0, y] = d[0, y - 1] + c[0, y]
 
             elif y == 0:  # initialize left column
-                d[x, 0] = d[x - 1, 0] + get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1], "", 0)
+                d[x, 0] = d[x - 1, 0] + c[x, 0]
 
             else:
-                delete = d[x - 1, y] + get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1], "", 0)
-                insert = d[x, y - 1] + get_cost(costmap_case, costmap_weights, "", 0, s2[y - 1], indices2[y - 1])
-                substitute = d[x - 1, y - 1] + get_cost(costmap_case, costmap_weights, s1[x - 1], indices1[x - 1],
-                                                        s2[y - 1], indices2[y - 1])
+                delete = d[x - 1, y] + c[x, 0]
+                insert = d[x, y - 1] + c[0, y]
+                substitute = d[x - 1, y - 1] + c[x, y]
                 d[x, y] = min(delete, insert, substitute)
 
                 # if x and y and s1[x] == s2[y - 1] and s1[x - 1] == s2[y]:
