@@ -10,6 +10,7 @@ from data_extraction import read_data_values_from_file
 from distance.distance import distance_functions
 from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
+from gui_compression.compression_choices import compression_functions
 
 
 def load_ExecutionConfiguration(filepath):
@@ -31,7 +32,22 @@ def load_ExecutionConfiguration(filepath):
     # return json.loads(filepath + ".json")
 
 
-def ExecutionConfigurationFromParams(data_path, compression_answers, distance_func, algorithm, algorithm_params, costmap=None):
+def get_compression_answers(compression):
+    for i,e in enumerate(compression_functions):
+        if e[0] == compression:
+            return e[1](None)[1]
+
+
+def ExecutionConfigurationFromParams(data_path, limit, compression, distance_func, algorithm, algorithm_params, costmap=None):
+
+    if isinstance(compression, list):
+        compression_answers = compression
+        compression_function = ""
+    elif isinstance(compression, str):
+        compression_answers = get_compression_answers(compression)
+        compression_function = compression
+    else:
+        pass
 
     if costmap is None:
         costmap_case, costmap_regex, costmap_weights = None, None, None
@@ -42,6 +58,8 @@ def ExecutionConfigurationFromParams(data_path, compression_answers, distance_fu
     dict = {
         "data_path": data_path,
         "data_name": re.sub("\..*", "", re.sub(".*/", "", data_path)),
+        "limit": limit,
+        "compression_function": compression_function,
         "compression_answers": compression_answers,
         "distance_func": distance_func,
         "algorithm": algorithm,
@@ -101,11 +119,11 @@ class ExecutionConfiguration(object):
         return json_text
 
     def generate_filename(self):
-        return self.data_name + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        return self.data_name + "_" + str(self.limit) + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
     def execute(self):
         # extract data
-        data = read_data_values_from_file(self.data_path)[0:1000]
+        data = read_data_values_from_file(self.data_path)[0:self.limit]
 
         # get_compression
         compression_f = self.get_compression()
@@ -156,7 +174,7 @@ if __name__ == '__main__':
     algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
 
     """INITIALIZE"""
-    object = ExecutionConfigurationFromParams("../data/midas_dates.txt", compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams("../data/midas_dates.txt", 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     """EXECUTE"""
     object.execute()
