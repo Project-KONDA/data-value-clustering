@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     # clustering
     algorithm = "dbscan"
-    algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
+    algorithm_params = [["eps", 3.9], ["min_samples", 3], ["n_jobs", None]]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_artist_names, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)

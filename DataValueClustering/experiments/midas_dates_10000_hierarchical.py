@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'single'], ['n_clusters', 11], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm_params = [['method', 'single'], ['n_clusters', 90], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates, 100000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
