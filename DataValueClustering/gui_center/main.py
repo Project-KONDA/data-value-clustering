@@ -112,7 +112,7 @@ class Main:
         # TODO
         # MDS scatter plot
         show_mds_scatter_plot(self.values_compressed, self.distance_matrix_map["distance_matrix"], self.clusters_compressed, savepath=scatter_plot_save_path)
-        # , "..\experiment\\result\here2")  # to instantly save the picture
+        # , "..\experiments\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
         # TODO

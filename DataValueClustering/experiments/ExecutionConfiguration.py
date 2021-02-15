@@ -37,6 +37,7 @@ def ExecutionConfigurationFromParams(data_path, compression_answers, distance_fu
         costmap_case, costmap_regex, costmap_weights = None, None, None
     else:
         costmap_case, costmap_regex, costmap_weights = split_cost_map(costmap)
+        costmap_regex, costmap_weights = costmap_regex.tolist(), costmap_weights.tolist()
 
     dict = {
         "data_path": data_path,
@@ -134,7 +135,7 @@ if __name__ == '__main__':
 
     """SPECIFY PARAMETERS"""
     # data
-    target_file_name = "target_file_name"
+    # target_file_name = "target_file_name"
     # compression
     compression_answers = [True, True, True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False, True]
     #distance
