@@ -17,9 +17,9 @@ midas_dates = "../data/midas_dates.txt"
 midas_artist_names = "../data/midas_artist_names.txt"
 midas_measurements = "../data/midas_measurement.txt"
 
-lido_titles = "../data/lido_titles.txt"
-lido_attribution_qualifier = "../data/lido_attribution_qualifier.txt"
-lido_measurement_unit = "../data/lido_measurement_unit.txt"
+lido_titles = "../data/xlido_titles.txt"
+lido_attribution_qualifier = "../data/xlido_attribution_qualifier.txt"
+lido_measurement_unit = "../data/xlido_measurement_unit.txt"
 
 
 def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
@@ -42,7 +42,7 @@ def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
 
 def distance_configuration_1(dates):
     weight_case = 1
-    regex = ["", "[a-zäöüßáàéèíìóòúù]", "[A-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ]", "[0-9]", " ", "[^a-zäöüßáàéèíìóòúùA-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ0-9 ]"]
+    regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".,:;!?()[]{}+-*/%=<>&|"]
     weights_dates = [
         [0, 2, 2, 1, 3, 3],
         [2, 0, 1, 3, 3, 3],
