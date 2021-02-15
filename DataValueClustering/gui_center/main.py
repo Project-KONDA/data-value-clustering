@@ -107,6 +107,9 @@ class Main:
 
         # CLUSTER VISUALISATION
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
+        self.fancy_cluster_list_compressed, self.noise_compressed = fancy_cluster_representation(self.values_compressed, self.clusters_compressed)
+        self.no_clusters = len(self.fancy_cluster_list)
+        self.no_noise = len(self.noise)
         self.print_result()
 
         # TODO
@@ -129,7 +132,15 @@ class Main:
             print("\t" + str(self.fancy_cluster_list[i]))
         print("]")
         print("Noise:", str(self.noise))
-        print("Number of clusters::", str(len(self.fancy_cluster_list)))
+
+        print("Clusters compressed:")
+        for i in range(len(self.fancy_cluster_list_compressed)):
+            print("\t" + str(self.fancy_cluster_list_compressed[i]))
+        print("]")
+        print("Noise compressed:", str(self.noise_compressed))
+
+        print("Number of clusters:", str(self.no_clusters))
+        print("Number of noisy values:", str(self.no_noise))
         print("Time Total:", self.timedelta_total)
         print("Time Compression:", self.timedelta_compression)
         print("Time Distance-Matrix:", self.timedelta_distance)
