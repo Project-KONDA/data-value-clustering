@@ -89,10 +89,14 @@ def word_decimal_compression_function():
 def word_sequence_compression_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"],
     # ["[qU]+", "V"], ["[0-9]+", "1"]
-    answers = [True, False, True, True, False, True, True, True, False,
-               True, True, False,
-               False, False, False, False, False, False,
-               True]
+    # answers = [True, False, True, True, False, True, True, True, False,
+    #            True, True, False,
+    #            False, False, False, False, False, False,
+    #            True]
+    answers = [True, True, False, True, True, False, True, True, True,
+     True, True, False,
+     False, False, False, False, False, False,
+     True]
     return get_compression_method(answers), answers
 
 
