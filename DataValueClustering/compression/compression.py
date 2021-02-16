@@ -93,7 +93,7 @@ def word_sequence_compression_function():
     #            True, True, False,
     #            False, False, False, False, False, False,
     #            True]
-    answers = [True, True, False, True, True, False, True, True, True,
+    answers = [True, True, False, False, True, False, False, False, True,
      True, True, False,
      False, False, False, False, False, False,
      True]
