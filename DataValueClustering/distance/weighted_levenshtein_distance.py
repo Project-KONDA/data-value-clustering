@@ -256,13 +256,22 @@ if __name__ == "__main__":
     x = function("aax", "a1")
     print("Compile:", datetime.now() - start, ":", x)
 
-    teststrings = ["a", "1", "Test00pü2ü9386h%%!Test00pü2ü9386h%%!7", "JamesBond007", "X Æ A-XII"]
+    teststrings = ["a2347z gsfhst3w445t ", "1b34545b 132452w5lwijejruktuh34589589342gtzt 452345", "Test00pü2ü9386h%%!Test00pü2ü9386h%%!7",
+                   "Jameadrgf3489t43t34sBond007", "X3246isdfhgjng Æ A-XII", "asöroifhg", "320895rhj", "$!öaoeeitrzh483", "23908p§gsd§2%5",
+                   "4832iit§$/%&/B!§T", "ösagdoih34wö9tighaöodfsgijnnöaeoriioghnnaöäeoriogsh0392", "flöiouiöwöeu4938ß210",
+                   "üp08934t2hj$§$ZT&/!", "§R§$%&§$%§$%gsdfgsret45$", "GW§E$%%FGY$%%&Z","a2347z gsfhst3w445t ", "1b34545b 132452w5lwijejruktuh34589589342gtzt 452345", "Test00pü2ü9386h%%!Test00pü2ü9386h%%!7",
+                   "Jameadrgf3489t43t34sBond007", "X3246isdfhgjng Æ A-XII", "asöroifhg", "320895rhj", "$!öaoeeitrzh483", "23908p§gsd§2%5",
+                   "4832iit§$/%&/B!§T", "ösagdoih34wö9tighaöodfsgijnnöaeoriioghnnaöäeoriogsh0392", "flöiouiöwöeu4938ß210",
+                   "üp08934t2hj$§$ZT&/!", "§R§$%&§$%§$%gsdfgsret45$", "GW§E$%%FGY$%%&Z","a2347z gsfhst3w445t "]
 
-    for i in teststrings:
-        for j in teststrings:
-            start = datetime.now()
-            x = function(i, j)
-            print(datetime.now() - start, i, "to", j, ":", x)
+    for outer in range(5):
+        start_outer = datetime.now()
+        for i in teststrings:
+                # start = datetime.now()
+            for j in teststrings:
+                x = function(i, j)
+                # print(datetime.now() - start, i, "to", j, ":", x)
+        print("iteration", outer, datetime.now() - start)
 
     # function("Jame", "01a!")
 
