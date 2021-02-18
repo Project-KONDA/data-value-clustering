@@ -5,7 +5,7 @@ from sklearn.manifold import MDS
 from distance.distance_matrix import get_symmetric
 
 
-def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed, savepath=None, show=True):
+def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compressed, savepath=None, show=True, show_labels=True):
     if not show and savepath is None:
         return
     
@@ -29,8 +29,9 @@ def show_mds_scatter_plot(values_compressed, distance_matrix, clusters_compresse
     plt.scatter(out[:, 0], out[:, 1], color=value_colors)
 
     # label points:
-    for i, val in enumerate(values_compressed):
-        plt.annotate(val, (out[i, 0], out[i, 1]))
+    if show_labels:
+        for i, val in enumerate(values_compressed):
+            plt.annotate(val, (out[i, 0], out[i, 1]))
 
     def quit_figure(event):
         if event.key == 'enter':
