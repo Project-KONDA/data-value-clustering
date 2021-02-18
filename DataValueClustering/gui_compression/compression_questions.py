@@ -35,13 +35,13 @@ compression_question_array = [
      "Choose yes if the capitalization of the first letter of a word does not have a crucial impact on the meaning.\n" +
      "For example, 'Portrait' and 'child' will be treated equally since both are words"],  # 6
     [[0, 3, 6], [1], "word_sequence", False,
-     "Should all sequences of lower or upper case words seperated by a blank space be treated equally?",
+     "Should all sequences of lower or upper case words separated by a blank space be treated equally?",
      "Choose yes if the length of sequences of lower or upper case words does not have a crucial impact on the\n" +
      "meaning or if you expect sequences of lower or upper case words of heterogeneous length.\n" +
      "For example, 'in Marburg' and 'brother or father' will be treated equally since both are sequences of words\n" +
      "seperated by a blank space"],  # 7
     [[0, 1, 4], [], "sequence_sequence", False,
-     "Should all sequences of lower, upper or mixed case letter sequences seperated by a blank space be treated equally?",
+     "Should all sequences of lower, upper or mixed case letter sequences separated by a blank space be treated equally?",
      "Choose yes if the length of sequences of lower, upper or mixed case letter sequences does not have\n" +
      "a crucial impact on the meaning or if you expect sequences of lower, upper or mixed case letter sequences of\n" +
      "heterogeneous length.\n" +

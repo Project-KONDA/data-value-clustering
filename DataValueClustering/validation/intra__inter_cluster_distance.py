@@ -2,11 +2,11 @@ import numpy as np
 
 
 def filter_distance_matrix(cluster1, cluster2, clusters, distance_matrix):
-    # cluster : int
-    # clusters = [4 0 3 5 ...]
     lines = np.where(clusters == cluster1)[0]
     columns = np.where(clusters == cluster2)[0]
-    return distance_matrix[lines, columns]
+
+    distance_matrix_lines = distance_matrix[lines, :]
+    return distance_matrix_lines[:, columns]
 
 
 def max_intra_cluster_distance(cluster, clusters, distance_matrix):
@@ -45,7 +45,9 @@ def min_of_min_inter_cluster_distances(clusters, distance_matrix):
     m = len(matrix)
     mini = np.inf
     for i in range(m):
-        for j in range(m):
+        # for j in range(m):
+        # if i != j:
+        for j in range(i+1, m):
             mini = min(matrix[i, j], mini)
     return mini
 
@@ -55,9 +57,9 @@ if __name__ == "__main__":
     # c2 = 1
     clusters = np.array([1, 1, 0])
     dm = np.array([
-        [1,2,3],
-        [2,5,6],
-        [3,6,9],
+        [1, 2, 3],
+        [2, 5, 6],
+        [3, 6, 9],
     ])
     # print(filter_distance_matrix(c1, c2, clusters, dm))
     # print(max_intra_cluster_distances(clusters, dm))
