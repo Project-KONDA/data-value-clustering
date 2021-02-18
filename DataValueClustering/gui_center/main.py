@@ -10,6 +10,8 @@ from gui_compression.compression_choices import compression_functions
 from gui_distances.distance_choices import distance_functions
 from data_extraction.read_file import get_sources_in_experiment_data_directory
 from gui_result import show_mds_scatter_plot
+from validation.dunn_index import dunn_index
+from validation.calinski_harabasz_index import calinski_harabasz_index, wb_index
 
 MAX_VALUES = 1000
 
@@ -110,6 +112,11 @@ class Main:
         self.fancy_cluster_list_compressed, self.noise_compressed = fancy_cluster_representation(self.values_compressed, self.clusters_compressed)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
+
+        self.wb_index = wb_index(self.clusters_compressed, self.distance_matrix_map['distance_matrix'])
+        self.calinski_harabasz_index = calinski_harabasz_index(self.clusters_compressed, self.distance_matrix_map['distance_matrix'])
+        self.dunn_index = dunn_index(self.clusters_compressed, self.distance_matrix_map['distance_matrix'])
+
         self.print_result()
 
         # TODO
@@ -139,12 +146,15 @@ class Main:
         print("]")
         print("Noise compressed:", str(self.noise_compressed))
 
-        print("Number of clusters:", str(self.no_clusters))
-        print("Number of noisy values:", str(self.no_noise))
-        print("Time Total:", self.timedelta_total)
-        print("Time Compression:", self.timedelta_compression)
-        print("Time Distance-Matrix:", self.timedelta_distance)
-        print("Time Clustering:", self.timedelta_cluster)
+        print("Number of clusters:      ", str(self.no_clusters))
+        print("Number of noisy values:  ", str(self.no_noise))
+        print("Time Total:              ", self.timedelta_total)
+        print("Time Compression:        ", self.timedelta_compression)
+        print("Time Distance-Matrix:    ", self.timedelta_distance)
+        print("Time Clustering:         ", self.timedelta_cluster)
+        print("wb-Index:                ", self.wb_index)
+        print("Calinski-Harabasz Index: ", self.calinski_harabasz_index)
+        print("Dunn Index:              ", self.dunn_index)
 
     def show_configuration_centre(self):
         title = "Configuration Centre"

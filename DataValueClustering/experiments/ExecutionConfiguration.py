@@ -146,6 +146,9 @@ class ExecutionConfiguration(object):
         self.time_compression = str(main.timedelta_compression)
         self.time_distance = str(main.timedelta_distance)
         self.time_cluster = str(main.timedelta_cluster)
+        self.wb_index = main.wb_index
+        self.calinski_harabasz_index = main.calinski_harabasz_index
+        self.dunn_index = main.dunn_index
 
     def params_to_dict(self):
         dict = {}
