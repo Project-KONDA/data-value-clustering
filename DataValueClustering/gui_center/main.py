@@ -58,6 +58,7 @@ class Main:
         if self.data_index != -1:
             self.extract_data()
 
+
         if self.compression_index != -1:
             self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1](self.data)
 
@@ -65,6 +66,9 @@ class Main:
             self.blob_configuration = get_blob_configuration(self.compression_answers)
             # [label, regex, resizable, info, x, y, size]
             self.distance_f, self.blob_configuration = self.l_distances[self.distance_index, 1](self.blob_configuration)
+
+
+        self.num_data = len(self.data)
 
         # EXECUTION
 
@@ -74,6 +78,9 @@ class Main:
         if self.values_compressed is None or self.compression_dict is None:
             self.values_compressed, self.compression_dict = self.compression_f(self.data)
         self.time_compressing_end = datetime.now()
+
+        self.num_compressed_data = len(self.values_compressed)
+        self.compression_rate = self.num_data / self.num_compressed_data
 
         # DISTANCE
         print("Calculate distance matrix ...")
@@ -146,6 +153,9 @@ class Main:
         print("]")
         print("Noise compressed:", str(self.noise_compressed))
 
+        print("Data Values:             ", self.num_data)
+        print("Compressed Data Values:  ", self.num_compressed_data)
+        print("Compression:             ", self.compression_rate)
         print("Number of clusters:      ", str(self.no_clusters))
         print("Number of noisy values:  ", str(self.no_noise))
         print("Time Total:              ", self.timedelta_total)

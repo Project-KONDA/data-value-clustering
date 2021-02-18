@@ -140,6 +140,9 @@ class ExecutionConfiguration(object):
         self.noise = main.noise
         self.cluster_list_compressed = main.fancy_cluster_list_compressed
         self.noise_compressed = main.noise_compressed
+        self.amount_data = main.num_data
+        self.amount_compressed_data = main.num_compressed_data
+        self.compression_rate = main.compression_rate
         self.no_clusters = main.no_clusters
         self.no_noise = main.no_noise
         self.time_total = str(main.timedelta_total)
