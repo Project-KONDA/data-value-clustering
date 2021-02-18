@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # algorithm_params = [["min_samples", 2], ["max_eps", 20], ["cluster_method", 'xi'], ["eps", None], ["xi", 0.05],
     #                     ["predecessor_correction", True], ["min_cluster_size", None], ["n_jobs", None]]
 
-    algorithm_params = [["n_clusters", 7], ["eigen_solver", None], ["n_components", 8], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
+    algorithm_params = [["n_clusters", 7], ["eigen_solver", None], ["n_components", None], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_measurements, 1000, compression_answers, "distance_weighted_levenshtein",
