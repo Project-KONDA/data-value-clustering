@@ -47,6 +47,7 @@ def generate_linkage_matrix(condensed_distance_matrix, values, method):
 
 
 def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
+    show_dendrogram(linkage_matrix)
     if not (n_clusters is None):
         return decrease_by_one(fcluster(linkage_matrix, n_clusters, criterion, depth, None, monocrit))
     elif not (distance_threshold is None):
@@ -75,7 +76,7 @@ def hierarchical_n_clusters_config(no_values):
     # int or range
     # activation xor with distance_threshold
     name = N_CLUSTERS
-    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
+    explanation = "Maximum number of clusters created. Higher values will yield more clusters. Increase if there is one giant cluster that you want being split up into smaller clusters."
     min_n_clusters = 2
     max_n_clusters = no_values
     suggestion_value = min(7, no_values // 2)
@@ -89,7 +90,7 @@ def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
     # float
     # activation xor with n_clusters
     name = THRESHOLD
-    explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
+    explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters. Decrease if there is one giant cluster that you want being split up into smaller clusters."
     min_distance_threshold = min_distance
     max_distance_threshold = float(linkage_matrix[len(linkage_matrix) - 1, 2] - 0.01)
     suggestion_value = (max_distance_threshold - min_distance_threshold) / 2
