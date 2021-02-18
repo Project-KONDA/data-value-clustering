@@ -120,18 +120,18 @@ class Main:
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
 
-        self.wb_index = wb_index(self.clusters_compressed, self.distance_matrix_map['distance_matrix'])
-        self.calinski_harabasz_index = calinski_harabasz_index(self.clusters_compressed, self.distance_matrix_map['distance_matrix'])
-        self.dunn_index = dunn_index(self.clusters_compressed, self.distance_matrix_map['distance_matrix'])
-
-        self.print_result()
-
         # TODO
+
         # MDS scatter plot
         show_mds_scatter_plot(self.values_compressed, self.distance_matrix_map["distance_matrix"], self.clusters_compressed, savepath=scatter_plot_save_path)
         # , "..\experiments\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
+        index_parameters = self.clusters_compressed, self.distance_matrix_map['distance_matrix']
+        self.wb_index = wb_index(*index_parameters)
+        self.calinski_harabasz_index = calinski_harabasz_index(*index_parameters)
+        self.dunn_index = dunn_index(*index_parameters)
+
         # TODO
 
         # SATISFACTION QUESTIONNAIRE
@@ -139,6 +139,8 @@ class Main:
 
         # SUGGEST DATA ENHANCEMENTS
         # TODO
+
+        self.print_result()
 
     def print_result(self):
         print("Clusters:")
@@ -151,13 +153,13 @@ class Main:
         for i in range(len(self.fancy_cluster_list_compressed)):
             print("\t" + str(self.fancy_cluster_list_compressed[i]))
         print("]")
-        print("Noise compressed:", str(self.noise_compressed))
+        print("Noise compressed:        ", self.noise_compressed)
 
         print("Data Values:             ", self.num_data)
         print("Compressed Data Values:  ", self.num_compressed_data)
         print("Compression:             ", self.compression_rate)
-        print("Number of clusters:      ", str(self.no_clusters))
-        print("Number of noisy values:  ", str(self.no_noise))
+        print("Number of clusters:      ", self.no_clusters)
+        print("Number of noisy values:  ", self.no_noise)
         print("Time Total:              ", self.timedelta_total)
         print("Time Compression:        ", self.timedelta_compression)
         print("Time Distance-Matrix:    ", self.timedelta_distance)
