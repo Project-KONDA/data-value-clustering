@@ -28,7 +28,7 @@ def max_intra_cluster_distances(clusters, distance_matrix):
     return distances
 
 
-def max_inter_cluster_distances(clusters, distance_matrix):
+def min_inter_cluster_distances(clusters, distance_matrix):
     clusters_unique = np.array(list(set(clusters)))
     clusters_unique_sorted = np.sort(clusters_unique)
     n = len(clusters_unique_sorted)
@@ -38,6 +38,16 @@ def max_inter_cluster_distances(clusters, distance_matrix):
             if i != j:
                 distances[i, j] = min_inter_cluster_distance(i, j, clusters, distance_matrix)
     return distances
+
+
+def min_of_min_inter_cluster_distances(clusters, distance_matrix):
+    matrix = min_inter_cluster_distances(clusters, distance_matrix)
+    m = len(matrix)
+    mini = np.inf
+    for i in range(m):
+        for j in range(m):
+            mini = min(matrix[i, j], mini)
+    return mini
 
 
 if __name__ == "__main__":
@@ -51,4 +61,4 @@ if __name__ == "__main__":
     ])
     # print(filter_distance_matrix(c1, c2, clusters, dm))
     # print(max_intra_cluster_distances(clusters, dm))
-    print(max_inter_cluster_distances(clusters, dm))
+    print(min_inter_cluster_distances(clusters, dm))
