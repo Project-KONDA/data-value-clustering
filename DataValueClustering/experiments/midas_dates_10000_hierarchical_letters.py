@@ -15,21 +15,21 @@ if __name__ == '__main__':
     weight_case = 1
     regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".,:;!?()[]{}+-*/%=<>&|\"`´'"]
     weights = [
-        [0, 2, 2, 1, 3, 3],
-        [2, 0, 1, 3, 3, 3],
-        [2, 1, 0, 3, 3, 3],
-        [1, 3, 3, 0, 3, 3],
-        [3, 3, 3, 3, 0, 3],
-        [3, 3, 3, 3, 3, 3]
+        [0, 4, 4, 1, 4, 6],
+        [4, 0, 1, 5, 4, 6],
+        [4, 1, 0, 5, 4, 6],
+        [1, 5, 5, 0, 4, 6],
+        [4, 4, 4, 4, 0, 6],
+        [6, 6, 6, 6, 6, 6]
     ]
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
-    algorithm = "spectral"
-    algorithm_params = [["n_clusters", 12], ["eigen_solver", None], ["n_components", 8], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
+    algorithm = "hierarchical"
+    algorithm_params = [['method', 'single'], ['n_clusters', 9], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_dates, 100000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams(midas_dates, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute
     object.execute()

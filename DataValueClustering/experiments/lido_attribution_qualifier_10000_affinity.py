@@ -20,7 +20,7 @@ if __name__ == '__main__':
         [2, 1, 0, 5, 3, 4],
         [4, 4, 4, 0, 3, 4],
         [3, 3, 3, 3, 0, 4],
-        [4, 4, 4, 4, 4, 4]
+        [4, 4, 4, 4, 4, 12]
     ]
     costmap = get_cost_map(weight_case, regex, weights)
 

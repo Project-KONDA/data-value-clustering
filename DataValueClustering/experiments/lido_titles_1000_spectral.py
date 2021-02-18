@@ -8,25 +8,25 @@ if __name__ == '__main__':
     # specify parameters
 
     # compression
-    compression_answers = "words"
+    compression_answers = "sentence"
     # [true, false, true, true, false, true, false, false, false, true, true, false, false, false, false, false, false, false, true]
 
     #distance
     weight_case = 1
     regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".,:;!?()[]{}+-*/%=<>&|\"`´'"]
     weights = [
-        [0, 1, 2, 4, 3, 3],
-        [1, 0, 1, 4, 3, 3],
-        [2, 1, 0, 4, 3, 3],
-        [4, 4, 4, 0, 3, 3],
-        [3, 3, 3, 3, 0, 3],
-        [3, 3, 3, 3, 3, 3]
+        [0, 1, 2, 4, 3, 24],
+        [1, 0, 1, 4, 3, 24],
+        [2, 1, 0, 4, 3, 24],
+        [4, 4, 4, 0, 3, 24],
+        [3, 3, 3, 3, 0, 24],
+        [24, 24, 24, 24, 24, 24]
     ]
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
     algorithm = "spectral"
-    algorithm_params = [["n_clusters", 12], ["eigen_solver", None], ["n_components", 8], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
+    algorithm_params = [["n_clusters", 3], ["eigen_solver", None], ["n_components", None], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
 
     # initialize
     object = ExecutionConfigurationFromParams(lido_titles, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)

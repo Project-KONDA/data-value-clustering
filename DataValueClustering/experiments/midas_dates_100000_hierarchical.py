@@ -15,18 +15,18 @@ if __name__ == '__main__':
     weight_case = 1
     regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".,:;!?()[]{}+-*/%=<>&|\"`´'"]
     weights = [
-        [0, 2, 2, 1, 3, 3],
-        [2, 0, 1, 3, 3, 3],
-        [2, 1, 0, 3, 3, 3],
-        [1, 3, 3, 0, 3, 3],
-        [3, 3, 3, 3, 0, 3],
-        [3, 3, 3, 3, 3, 3]
+        [0, 2, 2, 1, 2, 6],
+        [2, 0, 1, 2, 2, 6],
+        [2, 1, 0, 2, 2, 6],
+        [1, 2, 2, 0, 2, 6],
+        [2, 2, 2, 2, 0, 6],
+        [6, 6, 6, 6, 6, 12]
     ]
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'single'], ['n_clusters', 90], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm_params = [['method', 'single'], ['n_clusters', 10], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates, 100000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
