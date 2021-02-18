@@ -106,7 +106,7 @@ blob_configuration_array = [
      "info_other_characters"],
     [[12],         [],                       "special_characters",          "\\",                                                       False,
      "info_special_characters"],
-    [[],           [12, 13, 14, 15, 16, 17], "special_characters",          ".,:;!?()[]{}+-*/%=<>&|",                                    True,
+    [[],           [12, 13, 14, 15, 16, 17], "special_characters",          ".,:;!?()[]{}+-*/%=<>&|\"`´'",                                    True,
      "info_special_characters"]
 ]
 
