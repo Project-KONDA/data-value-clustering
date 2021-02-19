@@ -3,7 +3,7 @@ from sklearn.metrics import adjusted_mutual_info_score
 
 
 def get_true_and_pred_clusters_parts(values_compressed, clusters_true_fancy, clusters_pred):
-    clusters_true_part = get_clusters_true_from_fancy_compressed(clusters_true_fancy, values_compressed)
+    clusters_true_part = get_clusters_true_from_fancy(clusters_true_fancy, values_compressed)
     indices = np.array(clusters_true_part[2, :], dtype=int)
     clusters_pred_part = clusters_pred[indices]
     return clusters_true_part[1], clusters_pred_part
