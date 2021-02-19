@@ -15,10 +15,15 @@ def compare_true_and_pred_clusters(score_f, compression_f, values_compressed, cl
 
 
 def get_clusters_true_from_fancy(compression_f, clusters_true_fancy, values_compressed):
+    clusters_true_fancy_compressed = get_clusters_compressed_fancy(clusters_true_fancy, compression_f)
+    return get_clusters_true_from_fancy_compressed(clusters_true_fancy_compressed, values_compressed)
+
+
+def get_clusters_compressed_fancy(clusters_true_fancy, compression_f):
     clusters_true_fancy_compressed = []
     for i, line in enumerate(clusters_true_fancy):
         clusters_true_fancy_compressed.append(compression_f(line)[0].tolist())
-    return get_clusters_true_from_fancy_compressed(clusters_true_fancy_compressed, values_compressed)
+    return clusters_true_fancy_compressed
 
 
 def get_clusters_true_from_fancy_compressed(clusters_true_fancy_compressed, values_compressed):
