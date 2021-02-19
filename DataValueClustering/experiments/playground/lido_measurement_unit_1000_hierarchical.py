@@ -1,7 +1,6 @@
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports
+from experiments.constants import playground_exports, lido_measurement_unit
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
-from experiments.experiment import lido_measurement_unit
 
 if __name__ == '__main__':
 
