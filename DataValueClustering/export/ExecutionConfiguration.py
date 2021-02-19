@@ -15,7 +15,8 @@ from distance.distance import distance_functions
 from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
 from gui_compression.compression_choices import compression_functions
-from validation.external_validation import compare_true_and_pred_clusters, get_pred_clustering_of_true_values
+from validation.external_validation import compare_true_and_pred_clusters, get_pred_clustering_of_true_values, \
+    get_true_and_pred_clusters_parts
 
 
 def load_ExecutionConfiguration(filepath):
@@ -164,33 +165,38 @@ class ExecutionConfiguration(object):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
 
     def external_validation(self, values_compressed, clusters_compressed, compression_f):
-        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
+        # self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
 
-        self.adjusted_mutual_info_score = compare_true_and_pred_clusters(adjusted_mutual_info_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        self.adjusted_rand_score = compare_true_and_pred_clusters(adjusted_rand_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        self.completeness_score = compare_true_and_pred_clusters(completeness_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        self.fowlkes_mallows_score = compare_true_and_pred_clusters(fowlkes_mallows_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        self.homogeneity_score = compare_true_and_pred_clusters(homogeneity_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        self.mutual_info_score = compare_true_and_pred_clusters(mutual_info_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        self.normalized_mutual_info_score = compare_true_and_pred_clusters(normalized_mutual_info_score, compression_f, values_compressed,
-                                                                  self.clusters_true_fancy, clusters_compressed)
-        # self.rand_score = compare_true_and_pred_clusters(rand_score, self.compressed_values,
-        #                                                           self.clusters_true_fancy, clusters_compressed)
-        self.v_measure_score = compare_true_and_pred_clusters(v_measure_score, compression_f, values_compressed, self.clusters_true_fancy,
-                                                                           clusters_compressed)
+        clusters_true_part, clusters_pred_part = get_true_and_pred_clusters_parts(
+            compression_f, values_compressed, self.clusters_true_fancy, clusters_compressed)
+        self.clusters_true_part = clusters_true_part.tolist()
+        self.clusters_pred_part = clusters_pred_part.tolist()
 
-        self.contingency_matrix = compare_true_and_pred_clusters(contingency_matrix, compression_f, values_compressed,
-                                                              self.clusters_true_fancy,
-                                                              clusters_compressed).tolist()
+        self.adjusted_mutual_info_score = adjusted_mutual_info_score(self.clusters_true_part, self.clusters_pred_part)
+        self.adjusted_rand_score = adjusted_rand_score(self.clusters_true_part, self.clusters_pred_part)
+        self.completeness_score = completeness_score(self.clusters_true_part, self.clusters_pred_part)
+        self.fowlkes_mallows_score = fowlkes_mallows_score(self.clusters_true_part, self.clusters_pred_part)
+        self.homogeneity_score = homogeneity_score(self.clusters_true_part, self.clusters_pred_part)
+        self.mutual_info_score = mutual_info_score(self.clusters_true_part, self.clusters_pred_part)
+        self.normalized_mutual_info_score = normalized_mutual_info_score(self.clusters_true_part, self.clusters_pred_part)
+        # self.rand_score = compare_true_and_pred_clusters(rand_score(clusters_true_part, self.clusters_pred_part)
+        self.v_measure_score = v_measure_score(self.clusters_true_part, self.clusters_pred_part)
+
+        self.contingency_matrix = contingency_matrix(self.clusters_true_part, self.clusters_pred_part).tolist()
         # # self.pair_confusion_matrix = compare_true_and_pred_clusters(pair_confusion_matrix, self.compressed_values,
         # #                                                          self.clusters_true_fancy,
         # #                                                          clusters_compressed)
+
+        print("Clusters Filtered:", self.clusters_true_part)
+        print("Clusters Expected:", self.clusters_pred_part)
+        print("Scores:",
+              self.adjusted_mutual_info_score, self.adjusted_rand_score,
+              self.completeness_score, self.fowlkes_mallows_score,
+              self.fowlkes_mallows_score, self.homogeneity_score,
+              self.mutual_info_score, self.normalized_mutual_info_score
+              )
+        print("Contigency Matrix:")
+        print(self.contingency_matrix)
 
 
     def params_to_dict(self):
