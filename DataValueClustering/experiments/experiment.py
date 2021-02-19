@@ -1,4 +1,3 @@
-import time
 import numpy as np
 
 from clustering.affinity_propagation_clustering import affinity_args
@@ -7,19 +6,12 @@ from clustering.hierarchical_clustering import hierarchical_args
 from clustering.kmedoids_clustering import kmedoids_args
 from clustering.optics_clustering import optics_args
 from clustering.spectral_clustering import spectral_args
+from experiments.constants import midas_dates, midas_artist_names, midas_measurements, lido_titles, \
+    lido_attribution_qualifier, lido_measurement_unit
 from gui_center.main import Main
-from compression.compression import sequence_compression_case_sensitive_function, word_sequence_compression_function
-from distance.weighted_levenshtein_distance import get_cost_map, weighted_levenshtein_distance, \
-    get_weighted_levenshtein_distance
+from compression.compression import word_sequence_compression_function
+from distance.weighted_levenshtein_distance import get_cost_map, get_weighted_levenshtein_distance
 from data_extraction.read_file import read_data_values_from_file
-
-midas_dates = "../data/midas_dates.txt"
-midas_artist_names = "../data/midas_artist_names.txt"
-midas_measurements = "../data/midas_measurement.txt"
-
-lido_titles = "../data/xlido_titles.txt"
-lido_attribution_qualifier = "../data/xlido_attribution_qualifier.txt"
-lido_measurement_unit = "../data/xlido_measurement_unit.txt"
 
 
 def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
