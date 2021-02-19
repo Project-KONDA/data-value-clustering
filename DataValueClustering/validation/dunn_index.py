@@ -1,5 +1,5 @@
 import numpy as np
-from validation.intra__inter_cluster_distance import max_intra_cluster_distances, \
+from validation.intra_inter_cluster_distance import max_intra_cluster_distances, \
     min_of_min_inter_cluster_distances
 
 

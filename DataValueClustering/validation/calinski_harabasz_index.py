@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from validation.intra__inter_cluster_distance import filter_distance_matrix
+from validation.intra_inter_cluster_distance import filter_distance_matrix
 
 
 def get_medoid_index(cluster_distance_matrix):
