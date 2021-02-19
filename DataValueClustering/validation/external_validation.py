@@ -3,7 +3,7 @@ from sklearn.metrics import adjusted_mutual_info_score
 
 
 def get_true_and_pred_clusters_parts(values_compressed, clusters_true_fancy, clusters_pred):
-    clusters_true_part = get_clusters_true_from_fancy(clusters_true_fancy, values_compressed)
+    clusters_true_part = get_clusters_true_from_fancy_compressed(clusters_true_fancy, values_compressed)
     indices = np.array(clusters_true_part[2, :], dtype=int)
     clusters_pred_part = clusters_pred[indices]
     return clusters_true_part[1], clusters_pred_part
@@ -14,11 +14,17 @@ def compare_true_and_pred_clusters(score_f, values_compressed, clusters_true_fan
     return score_f(clusters_true_part, clusters_pred_part)
 
 
-def get_clusters_true_from_fancy(clusters_true_fancy, values_compressed):
-    no_compressed = sum(len(x) for x in clusters_true_fancy)
+def get_clusters_true_from_fancy(compression_f, clusters_true_fancy, values_compressed):
+    for i, line in enumerate(clusters_true_fancy):
+        clusters_true_fancy[i] = compression_f(line)
+    return get_clusters_true_from_fancy_compressed(clusters_true_fancy, values_compressed)
+
+
+def get_clusters_true_from_fancy_compressed(clusters_true_fancy_compressed, values_compressed):
+    no_compressed = sum(len(x) for x in clusters_true_fancy_compressed)
     clusters_true = np.empty((3, no_compressed), dtype=object)
     index = 0
-    for i, l in enumerate(clusters_true_fancy):
+    for i, l in enumerate(clusters_true_fancy_compressed):
         for j, v in enumerate(l):
             clusters_true[0, index] = v
             clusters_true[1, index] = i
