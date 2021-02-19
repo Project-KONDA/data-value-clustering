@@ -4,6 +4,10 @@ from datetime import datetime
 
 import jsbeautifier
 
+from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, completeness_score, fowlkes_mallows_score, \
+    homogeneity_score, mutual_info_score, normalized_mutual_info_score, v_measure_score
+from sklearn.metrics.cluster import contingency_matrix
+
 from clustering.clustering import clustering_args_functions
 from compression.compression import get_compression_method
 from data_extraction import read_data_values_from_file
@@ -11,6 +15,7 @@ from distance.distance import distance_functions
 from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
 from gui_compression.compression_choices import compression_functions
+from validation.external_validation import compare_true_and_pred_clusters
 
 
 def load_ExecutionConfiguration(filepath):
@@ -38,7 +43,7 @@ def get_compression_answers(compression):
             return e[1](None)[1]
 
 
-def ExecutionConfigurationFromParams(data_path, limit, compression, distance_func, algorithm, algorithm_params, costmap=None):
+def ExecutionConfigurationFromParams(data_path, limit, compression, distance_func, algorithm, algorithm_params, costmap=None, clusters_true_fancy=None):
 
     if isinstance(compression, list):
         compression_answers = compression
@@ -67,6 +72,7 @@ def ExecutionConfigurationFromParams(data_path, limit, compression, distance_fun
         "costmap_case": costmap_case,
         "costmap_regex": costmap_regex,
         "costmap_weights": costmap_weights,
+        "clusters_true_fancy": clusters_true_fancy,
     }
 
     return ExecutionConfiguration(dict)
@@ -136,6 +142,7 @@ class ExecutionConfiguration(object):
 
         main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
 
+        # self.compressed_values = main.values_compressed.tolist()
         self.cluster_list = main.fancy_cluster_list
         self.noise = main.noise
         self.cluster_list_compressed = main.fancy_cluster_list_compressed
@@ -152,6 +159,37 @@ class ExecutionConfiguration(object):
         self.wb_index = main.wb_index
         self.calinski_harabasz_index = main.calinski_harabasz_index
         self.dunn_index = main.dunn_index
+
+        if not(self.clusters_true_fancy is None):
+            self.external_validation(main.values_compressed, main.clusters_compressed)
+
+    def external_validation(self, values_compressed, clusters_compressed):
+        self.adjusted_mutual_info_score = compare_true_and_pred_clusters(adjusted_mutual_info_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        self.adjusted_rand_score = compare_true_and_pred_clusters(adjusted_rand_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        self.completeness_score = compare_true_and_pred_clusters(completeness_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        self.fowlkes_mallows_score = compare_true_and_pred_clusters(fowlkes_mallows_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        self.homogeneity_score = compare_true_and_pred_clusters(homogeneity_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        self.mutual_info_score = compare_true_and_pred_clusters(mutual_info_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        self.normalized_mutual_info_score = compare_true_and_pred_clusters(normalized_mutual_info_score, values_compressed,
+                                                                  self.clusters_true_fancy, clusters_compressed)
+        # self.rand_score = compare_true_and_pred_clusters(rand_score, self.compressed_values,
+        #                                                           self.clusters_true_fancy, clusters_compressed)
+        self.v_measure_score = compare_true_and_pred_clusters(v_measure_score, values_compressed, self.clusters_true_fancy,
+                                                                           clusters_compressed)
+
+        self.contingency_matrix = compare_true_and_pred_clusters(contingency_matrix, values_compressed,
+                                                              self.clusters_true_fancy,
+                                                              clusters_compressed).tolist()
+        # # self.pair_confusion_matrix = compare_true_and_pred_clusters(pair_confusion_matrix, self.compressed_values,
+        # #                                                          self.clusters_true_fancy,
+        # #                                                          clusters_compressed)
+
 
     def params_to_dict(self):
         dict = {}
