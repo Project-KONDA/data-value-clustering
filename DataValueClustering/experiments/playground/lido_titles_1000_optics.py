@@ -1,7 +1,8 @@
-from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.ExecutionConfiguration import ExecutionConfigurationFromParams, load_ExecutionConfiguration
-from experiments.experiment import midas_dates, lido_titles
+from experiments.constants import playground_exports
+from export.ExecutionConfiguration import ExecutionConfigurationFromParams
+from experiments.experiment import lido_titles
+import numpy as np
 
 if __name__ == '__main__':
 
@@ -25,17 +26,21 @@ if __name__ == '__main__':
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
-    algorithm = "hierarchical"
-    algorithm_params = [['method', 'ward'], ['n_clusters', 4], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm = "optics"
+    algorithm_params = [["min_samples", 3], ["max_eps", np.inf], ["cluster_method", 'xi'], ["eps", None], ["xi", 0.05], ["predecessor_correction", True], ["min_cluster_size", None], ["n_jobs", None]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_titles, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    l = [
+        ['Q (Q?)', 'Q (Q) Q'],
+        ['Q (Q)', 'Q (1-1)']
+    ]
+    object = ExecutionConfigurationFromParams(lido_titles, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap, l)
 
     # execute
     object.execute()
 
     # save
-    object.save("../data/examples/")
+    object.save(playground_exports)
 
     # load
     # load = load_ExecutionConfiguration("../data/examples/midas_dates_hierarchical_20210215-133033")

@@ -1,8 +1,6 @@
-import numpy as np
-
-from compression.compression import sequence_compression_case_sensitive_function
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.ExecutionConfiguration import ExecutionConfigurationFromParams, load_ExecutionConfiguration
+from experiments.constants import playground_exports
+from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 from experiments.experiment import midas_measurements
 
 if __name__ == '__main__':
@@ -42,7 +40,7 @@ if __name__ == '__main__':
     object.execute()
 
     # save
-    object.save("../data/examples/")
+    object.save(playground_exports)
 
     # load
     # load = load_ExecutionConfiguration("../data/examples/midas_dates_hierarchical_20210215-133033")
