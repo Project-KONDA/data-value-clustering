@@ -15,7 +15,7 @@ from distance.distance import distance_functions
 from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
 from gui_compression.compression_choices import compression_functions
-from validation.external_validation import compare_true_and_pred_clusters
+from validation.external_validation import compare_true_and_pred_clusters, get_pred_clustering_of_true_values
 
 
 def load_ExecutionConfiguration(filepath):
@@ -164,6 +164,8 @@ class ExecutionConfiguration(object):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
 
     def external_validation(self, values_compressed, clusters_compressed, compression_f):
+        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
+
         self.adjusted_mutual_info_score = compare_true_and_pred_clusters(adjusted_mutual_info_score, compression_f, values_compressed,
                                                                   self.clusters_true_fancy, clusters_compressed)
         self.adjusted_rand_score = compare_true_and_pred_clusters(adjusted_rand_score, compression_f, values_compressed,
