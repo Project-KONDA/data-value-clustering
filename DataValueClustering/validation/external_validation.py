@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.metrics import adjusted_mutual_info_score
 
+from gui_center.cluster_representation import fancy_cluster_representation
+
 
 def get_true_and_pred_clusters_parts(compression_f, values_compressed, clusters_true_fancy, clusters_pred):
     clusters_true_part = get_clusters_true_from_fancy(compression_f, clusters_true_fancy, values_compressed)
@@ -38,6 +40,15 @@ def get_clusters_true_from_fancy_compressed(clusters_true_fancy_compressed, valu
             index += 1
     # print(compressed_true)
     return clusters_true
+
+
+def get_pred_clustering_of_true_values(compression_f, clusters_true_fancy, values_compressed, clusters_pred):
+    true_values = [item for sublist in clusters_true_fancy for item in sublist]
+    pred_clusters_true_values = np.empty(len(true_values), dtype=int)
+    for i, v in enumerate(true_values):
+        index = np.where(values_compressed == compression_f([v])[0][0])[0][0]
+        pred_clusters_true_values[i] = clusters_pred[index]
+    return fancy_cluster_representation(true_values, pred_clusters_true_values)
 
 
 if __name__ == "__main__":
