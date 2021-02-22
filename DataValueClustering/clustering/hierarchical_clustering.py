@@ -47,7 +47,7 @@ def generate_linkage_matrix(condensed_distance_matrix, values, method):
 
 
 def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
-    show_dendrogram(linkage_matrix)
+    show_dendrogram(linkage_matrix, values)
     if not (n_clusters is None):
         return decrease_by_one(fcluster(linkage_matrix, n_clusters, criterion, depth, None, monocrit))
     elif not (distance_threshold is None):
