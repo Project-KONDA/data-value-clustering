@@ -1,3 +1,4 @@
+import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import playground_exports, midas_dates, evaluation_exports
@@ -155,7 +156,7 @@ if __name__ == '__main__':
          "um 1728/um 1760"],
 
         # imprecise one boundary
-        ["nach 1594", "vor 1672",
+        ["nach 1594", "vor 1672", "nach 530ante",
          "vor 1876.02",
          "nach 1415.02.23",
          "nach 1470-1484",
@@ -164,7 +165,8 @@ if __name__ == '__main__':
         # *** alternatives ***
         ["1471 / um 1505/1510",
          "um 1508 / um 1510",
-         "um 1651 / nach 1651"],
+         "um 1651 / nach 1651",
+         "um 1365/1370 / um 1380"],
 
         # *** intervals ***
         ["1853-1856", "1441-1447", "834-843",
@@ -182,28 +184,34 @@ if __name__ == '__main__':
     # specify parameters
 
     # compression
-    compression_answers = "letters, number sequences"
+    # compression_answers = "letters, number sequences"
+    compression_answers = [False, False, True, False, False, False, False, False, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
     # "letters, digits", "letter sequences and digit sequences", "case-sensitive letter sequences and digit sequences", "letter sequences, digits", "letters, number sequences"
 
     #distance
     weight_case = 1
-    regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".", ",:;!?()[]{}+-*/%=<>&|\"`´'" , "<rest>"]
+    regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".", "?", ",:;!()[]{}+-*/%=<>&|\"`´'" , "<rest>"]
     weights = [  # "case-sensitive letter sequences and digit sequences"
-        #       a    A    1   _    .    ?    r
-        [ 0,   32,  32,  4,  48,   2,  32,  32],  #
-        [32,   0,   1,  24,  32,   2,  32,  32],  # a
-        [32,   1,   0,  24,  32,   2,  32,  32],  # A
-        [ 4,  24,  24,   0,  32,   2,  32,  32],  # 1
-        [48,  32,  32,  32,   0,   2,  32,  32],  # _
-        [ 2,   2,   2,   2,   2,   0,   2,   2],  # .
-        [32,  32,  32,  32,  32,   2,  32,  32],  # ?
-        [32,  32,  32,  32,  32,   2,  32,  32],  # r
+        #        a     A         1    _     .    ?      $      r
+        [   0,  128,   128,    32,   256,   32,  512,   128,   32],  #
+        [ 128,  128,   128,   128,   256,  128,  512,   128,  128],  # a
+        [ 128,  128,   128,   128,   256,  128,  512,   128,  128],  # A
+        [  32,  128,   128,     0,   256,   32,  512,   128,   32],  # 1
+        [ 256,  256,   256,   256,     0,  256,  512,   256,  256],  # _
+        [  32,  128,   128,    32,   256,   32,  512,   128,   32],  # .
+        [ 512,  512,   512,   512,   512,  512,    0,   512,  512],  # ?
+        [ 128,  128,   128,   128,   256,  128,  512,   512,  128],  # $
+        [  32,  128,   128,    32,   256,   32,  512,   128,   32],  # r
     ]
+
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'single'], ['n_clusters', 14], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm_params = [['method', 'complete'], ['n_clusters', 9], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap, clustering_true)
@@ -213,6 +221,8 @@ if __name__ == '__main__':
 
     # save
     object.save(evaluation_exports)
+
+    print("symmetric:", np.allclose(np.array(weights), np.array(weights).T))
 
     # load
     # load = load_ExecutionConfiguration("../data/examples/midas_dates_hierarchical_20210215-133033")
