@@ -4,7 +4,7 @@ import numpy as np
 
 
 def get_sources_in_experiment_data_directory():
-    dir_path = "../data"
+    dir_path = "../../data"
     os.chdir(dir_path)
 
     res = list()
