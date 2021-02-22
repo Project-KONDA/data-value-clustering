@@ -165,7 +165,7 @@ class ExecutionConfiguration(object):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
 
     def external_validation(self, values_compressed, clusters_compressed, compression_f):
-        # self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
+        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
 
         clusters_true_part, clusters_pred_part = get_true_and_pred_clusters_parts(
             compression_f, values_compressed, self.clusters_true_fancy, clusters_compressed)
@@ -197,6 +197,7 @@ class ExecutionConfiguration(object):
               )
         print("Contigency Matrix:")
         print(self.contingency_matrix)
+
 
 
     def params_to_dict(self):
