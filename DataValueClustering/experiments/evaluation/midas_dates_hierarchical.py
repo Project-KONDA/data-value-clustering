@@ -195,23 +195,36 @@ if __name__ == '__main__':
     weight_case = 1
     regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".", "?", ",:;!()[]{}+-*/%=<>&|\"`´'" , "<rest>"]
     weights = [  # "case-sensitive letter sequences and digit sequences"
-        #        a     A         1    _     .    ?      $      r
-        [   0,  128,   128,    32,   256,   32,  512,   128,   32],  #
-        [ 128,  128,   128,   128,   256,  128,  512,   128,  128],  # a
-        [ 128,  128,   128,   128,   256,  128,  512,   128,  128],  # A
-        [  32,  128,   128,     0,   256,   32,  512,   128,   32],  # 1
-        [ 256,  256,   256,   256,     0,  256,  512,   256,  256],  # _
-        [  32,  128,   128,    32,   256,   32,  512,   128,   32],  # .
-        [ 512,  512,   512,   512,   512,  512,    0,   512,  512],  # ?
-        [ 128,  128,   128,   128,   256,  128,  512,   512,  128],  # $
-        [  32,  128,   128,    32,   256,   32,  512,   128,   32],  # r
+        #           a      A        1      _      .      ?      $      r
+        [    0,   128,    128,     32,    128,    32,  1024,   512,    32],  #
+        [  128,   256,    256,    256,    256,   256,  1024,   256,   256],  # a
+        [  128,   256,    256,    256,    256,   256,  1024,   256,   256],  # A
+        [   32,   256,    256,      0,    256,    32,  1024,   512,    32],  # 1
+        [  128,   256,    256,    256,      0,   256,  1024,   256,   256],  # _
+        [   32,   256,    256,     32,    256,     0,  1024,   512,    32],  # .
+        [ 1024,  1024,   1024,   1024,   1024,  1024,    0,   1024,  1024],  # ?
+        [  512,   256,    256,    512,    256,   512,  1024,   512,   128],  # $
+        [   32,   256,    256,     32,    256,    32,  1024,   128,    32],  # r
     ]
+
+    # t = [
+    #     [0, 128, 128, 32, 128, 32, 1024, 512, 32],
+    #     [128, 256, 256, 256, 256, 256, 1024, 256, 256],
+    #     [128, 256, 256, 256, 256, 256, 1024, 256, 256],
+    #     [32, 256, 256, 0, 256, 32, 1024, 512, 32],
+    #     [128, 256, 256, 256, 0, 256, 1024, 256, 256],
+    #     [32, 256, 256, 32, 256, 0, 1024, 512, 32],
+    #     [1024, 1024, 1024, 1024, 1024, 1024, 0, 1024, 1024],
+    #     [512, 256, 256, 512, 256, 512, 1024, 512, 128],
+    #     [32, 256, 256, 32, 256, 32, 1024, 128, 32],
+    # ]
+    # print(np.array(weights) - np.array(t))
 
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'complete'], ['n_clusters', 9], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm_params = [['method', 'complete'], ['n_clusters', 9], ['distance_threshold', None], ['criterion', 'maxclust']]  # complete, ward, average, weighted, centroid, median, single
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap, clustering_true)
