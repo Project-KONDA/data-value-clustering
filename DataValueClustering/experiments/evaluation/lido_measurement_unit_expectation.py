@@ -1,6 +1,6 @@
 lido_measurement_unit_100000_expectation = [
 
-    ["cm", "m"],
+    ["cm", "m", "mm"],
 
     ["-"],
 
