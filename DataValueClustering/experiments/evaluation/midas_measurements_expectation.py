@@ -1,13 +1,10 @@
 midas_measurement_expectation_10000 = [
     [   # EXPECTED
         "130 x 110 cm",
-        "20,5 x 15,1 cm",
         "34,7 x 28 cm",
         "252,5 x 301 cm",
+        "20,5 x 15,1 cm",
         "103,5 x 147,5 cm",
-    ],
-    [   # AND
-        "18,6 x 20,2 cm & 18,2 x 19,8 cm",
     ],
     [   # ANNOTATION
         "43 x 43 cm (gesamt)",
@@ -18,8 +15,8 @@ midas_measurement_expectation_10000 = [
         "56 x 147 cm (je Flügel)",
         "131 x 91 cm (ca.)",
     ],
-    [   # SPECIAL ANNOTATION
-        "147 x 242 (in der Mitte um 9 x 76,5 cm überhöht)",
+    [   # AND
+        "18,6 x 20,2 cm & 18,2 x 19,8 cm",
     ],
     [   # AND PLUS ANNOTAION
         "18,5 x 20,3 cm & 18 x 19,8 cm (Bildfläche)",
@@ -48,6 +45,9 @@ midas_measurement_expectation_10000 = [
     ],
     [
         "25 x 34,0 cm / 25 x 34,3 cm & 31,9 x 40,3 cm (mit Rahmen)",
+    ],
+    [   # SPECIAL ANNOTATION
+        "147 x 242 (in der Mitte um 9 x 76,5 cm überhöht)",
     ],
     [
         "---",
