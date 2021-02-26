@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     #distance
     weight_case = 1
-    regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".:;!?()[]{}+-*/%=<>&|\"`´'" , "<rest>"]
+    regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".,:;!?()[]{}+-*/%=<>&|\"`´'" , "<rest>"]
     weights = [
         #         a      A      1      _      $     r
         [   0,   64,    64,    32,    16,    64,   64],  #
