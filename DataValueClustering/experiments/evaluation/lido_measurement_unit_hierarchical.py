@@ -11,16 +11,11 @@ if __name__ == '__main__':
 
     # compression
     compression_answers = "letter sequences and digit sequences"
-    # compression_answers = [False, False, True, False, False, False, False, False, False,
-    #            True, True, False,
-    #            False, False, False, False, False, False,
-    #            True]
-    # "letters, digits", "letter sequences and digit sequences", "case-sensitive letter sequences and digit sequences", "letter sequences, digits", "letters, number sequences"
 
     #distance
     weight_case = 1
     regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ",", ".:;!?()[]{}+-*/%=<>&|\"`´'" , "<rest>"]
-    weights = [  # "case-sensitive letter sequences and digit sequences"
+    weights = [
         #         a      A      1      _     ,     $     r
         [   0,   64,    64,    32,    16,    0,   64,   64],  #
         [  64,    0,    64,    64,    32,   64,  128,   64],  # a
@@ -32,24 +27,11 @@ if __name__ == '__main__':
         [  64,   64,    64,    64,    64,   64,   64,   64],  # r
     ]
 
-    # t = [
-    #     [0, 128, 128, 32, 128, 32, 1024, 512, 32],
-    #     [128, 256, 256, 256, 256, 256, 1024, 256, 256],
-    #     [128, 256, 256, 256, 256, 256, 1024, 256, 256],
-    #     [32, 256, 256, 0, 256, 32, 1024, 512, 32],
-    #     [128, 256, 256, 256, 0, 256, 1024, 256, 256],
-    #     [32, 256, 256, 32, 256, 0, 1024, 512, 32],
-    #     [1024, 1024, 1024, 1024, 1024, 1024, 0, 1024, 1024],
-    #     [512, 256, 256, 512, 256, 512, 1024, 512, 128],
-    #     [32, 256, 256, 32, 256, 32, 1024, 128, 32],
-    # ]
-    # print(np.array(weights) - np.array(t))
-
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'complete'], ['n_clusters', 12], ['distance_threshold', None], ['criterion', 'maxclust']]  # complete, ward, average, weighted, centroid, median, single
+    algorithm_params = [['method', 'complete'], ['n_clusters', 12], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
     object = ExecutionConfigurationFromParams(lido_measurement_unit, 100000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
