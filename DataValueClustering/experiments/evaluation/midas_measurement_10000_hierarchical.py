@@ -1,6 +1,6 @@
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import playground_exports, midas_measurements
-from experiments.evaluation.midas_measurements_expectation import midas_measurement_expecation_10000
+from experiments.evaluation.midas_measurements_expectation import midas_measurement_expectation_10000
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':
@@ -43,7 +43,7 @@ if __name__ == '__main__':
         algorithm,
         algorithm_params,
         costmap,
-        midas_measurement_expecation_10000
+        midas_measurement_expectation_10000
     )
 
     # execute

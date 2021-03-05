@@ -1,5 +1,6 @@
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import playground_exports, midas_measurements
+from experiments.evaluation.midas_measurements_expectation import midas_measurement_expectation_10000
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':
@@ -11,15 +12,17 @@ if __name__ == '__main__':
 
     # distance
     weight_case = 1
-    regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúù", "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", ".,:;!?()[]{}",  "<rest>"] # "+-*/%=<>&|",
+    regex = ["",
+             " abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúùABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ0123456789",
+             ".,:;!?",
+             "()[]{}",
+             "<rest>"]
     weights = [
-        [0, 1, 1, 4, 4, 16, 32],
-        [1, 0, 1, 4, 4, 16, 32],
-        [1, 1, 0, 4, 4, 16, 32],
-        [4, 4, 4, 0, 4, 16, 32],
-        [4, 4, 4, 4, 4, 16, 32],
-        [16, 16, 16, 16, 16, 16, 32],
-        [32, 32, 32, 32, 32, 32, 32]
+        [0,  1,  1,  16, 16],
+        [1,  1,  1,  16, 16],
+        [1,  1,  1,  16, 16],
+        [16, 16, 16, 16, 16],
+        [16, 16, 16, 16, 16]
     ]
     costmap = get_cost_map(weight_case, regex, weights)
 
@@ -29,11 +32,11 @@ if __name__ == '__main__':
     # algorithm_params = [["min_samples", 2], ["max_eps", 20], ["cluster_method", 'xi'], ["eps", None], ["xi", 0.05],
     #                     ["predecessor_correction", True], ["min_cluster_size", None], ["n_jobs", None]]
 
-    algorithm_params = [["n_clusters", 7], ["eigen_solver", None], ["n_components", None], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
+    algorithm_params = [["n_clusters", 10], ["eigen_solver", None], ["n_components", None], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_measurements, 1000, compression_answers, "distance_weighted_levenshtein",
-                                              algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams(midas_measurements, 10000, compression_answers, "distance_weighted_levenshtein",
+                                              algorithm, algorithm_params, costmap, midas_measurement_expectation_10000)
 
     # execute
     object.execute()
