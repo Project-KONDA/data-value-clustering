@@ -1,9 +1,5 @@
 lido_attribution_qualifier_expecation = [
-    [
-        "alternative Zuschreibung",
-        "ehemalige Zuschreibung",
-        "andere Zuschreibung",
-
+    [ # TEXT
         "Nachahmer",
         "Werkstatt",
         "Kreis",
@@ -15,7 +11,12 @@ lido_attribution_qualifier_expecation = [
         "zugeschrieben",
         "ungesichert",
     ],
-    [
+    [ # TEXT 2
+        "alternative Zuschreibung",
+        "ehemalige Zuschreibung",
+        "andere Zuschreibung",
+    ],
+    [ # QUESTIONMARK
         "Werkstatt?",
         "Schule?",
         "Nachahmer?",
@@ -25,10 +26,7 @@ lido_attribution_qualifier_expecation = [
         "Nachfolger?",
         "zugeschrieben?",
     ],
-    [
-        "zugeschrieben &amp;",
-    ],
-    [
+    [ # AND
         "zugeschrieben &amp; ungesichert",
         "zugeschrieben &amp; Kreis",
         "zugeschrieben &amp; Schule",
@@ -49,13 +47,13 @@ lido_attribution_qualifier_expecation = [
         "Umkreis &amp; ungesichert",
         "Nachahmer &amp; ungesichert",
     ],
-    [
+    [ # AND QUESTION
         "zugeschrieben &amp; Schule?",
         "zugeschrieben &amp; Kreis?",
         "zugeschrieben &amp; Werkstatt?",
         "zugeschrieben &amp; Umkreis?",
     ],
-    [
+    [ # OR
         "Schule / Nachahmer",
         "Schule / Kreis",
         "Werkstatt / Umkreis",
@@ -63,16 +61,12 @@ lido_attribution_qualifier_expecation = [
         "Schule / Art",
         "Werkstatt / Nachfolger",
     ],
-    [
+    [ # NOISE
+        "zugeschrieben &amp;",
         "Umkreis? &amp; ungesichert",
-
         "Art? / Nachahmer?",
-
         "ungesichert &amp; Umkreis? &amp; Nachahmer?",
-
         "Umkreis / Werkstatt / Nachfolger",
-
         "Umkreis? / Nachahmer? / ungesichert",
-
     ]
 ]
