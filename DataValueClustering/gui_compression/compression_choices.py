@@ -22,6 +22,7 @@ compression_functions = np.array([
     ["Manual Configuration", lambda data: compression_configuration (data)],
 
     ["No Compression", lambda data: (lambda values: (values, {}), list(np.full(len(compression_question_array), False)))],
+    ["Duplicate Removal", lambda data: duplicate_removal_function()],
 
     ["letters, digits", lambda data: char_compression_function()],
     ["case-sensitive letters, digits", lambda data: char_compression_case_sensitive_function()],

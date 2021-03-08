@@ -6,6 +6,14 @@ from gui_compression.compression_questions import compression_question_array
 from util.question_result_array_util import get_array_part
 
 
+def duplicate_removal_function():
+    answers = [False, False, False, False, False, False, False, False, False,
+               False, False, False,
+               False, False, False, False, False, False,
+               True]
+    return get_compression_method(answers), answers
+
+
 def max_compression_function():
     answers = [True, True, True, True, True, True, True, True, True,
         True, True, True,
