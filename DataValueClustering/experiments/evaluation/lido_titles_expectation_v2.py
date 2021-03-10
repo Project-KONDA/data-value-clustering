@@ -1,4 +1,4 @@
-lido_titles_1000_expectation = [
+lido_titles_1000_expectation_v2 = [
 
     # normal title (may contain numbers, dot and minus)
     ["Die vier Evangelisten",
@@ -7,26 +7,29 @@ lido_titles_1000_expectation = [
      "Die Fußoperation",
      "Via San Giovanni in Laterano mit Blick auf das Kolosseum",
      # "Familienbildnis bei der silbernen Hochzeit der Familie Neuß",
-     "Bildnis eines Mannes von 35-40 Jahren",
-     "Bildnis des Landgrafen Wilhelm 6.",
      # "Bildnis Papst Clemens 9.",
-     "König Friedrich Wilhelm 3. als Kind",
-     "Wilhelm 1. von Oranien-Nassau",
      # "Kurfürst Wilhelm 2. von Hessen-Kassel als Kurprinz",
      "Bildnis einer Frau mit Panther-Katze",
      # "Landgraf Karl von Hessen-Kassel und seine Familie",
      "Bildnis des Schreib- und Rechenmeisters Lieven Willemsz van Coppenol",
-     "Linné als Knabe"],
+     "Linné als Knabe",
+     "Pendants?",
+     "Eine Räuberhöhle?",
+     "Partie an der Mosel?",
+     "Allegorie des Herbstes?",
+     "Hirte 2"],
+
+    ["Bildnis des Landgrafen Wilhelm 6.",
+     "König Friedrich Wilhelm 3. als Kind",
+     "Wilhelm 1. von Oranien-Nassau",
+     "Bildnis Cosimos 1., Großherzog von Toskana",
+     "Gustav 3., König von Schweden"],
 
     # comma -> extra information
-    ["Bildnis Cosimos 1., Großherzog von Toskana",
-     "Diana mit Nymphen, im Schlafe von Satyrn belauscht",
+    ["Diana mit Nymphen, im Schlafe von Satyrn belauscht",
      "Italienische Landschaft mit Jägern, Landleuten und Herde",
-     "Allegorie der Malerei und der Bildhauerei mit dem Bildnis ihres Beschützers, des Landgrafen Friedrich 2. von Hessen",
      # "Selbstbildnis, der Künstler mit seiner Familie",
-     "Bildnis eines Jünglings, angeblich des Landgrafen Wilhelms 6. von Hessen",
      "Philibert, Prince de Savoye-Carignan",
-     "Gustav 3., König von Schweden",
      # "Arkadische Landschaft, im Vordergrund Jüngling mit rotem Mantel",
      # "Bildnis der Saskia van Uylenburgh im Profil, in reichem Kostüm",
      # "Südliche Landschaft mit Herde, Hirtin und Knabe",
@@ -34,6 +37,9 @@ lido_titles_1000_expectation = [
      "Fünfzehn Ansichten aus München, in der Mitte der Marienplatz",
      # "Gräfin Ernst Harrach, geborene Dittrichstein",
      "Florenz, Blick von San Miniato auf die Stadt"],  # -
+
+    ["Bildnis eines Jünglings, angeblich des Landgrafen Wilhelms 6. von Hessen",
+     "Allegorie der Malerei und der Bildhauerei mit dem Bildnis ihres Beschützers, des Landgrafen Friedrich 2. von Hessen"],
 
     # space minus space -> part
     ["Flügelaltärchen — Mittelbild",
@@ -43,11 +49,18 @@ lido_titles_1000_expectation = [
      "Zwei Landschaften — Landschaft mit Aufrichtung eines antiken Grabmals",
      # "Zwei Musiker — Geigenspieler mit Glas",
      "Kasseler Auferstehungsaltärchen — Wappen Mecklenburgs",
-     "Rembrandts Eltern — Rembrandts Vater"],
+     "Rembrandts Eltern — Rembrandts Vater",
+     "Die Verkündigung an Maria —",
+     "Vor dem Tore einer befestigten Stadt —",
+     "Das Innere der Kathedrale von Antwerpen —",
+     "Die niederländischen Sprichwörter — Er hat es faustdick hinter den Ohren?"],
 
     # space minus space ... space minus space -> part of part?
-    ["Doppelbildnis eines Ehepaares von Weinsberg — Gottschalk von Weinsberg — originaler Rahmen",
-     "Doppelbildnis eines Ehepaares von Weinsberg — Elisabeth von Weinsberg, geb. Horns — originaler Rahmen"],
+    ["Triptychon mit der Darstellung des Schmerzensmannes zwischen Maria und Johannes; auf den Flügeltafeln der heilige Andreas und die heilige Katharina — Schmerzensmann"],
+
+    ["Doppelbildnis eines Ehepaares von Weinsberg — Gottschalk von Weinsberg — originaler Rahmen",],
+
+    ["Doppelbildnis eines Ehepaares von Weinsberg — Elisabeth von Weinsberg, geb. Horns — originaler Rahmen"],
 
     # # dot
     # # TODO
@@ -57,46 +70,36 @@ lido_titles_1000_expectation = [
     # # TODO
     # ["Allegorie. Der Bettel sitzt der Hoffahrt auf der Schleppe"],
 
-    # semi-colon -> extra info
-    ["Triptychon mit der Darstellung des Schmerzensmannes zwischen Maria und Johannes; auf den Flügeltafeln der heilige Andreas und die heilige Katharina — Schmerzensmann"],
+
 
     # space minus space ... brackets -> extra information for part
+    # space minus space ... brackets in text ->
     ["Die fünf Sinne — Der Geruch (Selbstporträt)",
      "Die Verkündigung an Maria — Schauseite (erste)",
-     "Kasseler Auferstehungsaltärchen — Schauseite (zweite)"],
+     "Kasseler Auferstehungsaltärchen — Schauseite (zweite)",
+     "Die niederländischen Sprichwörter — Läßt man den Hund herein, so kriecht er in den (Topf) Schrank",
+     "Die niederländischen Sprichwörter — Zwei Hunde an einem Bein (Knochen) kommen selten überein"],
 
     # space minus -> whole
-    ["Die Verkündigung an Maria —",
-     "Vor dem Tore einer befestigten Stadt —",
-     "Das Innere der Kathedrale von Antwerpen —"],
+
 
     # brackets -> uncertainty, extra info or language variant
     # TODO: maybe split
     ["Bildnis einer Dame (Luise Henriette von Oranien?)",
-     "Die Kartenspieler (oder: Lagerszene; Rast der Soldaten)",
      "Bildnis eines Architekten (Apostel Thomas?)",
      "Landleute bei der Mahlzeit auf dem Feld (Kopie)",
      "Das Mädchen mit dem Spiegel (Allegorie der Vanitas)",
-     "Die Predigt Johannes des Täufers (\"Ecce Agnus Dei\")",
-     "Christus erscheint Maria Magdalena als Gärtner (Noli me tangere)"],
+     "Christus erscheint Maria Magdalena als Gärtner (Noli me tangere)",
+     "Das Innere der (abgebrochenen) Sankt Marienkirche zu Utrecht"],
 
-    # brackets in text -> normal
-    # TODO
-    ["Das Innere der (abgebrochenen) Sankt Marienkirche zu Utrecht"],
+    ["Die Predigt Johannes des Täufers (\"Ecce Agnus Dei\")"],
 
-    # space minus space ... brackets in text ->
-    # TODO
-    ["Die niederländischen Sprichwörter — Läßt man den Hund herein, so kriecht er in den (Topf) Schrank",
-     "Die niederländischen Sprichwörter — Zwei Hunde an einem Bein (Knochen) kommen selten überein"],
+    ["Die Kartenspieler (oder: Lagerszene; Rast der Soldaten)"],
+
+
 
     # question mark at end -> uncertain
-    ["Pendants?",
-     "Eine Räuberhöhle?",
-     "Partie an der Mosel?",
-     "Allegorie des Herbstes?"],
-
     # space minus space ... question mark at end -> part uncertain
-    ["Die niederländischen Sprichwörter — Er hat es faustdick hinter den Ohren?"],
 
     # brackets with numbers at end -> birth and death dates
     ["Porträt des Joseph Rinald (1735-1811)",
@@ -106,12 +109,11 @@ lido_titles_1000_expectation = [
 
     # numbers -> dating info
     ["Komposition 1923 V",
-     "Dorfszene im Winter 1828",
-     "Doppelporträt zweier Ärzte als Heilige Cosmas und Damian. Um 1623/26"],
+     "Bildnis eines Mannes von 35-40 Jahren",
+     "Dorfszene im Winter 1828"],
 
-    # number at end
-    # TODO
-    ["Hirte 2"],
+    ["Doppelporträt zweier Ärzte als Heilige Cosmas und Damian. Um 1623/26"],
+
 
     # space slash space -> alternatives or language variants
     ["Die Versucherin / Allegorie der Vanitas",
@@ -122,8 +124,11 @@ lido_titles_1000_expectation = [
      "Angebliches Bildnis des Don Carlos / Bildnis eines Hofzwerges",
      "Die Briefsieglerin / Une femme occupée à cacheter une lettre"],
 
-    # space slash space ... space slash space -> alternatives or language variants
     ["Rückkehr vom Markt / Die Köchin / La pourvoyeuse"],
+    # space slash space ... space slash space -> alternatives or language variants
+
 
 ] # n = 17
 
+if __name__ == "__main__":
+    print(len(lido_titles_1000_expectation_v2))

@@ -3,7 +3,8 @@ import numpy as np
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import midas_dates, evaluation_exports, lido_measurement_unit, lido_titles
 from experiments.evaluation.lido_measurement_unit_expectation import lido_measurement_unit_100000_expectation
-from experiments.evaluation.lido_titles_expectation import lido_titles_1000_expectation, lido_titles_1000_expectation_v2
+from experiments.evaluation.lido_titles_expectation import lido_titles_1000_expectation
+from experiments.evaluation.lido_titles_expectation_v2 import lido_titles_1000_expectation_v2
 from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
