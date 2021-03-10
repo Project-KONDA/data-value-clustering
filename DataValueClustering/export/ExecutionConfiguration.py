@@ -160,6 +160,7 @@ class ExecutionConfiguration(object):
         self.wb_index = main.wb_index
         self.calinski_harabasz_index = main.calinski_harabasz_index
         self.dunn_index = main.dunn_index
+        self.intra_cluster_distances = main.intra_cluster_distances.tolist()
 
         if not(self.clusters_true_fancy is None):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
