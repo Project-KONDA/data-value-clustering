@@ -30,7 +30,7 @@ if __name__ == '__main__':
         [ 500,   128,     0,   900,   800,  2500,   500],  # A
         [ 900,   900,   900,     0,   900,  2500,   900],  # 1
         [ 800,   800,   800,   900,     0,  2500,   800],  # _
-        [2500,  2500,  2500,  2500,  2500,  2800,  2500],  # $
+        [2500,  2500,  2500,  2500,  2500,  3800,  2500],  # $
         [  16,   500,   500,   900,   800,  2500,    16],  # r
     ]
 
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'complete'], ['n_clusters', 17], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm_params = [['method', 'complete'], ['n_clusters', 15], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
     object = ExecutionConfigurationFromParams(lido_titles, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,

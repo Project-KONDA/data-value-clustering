@@ -36,9 +36,8 @@ lido_titles_1000_expectation_v2 = [
      "Venus, Amor, Bacchus und Ceres",
      "Fünfzehn Ansichten aus München, in der Mitte der Marienplatz",
      # "Gräfin Ernst Harrach, geborene Dittrichstein",
-     "Florenz, Blick von San Miniato auf die Stadt"],  # -
-
-    ["Bildnis eines Jünglings, angeblich des Landgrafen Wilhelms 6. von Hessen",
+     "Florenz, Blick von San Miniato auf die Stadt",
+     "Bildnis eines Jünglings, angeblich des Landgrafen Wilhelms 6. von Hessen",
      "Allegorie der Malerei und der Bildhauerei mit dem Bildnis ihres Beschützers, des Landgrafen Friedrich 2. von Hessen"],
 
     # space minus space -> part
@@ -53,12 +52,9 @@ lido_titles_1000_expectation_v2 = [
      "Die Verkündigung an Maria —",
      "Vor dem Tore einer befestigten Stadt —",
      "Das Innere der Kathedrale von Antwerpen —",
-     "Die niederländischen Sprichwörter — Er hat es faustdick hinter den Ohren?"],
-
-    # space minus space ... space minus space -> part of part?
-    ["Triptychon mit der Darstellung des Schmerzensmannes zwischen Maria und Johannes; auf den Flügeltafeln der heilige Andreas und die heilige Katharina — Schmerzensmann"],
-
-    ["Doppelbildnis eines Ehepaares von Weinsberg — Gottschalk von Weinsberg — originaler Rahmen",],
+     "Die niederländischen Sprichwörter — Er hat es faustdick hinter den Ohren?",
+     "Triptychon mit der Darstellung des Schmerzensmannes zwischen Maria und Johannes; auf den Flügeltafeln der heilige Andreas und die heilige Katharina — Schmerzensmann",
+     "Doppelbildnis eines Ehepaares von Weinsberg — Gottschalk von Weinsberg — originaler Rahmen",],
 
     ["Doppelbildnis eines Ehepaares von Weinsberg — Elisabeth von Weinsberg, geb. Horns — originaler Rahmen"],
 
@@ -90,9 +86,8 @@ lido_titles_1000_expectation_v2 = [
      "Landleute bei der Mahlzeit auf dem Feld (Kopie)",
      "Das Mädchen mit dem Spiegel (Allegorie der Vanitas)",
      "Christus erscheint Maria Magdalena als Gärtner (Noli me tangere)",
-     "Das Innere der (abgebrochenen) Sankt Marienkirche zu Utrecht"],
-
-    ["Die Predigt Johannes des Täufers (\"Ecce Agnus Dei\")"],
+     "Das Innere der (abgebrochenen) Sankt Marienkirche zu Utrecht",
+     "Die Predigt Johannes des Täufers (\"Ecce Agnus Dei\")"],
 
     ["Die Kartenspieler (oder: Lagerszene; Rast der Soldaten)"],
 
@@ -122,9 +117,8 @@ lido_titles_1000_expectation_v2 = [
      # "Das Kartenspielchen / Soldat und Dirne",
      # "Das lustige Paar / Satyr mit Nymphe",
      "Angebliches Bildnis des Don Carlos / Bildnis eines Hofzwerges",
-     "Die Briefsieglerin / Une femme occupée à cacheter une lettre"],
-
-    ["Rückkehr vom Markt / Die Köchin / La pourvoyeuse"],
+     "Die Briefsieglerin / Une femme occupée à cacheter une lettre",
+     "Rückkehr vom Markt / Die Köchin / La pourvoyeuse"],
     # space slash space ... space slash space -> alternatives or language variants
 
 
