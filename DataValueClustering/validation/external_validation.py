@@ -51,6 +51,14 @@ def get_pred_clustering_of_true_values(compression_f, clusters_true_fancy, value
     return fancy_cluster_representation(true_values, pred_clusters_true_values)
 
 
+def check_completeness_of_true_values(compression_f, clusters_true_fancy, values_compressed):
+    true_values = [item for sublist in clusters_true_fancy for item in sublist]
+    true_values_compressed, compression_dict = compression_f(true_values)
+    true_values_compressed = set(true_values_compressed)
+    values_compressed = set(values_compressed)
+    return true_values_compressed == values_compressed, list(values_compressed - true_values_compressed), list(true_values_compressed - values_compressed)
+
+
 if __name__ == "__main__":
     clusters = np.array([0, 1, 2, 3, 4, 5, 6, 7])
     cc = np.array(["e", "a", "f", "b", "x", "B", "A", "X"])
@@ -62,4 +70,5 @@ if __name__ == "__main__":
     print(get_true_and_pred_clusters_parts(cc, f, clusters))
 
     print(compare_true_and_pred_clusters(adjusted_mutual_info_score, cc, f, clusters))
+
 

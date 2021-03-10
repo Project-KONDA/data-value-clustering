@@ -16,7 +16,7 @@ from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
 from gui_compression.compression_choices import compression_functions
 from validation.external_validation import compare_true_and_pred_clusters, get_pred_clustering_of_true_values, \
-    get_true_and_pred_clusters_parts
+    get_true_and_pred_clusters_parts, check_completeness_of_true_values
 
 
 def load_ExecutionConfiguration(filepath):
@@ -166,6 +166,8 @@ class ExecutionConfiguration(object):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
 
     def external_validation(self, values_compressed, clusters_compressed, compression_f):
+        self.completeness, self.missing_values, self.superflous_values = check_completeness_of_true_values(compression_f, self.clusters_true_fancy, values_compressed)
+
         self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
 
         clusters_true_part, clusters_pred_part = get_true_and_pred_clusters_parts(
@@ -190,6 +192,9 @@ class ExecutionConfiguration(object):
 
         print("Clusters Filtered:", self.clusters_true_part)
         print("Clusters Expected:", self.clusters_pred_part)
+        print("Completeness:", self.completeness)
+        print("Missing Values:", self.missing_values)
+        print("Superflous Values:", self.superflous_values)
         print("Scores:",
               self.adjusted_mutual_info_score, self.adjusted_rand_score,
               self.completeness_score, self.fowlkes_mallows_score,
