@@ -1,5 +1,5 @@
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports, lido_attribution_qualifier
+from experiments.constants import playground_exports, lido_attribution_qualifier, evaluation_exports
 from experiments.evaluation.lido_attribution_qualifier_expectation import lido_attribution_qualifier_expecation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     object.execute()
 
     # save
-    object.save(playground_exports)
+    object.save(evaluation_exports)
 
     # load
     # load = load_ExecutionConfiguration("../data/examples/midas_dates_hierarchical_20210215-133033")

@@ -1,5 +1,5 @@
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports, midas_measurements
+from experiments.constants import playground_exports, midas_measurements, evaluation_exports
 from experiments.evaluation.midas_measurements_expectation import midas_measurement_expectation_10000
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     object.execute()
 
     # save
-    object.save(playground_exports)
+    object.save(evaluation_exports)
 
     # load
     # load = load_ExecutionConfiguration("../data/examples/midas_dates_hierarchical_20210215-133033")
