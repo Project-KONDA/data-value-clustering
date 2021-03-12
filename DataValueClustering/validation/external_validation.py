@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.metrics import adjusted_mutual_info_score
 
+from compression.compression import compress_single_value
 from gui_center.cluster_representation import fancy_cluster_representation
 
 
@@ -26,6 +27,17 @@ def get_clusters_compressed_fancy(clusters_true_fancy, compression_f):
     for i, line in enumerate(clusters_true_fancy):
         clusters_true_fancy_compressed.append(compression_f(line)[0].tolist())
     return clusters_true_fancy_compressed
+
+
+def filter_clusters_true_fancy(clusters_true_fancy, values_compressed, compression_f):
+    clusters_true_fancy_compressed_filtered = []
+    for x, l in enumerate(clusters_true_fancy):
+        l_filtered = []
+        for y, v in enumerate(l):
+            if compress_single_value(v, compression_f) in values_compressed:
+                l_filtered.append(v)
+        clusters_true_fancy_compressed_filtered.append(l_filtered)
+    return clusters_true_fancy_compressed_filtered
 
 
 def get_clusters_true_from_fancy_compressed(clusters_true_fancy_compressed, values_compressed):

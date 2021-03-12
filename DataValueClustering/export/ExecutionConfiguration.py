@@ -16,7 +16,7 @@ from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
 from gui_compression.compression_choices import compression_functions
 from validation.external_validation import compare_true_and_pred_clusters, get_pred_clustering_of_true_values, \
-    get_true_and_pred_clusters_parts, check_completeness_of_true_values
+    get_true_and_pred_clusters_parts, check_completeness_of_true_values, filter_clusters_true_fancy
 
 
 def load_ExecutionConfiguration(filepath):
@@ -168,10 +168,12 @@ class ExecutionConfiguration(object):
     def external_validation(self, values_compressed, clusters_compressed, compression_f):
         self.completeness, self.missing_values, self.superflous_values = check_completeness_of_true_values(compression_f, self.clusters_true_fancy, values_compressed)
 
-        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, self.clusters_true_fancy, values_compressed, clusters_compressed)
+        clusters_true_fancy_filtered = filter_clusters_true_fancy(self.clusters_true_fancy, values_compressed, compression_f)
+
+        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, clusters_true_fancy_filtered, values_compressed, clusters_compressed)
 
         clusters_true_part, clusters_pred_part = get_true_and_pred_clusters_parts(
-            compression_f, values_compressed, self.clusters_true_fancy, clusters_compressed)
+            compression_f, values_compressed, clusters_true_fancy_filtered, clusters_compressed)
         self.clusters_true_part = clusters_true_part.tolist()
         self.clusters_pred_part = clusters_pred_part.tolist()
 
