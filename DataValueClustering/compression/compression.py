@@ -193,6 +193,10 @@ def get_compression_method(answers):
     return lambda values: local_func(values, compressions, answers[n-1])
 
 
+def compress_single_value(value, compression_f):
+    return compression_f([value])[0][0]
+
+
 if __name__ == '__main__':
     min = [True, True, False, False, False, False, False, False, False,
         True, True, False,
