@@ -38,7 +38,7 @@ midas_measurement_expectation_10000 = [
         "22,3 x 28,6 cm (Platte) & 20,5 x 15 cm (Darstellung) & 50,3 x 32 cm (Blatt)",
         "10,7 x 18 cm (Platte) & 23,7 x 35,2 cm (Platte) & 42 x 53 cm (Blatt)",
     ],
-    [
+    [   # OR PLUS 2 ANNOTAIONS
         "66,8 x 47,5 cm (Bildfeld) / 73,8 x 54,7 cm (mit Rahmen)",
         "58 x 42,5 cm (ohne Anstückung) / 58 x 44 cm (mit Anstückung)",
         "58 x 44 cm (mit Anstückung) / 58 x 42,5 cm (ohne Anstückung)",

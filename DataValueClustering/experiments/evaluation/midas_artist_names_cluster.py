@@ -1,5 +1,5 @@
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports, lido_attribution_qualifier, midas_artist_names
+from experiments.constants import playground_exports, lido_attribution_qualifier, midas_artist_names, midas_artist_names_randomized
 from experiments.evaluation.lido_attribution_qualifier_expectation import lido_attribution_qualifier_expecation
 from experiments.evaluation.midas_artist_names_expectation import midas_artist_names_expecation_10000
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
@@ -8,16 +8,16 @@ if __name__ == '__main__':
     # specify parameters
 
     # compression
-    compression_answers =  "case-sensitive letter sequences and digit sequences" # "letters, digits" #
+    compression_answers = "letters, digits"  # "case-sensitive letter sequences and digit sequences" #
 
     # distance
     weight_case = 1
     regex = ["", ",()?", "<rest>"]
 
     weights = [
-        [1, 10, 1],
-        [10, 10, 10],
-        [1, 10, 1]
+        [1, 20, 1],
+        [20, 20, 20],
+        [1, 20, 1]
     ]
 
     costmap = get_cost_map(weight_case, regex, weights)
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     # initialize
     object = ExecutionConfigurationFromParams(
-        midas_artist_names,
+        midas_artist_names_randomized,
         10000,
         compression_answers,
         "distance_weighted_levenshtein",

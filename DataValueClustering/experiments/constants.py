@@ -5,6 +5,7 @@ evaluation_exports = "../experiments/exports/evaluation/"
 midas_dates = "../../data/midas_dates.txt"
 midas_dates_randomized = "../../data/midas_dates_randomized.txt"
 midas_artist_names = "../../data/midas_artist_names.txt"
+midas_artist_names_randomized = "../../data/midas_artist_names_randomized.txt"
 midas_measurements = "../../data/midas_measurement.txt"
 
 lido_titles = "../../data/xlido_titles.txt"
