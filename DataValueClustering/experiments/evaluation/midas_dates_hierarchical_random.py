@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # clustering
     algorithm = "hierarchical"
     # algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 900], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
-    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 2600], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
+    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 2000], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates_randomized, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
