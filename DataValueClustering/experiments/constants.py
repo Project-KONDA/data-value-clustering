@@ -8,6 +8,7 @@ midas_artist_names = "../../data/midas_artist_names.txt"
 midas_measurements = "../../data/midas_measurement.txt"
 
 lido_titles = "../../data/xlido_titles.txt"
+lido_titles_randomized = "../../data/xlido_titles_randomized.txt"
 lido_attribution_qualifier = "../../data/xlido_attribution_qualifier.txt"
 lido_measurement_unit = "../../data/xlido_measurement_unit.txt"
 lido_measurement_unit_randomized = "../../data/xlido_measurement_unit_randomized.txt"
