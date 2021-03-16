@@ -28,7 +28,8 @@ if __name__ == '__main__':
     algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_artist_names, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams(midas_artist_names, 0, 1000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute
     object.execute()

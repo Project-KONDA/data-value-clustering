@@ -28,7 +28,8 @@ if __name__ == '__main__':
     algorithm_params = [["damping", 0.5], ["max_iter", 200], ["convergence_iter", 15], ["preference", None]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_attribution_qualifier, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams(lido_attribution_qualifier, 0, 10000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute
     object.execute()

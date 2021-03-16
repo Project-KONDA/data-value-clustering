@@ -28,7 +28,8 @@ if __name__ == '__main__':
     algorithm_params = [["n_clusters", 4], ["init", 'heuristic'], ["max_iter", 200]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_artist_names, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams(midas_artist_names, 0, 1000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute
     object.execute()

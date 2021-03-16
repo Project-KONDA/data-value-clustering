@@ -28,7 +28,8 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'single'], ['n_clusters', 10], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_dates, 100000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams(midas_dates, 0, 100000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute
     object.execute()

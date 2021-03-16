@@ -44,7 +44,8 @@ def get_compression_answers(compression):
             return e[1](None)[1]
 
 
-def ExecutionConfigurationFromParams(data_path, limit, compression, distance_func, algorithm, algorithm_params, costmap=None, clusters_true_fancy=None):
+def ExecutionConfigurationFromParams(data_path, lower_limit, upper_limit, compression, distance_func, algorithm,
+                                     algorithm_params, costmap=None, clusters_true_fancy=None):
 
     if isinstance(compression, list):
         compression_answers = compression
@@ -64,7 +65,8 @@ def ExecutionConfigurationFromParams(data_path, limit, compression, distance_fun
     dict = {
         "data_path": data_path,
         "data_name": re.sub("\..*", "", re.sub(".*/", "", data_path)),
-        "limit": limit,
+        "lower_limit": lower_limit,
+        "upper_limit": upper_limit,
         "compression_function": compression_function,
         "compression_answers": compression_answers,
         "distance_func": distance_func,
@@ -126,11 +128,11 @@ class ExecutionConfiguration(object):
         return json_text
 
     def generate_filename(self):
-        return self.data_name + "_" + str(self.limit) + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        return self.data_name + "_" + str(self.lower_limit) + "_" + str(self.upper_limit) + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
     def execute(self):
         # extract data
-        data = read_data_values_from_file(self.data_path)[0:self.limit]
+        data = read_data_values_from_file(self.data_path)[self.lower_limit:self.upper_limit]
 
         # get_compression
         compression_f = self.get_compression()
@@ -239,7 +241,8 @@ if __name__ == '__main__':
     algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
 
     """INITIALIZE"""
-    object = ExecutionConfigurationFromParams("../data/midas_dates.txt", 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
+    object = ExecutionConfigurationFromParams("../data/midas_dates.txt", 0, 1000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     """EXECUTE"""
     object.execute()

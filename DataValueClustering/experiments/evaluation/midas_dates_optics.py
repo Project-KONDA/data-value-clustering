@@ -52,7 +52,9 @@ if __name__ == '__main__':
     algorithm_params = [["min_samples", 3], ["max_eps", np.inf], ["cluster_method", 'xi'], ["eps", None], ["xi", 0.05], ["predecessor_correction", True], ["min_cluster_size", None], ["n_jobs", None]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_dates, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap, midas_dates_10000_expectation)
+    object = ExecutionConfigurationFromParams(midas_dates, 0, 10000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+                                              midas_dates_10000_expectation)
 
     # execute
     object.execute()

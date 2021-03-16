@@ -37,7 +37,8 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 35], ['criterion', 'distance']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_measurement_unit_randomized, 100000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+    object = ExecutionConfigurationFromParams(lido_measurement_unit_randomized, 0, 100000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               lido_measurement_unit_100000_expectation)
 
     # execute

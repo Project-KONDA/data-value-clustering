@@ -33,16 +33,9 @@ if __name__ == '__main__':
     # algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(
-        midas_artist_names_randomized,
-        10000,
-        compression_answers,
-        "distance_weighted_levenshtein",
-        algorithm,
-        algorithm_params,
-        costmap,
-        midas_artist_names_expecation_10000
-    )
+    object = ExecutionConfigurationFromParams(midas_artist_names_randomized, 0, 10000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+                                              midas_artist_names_expecation_10000)
 
     object.execute()
     object.save(playground_exports)

@@ -35,8 +35,9 @@ if __name__ == '__main__':
     algorithm_params = [["n_clusters", 10], ["eigen_solver", None], ["n_components", None], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_measurements, 10000, compression_answers, "distance_weighted_levenshtein",
-                                              algorithm, algorithm_params, costmap, midas_measurement_expectation_10000)
+    object = ExecutionConfigurationFromParams(midas_measurements, 0, 10000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+                                              midas_measurement_expectation_10000)
 
     # execute
     object.execute()

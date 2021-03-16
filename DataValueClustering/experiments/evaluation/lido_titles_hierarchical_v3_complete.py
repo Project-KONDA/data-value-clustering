@@ -42,7 +42,8 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'complete'], ['n_clusters', 14], ['distance_threshold', None], ['criterion', 'maxclust']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_titles, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+    object = ExecutionConfigurationFromParams(lido_titles, 0, 1000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               lido_titles_1000_expectation_v3_complete)
 
     # execute

@@ -39,7 +39,8 @@ if __name__ == '__main__':
     algorithm_params = [["n_clusters", 35], ["init", 'k-medoids++'], ["max_iter", 200]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_repository_names, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+    object = ExecutionConfigurationFromParams(lido_repository_names, 0, 1000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               lido_repository_names_expectation)
 
     # execute

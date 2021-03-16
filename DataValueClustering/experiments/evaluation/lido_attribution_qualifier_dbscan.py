@@ -39,16 +39,9 @@ if __name__ == '__main__':
     algorithm_params = [["eps", 10], ["min_samples", 3], ["n_jobs", None]]
 
     # initialize
-    object = ExecutionConfigurationFromParams(
-        lido_attribution_qualifier,
-        1000000,
-        compression_answers,
-        "distance_weighted_levenshtein",
-        algorithm,
-        algorithm_params,
-        costmap,
-        lido_attribution_qualifier_expecation
-    )
+    object = ExecutionConfigurationFromParams(lido_attribution_qualifier, 0, 1000000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+                                              lido_attribution_qualifier_expecation)
 
     # execute
     object.execute()

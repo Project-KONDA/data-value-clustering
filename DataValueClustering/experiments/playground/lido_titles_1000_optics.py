@@ -33,7 +33,8 @@ if __name__ == '__main__':
         ['Q (Q?)', 'Q (Q) Q'],
         ['Q (Q)', 'Q (1-1)']
     ]
-    object = ExecutionConfigurationFromParams(lido_titles, 1000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap, l)
+    object = ExecutionConfigurationFromParams(lido_titles, 0, 1000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap, l)
 
     # execute
     object.execute()

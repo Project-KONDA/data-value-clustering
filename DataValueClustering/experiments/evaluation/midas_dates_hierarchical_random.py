@@ -45,7 +45,8 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 2000], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_dates_randomized, 10000, compression_answers, "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
+    object = ExecutionConfigurationFromParams(midas_dates_randomized, 0, 10000, compression_answers,
+                                              "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               midas_dates_10000_expectation_v3)
 
     # execute
