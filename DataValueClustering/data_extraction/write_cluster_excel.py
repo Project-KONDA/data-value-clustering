@@ -1,54 +1,93 @@
-import xlwt
+import xlsxwriter
 
 
 def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map):
-    if not (path.endswith('.xls')):
-        path += '.xls'
+    if not (path.endswith('.xlsx')):
+        path += '.xlsx'
 
-    # newfile (path)
-    workbook = xlwt.Workbook()
-    style_caption = xlwt.easyxf('font: bold 1, color red;')
-    style_sum = xlwt.easyxf('font: bold 1, color blue;')
+    workbook = xlsxwriter.Workbook(path)
+    style_caption = workbook.add_format({'bold': True, 'font_color': 'red', 'left': 2})
+    style_sum = workbook.add_format({'bold': True, 'font_color': 'blue', 'left': 2, 'bottom': 1})
+    style_sum_right = workbook.add_format({'right': 2, 'bottom': 1})
+    style_value = workbook.add_format({'left': 2})
+    style_occurrence = workbook.add_format({'right': 2, 'font_color': 'grey'})
 
-    sheet1 = workbook.add_sheet("Cluster_Original")
+    sheet1 = workbook.add_worksheet("Cluster_Original")
 
     sheet1.write(2, 0, "#original", style_sum)
+    sheet1.set_column(0, 0, 12)
 
-    sheet1.write(1, 1, "NOISE", style_caption)
+    sheet1.write(1, 1, "Noise", style_caption)
     sheet1.write(2, 1, str(len(noise)), style_sum)
-    write_list_to_sheet(sheet1, 4, 1, noise)
+    sheet1.write(2, 2, "", style_sum_right)
+    cluster_count, cluster_unique = get_unique_values(noise)
+    write_list_to_sheet(sheet1, 3, 1, cluster_unique, style_value)
+    write_list_to_sheet(sheet1, 3, 2, cluster_count, style_occurrence)
+    sheet1.set_column(2, 2, 3)
 
     for i, cluster in enumerate(clusters):
+        cluster_count, cluster_unique = get_unique_values(cluster)
         name = "Cluster " + str(i + 1)
-        sheet1.write(1, i + 2, name, style_caption)
-        sheet1.write(2, i + 2, str(len(cluster)), style_sum)
-        write_list_to_sheet(sheet1, 4, i + 2, cluster)
+        sheet1.write(1, i * 2 + 3, name, style_caption)
+        sheet1.write(1, i * 2 + 4, "", style_occurrence)
+        sheet1.write(2, i * 2 + 3, str(len(cluster)), style_sum)
+        sheet1.write(2, i * 2 + 4, "", style_sum_right)
+        write_list_to_sheet(sheet1, 3, i * 2 + 3, cluster_unique, style_value)
+        write_list_to_sheet(sheet1, 3, i * 2 + 4, cluster_count, style_occurrence)
+        sheet1.set_column(i * 2 + 4, i * 2 + 4, 3)
 
-    sheet2 = workbook.add_sheet("Cluster_Repr")
+    sheet2 = workbook.add_worksheet("Cluster_Repr")
 
     sheet2.write(2, 0, "#compressed", style_sum)
     sheet2.write(3, 0, "#original", style_sum)
+    sheet2.set_column(0, 0, 12)
 
     sheet2.write(1, 1, "NOISE", style_caption)
     sheet2.write(2, 1, str(len(noise_compressed)), style_sum)
+    sheet2.write(2, 2, "", style_sum_right)
+    noise_count = get_compressed_count(comp_to_normal_map, noise_compressed)
     sheet2.write(3, 1, str(len(noise)), style_sum)
+    sheet2.write(3, 2, "", style_sum_right)
     noise_repr = get_repr_list(noise_compressed, comp_to_normal_map)
-    write_list_to_sheet(sheet2, 5, 1, noise_repr)
+    write_list_to_sheet(sheet2, 4, 1, noise_repr, style_value)
+    write_list_to_sheet(sheet2, 4, 2, noise_count, style_occurrence)
+    sheet2.set_column(2, 2, 3)
 
     for i, cluster in enumerate(clusters_compressed):
+        cluster_count = get_compressed_count(comp_to_normal_map, cluster)
         name = "Cluster " + str(i + 1)
-        sheet2.write(1, i + 2, name, style_caption)
-        sheet2.write(2, i + 2, str(len(cluster)), style_sum)
-        sheet2.write(3, i + 2, str(len(clusters[i])), style_sum)
+        sheet2.write(1, i * 2 + 3, name, style_caption)
+        sheet2.write(1, i * 2 + 4, "", style_occurrence)
+        sheet2.write(2, i * 2 + 3, str(len(cluster)), style_sum)
+        sheet2.write(2, i * 2 + 4, "", style_sum_right)
+        sheet2.write(3, i * 2 + 3, str(len(clusters[i])), style_sum)
+        sheet2.write(3, i * 2 + 4, "", style_sum_right)
         cluster_repr = get_repr_list(cluster, comp_to_normal_map)
-        write_list_to_sheet(sheet2, 5, i + 2, cluster_repr)
+        write_list_to_sheet(sheet2, 4, i * 2 + 3, cluster_repr, style_value)
+        write_list_to_sheet(sheet2, 4, i * 2 + 4, cluster_count, style_occurrence)
+        sheet2.set_column(i * 2 + 4, i * 2 + 4, 3)
 
-    workbook.save(path)
+    workbook.close()
 
 
-def write_list_to_sheet(sheet, x, y, list):
+def get_compressed_count(comp_to_normal_map, noise_compressed):
+    noise_count = []
+    for u in noise_compressed:
+        noise_count.append(len(comp_to_normal_map[u]))
+    return noise_count
+
+
+def get_unique_values(cluster):
+    cluster_unique = list(set(cluster))
+    cluster_count = []
+    for u in cluster_unique:
+        cluster_count.append(cluster.count(u))
+    return cluster_count, cluster_unique
+
+
+def write_list_to_sheet(sheet, x, y, list, style = None):
     for i, v in enumerate(list):
-        sheet.write(x + i, y, v)
+        sheet.write(x + i, y, v, style)
 
 
 def get_repr_list(list, map):
@@ -66,9 +105,9 @@ def get_repr(compressed_value, map):
 
 
 if __name__ == '__main__':
-    path = "file.xl"
+    path = "file.xlsx"
     clusters = [
-        ['value1', 'value2', 'value3', 'value4'],
+        ['value1', 'value2', 'value3', 'value4', 'value1', 'value2'],
         ['value5', 'value6']
     ]
     noise = ['value7']
