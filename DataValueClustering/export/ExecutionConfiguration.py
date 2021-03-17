@@ -11,6 +11,7 @@ from sklearn.metrics.cluster import contingency_matrix
 from clustering.clustering import clustering_args_functions
 from compression.compression import get_compression_method
 from data_extraction import read_data_values_from_file
+from data_extraction.write_cluster_excel import cluster_to_excel
 from distance.distance import distance_functions
 from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
@@ -39,14 +40,13 @@ def load_ExecutionConfiguration(filepath):
 
 
 def get_compression_answers(compression):
-    for i,e in enumerate(compression_functions):
+    for i, e in enumerate(compression_functions):
         if e[0] == compression:
             return e[1](None)[1]
 
 
 def ExecutionConfigurationFromParams(data_path, lower_limit, upper_limit, compression, distance_func, algorithm,
                                      algorithm_params, costmap=None, clusters_true_fancy=None):
-
     if isinstance(compression, list):
         compression_answers = compression
         compression_function = ""
@@ -92,6 +92,7 @@ class ExecutionConfiguration(object):
             self.target_file_name = self.generate_filename()
             self.json_file_name = self.target_file_name + ".json"
             self.picture_file_name = self.target_file_name + ".png"
+            self.excel_file_name = self.target_file_name + ".xls"
 
     def validate_params(self):
         for p in self.algorithm_params:
@@ -128,7 +129,8 @@ class ExecutionConfiguration(object):
         return json_text
 
     def generate_filename(self):
-        return self.data_name + "_" + str(self.lower_limit) + "_" + str(self.upper_limit) + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        return self.data_name + "_" + str(self.lower_limit) + "_" + str(
+            self.upper_limit) + "_" + self.algorithm + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
     def execute(self):
         # extract data
@@ -150,6 +152,7 @@ class ExecutionConfiguration(object):
         self.noise = main.noise
         self.cluster_list_compressed = main.fancy_cluster_list_compressed
         self.noise_compressed = main.noise_compressed
+        self.comp_to_normal_map = main.compression_dict
         self.amount_data = main.num_data
         self.amount_compressed_data = main.num_compressed_data
         self.compression_rate = main.compression_rate
@@ -164,15 +167,19 @@ class ExecutionConfiguration(object):
         self.dunn_index = main.dunn_index
         self.intra_cluster_distances = main.intra_cluster_distances.tolist()
 
-        if not(self.clusters_true_fancy is None):
+        if not (self.clusters_true_fancy is None):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
 
     def external_validation(self, values_compressed, clusters_compressed, compression_f):
-        self.completeness, self.missing_values, self.superflous_values = check_completeness_of_true_values(compression_f, self.clusters_true_fancy, values_compressed)
+        self.completeness, self.missing_values, self.superflous_values = check_completeness_of_true_values(
+            compression_f, self.clusters_true_fancy, values_compressed)
 
-        clusters_true_fancy_filtered = filter_clusters_true_fancy(self.clusters_true_fancy, values_compressed, compression_f)
+        clusters_true_fancy_filtered = filter_clusters_true_fancy(self.clusters_true_fancy, values_compressed,
+                                                                  compression_f)
 
-        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f, clusters_true_fancy_filtered, values_compressed, clusters_compressed)
+        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f,
+                                                                                 clusters_true_fancy_filtered,
+                                                                                 values_compressed, clusters_compressed)
 
         clusters_true_part, clusters_pred_part = get_true_and_pred_clusters_parts(
             compression_f, values_compressed, clusters_true_fancy_filtered, clusters_compressed)
@@ -185,7 +192,8 @@ class ExecutionConfiguration(object):
         self.fowlkes_mallows_score = fowlkes_mallows_score(self.clusters_true_part, self.clusters_pred_part)
         self.homogeneity_score = homogeneity_score(self.clusters_true_part, self.clusters_pred_part)
         self.mutual_info_score = mutual_info_score(self.clusters_true_part, self.clusters_pred_part)
-        self.normalized_mutual_info_score = normalized_mutual_info_score(self.clusters_true_part, self.clusters_pred_part)
+        self.normalized_mutual_info_score = normalized_mutual_info_score(self.clusters_true_part,
+                                                                         self.clusters_pred_part)
         # self.rand_score = compare_true_and_pred_clusters(rand_score(clusters_true_part, self.clusters_pred_part)
         self.v_measure_score = v_measure_score(self.clusters_true_part, self.clusters_pred_part)
 
@@ -208,22 +216,38 @@ class ExecutionConfiguration(object):
         print("Contigency Matrix:")
         print(self.contingency_matrix)
 
-
-
     def params_to_dict(self):
         dict = {}
         for p in self.algorithm_params:
             dict[p[0]] = p[1]
         return dict
 
-if __name__ == '__main__':
+    def export_to_excel(self, path):
+        assert (
+                hasattr(self, 'excel_file_name')
+            and hasattr(self, 'cluster_list')
+            and hasattr(self, 'noise')
+            and hasattr(self, 'cluster_list_compressed')
+            and hasattr(self, 'noise_compressed')
+            and hasattr(self, 'comp_to_normal_map')
+        )
 
+        cluster_to_excel(path + self.excel_file_name,
+                         self.cluster_list,
+                         self.noise,
+                         self.cluster_list_compressed,
+                         self.noise_compressed,
+                         self.comp_to_normal_map)
+
+
+if __name__ == '__main__':
     """SPECIFY PARAMETERS"""
     # data
     # target_file_name = "target_file_name"
     # compression
-    compression_answers = [True, True, True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False, True]
-    #distance
+    compression_answers = [True, True, True, True, True, True, True, True, True, True, True, True, True, False, False,
+                           False, False, False, True]
+    # distance
     weight_case = 1
     regex = ["", "[a-zäöüßáàéèíìóòúù]", "[A-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ]", "[0-9]", " ", "[^a-zäöüßáàéèíìóòúùA-ZÄÖÜÁÀÉÈÍÌÓÒÚÙ0-9 ]"]
     weights_dates = [
@@ -249,6 +273,7 @@ if __name__ == '__main__':
 
     """SAVE"""
     object.save("../data/")
+    object.export_to_excel("../data/")
 
     """LOAD"""
     load = load_ExecutionConfiguration("../data/dbscan20210209-103005")
