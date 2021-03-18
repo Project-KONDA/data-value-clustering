@@ -92,7 +92,7 @@ class ExecutionConfiguration(object):
             self.target_file_name = self.generate_filename()
             self.json_file_name = self.target_file_name + ".json"
             self.picture_file_name = self.target_file_name + ".png"
-            self.excel_file_name = self.target_file_name + ".xls"
+            self.excel_file_name = self.target_file_name + ".xlsx"
 
     def validate_params(self):
         for p in self.algorithm_params:
