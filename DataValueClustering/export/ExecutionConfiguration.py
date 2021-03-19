@@ -229,8 +229,11 @@ class ExecutionConfiguration(object):
             and hasattr(self, 'noise')
             and hasattr(self, 'cluster_list_compressed')
             and hasattr(self, 'noise_compressed')
-            and hasattr(self, 'comp_to_normal_map')
+            # and hasattr(self, 'comp_to_normal_map')
         )
+
+        if not hasattr(self, 'comp_to_normal_map'):
+            self.comp_to_normal_map = None
 
         cluster_to_excel(path + self.excel_file_name,
                          self.cluster_list,
