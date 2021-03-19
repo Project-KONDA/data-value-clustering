@@ -153,6 +153,10 @@ class ExecutionConfiguration(object):
         self.cluster_list_compressed = main.fancy_cluster_list_compressed
         self.noise_compressed = main.noise_compressed
         self.comp_to_normal_map = main.compression_dict
+        self.cluster_sizes = main.cluster_sizes
+        self.noise_size = main.noise_size
+        self.cluster_sizes_compressed = main.cluster_sizes_compressed
+        self.noise_size_compressed = main.noise_size_compressed
         self.amount_data = main.num_data
         self.amount_compressed_data = main.num_compressed_data
         self.compression_rate = main.compression_rate

@@ -20,6 +20,16 @@ def get_clusters_original_values(clusters_compressed, values_compressed, compres
     return clusters_original_values  # one dimensional array
 
 
+def get_cluster_sizes(clusters):
+    unique, counts = np.unique(clusters, return_counts=True)
+    noise_size = 0
+    cluster_sizes = counts
+    if -1 in unique:
+        noise_size = counts[0]
+        cluster_sizes = counts[1:]
+    return cluster_sizes.tolist(), int(noise_size)
+
+
 clustering_args_functions = {
     "hierarchical": hierarchical_args,
     "kmedoids": kmedoids_args,
@@ -28,5 +38,4 @@ clustering_args_functions = {
     "affinity": affinity_args,
     "spectral": spectral_args
 }
-
 
