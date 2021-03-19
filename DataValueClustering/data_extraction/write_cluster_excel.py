@@ -18,6 +18,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     sheet1.write(2, 0, "#original", style_sum)
     sheet1.set_column(0, 0, 12)
 
+    sheet1.write(1, 0, "", style_grey)
     sheet1.write(1, 1, "Noise", style_caption)
     sheet1.write(1, 2, "", style_grey)
     sheet1.write_number(2, 1, len(noise), style_sum)
@@ -32,7 +33,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     cluster_sizes = list(map(len, clusters))
     cluster_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(clusters))), cluster_sizes)
 
-    for i in cluster_indices_sorted:
+    for i, v in enumerate(cluster_indices_sorted):
         name = "Cluster " + str(i + 1)
         sheet1.write(1, i * 2 + 3, name, style_caption)
         sheet1.write(1, i * 2 + 4, "", style_grey)
@@ -40,7 +41,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet1.write(2, i * 2 + 4, "", style_sum_right)
         sheet1.set_column(3 + i * 2, 3 + i * 2, 15)
         sheet1.set_column(4 + i * 2, 4 + i * 2, 6)
-        cluster_unique, cluster_count = get_sorted_unique_values_counts(clusters[i])
+        cluster_unique, cluster_count = get_sorted_unique_values_counts(clusters[v])
         write_list_to_sheet(sheet1, 3, i * 2 + 3, cluster_unique, style_value)
         write_list_to_sheet(sheet1, 3, i * 2 + 4, cluster_count, style_occurrence, True)
         sheet1.conditional_format(3, i * 2 + 4, 3 + len(cluster_count), i * 2 + 4, {'type': 'data_bar'})
@@ -53,6 +54,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet2.write(3, 0, "#compressed", style_sum)
         sheet2.set_column(0, 0, 12)
 
+        sheet2.write(1, 0, "", style_grey)
         sheet2.write(1, 1, "Noise", style_caption)
         sheet2.write(1, 2, "", style_grey)
         sheet2.write_number(2, 1, len(noise_compressed), style_sum)
@@ -68,7 +70,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
         cluster_compressed_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(clusters_compressed))), cluster_sizes)
 
-        for i in cluster_compressed_indices_sorted:
+        for i, v in enumerate(cluster_compressed_indices_sorted):
             name = "Cluster " + str(i + 1)
             sheet2.write(1, i * 2 + 3, name, style_caption)
             sheet2.write(1, i * 2 + 4, "", style_grey)
@@ -78,7 +80,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet2.write(3, i * 2 + 4, "", style_sum_right)
             sheet2.set_column(3 + i * 2, 3 + i * 2, 15)
             sheet2.set_column(4 + i * 2, 4 + i * 2, 6)
-            cluster_repr, cluster_count = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[i])
+            cluster_repr, cluster_count = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[v])
             write_list_to_sheet(sheet2, 4, i * 2 + 3, cluster_repr, style_value)
             write_list_to_sheet(sheet2, 4, i * 2 + 4, cluster_count, style_occurrence, True)
             sheet2.conditional_format(4, i * 2 + 4, 4 + len(cluster_count), i * 2 + 4, {'type': 'data_bar'})
