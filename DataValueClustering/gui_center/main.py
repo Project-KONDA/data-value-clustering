@@ -131,13 +131,14 @@ class Main:
         # , "..\experiments\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
+        noise_penalty = (self.num_data - self.no_noise)/self.num_data
         lines = np.where(self.clusters_compressed != -1)[0]
         distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
         filtered_distance_matrix = distance_matrix_lines[:, lines]
         index_parameters = self.clusters_compressed[self.clusters_compressed != -1], filtered_distance_matrix
-        self.wb_index = wb_index(*index_parameters)
-        self.calinski_harabasz_index = calinski_harabasz_index(*index_parameters)
-        self.dunn_index = dunn_index(*index_parameters)
+        self.wb_index = noise_penalty * wb_index(*index_parameters)
+        self.calinski_harabasz_index = noise_penalty * calinski_harabasz_index(*index_parameters)
+        self.dunn_index = noise_penalty * dunn_index(*index_parameters)
         self.intra_cluster_distances = max_intra_cluster_distances(*index_parameters)
 
         # TODO
