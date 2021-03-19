@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from gui_center.cluster_representation import fancy_cluster_representation
-from clustering.clustering import get_clusters_original_values
+from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_matrix_map
 from gui_general.DropdownInput import input_dropdown
@@ -13,6 +13,7 @@ from gui_result import show_mds_scatter_plot
 from validation.dunn_index import dunn_index
 from validation.calinski_harabasz_index import calinski_harabasz_index, wb_index
 from validation.intra_inter_cluster_distance import max_intra_cluster_distances
+import numpy as np
 
 MAX_VALUES = 1000
 
@@ -107,6 +108,8 @@ class Main:
         self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
                                                 self.data)
         self.time_cluster_end = datetime.now()
+        self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
+        self.cluster_sizes_compressed, self.noise_size_compressed = get_cluster_sizes(self.clusters_compressed)
 
         print("Finalizing ...")
         self.time_end = datetime.now()
@@ -128,7 +131,10 @@ class Main:
         # , "..\experiments\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
-        index_parameters = self.clusters_compressed, self.distance_matrix_map['distance_matrix']
+        lines = np.where(self.clusters_compressed != -1)[0]
+        distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
+        filtered_distance_matrix = distance_matrix_lines[:, lines]
+        index_parameters = self.clusters_compressed[self.clusters_compressed != -1], filtered_distance_matrix
         self.wb_index = wb_index(*index_parameters)
         self.calinski_harabasz_index = calinski_harabasz_index(*index_parameters)
         self.dunn_index = dunn_index(*index_parameters)
