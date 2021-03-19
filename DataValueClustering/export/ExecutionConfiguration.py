@@ -152,7 +152,7 @@ class ExecutionConfiguration(object):
         self.noise = main.noise
         self.cluster_list_compressed = main.fancy_cluster_list_compressed
         self.noise_compressed = main.noise_compressed
-        self.comp_to_normal_map = main.compression_dict
+        self.comp_to_normal_map = [list(elem) for elem in main.compression_dict.items()]
         self.cluster_sizes = main.cluster_sizes
         self.noise_size = main.noise_size
         self.cluster_sizes_compressed = main.cluster_sizes_compressed
@@ -237,14 +237,16 @@ class ExecutionConfiguration(object):
         )
 
         if not hasattr(self, 'comp_to_normal_map'):
-            self.comp_to_normal_map = None
+            map = None
+        else:
+            map = dict([tuple(l) for l in self.comp_to_normal_map])
 
         cluster_to_excel(path + self.excel_file_name,
                          self.cluster_list,
                          self.noise,
                          self.cluster_list_compressed,
                          self.noise_compressed,
-                         self.comp_to_normal_map,
+                         map,
                          self.cluster_sizes,
                          self.noise_size,
                          self.cluster_sizes_compressed,
