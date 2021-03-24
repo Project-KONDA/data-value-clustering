@@ -52,6 +52,27 @@ def min_of_min_inter_cluster_distances(clusters, distance_matrix):
     return mini
 
 
+def average_intra_cluster_distance_per_value(cluster, clusters, distance_matrix):
+    filtered_distance_matrix = filter_distance_matrix(cluster, cluster, clusters, distance_matrix)
+    length = len(filtered_distance_matrix)
+    distances = np.full(length, 0.0)
+    for i in range(length):
+        no_other_values = len(filtered_distance_matrix[i, :]) - 1
+        if no_other_values > 0:
+            distances[i] = (sum(filtered_distance_matrix[i,:]) - filtered_distance_matrix[i,i]) / no_other_values
+        else:
+            distances[i] = 0.0
+    return distances
+
+
+def average_intra_cluster_distances_per_cluster_per_value(clusters, distance_matrix):
+    clusters_unique = np.array(list(set(clusters)))
+    clusters_unique_sorted = np.sort(clusters_unique)
+    distances_per_cluster = []
+    for i in clusters_unique_sorted:
+        distances_per_cluster.append(average_intra_cluster_distance_per_value(i, clusters, distance_matrix).tolist())
+    return distances_per_cluster
+
 if __name__ == "__main__":
     # c1 = 0
     # c2 = 1
@@ -63,4 +84,5 @@ if __name__ == "__main__":
     ])
     # print(filter_distance_matrix(c1, c2, clusters, dm))
     # print(max_intra_cluster_distances(clusters, dm))
-    print(min_inter_cluster_distances(clusters, dm))
+    # print(min_inter_cluster_distances(clusters, dm))
+    print(average_intra_cluster_distances_per_cluster_per_value(clusters, dm))
