@@ -170,6 +170,7 @@ class ExecutionConfiguration(object):
         self.calinski_harabasz_index = main.calinski_harabasz_index
         self.dunn_index = main.dunn_index
         self.intra_cluster_distances = main.intra_cluster_distances.tolist()
+        self.average_intra_cluster_distances_per_cluster_per_value = main.average_intra_cluster_distances_per_cluster_per_value
 
         if not (self.clusters_true_fancy is None):
             self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
@@ -250,7 +251,9 @@ class ExecutionConfiguration(object):
                          self.cluster_sizes,
                          self.noise_size,
                          self.cluster_sizes_compressed,
-                         self.noise_size_compressed)
+                         self.noise_size_compressed,
+                         self.average_intra_cluster_distances_per_cluster_per_value,
+                         self.intra_cluster_distances)
 
 
 if __name__ == '__main__':

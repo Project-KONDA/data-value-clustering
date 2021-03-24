@@ -12,7 +12,8 @@ from data_extraction.read_file import get_sources_in_experiment_data_directory
 from gui_result import show_mds_scatter_plot
 from validation.dunn_index import dunn_index
 from validation.calinski_harabasz_index import calinski_harabasz_index, wb_index
-from validation.intra_inter_cluster_distance import max_intra_cluster_distances
+from validation.intra_inter_cluster_distance import max_intra_cluster_distances, \
+    average_intra_cluster_distances_per_cluster_per_value
 import numpy as np
 
 MAX_VALUES = 1000
@@ -140,6 +141,7 @@ class Main:
         self.calinski_harabasz_index = noise_penalty * calinski_harabasz_index(*index_parameters)
         self.dunn_index = noise_penalty * dunn_index(*index_parameters)
         self.intra_cluster_distances = max_intra_cluster_distances(*index_parameters)
+        self.average_intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(*index_parameters)
 
         # TODO
 

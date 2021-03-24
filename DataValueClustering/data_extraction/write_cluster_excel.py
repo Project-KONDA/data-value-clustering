@@ -2,7 +2,11 @@ import xlsxwriter
 
 
 def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map, cluster_sizes,
-                         noise_size, cluster_sizes_compressed, noise_size_compressed):
+                         noise_size, cluster_sizes_compressed, noise_size_compressed, average_intra_cluster_distances_per_cluster_per_value,
+                         intra_cluster_distances):
+
+    # TODO: show average_intra_cluster_distances_per_cluster_per_value and intra_cluster_distances in excel file
+
     if not (path.endswith('.xlsx')):
         path += '.xlsx'
 
@@ -23,7 +27,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     sheet1.write(1, 2, "", style_grey)
     sheet1.write_number(2, 1, len(noise), style_sum)
     sheet1.write(2, 2, "", style_sum_right)
-    sheet1.set_column(1, 1, 15)
+    sheet1.set_column(1, 1, 40)
     sheet1.set_column(2, 2, 6)
     noise_unique, noise_count = get_sorted_unique_values_counts(noise)
     write_list_to_sheet(sheet1, 3, 1, noise_unique, style_value)
@@ -39,7 +43,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet1.write(1, i * 2 + 4, "", style_grey)
         sheet1.write_number(2, i * 2 + 3, cluster_counts_sorted[i], style_sum)
         sheet1.write(2, i * 2 + 4, "", style_sum_right)
-        sheet1.set_column(3 + i * 2, 3 + i * 2, 15)
+        sheet1.set_column(3 + i * 2, 3 + i * 2, 40)
         sheet1.set_column(4 + i * 2, 4 + i * 2, 6)
         cluster_unique, cluster_count = get_sorted_unique_values_counts(clusters[v])
         write_list_to_sheet(sheet1, 3, i * 2 + 3, cluster_unique, style_value)
@@ -61,7 +65,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet2.write(2, 2, "", style_sum_right)
         sheet2.write_number(3, 1, len(noise), style_sum)
         sheet2.write(3, 2, "", style_sum_right)
-        sheet2.set_column(1, 1, 15)
+        sheet2.set_column(1, 1, 40)
         sheet2.set_column(2, 2, 6)
         noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
         write_list_to_sheet(sheet2, 4, 1, noise_repr, style_value)
@@ -78,7 +82,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet2.write(2, i * 2 + 4, "", style_sum_right)
             sheet2.write_number(3, i * 2 + 3, len(clusters_compressed[v]), style_sum)
             sheet2.write(3, i * 2 + 4, "", style_sum_right)
-            sheet2.set_column(3 + i * 2, 3 + i * 2, 15)
+            sheet2.set_column(3 + i * 2, 3 + i * 2, 40)
             sheet2.set_column(4 + i * 2, 4 + i * 2, 6)
             cluster_repr, cluster_count = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[v])
             write_list_to_sheet(sheet2, 4, i * 2 + 3, cluster_repr, style_value)
