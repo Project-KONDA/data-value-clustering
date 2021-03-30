@@ -10,25 +10,32 @@ if __name__ == '__main__':
     # compression
     # compression_answers = "letters, number sequences"
     compression_answers = [False, False, False, False, False, False, False, False, False,
-               True, True, False,
+               True, True, True,
                False, False, False, False, False, False,
                True]
 
     #distance
     weight_case = 1
     regex = ["", "0123456789", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúùABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "<rest>"]
+    # weights = [
+    #     [0, 1, 1, 1],  #
+    #     [1, 0, 2, 2],  # 1
+    #     [1, 2, 1, 2],  # aA
+    #     [1, 2, 2, 1],  # <rest>
+    # ]
+
     weights = [
-        [0, 1, 1, 1],  #
-        [1, 0, 2, 2],  # 1
-        [1, 2, 1, 2],  # aA
-        [1, 2, 2, 1],  # <rest>
+        [0, 2, 1, 2],  #
+        [2, 0, 3, 4],  # 1
+        [1, 3, 1, 3],  # aA
+        [2, 4, 3, 2],  # <rest>
     ]
 
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 2.5], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
+    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 3.5], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
 
     # algorithm = "dbscan"
     # algorithm_params = [["eps", 1.5], ["min_samples", 2], ["n_jobs", None]]
