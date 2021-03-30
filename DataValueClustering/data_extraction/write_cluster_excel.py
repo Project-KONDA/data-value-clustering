@@ -177,6 +177,8 @@ def get_sorted_representatives_counts(comp_to_normal_map, values_compressed, val
 
 
 def sort_values_counts(values, counts):
+    if not values or not counts:
+        return [], []
     res = list(zip(*sorted(zip(counts, values), reverse=True)))
     return res[1], res[0]
     # cluster_unique_count_dict = dict(zip(values, counts))
