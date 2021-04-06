@@ -1,11 +1,12 @@
 import xlsxwriter
 
+from data_extraction.representants import get_repr_list
+
 
 def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map, cluster_sizes,
                      noise_size, cluster_sizes_compressed, noise_size_compressed,
                      average_intra_cluster_distances_per_cluster_per_value,
                      intra_cluster_distances):
-
     aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
 
     if not (path.endswith('.xlsx')):
@@ -23,7 +24,6 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     style_val = workbook.add_format()
     style_val_right = workbook.add_format({'right': 2})
     style_val_left = workbook.add_format({'left': 2})
-
 
     sheet1 = workbook.add_worksheet("Cluster_Original")
     sheet1.write(2, 0, "#original", style_sum)
@@ -201,7 +201,7 @@ def get_sorted_unique_values_counts(cluster):
     return sort_values_counts(cluster_unique, cluster_count)
 
 
-def write_list_to_sheet(sheet, x, y, list, style = None, number=False):
+def write_list_to_sheet(sheet, x, y, list, style=None, number=False):
     for i, v in enumerate(list):
         if number:
             sheet.write_number(x + i, y, v, style)
@@ -209,24 +209,9 @@ def write_list_to_sheet(sheet, x, y, list, style = None, number=False):
             sheet.write(x + i, y, v, style)
 
 
-def get_repr_list(values_compressed, comp_to_normal_map):
-    result = []
-    for i in values_compressed:
-        result.append(get_repr(i, comp_to_normal_map))
-    return result
-
-
-def get_repr(value_compressed, comp_to_normal_map):
-    try:
-        return comp_to_normal_map[value_compressed][0]
-    except:
-        return ""
-
-
 if __name__ == '__main__':
-
-    X = ["abcd",    "basd",     "bqwr",     "ayc",  "cyc",      "  ayc",    "vyc",  "das",  "bdas"]
-    Y = [0,         1,          1,          0,      13,         2,          2,      0,      1]
+    X = ["abcd", "basd", "bqwr", "ayc", "cyc", "  ayc", "vyc", "das", "bdas"]
+    Y = [0, 1, 1, 0, 13, 2, 2, 0, 1]
     print(list(zip(*sorted(zip(Y, X))))[0])
     print(list(zip(*sorted(zip(Y, X))))[1])
 

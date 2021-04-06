@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from data_extraction.representants import get_repr_cluster, get_repr_list
 from gui_center.cluster_representation import fancy_cluster_representation
 from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from gui_distances.blobinput_helper import get_blob_configuration
@@ -126,9 +127,9 @@ class Main:
         self.no_noise = len(self.noise)
 
         # TODO
-
         # MDS scatter plot
-        show_mds_scatter_plot(self.values_compressed, self.distance_matrix_map["distance_matrix"], self.clusters_compressed, savepath=scatter_plot_save_path)
+        values_representants = get_repr_list(self.values_compressed, self.compression_dict)
+        show_mds_scatter_plot(values_representants, self.distance_matrix_map["distance_matrix"], self.clusters_compressed, savepath=scatter_plot_save_path)
         # , "..\experiments\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
