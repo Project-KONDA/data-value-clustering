@@ -65,7 +65,7 @@ class CostMapInput:
     # main map record GUI
     def record_map(self, empty=False):
         # self.root.title('Cost Map')
-        self.root.title('Please enter Cost Map')
+        self.root.title('Please enter Weight Matrix')
         self.root.configure(background='white')
         width = 220 + 48 * self.n  # 300 #270 # 240
         # width = max(470, 220 + 48 * self.n)  # 300 #270 # 240
@@ -186,6 +186,7 @@ class CostMapInput:
 
 if __name__ == '__main__':
     test_regexes = ["^$", "^a$", "^b$", "^c$", "^d$"]
+    test_regexes = ["", "0-9", "a-zA-Z$", ""]
     test_costmap = example_costmap()
 
     # print_cost_map(input_costmap(costmap=test_costmap))

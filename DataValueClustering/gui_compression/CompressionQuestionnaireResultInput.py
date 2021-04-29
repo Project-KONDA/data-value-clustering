@@ -22,8 +22,8 @@ def input_questionnaire_compression(config, data, predefined_answers=None):
 class CompressionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def __init__(self, config, data, predefined_answers=None):
-        self.help_text = "Compression of the first 100 data values:\n"
-        super().__init__("Compression Configuration", config, predefined_answers)
+        self.help_text = "Abstraction of the first 100 data values:\n"
+        super().__init__("Abstraction Configuration", config, predefined_answers)
         self.data = data
         self.labels = []
         self.update_visibility_and_result()
