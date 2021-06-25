@@ -1,10 +1,8 @@
 import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import midas_dates, evaluation_exports, lido_measurement_unit, \
-    lido_measurement_unit_randomized
-from experiments.evaluation.lido_measurement_unit_expectation import lido_measurement_unit_100000_expectation
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation
+from experiments.constants import evaluation_exports, lido_measurement_unit
+from experiments.playground.lido_measurement_unit_expectation import lido_measurement_unit_100000_expectation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':
@@ -37,7 +35,7 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 35], ['criterion', 'distance']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_measurement_unit_randomized, 0, 100000, compression_answers,
+    object = ExecutionConfigurationFromParams(lido_measurement_unit, 0, 100000, compression_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               lido_measurement_unit_100000_expectation)
 

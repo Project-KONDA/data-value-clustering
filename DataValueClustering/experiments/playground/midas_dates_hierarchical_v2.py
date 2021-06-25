@@ -2,8 +2,7 @@ import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import midas_dates, evaluation_exports
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation, \
-    midas_dates_10000_expectation_v2
+from experiments.playground.midas_dates_expectation import midas_dates_10000_expectation_v2
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':

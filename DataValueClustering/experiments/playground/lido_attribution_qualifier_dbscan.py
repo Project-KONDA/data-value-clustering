@@ -1,6 +1,6 @@
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports, lido_attribution_qualifier, evaluation_exports
-from experiments.evaluation.lido_attribution_qualifier_expectation import lido_attribution_qualifier_expecation
+from experiments.constants import lido_attribution_qualifier, evaluation_exports
+from experiments.playground.lido_attribution_qualifier_expectation import lido_attribution_qualifier_expecation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':

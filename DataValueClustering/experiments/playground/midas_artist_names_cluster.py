@@ -1,7 +1,6 @@
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports, lido_attribution_qualifier, midas_artist_names, midas_artist_names_randomized
-from experiments.evaluation.lido_attribution_qualifier_expectation import lido_attribution_qualifier_expecation
-from experiments.evaluation.midas_artist_names_expectation import midas_artist_names_expecation_10000
+from experiments.constants import playground_exports, midas_artist_names_randomized
+from experiments.playground.midas_artist_names_expectation import midas_artist_names_expecation_10000
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':

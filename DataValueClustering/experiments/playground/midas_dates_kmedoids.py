@@ -2,7 +2,7 @@ import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import midas_dates, evaluation_exports
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation
+from experiments.playground.midas_dates_expectation import midas_dates_10000_expectation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
-    algorithm = "hierarchical"
-    algorithm_params = [['method', 'complete'], ['n_clusters', 9], ['distance_threshold', None], ['criterion', 'maxclust']]  # complete, ward, average, weighted, centroid, median, single
+    algorithm = "kmedoids"
+    algorithm_params = [["n_clusters", 9], ["init", 'k-medoids++'], ["max_iter", 200]]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates, 0, 10000, compression_answers,

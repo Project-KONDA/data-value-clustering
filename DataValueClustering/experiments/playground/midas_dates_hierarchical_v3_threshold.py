@@ -1,9 +1,8 @@
 import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import midas_dates, evaluation_exports, midas_dates_randomized
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation, \
-    midas_dates_10000_expectation_v2, midas_dates_10000_expectation_v3
+from experiments.constants import midas_dates, evaluation_exports
+from experiments.playground.midas_dates_expectation import midas_dates_10000_expectation_v3
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':
@@ -41,11 +40,10 @@ if __name__ == '__main__':
 
     # clustering
     algorithm = "hierarchical"
-    # algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 900], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
-    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 2000], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
+    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 900], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_dates_randomized, 0, 10000, compression_answers,
+    object = ExecutionConfigurationFromParams(midas_dates, 0, 10000, compression_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               midas_dates_10000_expectation_v3)
 

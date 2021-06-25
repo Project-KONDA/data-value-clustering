@@ -1,9 +1,8 @@
 import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import midas_dates, evaluation_exports, lido_measurement_unit
-from experiments.evaluation.lido_measurement_unit_expectation import lido_measurement_unit_100000_expectation
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation
+from experiments.constants import evaluation_exports, lido_measurement_unit
+from experiments.playground.lido_measurement_unit_expectation import lido_measurement_unit_100000_expectation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':

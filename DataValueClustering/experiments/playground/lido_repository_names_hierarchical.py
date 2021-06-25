@@ -2,7 +2,7 @@ import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
 from experiments.constants import evaluation_exports, lido_repository_names
-from experiments.evaluation.lido_repository_names_expectation import lido_repository_names_expectation
+from experiments.playground.lido_repository_names_expectation import lido_repository_names_expectation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 

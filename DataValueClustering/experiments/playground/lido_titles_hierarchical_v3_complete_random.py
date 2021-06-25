@@ -1,12 +1,8 @@
 import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import midas_dates, evaluation_exports, lido_measurement_unit, lido_titles
-from experiments.evaluation.lido_measurement_unit_expectation import lido_measurement_unit_100000_expectation
-from experiments.evaluation.lido_titles_expectation import lido_titles_1000_expectation
-from experiments.evaluation.lido_titles_expectation_v2 import lido_titles_1000_expectation_v2
-from experiments.evaluation.lido_titles_expectation_v3_complete import lido_titles_1000_expectation_v3_complete
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation
+from experiments.constants import evaluation_exports, lido_titles_randomized
+from experiments.playground.lido_titles_expectation_v3_complete import lido_titles_1000_expectation_v3_complete
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 
@@ -39,10 +35,10 @@ if __name__ == '__main__':
 
     # clustering
     algorithm = "hierarchical"
-    algorithm_params = [['method', 'complete'], ['n_clusters', 14], ['distance_threshold', None], ['criterion', 'maxclust']]
+    algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 12000], ['criterion', 'distance']]
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_titles, 0, 1000, compression_answers,
+    object = ExecutionConfigurationFromParams(lido_titles_randomized, 0, 1000, compression_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap,
                                               lido_titles_1000_expectation_v3_complete)
 

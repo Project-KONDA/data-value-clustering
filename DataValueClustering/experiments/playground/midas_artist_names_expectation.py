@@ -113,7 +113,7 @@ midas_artist_names_expecation_10000 = [
 
 
 if __name__ == '__main__':
-    path = "..\..\data\midas_artist_names.txt"
+    path = "../../data/midas_artist_names.txt"
     file = read_data_values_from_file(path)
     for list in midas_artist_names_expecation_10000:
         for v in list:

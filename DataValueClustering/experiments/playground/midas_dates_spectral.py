@@ -1,8 +1,8 @@
 import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map
-from experiments.constants import playground_exports, midas_dates, evaluation_exports
-from experiments.evaluation.midas_dates_expectation import midas_dates_10000_expectation
+from experiments.constants import midas_dates, evaluation_exports
+from experiments.playground.midas_dates_expectation import midas_dates_10000_expectation
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
 if __name__ == '__main__':
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     costmap = get_cost_map(weight_case, regex, weights)
 
     # clustering
-    algorithm = "dbscan"
-    algorithm_params = [["eps", 600], ["min_samples", 3], ["n_jobs", None]]
+    algorithm = "spectral"
+    algorithm_params = [["n_clusters", 9], ["eigen_solver", None], ["n_components", None], ["n_init", 10], ["eigen_tol", 0.0], ["assign_labels", 'kmeans']]
 
     # initialize
     object = ExecutionConfigurationFromParams(midas_dates, 0, 10000, compression_answers,
