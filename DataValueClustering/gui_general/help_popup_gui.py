@@ -57,6 +57,18 @@ def menu_help_blob_input():
 
 
 def menu_information_display(title, content):
+    """
+    Show window with text
+    as help feature for context menu
+
+    :param title: str
+        window title
+    :param content: list[str]
+        help text for window content
+        one string per line
+    :return:
+    """
+
     root = Tk()
     # root.geometry("500x200")
     root.title("Help")

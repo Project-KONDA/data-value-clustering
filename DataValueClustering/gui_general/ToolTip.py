@@ -2,6 +2,10 @@ from tkinter import *
 
 
 class ToolTip(object):
+    """
+    Class for GUI ToolTips
+    binds text to objects, that are shown when hovering
+    """
 
     def __init__(self, widget):
         self.widget = widget

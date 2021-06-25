@@ -20,6 +20,7 @@ def input_questionnaire_compression(config, data, predefined_answers=None):
 
 
 class CompressionQuestionnaireResultInput(QuestionnaireResultInput):
+    """ binary questionaire GUI for configuring the compression function """
 
     def __init__(self, config, data, predefined_answers=None):
         self.help_text = "Abstraction of the first 100 data values:\n"

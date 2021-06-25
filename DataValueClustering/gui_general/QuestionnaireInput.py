@@ -13,6 +13,9 @@ def input_questionnaire(title, config):
     return result
 
 class QuestionnaireInput:
+    """
+    class for any binary questionaire GUI
+    """
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 

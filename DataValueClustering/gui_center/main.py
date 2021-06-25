@@ -21,9 +21,39 @@ MAX_VALUES = 1000
 
 
 class Main:
+    """
+    Main Class that realises the workflow of the cluster approach
+    Can be executed directly without attributes to configure via GUI
+    Attributes used to specify execution up front
+    """
 
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
                  compression_f=None, distance_f=None, cluster_f=None, scatter_plot_save_path=None):
+        """
+        :param data_index: int
+            index of the data (default is -1)
+            data corresponds to files in the 'data' folder, order alphabetically
+        :param compression_index: int
+            index of the compression function (default is -1)
+            functions specified in 'gui_compression/compression_choices.py'
+        :param distance_index: int
+            index of the compression function (default is -1)
+            functions specified in 'gui_distance/distance_choices.py'
+        :param cluster_index: int
+            index of the cluster algorithm (default is -1)
+            algorithms specified in 'gui_cluster_selection/clustering_choices.py'
+        :param data: list[str]
+            specify the data (default is None)
+        :param compression_f:  (list[str]) -> ?
+            specify the compression function (default is None)
+        :param distance_f: (str, str) -> float
+            specify the distance function (default is None)
+        :param cluster_f: ({str: ndarray}, list[str]) -> ndarray[float, float]
+            specify the clustering function (default is None)
+        :param scatter_plot_save_path: str
+            path where the scatter plot is saved as image
+            will not be saved if None (default is None)
+        """
 
         self.time_start = datetime.now()
         print("Initializing ...")

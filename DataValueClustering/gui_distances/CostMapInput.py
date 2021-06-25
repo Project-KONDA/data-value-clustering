@@ -16,6 +16,7 @@ def input_costmap(size=None, empty=False, regexes=None, costmap=None):
 
 
 class CostMapInput:
+    """ GUI for direct input of the weight matrix for configuring the weighted levenstein distance function """
 
     def __init__(self, n=None, regexes=None, costmap=None):
         if costmap is not None:

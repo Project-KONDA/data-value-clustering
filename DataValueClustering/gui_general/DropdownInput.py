@@ -10,6 +10,7 @@ def input_dropdown(title, labels, matrix, initial_indices=None):
 
 
 class DropdownInput:
+    """ GUI for multiple dropdown menus """
 
     def __init__(self, title, labels, option_array, initial_indices=None):
         self.title = title

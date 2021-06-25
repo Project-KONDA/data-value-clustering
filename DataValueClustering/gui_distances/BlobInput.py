@@ -17,9 +17,16 @@ def input_blobs(config):
 
 
 class BlobInput:
+    """
+    GUI for indirect input of the weight matrix for configuring the weighted levenstein distance function
+    by moving and resizing objects on a canvas
+    """
 
     def __init__(self, config):
-        # config is array of form [label, regex, resizable, info, x, y, size]
+        """
+        :param config: array
+            config is array of form [label, regex, resizable, info, x, y, size]
+        """
 
         """Parameters"""
         self.configuration = config
