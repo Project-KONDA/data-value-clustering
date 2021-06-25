@@ -1,10 +1,12 @@
 import glob
 import os
 import numpy as np
+from pathlib import Path
+
 
 
 def get_sources_in_experiment_data_directory():
-    dir_path = "../../data"
+    dir_path = str(Path(__file__).parent.parent) + "/data"
     os.chdir(dir_path)
 
     res = list()
