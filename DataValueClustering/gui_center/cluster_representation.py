@@ -14,3 +14,18 @@ def fancy_cluster_representation(values, clusters):
             noise.append(values[j])
 
     return outer_list, noise
+
+def fancy_cluster_representation_reverse(values, fancy):
+    clusters = list()
+    b = False
+    for i,v in enumerate(values):
+        b = False
+        for j,k in enumerate(fancy):
+            print(v)
+            print(k)
+            if v in k:
+                clusters.append(j)
+                b = True
+        if not b:
+            raise Exception("problem")
+    return clusters
