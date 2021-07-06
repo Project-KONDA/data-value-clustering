@@ -1,3 +1,4 @@
+'''Manage cost map input.'''
 from math import floor, sqrt
 import re
 

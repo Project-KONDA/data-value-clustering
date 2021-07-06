@@ -1,3 +1,4 @@
+'''Collection of distance configuration views.'''
 import numpy as np
 
 from gui_distances.distance_functions_gui import distance_weighted_levenshtein, distance_levenshtein, \

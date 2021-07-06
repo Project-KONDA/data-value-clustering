@@ -3,6 +3,9 @@ from PIL import Image, ImageTk
 
 
 class Blob:
+    '''
+    Graphical object on 2D canvas that represents a character or group of characters.
+    '''
     def __init__(self, blob_input, label, regex="", resizable=True, info="", rel_x=0, rel_y=0, rel_size=1):
         self.blob_input = blob_input
         self.label = label

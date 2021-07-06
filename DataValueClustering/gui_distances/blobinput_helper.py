@@ -1,3 +1,4 @@
+'''Mange blobs.'''
 from math import sin, radians, cos, sqrt, floor
 
 import numpy as np
