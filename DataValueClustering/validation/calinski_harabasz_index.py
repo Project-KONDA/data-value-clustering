@@ -1,3 +1,4 @@
+'''calculation of the calinsky harabasz index including helper functions'''
 import numpy as np
 
 

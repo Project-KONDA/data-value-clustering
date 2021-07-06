@@ -1,3 +1,4 @@
+'''silhouette plot'''
 from sklearn.metrics import silhouette_score, silhouette_samples
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm

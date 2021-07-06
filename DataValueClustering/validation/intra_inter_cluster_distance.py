@@ -1,3 +1,4 @@
+'''calculate inter and intra cluster distances to measure compactness and separation of clusterings as basis for indices'''
 import numpy as np
 
 

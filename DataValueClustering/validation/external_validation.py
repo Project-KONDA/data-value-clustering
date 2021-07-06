@@ -1,3 +1,4 @@
+'''functions for comparing clusterings with predictions for external validation'''
 import numpy as np
 from sklearn.metrics import adjusted_mutual_info_score
 

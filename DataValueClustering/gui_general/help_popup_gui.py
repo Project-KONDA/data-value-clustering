@@ -1,7 +1,9 @@
+'''text popup for context menu, used as help'''
 from tkinter import *
 
 
 def menu_help_cost_map():
+    """help popup for matrix view"""
     text = [
         "This view is designed to give full control over the configuration of distances between",
         "text values.",
@@ -24,6 +26,7 @@ def menu_help_cost_map():
 
 
 def menu_help_blob_input():
+    """help popup for Blob view"""
     text = [
         "This view is used to simplify the configuration of distances between text values.",
         "",

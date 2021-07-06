@@ -1,3 +1,4 @@
+'''Basic choices for abstraction'''
 from abstraction.abstraction import *
 
 
@@ -18,7 +19,7 @@ def custom_full():
 # name, [method() -> (   [method(vals)->(vals, dict)], answers)]
 
 abstraction_functions = np.array([
-    ["Maximum Compression", lambda data: max_abstraction_function()],
+    ["Maximum Abstraction", lambda data: max_abstraction_function()],
     ["Manual Configuration", lambda data: abstraction_configuration (data)],
 
     ["No Compression", lambda data: (lambda values: (values, {}), list(np.full(len(abstraction_question_array), False)))],

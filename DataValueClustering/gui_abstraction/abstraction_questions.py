@@ -1,3 +1,4 @@
+'''Configuration array for for abstraction questionaire'''
 abstraction_question_array = [
     # dependencies, not-dependencies, name, default, question, explanation, example
     [[], [], "lower_case", True,

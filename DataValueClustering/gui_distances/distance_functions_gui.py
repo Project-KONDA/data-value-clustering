@@ -1,3 +1,4 @@
+'''collection of measure functions between string values and small interface for choice'''
 import numpy as np
 
 from distance.dice_coefficient import dice_coefficient_distance

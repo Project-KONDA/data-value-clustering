@@ -1,3 +1,4 @@
+'''calculation of the dunn index'''
 import numpy as np
 from validation.intra_inter_cluster_distance import max_intra_cluster_distances, \
     min_of_min_inter_cluster_distances

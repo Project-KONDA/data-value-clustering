@@ -1,3 +1,4 @@
+'''script for manually experimenting with parameters'''
 import numpy as np
 
 from clustering.affinity_propagation_clustering import affinity_args
