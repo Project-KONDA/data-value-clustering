@@ -1,3 +1,4 @@
+'''Abstract from original data values by applying abstraction rules.'''
 import re
 import numpy as np
 

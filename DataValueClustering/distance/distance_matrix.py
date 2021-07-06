@@ -1,3 +1,4 @@
+'''Calculate distance matrix containing pairwise distances between abstracted data values.'''
 from datetime import datetime
 
 import numpy as np

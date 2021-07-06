@@ -1,3 +1,4 @@
+'''Collection of distance functions.'''
 from distance import levenshtein_distance, longest_common_subsequence_distance, dice_coefficient_distance
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
 

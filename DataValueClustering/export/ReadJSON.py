@@ -1,3 +1,4 @@
+'''Read individual information from JSON file containing configuration and results.'''
 from export.ExecutionConfiguration import load_ExecutionConfiguration
 from gui_center.cluster_representation import fancy_cluster_representation_reverse
 

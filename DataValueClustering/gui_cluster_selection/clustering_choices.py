@@ -1,3 +1,4 @@
+'''Collection of views for specifying the parameters of the clustering algorithm.'''
 import numpy as np
 
 from gui_cluster_configuration.cluster_algorithms_gui import cluster_hierarchical, cluster_kmedoids, cluster_dbscan, \

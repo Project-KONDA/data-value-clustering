@@ -1,3 +1,4 @@
+'''This script allows starting the GUI.'''
 from datetime import datetime
 
 from data_extraction.representants import get_repr_cluster, get_repr_list
@@ -22,9 +23,8 @@ MAX_VALUES = 1000
 
 class Main:
     """
-    Main Class that realises the workflow of the cluster approach
-    Can be executed directly without attributes to configure via GUI
-    Attributes used to specify execution up front
+    Central class that realises the workflow of the clustering approach and controls the data flows between the other components.
+    Allows data value clustering via an API or via the GUI.
     """
 
     def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
@@ -37,7 +37,7 @@ class Main:
             index of the compression function (default is -1)
             functions specified in 'gui_compression/compression_choices.py'
         :param distance_index: int
-            index of the compression function (default is -1)
+            index of the distance function (default is -1)
             functions specified in 'gui_distance/distance_choices.py'
         :param cluster_index: int
             index of the cluster algorithm (default is -1)

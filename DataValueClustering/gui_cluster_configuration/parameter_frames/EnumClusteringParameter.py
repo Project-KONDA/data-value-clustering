@@ -13,6 +13,9 @@ def create_enum_frame(name, explanation, dropdown_options, suggestions, deactiva
 
 
 class EnumClusteringParameter(ClusteringParameter):
+    '''
+    A widget for specifying an enumeration parameter of a clusering algorithm via radio buttons.
+    '''
 
     def __init__(self, parent, name, explanation, options, suggestions, deactivatable=False, default_active=False, plot_function=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)

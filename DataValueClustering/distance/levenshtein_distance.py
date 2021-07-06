@@ -1,3 +1,4 @@
+'''Apply non-weighted levenshtein distance.'''
 import numpy as np
 
 

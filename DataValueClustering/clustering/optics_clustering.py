@@ -1,3 +1,4 @@
+'''Apply OPTICS clustering algorithm.'''
 import numpy as np
 from sklearn.cluster import OPTICS
 

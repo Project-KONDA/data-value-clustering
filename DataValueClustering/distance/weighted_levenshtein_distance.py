@@ -1,3 +1,4 @@
+'''Apply weighted levenshtein distance.'''
 import re
 import math
 from datetime import datetime

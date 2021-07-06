@@ -10,6 +10,9 @@ def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, de
 
 
 class SliderClusteringParameter(ClusteringParameter):
+    '''
+    A widget for specifying a number parameter of a clusering algorithm via a slider.
+    '''
 
     def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False, plot_function=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)

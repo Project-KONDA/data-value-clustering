@@ -1,3 +1,4 @@
+'''Suggest clusterings algorithms based on answers to questionnaire.'''
 from gui_cluster_configuration.cluster_algorithms_gui import cluster_spectral, cluster_affinity, cluster_optics, cluster_dbscan, \
     cluster_kmedoids, cluster_hierarchical
 

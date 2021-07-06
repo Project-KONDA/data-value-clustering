@@ -1,3 +1,4 @@
+'''Manage configurations for data value clustering.'''
 import json
 import re
 from datetime import datetime
@@ -82,6 +83,9 @@ def ExecutionConfigurationFromParams(data_path, lower_limit, upper_limit, compre
 
 
 class ExecutionConfiguration(object):
+    '''
+    A class for executing data value clustering with a given configuration and saving both the configuration and results in JSON format.
+    '''
 
     def __init__(self, dict):
         for key, value in dict.items():

@@ -1,3 +1,4 @@
+'''This script allows clustering the data values of the field LIDO attribution qualifiers with an example configuration used for the evaluation.'''
 import numpy as np
 
 from distance.weighted_levenshtein_distance import get_cost_map

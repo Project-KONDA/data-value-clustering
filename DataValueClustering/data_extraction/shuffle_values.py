@@ -1,3 +1,4 @@
+'''Save shuffled data value list in file.'''
 from random import shuffle
 
 from data_extraction import read_data_values_from_file

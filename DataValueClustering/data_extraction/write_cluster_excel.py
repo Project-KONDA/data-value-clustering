@@ -1,3 +1,4 @@
+'''Export calculated clustering to excel file.'''
 import xlsxwriter
 
 from data_extraction.representants import get_repr_list

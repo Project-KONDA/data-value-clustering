@@ -1,3 +1,4 @@
+'''Apply k-medoids clustering algorithm.'''
 from sklearn_extra.cluster import KMedoids
 
 from clustering import hierarchical_clustering

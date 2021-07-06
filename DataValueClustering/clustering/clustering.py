@@ -1,3 +1,4 @@
+'''Handle clusterings created by clustering algorithm.'''
 import numpy as np
 
 from clustering.affinity_propagation_clustering import affinity_args

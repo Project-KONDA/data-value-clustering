@@ -1,3 +1,4 @@
+'''Apply affinity propagation clustering algorithm.'''
 from sklearn.cluster import AffinityPropagation
 
 from gui_center.cluster_representation import fancy_cluster_representation

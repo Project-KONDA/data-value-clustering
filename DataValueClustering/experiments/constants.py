@@ -1,4 +1,4 @@
-
+'''File paths used for the examples.'''
 playground_exports = "../experiments/exports/playground/"
 evaluation_exports = "../experiments/exports/evaluation/"
 

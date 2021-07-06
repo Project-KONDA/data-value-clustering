@@ -1,3 +1,4 @@
+'''Read data values from file.'''
 import glob
 import os
 import numpy as np

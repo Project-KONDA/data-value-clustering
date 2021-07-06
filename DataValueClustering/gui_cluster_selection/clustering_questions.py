@@ -1,3 +1,4 @@
+'''Questionnaire for suggesting clustering algorithms.'''
 clustering_question_array = [
     # dependencies, not-dependencies, name, default, question, explanation
 

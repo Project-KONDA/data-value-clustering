@@ -1,3 +1,4 @@
+'''Read read random data values from file.'''
 import random
 
 from data_extraction import read_data_values_from_file

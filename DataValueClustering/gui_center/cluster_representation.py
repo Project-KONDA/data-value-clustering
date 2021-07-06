@@ -1,3 +1,4 @@
+'''Convert between simple cluster representation output by clustering algorithms and more human readable fancy cluster representation.'''
 def fancy_cluster_representation(values, clusters):
     n_clusters = max(clusters) + 1
     outer_list = list()

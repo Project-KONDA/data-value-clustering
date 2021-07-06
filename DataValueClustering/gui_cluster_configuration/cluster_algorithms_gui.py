@@ -1,3 +1,4 @@
+'''Compose widgets for specifying the parameters of the clustering algorithm.'''
 from clustering import hierarchical_clustering, affinity_propagation_clustering, dbscan_clustering, optics_clustering, spectral_clustering, kmedoids_clustering
 from clustering.hierarchical_clustering import *
 from clustering.kmedoids_clustering import *

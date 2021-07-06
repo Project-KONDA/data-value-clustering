@@ -9,6 +9,9 @@ def create_boolean_frame(name, explanation, default, deactivatable=False, defaul
 
 
 class BooleanClusteringParameter(ClusteringParameter):
+    '''
+    A widget for specifying a boolean parameter of a clusering algorithm via a check button.
+    '''
 
     def __init__(self, parent, name, explanation, default, deactivatable=False, default_active=False, plot_function=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)

@@ -1,3 +1,4 @@
+'''Apply hierarchical clustering algorithm.'''
 from scipy.cluster.hierarchy import linkage, fcluster
 
 from gui_cluster_configuration.dendrogram import show_dendrogram

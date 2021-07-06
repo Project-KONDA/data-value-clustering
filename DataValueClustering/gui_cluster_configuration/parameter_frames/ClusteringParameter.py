@@ -10,6 +10,9 @@ DEPENDENCY_ACTIVATION_ACTIVATION = 'activation_activation'
 
 
 class ClusteringParameter(ABC):
+    '''
+    A widget for specifying a parameter of a clusering algorithm.
+    '''
 
     def __init__(self, parent, name, explanation, deactivatable=False, reverse_default_active=False, plot_function=None):
         self.frame = Frame(parent, highlightthickness=1, highlightbackground='grey', bg='white')

@@ -1,3 +1,4 @@
+'''Get original values as representatives for abstracted data values.'''
 import numpy as np
 
 

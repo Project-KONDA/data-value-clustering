@@ -1,3 +1,4 @@
+'''Apply spectral clustering algorithm.'''
 import numpy as np
 from sklearn.cluster import SpectralClustering
 

@@ -10,6 +10,9 @@ def get_configuration_parameters(title, parameter_frame_inits, dependencies):
 
 
 class ClusterConfigurationInput:
+    '''
+    A view that contains widgets for specifying the parameters of the clustering algorithm.
+    '''
 
     def __init__(self, title, parameter_frame_inits, dependencies):
         self.root = Tk()

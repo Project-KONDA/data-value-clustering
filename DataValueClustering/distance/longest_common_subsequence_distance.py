@@ -1,3 +1,4 @@
+'''Apply longest common subsequence distance.'''
 import numpy as np
 
 

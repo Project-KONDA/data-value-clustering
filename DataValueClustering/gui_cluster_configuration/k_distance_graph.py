@@ -1,3 +1,4 @@
+'''View showing k-distance graph.'''
 import numpy as np
 from matplotlib import pyplot as plt
 

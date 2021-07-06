@@ -23,7 +23,7 @@ def input_questionnaire_clustering(config, predefined_answers=None):
 
 
 class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
-    """ binary questionaire GUI to help with the choice of the clustering function """
+    """Binary questionnaire view to support the selection of the clustering algorithm"""
 
     def __init__(self, config, predefined_answers=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
