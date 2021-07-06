@@ -10,13 +10,13 @@ from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, com
 from sklearn.metrics.cluster import contingency_matrix
 
 from clustering.clustering import clustering_args_functions
-from compression.compression import get_compression_method
+from abstraction.abstraction import get_abstraction_method
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel
 from distance.distance import distance_functions
 from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
 from gui_center.main import Main
-from gui_compression.compression_choices import compression_functions
+from gui_abstraction.abstraction_choices import abstraction_functions
 from validation.external_validation import compare_true_and_pred_clusters, get_pred_clustering_of_true_values, \
     get_true_and_pred_clusters_parts, check_completeness_of_true_values, filter_clusters_true_fancy
 
@@ -40,20 +40,20 @@ def load_ExecutionConfiguration(filepath):
     # return json.loads(filepath + ".json")
 
 
-def get_compression_answers(compression):
-    for i, e in enumerate(compression_functions):
-        if e[0] == compression:
+def get_abstraction_answers(abstraction):
+    for i, e in enumerate(abstraction_functions):
+        if e[0] == abstraction:
             return e[1](None)[1]
 
 
-def ExecutionConfigurationFromParams(data_path, lower_limit, upper_limit, compression, distance_func, algorithm,
+def ExecutionConfigurationFromParams(data_path, lower_limit, upper_limit, abstraction, distance_func, algorithm,
                                      algorithm_params, costmap=None, clusters_true_fancy=None):
-    if isinstance(compression, list):
-        compression_answers = compression
-        compression_function = ""
-    elif isinstance(compression, str):
-        compression_answers = get_compression_answers(compression)
-        compression_function = compression
+    if isinstance(abstraction, list):
+        abstraction_answers = abstraction
+        abstraction_function = ""
+    elif isinstance(abstraction, str):
+        abstraction_answers = get_abstraction_answers(abstraction)
+        abstraction_function = abstraction
     else:
         pass
 
@@ -68,8 +68,8 @@ def ExecutionConfigurationFromParams(data_path, lower_limit, upper_limit, compre
         "data_name": re.sub("\..*", "", re.sub(".*/", "", data_path)),
         "lower_limit": lower_limit,
         "upper_limit": upper_limit,
-        "compression_function": compression_function,
-        "compression_answers": compression_answers,
+        "abstraction_function": abstraction_function,
+        "abstraction_answers": abstraction_answers,
         "distance_func": distance_func,
         "algorithm": algorithm,
         "algorithm_params": algorithm_params,
@@ -108,10 +108,10 @@ class ExecutionConfiguration(object):
         json_other = other.toJSON().replace(other.target_file_name, "")
         return json_self == json_other
 
-    def get_compression(self):
-        import compression.compression
-        # return compression.get_compression_method(self.compression_answers), self.compression_answers
-        return get_compression_method(self.compression_answers)
+    def get_abstraction(self):
+        import abstraction.abstraction
+        # return abstraction.get_compression_method(self.compression_answers), self.compression_answers
+        return get_abstraction_method(self.abstraction_answers)
 
     def get_costmap(self):
         if self.costmap_case is None or self.costmap_regex is None or self.costmap_weights is None:
@@ -140,8 +140,8 @@ class ExecutionConfiguration(object):
         # extract data
         data = read_data_values_from_file(self.data_path)[self.lower_limit:self.upper_limit]
 
-        # get_compression
-        compression_f = self.get_compression()
+        # get_abstraction
+        abstraction_f = self.get_abstraction()
 
         # specify distance function
         distance_f = distance_functions[self.distance_func](self.get_costmap())
@@ -149,25 +149,25 @@ class ExecutionConfiguration(object):
         # specify cluster function with parameters
         cluster_f = clustering_args_functions[self.algorithm](**self.params_to_dict())
 
-        main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
+        main = Main(data=data, abstraction_f=abstraction_f, distance_f=distance_f, cluster_f=cluster_f)
 
         # self.compressed_values = main.values_compressed.tolist()
         self.cluster_list = main.fancy_cluster_list
         self.noise = main.noise
-        self.cluster_list_compressed = main.fancy_cluster_list_compressed
-        self.noise_compressed = main.noise_compressed
-        self.comp_to_normal_map = [list(elem) for elem in main.compression_dict.items()]
+        self.cluster_list_abstracted = main.fancy_cluster_list_abstracted
+        self.noise_abstracted = main.noise_abstracted
+        self.comp_to_normal_map = [list(elem) for elem in main.abstraction_dict.items()]
         self.cluster_sizes = main.cluster_sizes
         self.noise_size = main.noise_size
-        self.cluster_sizes_compressed = main.cluster_sizes_compressed
-        self.noise_size_compressed = main.noise_size_compressed
+        self.cluster_sizes_abstracted = main.cluster_sizes_abstracted
+        self.noise_size_abstracted = main.noise_size_abstracted
         self.amount_data = main.num_data
-        self.amount_compressed_data = main.num_compressed_data
-        self.compression_rate = main.compression_rate
+        self.amount_abstracted_data = main.num_abstracted_data
+        self.abstraction_rate = main.abstraction_rate
         self.no_clusters = main.no_clusters
         self.no_noise = main.no_noise
         self.time_total = str(main.timedelta_total)
-        self.time_compression = str(main.timedelta_compression)
+        self.time_abstraction = str(main.timedelta_abstraction)
         self.time_distance = str(main.timedelta_distance)
         self.time_cluster = str(main.timedelta_cluster)
         self.wb_index = main.wb_index
@@ -177,21 +177,21 @@ class ExecutionConfiguration(object):
         self.average_intra_cluster_distances_per_cluster_per_value = main.average_intra_cluster_distances_per_cluster_per_value
 
         if not (self.clusters_true_fancy is None):
-            self.external_validation(main.values_compressed, main.clusters_compressed, compression_f)
+            self.external_validation(main.values_abstracted, main.clusters_abstracted, abstraction_f)
 
-    def external_validation(self, values_compressed, clusters_compressed, compression_f):
+    def external_validation(self, values_abstracted, clusters_abstracted, abstraction_f):
         self.completeness, self.missing_values, self.superflous_values = check_completeness_of_true_values(
-            compression_f, self.clusters_true_fancy, values_compressed)
+            abstraction_f, self.clusters_true_fancy, values_abstracted)
 
-        clusters_true_fancy_filtered = filter_clusters_true_fancy(self.clusters_true_fancy, values_compressed,
-                                                                  compression_f)
+        clusters_true_fancy_filtered = filter_clusters_true_fancy(self.clusters_true_fancy, values_abstracted,
+                                                                  abstraction_f)
 
-        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(compression_f,
+        self.pred_clustering_of_true_values = get_pred_clustering_of_true_values(abstraction_f,
                                                                                  clusters_true_fancy_filtered,
-                                                                                 values_compressed, clusters_compressed)
+                                                                                 values_abstracted, clusters_abstracted)
 
         clusters_true_part, clusters_pred_part = get_true_and_pred_clusters_parts(
-            compression_f, values_compressed, clusters_true_fancy_filtered, clusters_compressed)
+            abstraction_f, values_abstracted, clusters_true_fancy_filtered, clusters_abstracted)
         self.clusters_true_part = clusters_true_part.tolist()
         self.clusters_pred_part = clusters_pred_part.tolist()
 
@@ -236,8 +236,8 @@ class ExecutionConfiguration(object):
                 hasattr(self, 'excel_file_name')
             and hasattr(self, 'cluster_list')
             and hasattr(self, 'noise')
-            and hasattr(self, 'cluster_list_compressed')
-            and hasattr(self, 'noise_compressed')
+            and hasattr(self, 'cluster_list_abstracted')
+            and hasattr(self, 'noise_abstracted')
             # and hasattr(self, 'comp_to_normal_map')
         )
 
@@ -249,13 +249,13 @@ class ExecutionConfiguration(object):
         cluster_to_excel(path + self.excel_file_name,
                          self.cluster_list,
                          self.noise,
-                         self.cluster_list_compressed,
-                         self.noise_compressed,
+                         self.cluster_list_abstracted,
+                         self.noise_abstracted,
                          map,
                          self.cluster_sizes,
                          self.noise_size,
-                         self.cluster_sizes_compressed,
-                         self.noise_size_compressed,
+                         self.cluster_sizes_abstracted,
+                         self.noise_size_abstracted,
                          self.average_intra_cluster_distances_per_cluster_per_value,
                          self.intra_cluster_distances)
 
@@ -264,8 +264,8 @@ if __name__ == '__main__':
     """SPECIFY PARAMETERS"""
     # data
     # target_file_name = "target_file_name"
-    # compression
-    compression_answers = [True, True, True, True, True, True, True, True, True, True, True, True, True, False, False,
+    # abstraction
+    abstraction_answers = [True, True, True, True, True, True, True, True, True, True, True, True, True, False, False,
                            False, False, False, True]
     # distance
     weight_case = 1
@@ -285,7 +285,7 @@ if __name__ == '__main__':
     algorithm_params = [["eps", 3], ["min_samples", 3], ["n_jobs", None]]
 
     """INITIALIZE"""
-    object = ExecutionConfigurationFromParams("../data/midas_dates.txt", 0, 1000, compression_answers,
+    object = ExecutionConfigurationFromParams("../data/midas_dates.txt", 0, 1000, abstraction_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     """EXECUTE"""

@@ -5,5 +5,5 @@ from gui_center.cluster_representation import fancy_cluster_representation_rever
 
 def read_clusters_compressed(path, values):
     exe = load_ExecutionConfiguration(path)
-    fancy = exe.cluster_list_compressed
+    fancy = exe.cluster_list_abstracted
     return fancy_cluster_representation_reverse(values, fancy)

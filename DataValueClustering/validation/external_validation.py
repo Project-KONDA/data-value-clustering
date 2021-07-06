@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics import adjusted_mutual_info_score
 
-from compression.compression import compress_single_value
+from abstraction.abstraction import abstraction_single_value
 from gui_center.cluster_representation import fancy_cluster_representation
 
 
@@ -34,7 +34,7 @@ def filter_clusters_true_fancy(clusters_true_fancy, values_compressed, compressi
     for x, l in enumerate(clusters_true_fancy):
         l_filtered = []
         for y, v in enumerate(l):
-            if compress_single_value(v, compression_f) in values_compressed:
+            if abstraction_single_value(v, compression_f) in values_compressed:
                 l_filtered.append(v)
         clusters_true_fancy_compressed_filtered.append(l_filtered)
     return clusters_true_fancy_compressed_filtered

@@ -8,12 +8,12 @@ from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 if __name__ == '__main__':
     # specify parameters
 
-    # compression
+    # abstraction
     # "letter sequences, digits"
-    compression_answers = [True, True, False, False, True, False, False, False, True,
-         True, False, False,
-         False, False, False, False, False, False,
-         True]
+    abstraction_answers = [True, True, False, False, True, False, False, False, True,
+                           True, False, False,
+                           False, False, False, False, False, False,
+                           True]
     #distance
     weight_case = 1
     regex = ["", "abcdefghijklmnopqrstuvwxyzäöüßáàéèíìóòúùABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈÍÌÓÒÚÙ", "0123456789", " ", "-'", ",", ".:;^?!()[]{}+*/%=<>&|\"`´" , "<rest>"]
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 700], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_aps_artist_names, 0, 1000000, compression_answers,
+    object = ExecutionConfigurationFromParams(midas_aps_artist_names, 0, 1000000, abstraction_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute

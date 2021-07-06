@@ -2,7 +2,7 @@
 import re
 import numpy as np
 
-from gui_compression.compression_questions import compression_question_array
+from gui_abstraction.abstraction_questions import abstraction_question_array
 #from gui_distances.blobinput_helper import get_blob_configuration
 from util.question_result_array_util import get_array_part
 
@@ -12,90 +12,90 @@ def duplicate_removal_function():
                False, False, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def max_compression_function():
+def max_abstraction_function():
     answers = [True, True, True, True, True, True, True, True, True,
         True, True, True,
         True, False, False, False, False, False,
         True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def char_compression_function():
+def char_abstraction_function():
     # ["[a-zA-Z]", "e"], ["[0-9]", "0"]
     answers = [True, True, False, False, False, False, False, False, False,
                True, False, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def char_compression_case_sensitive_function():
+def char_abstraction_case_sensitive_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["[0-9]", "0"]
     answers = [True, False, True, False, False, False, False, False, False,
                True, False, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def sequence_compression_function():
+def sequence_abstraction_function():
     # ["[a-zA-Z]+", "f"],  ["[0-9]+", "1"]
     answers = [True, True, False, False, True, False, False, False, False,
                True, True, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def sequence_compression_case_sensitive_function():
+def sequence_abstraction_case_sensitive_function():
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]+", "1"]
     answers = [True, False, True, True, False, True, False, False, False,
                True, True, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def letter_sequence_compression_function():
+def letter_sequence_abstraction_function():
     # ["[a-z]+", "w"], ["[A-Z]+", "S"], ["[0-9]", "0"]
     answers = [True, False, True, True, False, True, False, False, False,
                True, False, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def number_sequence_compression_function():
+def number_sequence_abstraction_function():
     # ["[a-z]", l"], ["[A-Z]", "L"], ["[0-9]+", "1"]
     answers = [True, False, True, False, False, False, False, False, False,
                True, True, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def word_compression_function():
+def word_abstraction_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"]
     answers = [True, False, True, True, False, True, True, False, False,
                True, True, False,
                False, False, False, False, False, False,
                True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def word_decimal_compression_function():
+def word_decimal_abstraction_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["[0-9]+", "1"], ["1,1", "2"]
     answers = [True, False, True, True, False, True, True, False, False,
                True, True, True,
                False, False, False, False, False, False,
                True]
-    return get_compression_method( answers), answers
+    return get_abstraction_method(answers), answers
 
 
-def word_sequence_compression_function():
+def word_sequence_abstraction_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"],
     # ["[qU]+", "V"], ["[0-9]+", "1"]
     # answers = [True, False, True, True, False, True, True, True, False,
@@ -106,7 +106,7 @@ def word_sequence_compression_function():
      True, True, False,
      False, False, False, False, False, False,
      True]
-    return get_compression_method(answers), answers
+    return get_abstraction_method(answers), answers
 
 
 # dictionary = [
@@ -121,7 +121,7 @@ def word_sequence_compression_function():
 #     ["letter sequence",                                 "[a-zäöüßA-ZÄÖÜ]+"],
 # ]
 
-compression_configuration_array = [
+abstraction_configuration_array = [
     # dependencies, not-dependencies, replacement function, replacement char, label, regex
     [[1],          [0],    lambda v: v.lower(),                                                                 ],  # "↓",  "",                            "lower_case"],  # 0
     [[0],          [1, 3], lambda v: re.sub("[a-zäöüßáàéèíìóòúùøñçåâêëîïæœôûÿ]", "l", v),                                               ],  # "l",  "lower_case_letters",          "[a-zäöüß]"],  # 1
@@ -147,8 +147,8 @@ compression_configuration_array = [
 ]
 
 
-def get_compression_configuration(answers):
-    array = get_array_part(compression_configuration_array, compression_question_array, answers)
+def get_abstraction_configuration(answers):
+    array = get_array_part(abstraction_configuration_array, abstraction_question_array, answers)
     if len(array.shape) < 2:
         return array
     return array[:, 0]
@@ -168,34 +168,34 @@ def get_compression_configuration(answers):
 #     return np.array(result, dtype=object)
 
 
-def get_compression_method(answers):
+def get_abstraction_method(answers):
     def local_func(values, compressions_list, unique):
-        values_compressed = values.copy()
-        compression_dict = {}
-        assert len(values_compressed) == len(values)
-        for i in range(len(values_compressed)):
+        values_abstracted = values.copy()
+        abstraction_dict = {}
+        assert len(values_abstracted) == len(values)
+        for i in range(len(values_abstracted)):
             # apply all compressions:
             for compression in compressions_list:
-                values_compressed[i] = compression(values_compressed[i])
+                values_abstracted[i] = compression(values_abstracted[i])
             # add dict entry:
-            if values_compressed[i] in compression_dict:
-                compression_dict[values_compressed[i]].append(values[i])
+            if values_abstracted[i] in abstraction_dict:
+                abstraction_dict[values_abstracted[i]].append(values[i])
             else:
-                compression_dict[values_compressed[i]] = [values[i]]
+                abstraction_dict[values_abstracted[i]] = [values[i]]
         if unique:
             # remove redundancy:
-            values_compressed = np.array(list(set(values_compressed)))  # order differs across multiple runs
-        return values_compressed, compression_dict
+            values_abstracted = np.array(list(set(values_abstracted)))  # order differs across multiple runs
+        return values_abstracted, abstraction_dict
 
     n = len(answers)
 
-    compressions = get_compression_configuration(answers=answers)
+    abstractions = get_abstraction_configuration(answers=answers)
 
-    return lambda values: local_func(values, compressions, answers[n-1])
+    return lambda values: local_func(values, abstractions, answers[n-1])
 
 
-def compress_single_value(value, compression_f):
-    return compression_f([value])[0][0]
+def abstraction_single_value(value, abstraction_f):
+    return abstraction_f([value])[0][0]
 
 
 if __name__ == '__main__':
@@ -203,8 +203,8 @@ if __name__ == '__main__':
         True, True, False,
         True, False, False, False, False, False,
         True]
-    min_compression = get_compression_configuration(answers=min)
-    print(min_compression)
+    min_abstraction = get_abstraction_configuration(answers=min)
+    print(min_abstraction)
 
     # max = [True, False, True, True, True, True, True, True, True,
     #     True, True, True,

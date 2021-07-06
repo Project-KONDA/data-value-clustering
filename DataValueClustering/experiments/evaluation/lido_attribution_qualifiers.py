@@ -8,8 +8,8 @@ from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 if __name__ == '__main__':
     # specify parameters
 
-    # compression
-    compression_answers = "letters, digits"
+    # abstraction
+    abstraction_answers = "letters, digits"
 
     #distance
     weight_case = 1
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     algorithm_params = [['method', 'complete'], ['n_clusters', None], ['distance_threshold', 100], ['criterion', 'distance']]  # complete, ward, average, weighted, centroid, median, single
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_attribution_qualifier_randomized, 0, 1000000, compression_answers,
+    object = ExecutionConfigurationFromParams(lido_attribution_qualifier_randomized, 0, 1000000, abstraction_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute

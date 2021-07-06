@@ -9,7 +9,7 @@ from clustering.spectral_clustering import spectral_args
 from experiments.constants import midas_dates, midas_artist_names, midas_measurements, lido_titles, \
     lido_attribution_qualifier, lido_measurement_unit
 from gui_center.main import Main
-from compression.compression import word_sequence_compression_function
+from abstraction.abstraction import word_sequence_abstraction_function
 from distance.weighted_levenshtein_distance import get_cost_map, get_weighted_levenshtein_distance
 from data_extraction.read_file import read_data_values_from_file
 
@@ -19,7 +19,7 @@ def run_clustering(file_path, data_limit, compression_f, distance_f, cluster_f):
     # print(data)
 
     # start = time.time()
-    main = Main(data=data, compression_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
+    main = Main(data=data, abstraction_f=compression_f, distance_f=distance_f, cluster_f=cluster_f)
     cluster_list, noise = main.fancy_cluster_list, main.noise
     # end = time.time()
     # print("Runtime = " + str(end - start))
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     ]
 
     data_i = 0
-    f = lambda: run_clustering(data_fields[data_i], 1000, word_sequence_compression_function()[0], distance_configuration_1(data_i), algorithm_configurations[3])
+    f = lambda: run_clustering(data_fields[data_i], 1000, word_sequence_abstraction_function()[0], distance_configuration_1(data_i), algorithm_configurations[3])
 
     f()
     print("---------------------------------")

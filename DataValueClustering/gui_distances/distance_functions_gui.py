@@ -67,7 +67,7 @@ def automatic():
 
 
 def custom_full():
-    # TODO: let user specify compression
+    # TODO: let user specify abstraction
     pass
 
 

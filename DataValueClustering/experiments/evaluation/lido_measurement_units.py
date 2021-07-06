@@ -8,12 +8,12 @@ from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 if __name__ == '__main__':
     # specify parameters
 
-    # compression
+    # abstraction
     # compression_answers = "letters, number sequences"
-    compression_answers = [False, False, False, False, False, False, False, False, False,
-               True, True, True,
-               False, False, False, False, False, False,
-               True]
+    abstraction_answers = [False, False, False, False, False, False, False, False, False,
+                           True, True, True,
+                           False, False, False, False, False, False,
+                           True]
 
     #distance
     weight_case = 1
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
 
     # initialize
-    object = ExecutionConfigurationFromParams(lido_measurement_unit, 0, 1000000, compression_answers,
+    object = ExecutionConfigurationFromParams(lido_measurement_unit, 0, 1000000, abstraction_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute

@@ -8,7 +8,7 @@ from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_matrix_map
 from gui_general.DropdownInput import input_dropdown
 from gui_cluster_selection.clustering_choices import cluster_algorithms
-from gui_compression.compression_choices import compression_functions
+from gui_abstraction.abstraction_choices import abstraction_functions
 from gui_distances.distance_choices import distance_functions
 from data_extraction.read_file import get_sources_in_experiment_data_directory
 from gui_result import show_mds_scatter_plot
@@ -27,15 +27,15 @@ class Main:
     Allows data value clustering via an API or via the GUI.
     """
 
-    def __init__(self, data_index=-1, compression_index=-1, distance_index=-1, cluster_index=-1, data=None,
-                 compression_f=None, distance_f=None, cluster_f=None, scatter_plot_save_path=None):
+    def __init__(self, data_index=-1, abstraction_index=-1, distance_index=-1, cluster_index=-1, data=None,
+                 abstraction_f=None, distance_f=None, cluster_f=None, scatter_plot_save_path=None):
         """
         :param data_index: int
             index of the data (default is -1)
             data corresponds to files in the 'data' folder, order alphabetically
-        :param compression_index: int
-            index of the compression function (default is -1)
-            functions specified in 'gui_compression/compression_choices.py'
+        :param abstraction_index: int
+            index of the abstraction function (default is -1)
+            functions specified in 'gui_abstraction/abstraction_choices.py'
         :param distance_index: int
             index of the distance function (default is -1)
             functions specified in 'gui_distance/distance_choices.py'
@@ -44,8 +44,8 @@ class Main:
             algorithms specified in 'gui_cluster_selection/clustering_choices.py'
         :param data: list[str]
             specify the data (default is None)
-        :param compression_f:  (list[str]) -> ?
-            specify the compression function (default is None)
+        :param abstraction_f:  (list[str]) -> ?
+            specify the abstraction function (default is None)
         :param distance_f: (str, str) -> float
             specify the distance function (default is None)
         :param cluster_f: ({str: ndarray}, list[str]) -> ndarray[float, float]
@@ -59,27 +59,27 @@ class Main:
         print("Initializing ...")
 
         self.l_data = get_sources_in_experiment_data_directory()
-        self.l_compressions = compression_functions
+        self.l_abstractions = abstraction_functions
         self.l_distances = distance_functions
         self.l_clusters = cluster_algorithms
 
         self.data_index = data_index
-        self.compression_index = compression_index
+        self.abstraction_index = abstraction_index
         self.distance_index = distance_index
         self.cluster_index = cluster_index
 
         self.data = data
-        self.compression_f = compression_f
+        self.abstraction_f = abstraction_f
         self.distance_f = distance_f
         self.cluster_f = cluster_f
 
-        self.values_compressed = None
-        self.compression_dict = None
+        self.values_abstracted = None
+        self.abstraction_dict = None
         self.distance_matrix = None
 
         # Basic Configurations
         if ((self.data_index == -1 and self.data is None)
-                or (self.compression_index == -1 and self.compression_f is None)
+                or (self.abstraction_index == -1 and self.abstraction_f is None)
                 or (self.distance_index == -1 and self.distance_f is None)
                 or (self.cluster_index == -1 and self.cluster_f is None)):
             print("Basic Configurations ...")
@@ -93,11 +93,11 @@ class Main:
             self.extract_data()
 
 
-        if self.compression_index != -1:
-            self.compression_f, self.compression_answers = self.l_compressions[self.compression_index, 1](self.data)
+        if self.abstraction_index != -1:
+            self.abstraction_f, self.abstraction_answers = self.l_abstractions[self.abstraction_index, 1](self.data)
 
         if self.distance_index != -1:
-            self.blob_configuration = get_blob_configuration(self.compression_answers)
+            self.blob_configuration = get_blob_configuration(self.abstraction_answers)
             # [label, regex, resizable, info, x, y, size]
             self.distance_f, self.blob_configuration = self.l_distances[self.distance_index, 1](self.blob_configuration)
 
@@ -107,20 +107,20 @@ class Main:
         # EXECUTION
 
         # COMPRESSION
-        print("Calculate compression ...")
-        self.time_compressing_start = datetime.now()
-        if self.values_compressed is None or self.compression_dict is None:
-            self.values_compressed, self.compression_dict = self.compression_f(self.data)
-        self.time_compressing_end = datetime.now()
+        print("Calculate abstraction ...")
+        self.time_abstraction_start = datetime.now()
+        if self.values_abstracted is None or self.abstraction_dict is None:
+            self.values_abstracted, self.abstraction_dict = self.abstraction_f(self.data)
+        self.time_abstraction_end = datetime.now()
 
-        self.num_compressed_data = len(self.values_compressed)
-        self.compression_rate = self.num_data / self.num_compressed_data
+        self.num_abstracted_data = len(self.values_abstracted)
+        self.abstraction_rate = self.num_data / self.num_abstracted_data
 
         # DISTANCE
         print("Calculate distance matrix ...")
         if self.distance_matrix is None:
             self.time_distance_start = datetime.now()
-            self.distance_matrix_map = calculate_distance_matrix_map(self.distance_f, self.values_compressed)
+            self.distance_matrix_map = calculate_distance_matrix_map(self.distance_f, self.values_abstracted)
             self.time_distance_end = datetime.now()
 
         # CLUSTERING PARAMETER CONFIGURATION
@@ -131,43 +131,43 @@ class Main:
                 quit()
 
         if self.cluster_f is None:
-            self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_compressed)
+            self.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_abstracted)
 
         # CLUSTERING
         print("Start clustering ...")
         self.time_cluster_start = datetime.now()
-        self.clusters_compressed = self.cluster_f(self.distance_matrix_map, self.values_compressed)
-        self.clusters = get_clusters_original_values(self.clusters_compressed, self.values_compressed, self.compression_f,
-                                                self.data)
+        self.clusters_abstracted = self.cluster_f(self.distance_matrix_map, self.values_abstracted)
+        self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted, self.abstraction_f,
+                                                     self.data)
         self.time_cluster_end = datetime.now()
         self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
-        self.cluster_sizes_compressed, self.noise_size_compressed = get_cluster_sizes(self.clusters_compressed)
+        self.cluster_sizes_abstracted, self.noise_size_abstracted = get_cluster_sizes(self.clusters_abstracted)
 
         print("Finalizing ...")
         self.time_end = datetime.now()
         self.timedelta_total = self.time_end - self.time_start
-        self.timedelta_compression = self.time_compressing_end - self.time_compressing_start
+        self.timedelta_abstraction = self.time_abstraction_end - self.time_abstraction_start
         self.timedelta_distance = self.time_distance_end - self.time_distance_start
         self.timedelta_cluster = self.time_cluster_end - self.time_cluster_start
 
         # CLUSTER VISUALISATION
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
-        self.fancy_cluster_list_compressed, self.noise_compressed = fancy_cluster_representation(self.values_compressed, self.clusters_compressed)
+        self.fancy_cluster_list_abstracted, self.noise_abstracted = fancy_cluster_representation(self.values_abstracted, self.clusters_abstracted)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
 
         # TODO
         # MDS scatter plot
-        values_representants = get_repr_list(self.values_compressed, self.compression_dict)
-        show_mds_scatter_plot(values_representants, self.distance_matrix_map["distance_matrix"], self.clusters_compressed, savepath=scatter_plot_save_path)
+        values_representants = get_repr_list(self.values_abstracted, self.abstraction_dict)
+        show_mds_scatter_plot(values_representants, self.distance_matrix_map["distance_matrix"], self.clusters_abstracted, savepath=scatter_plot_save_path)
         # , "..\experiments\\result\here2")  # to instantly save the picture
 
         # CLUSTER VALIDATION
         noise_penalty = (self.num_data - self.no_noise)/self.num_data
-        lines = np.where(self.clusters_compressed != -1)[0]
+        lines = np.where(self.clusters_abstracted != -1)[0]
         distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
         filtered_distance_matrix = distance_matrix_lines[:, lines]
-        index_parameters = self.clusters_compressed[self.clusters_compressed != -1], filtered_distance_matrix
+        index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix
         self.wb_index = noise_penalty * wb_index(*index_parameters)
         self.calinski_harabasz_index = noise_penalty * calinski_harabasz_index(*index_parameters)
         self.dunn_index = noise_penalty * dunn_index(*index_parameters)
@@ -191,19 +191,19 @@ class Main:
         print("]")
         print("Noise:", str(self.noise))
 
-        print("Clusters compressed:")
-        for i in range(len(self.fancy_cluster_list_compressed)):
-            print("\t" + str(self.fancy_cluster_list_compressed[i]))
+        print("Clusters abstracted:")
+        for i in range(len(self.fancy_cluster_list_abstracted)):
+            print("\t" + str(self.fancy_cluster_list_abstracted[i]))
         print("]")
-        print("Noise compressed:        ", self.noise_compressed)
+        print("Noise abstracted:        ", self.noise_abstracted)
 
         print("Data Values:             ", self.num_data)
-        print("Compressed Data Values:  ", self.num_compressed_data)
-        print("Compression:             ", self.compression_rate)
+        print("Abstracted Data Values:  ", self.num_abstracted_data)
+        print("Abstraction:             ", self.abstraction_rate)
         print("Number of clusters:      ", self.no_clusters)
         print("Number of noisy values:  ", self.no_noise)
         print("Time Total:              ", self.timedelta_total)
-        print("Time Compression:        ", self.timedelta_compression)
+        print("Time Abstraction:        ", self.timedelta_abstraction)
         print("Time Distance-Matrix:    ", self.timedelta_distance)
         print("Time Clustering:         ", self.timedelta_cluster)
         print("wb-Index:                ", self.wb_index)
@@ -212,17 +212,17 @@ class Main:
 
     def show_configuration_centre(self):
         title = "Configuration Centre"
-        labels = ["data", "compression", "distance", "cluster"]
+        labels = ["data", "abstraction", "distance", "cluster"]
         matrix = [
             list(self.l_data[:, 0]),
-            list(self.l_compressions[:, 0]),
+            list(self.l_abstractions[:, 0]),
             list(self.l_distances[:, 0]),
             list(self.l_clusters[:, 0])
         ]
-        current_indexes = [self.data_index, self.compression_index, self.distance_index, self.cluster_index]
+        current_indexes = [self.data_index, self.abstraction_index, self.distance_index, self.cluster_index]
         answers, answer_indexes = input_dropdown(title, labels, matrix, current_indexes)
         assert (len(answer_indexes) == 4)
-        [self.data_index, self.compression_index, self.distance_index, self.cluster_index] = answer_indexes
+        [self.data_index, self.abstraction_index, self.distance_index, self.cluster_index] = answer_indexes
 
     def extract_data(self):
         self.data = self.l_data[self.data_index, 1]()

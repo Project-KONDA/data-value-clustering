@@ -1,4 +1,4 @@
-compression_question_array = [
+abstraction_question_array = [
     # dependencies, not-dependencies, name, default, question, explanation, example
     [[], [], "lower_case", True,
      "Should all lower case letters be treated equally?",  # TODO: ask if there are exceptions?

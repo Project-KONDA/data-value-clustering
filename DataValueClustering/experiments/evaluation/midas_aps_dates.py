@@ -10,12 +10,12 @@ if __name__ == '__main__':
 
 
 
-    # compression
+    # abstraction
     # compression_answers = "letters, number sequences"
-    compression_answers = [False, True, False, False, False, False, False, False, False,
-               True, True, False,
-               False, False, False, False, False, False,
-               True]
+    abstraction_answers = [False, True, False, False, False, False, False, False, False,
+                           True, True, False,
+                           False, False, False, False, False, False,
+                           True]
 
 
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
 
     # initialize
-    object = ExecutionConfigurationFromParams(midas_aps_dates, 0, 1000000, compression_answers,
+    object = ExecutionConfigurationFromParams(midas_aps_dates, 0, 1000000, abstraction_answers,
                                               "distance_weighted_levenshtein", algorithm, algorithm_params, costmap)
 
     # execute
