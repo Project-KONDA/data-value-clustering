@@ -18,13 +18,13 @@ Clustering Heterogeneous Data Values](################)".
 
 This diagram gives an overview of the components and their interfaces.
 The core of the tool is the Clustering-based Analyser.
-It realises the workflow and controlls the data flows between the other components.
+It realises the workflow and controls the data flows between the other components.
 It is realized via the class ```Main``` (```DataValueClustering\gui_center\main.py```).
 
 The Extraction component is extracts a list of data values from the database.
 It is not yet implemented.
 
-Multiple GUI components are provided to enable the configuration of the data value clustering based on domain knowledge and present the clustering results.
+Multiple GUI components are provided to enable the configuration of the data value clustering based on domain knowledge and to present the clustering results.
 The GUI is still under development.
 
 The Data Value Clustering component allows performing 3-step data value clustering via an API.
@@ -79,51 +79,64 @@ For running the GUI, ```main.py``` has to be executed. It can be found in ```Dat
 
 ## GUI
 
-The goal of the GUI is to provide an interface with which the nomerous parameters can be configured intuitively and easily by domain experts based on their domain knowledge.
-Therefore the ultimate goal of the interface is to require as little technical understanding of the process.
-For this we want to hide the complexity by reducing the parameter amount and determine parameters based on questions adressing specific circumstances within the domain.
-
-Currently the GUI is build from multiple windows, that open successively.
+To facilitate the usage of our tool, we provide a graphical user interface.
+<!---
+The goal of the GUI is to provide an interface with which the numerous parameters can be configured intuitively and easily by domain experts based on their domain knowledge.
+-->
+The goal is to enable domain experts to intuitively configure the numerous parameters based on their domain knowledge.
+Therefore, the GUI should require as little technical understanding of the clustering process as possible.
+We aim to lower the complexity by reducing the amount of parameters and determining fitting parameter values based on questionnaires adressing specific circumstances of the domain.
+<!---
+Currently, the GUI is build from multiple windows that open successively.
 In the future we will reimplement the center window, to be the real center of configuration.
 It shall be able to start the data value clustering process and present the results.
 Further it shall provide the reentry point for new iterations.
+-->
 
 
 ### Abstraction Configuration
 
 ![Abstraction Configuration](readme_images/config_abstraction.png)
 
-For configuring the abstraction step we developed an interactive view based on a binary response questionnaire.
-Each option is accompanied by a ToolTip showing additional information including an explanation and an example.
-Meanwhile the abstraction of the first 100 original values are dynamically visualized on the right-hand side.
-For this each abstracted value is listed with all associated original values.
+For the configuration of the abstraction step, we provide a binary response questionnaire.
+The questions aim at the expert's assessment of the importance of certain syntactical features.
+Each question is accompanied by a tool tip showing additional information including an explanation and an example.
+The answers are translated to valid combinations of abstraction rules. 
+The result of abstracting the first 100 original values is dynamically visualized on the right-hand side.
+For each abstracted value the list of all associated original values is shown.
 
 
 ### Distance Configuration
 
-For the clustering the similarity between values must be measured.
-To do this we chose the weighted Levenshtein distance, which is a highly configurable edit distance function for string values.
-For  the configuration each edit operation is assigned a weight.
+As a prerequisite for clustering, the similarity between values must be measured.
+For this, we support the weighted Levenshtein distance, which is an edit distance allowing insertions, deletions and substitutions of characters.
+The weights can be configured for each edit operation applied to each possible character.
+For the configuration of the weights we provide two alternative ways explained in the following.
+<!---
+which is a highly configurable edit distance function for string values.
+For the configuration each edit operation is assigned a weight.
 As the measured distance is the accumulated sum of the weights for each performed edit operation during the transformation of one string to another.
 Therefore each operation needs an associated weight, which can be dependent on the in- and outputs.
+-->
+
 
 
 #### Matrix View
 
-The most flexible and most complex configuration of the distance function gives the Matrix View.
-Here groups of symbols can be manually configured.
-Every insertion, deletion and substitution can be assigned a weight based on domain knowledge and personal intentions.
+A direct and flexible configuration of the distance function can be performed via the Matrix View.
+Here groups of characters can be configured freely.
+Every insertion, deletion and substitution of characters of these groups can be assigned a weight based on domain knowledge and personal intentions.
 
 ![Matrix View](readme_images/config_matrixview.png)
 
-For this the Matrix view offers a tabular interface.
+For this, the Matrix view offers a tabular interface.
 Each cell is assigned a substitution operation between groups of symbols, where the user can input a custom weight.
 The table should be read in such a way that the substitutions are from left to top. 
 Additions and deletions are interpreted as substitutions from or to empty strings. 
 To represent this, the first column and first row is always reserved for empty strings.
 
 The distance function needs to be symmetrical to fulfill the symmetry axiom for metrics.
-Therefore the matrix must be symmetrical to the diagonal.
+Therefore, the weight matrix must be symmetrical to the diagonal.
 To guarantee this, all input values are copied into the symmetrically corresponding field.
 
 
@@ -131,17 +144,17 @@ To guarantee this, all input values are copied into the symmetrically correspond
 
 ![Blob View](readme_images/config_blobview.png)
 
-As a more simple and playful approach on configuring the numerous weights for the configuration of the distance function we developed the Blob View.
-The view enables the configuration of the weight matrix via moving and scaling graphical objects.
+As a more simple and playful approach to configuring the numerous weights of the distance function we provide the so called Blob View.
+It enables the configuration of the weight matrix by moving and scaling graphical objects.
 
-Groups of characters are presented as graphical objects, called blobs. 
+Groups of characters are represented by graphical objects, called blobs. 
 They correspond to the columns and rows of the matrix.
 To configure additions and deletions we use an additional blob, the small blue blob labelled with an X.
 For configuring the weights, the user can move the blobs on the 2D canvas using drag and drop.
 The weight for substitutions within a group is represented by the size of the corresponding blob. 
 The user can modify the size using the mouse wheel while hovering over the blob.
 
-
+<!---
 #### Slider View (prevision)
 
 The Slider view is the easiest way of configuring the distance function.
@@ -149,38 +162,49 @@ However it is not implemented yet.
 The idea of this view is, to only configure relative importance of different groups of symbols.
 For this each group will have one slider.
 From the relative importances a valid weight matrix is calculated.
+-->
 
 
 ### Cluster Choice
 
-We support multiple clustering algorithms.
-For the selection of a fitting algorithm, we implemented a short binary questionnaire with fitting ToolTips.
+We support the following clustering algorithms: hierarchical clustering, k-medoids, DBSCAN, OPTICS, affinity propagation and spectral clustering.
+For the selection of a fitting algorithm, we provide a binary questionnaire including tool tips.
+The translation into domain knowledge is subject to future work.
 
 
 ### Cluster Configuration
 
-All the clustering algorithms come with many parameters.
-We implemented a modularized view to configure these parameters contains a checkbox, a slider or an enumeration with radio buttons, respectively.
-The sliders for numerical parameters are provided with appropriate minimum and maximum values.
+The clustering algorithms come with many parameters.
+Our tool provides a modularized view to configure these parameters via standard widgets.
+<!---
+It contains a checkbox, a slider or an enumeration with radio buttons, respectively.
+-->
+The sliders for the configuration of numerical parameters are provided with appropriate minimum and maximum values.
 For enumerations, tooltips are provided for each option.
 
 ![Hierarchical Configuration 2](readme_images/config_clustering_hierarchical2.png)
 
-The modules also mimic the dependencies between parameters.
-For example in hierarchical clustering, there is an alternating dependency between n_clusters and distance_threshold: 
+The modules also mimic the dependencies between the parameters of the clustering algorithms.
+For example, in hierarchical clustering, there is an alternating dependency between n_clusters and distance_threshold: 
 only one of the parameters is required.
-The parameter depth is enabled only if the option “inconsistent” is chosen for the parameter criterion.
+The parameter depth is enabled only if the option 'inconsistent' is chosen for the parameter criterion.
 
 
 ### Result
 
 ![Excel Excerpt](readme_images/excel_excerpt2.png)
 
-Currently there is no real result view implemented.
-Instead the resulting clusters are provided via a generated Excel file.
-In the future, we plan to also present this cluster representation directly in the interface.
-This shall also include a questionnaire on which features of the clustering do not fulfill the expectations of the user.
-They will then be used to provide suggestions for the next iteration on how to change the configuration.
+Currently, 
+<!---
+there is no real result view implemented.
+Instead
+-->
+the calculated clusterings are provided via generated Excel files.
+<!---
+In the future, we plan to also present the clustering directly in the GUI.
+This shall also include a questionnaire on on how satisfied the experts are with certain aspects of a produced clustering
+Based on the answers, suggestions on how to modify the configuration in the next iteration will be made.
+-->
 
 
 
