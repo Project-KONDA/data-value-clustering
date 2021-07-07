@@ -108,10 +108,10 @@ For each abstracted value the list of all associated original values is shown.
 
 ### Distance Configuration
 
-As a prerequisite for clustering, the similarity between values must be measured.
-For this, we support the weighted Levenshtein distance, which is an edit distance allowing insertions, deletions and substitutions of characters.
+As a prerequisite for clustering, the similarity between the abstracted values must be measured.
+For this, we support the weighted Levenshtein distance, which is an edit distance based on insertions, deletions and substitutions of characters.
 The weights can be configured for each edit operation applied to each possible character.
-For the configuration of the weights we provide two alternative ways explained in the following.
+For the configuration of the weights we offer two options explained in the following.
 <!---
 which is a highly configurable edit distance function for string values.
 For the configuration each edit operation is assigned a weight.
@@ -130,10 +130,10 @@ Every insertion, deletion and substitution of characters of these groups can be 
 ![Matrix View](readme_images/config_matrixview.png)
 
 For this, the Matrix view offers a tabular interface.
-Each cell is assigned a substitution operation between groups of symbols, where the user can input a custom weight.
-The table should be read in such a way that the substitutions are from left to top. 
+Each cell is assigned a substitution operation between groups of characters, where the user can input a custom weight.
+The table is to be read such that characters of the first column are substituted by characters of the first line.
 Additions and deletions are interpreted as substitutions from or to empty strings. 
-To represent this, the first column and first row is always reserved for empty strings.
+To represent this, the second column and second row is always reserved for empty strings.
 
 The distance function needs to be symmetrical to fulfill the symmetry axiom for metrics.
 Therefore, the weight matrix must be symmetrical to the diagonal.
@@ -149,8 +149,9 @@ It enables the configuration of the weight matrix by moving and scaling graphica
 
 Groups of characters are represented by graphical objects, called blobs. 
 They correspond to the columns and rows of the matrix.
-To configure additions and deletions we use an additional blob, the small blue blob labelled with an X.
-For configuring the weights, the user can move the blobs on the 2D canvas using drag and drop.
+Their distances correspond to the weights for subsitutions.
+For configuring the these weights, the user can move the blobs on the 2D canvas using drag and drop.
+To configure the weights for additions and deletions we use an additional blob, the small blue blob labelled with an X.
 The weight for substitutions within a group is represented by the size of the corresponding blob. 
 The user can modify the size using the mouse wheel while hovering over the blob.
 
@@ -165,14 +166,14 @@ From the relative importances a valid weight matrix is calculated.
 -->
 
 
-### Cluster Choice
+### Clustering Algorithm Selection
 
 We support the following clustering algorithms: hierarchical clustering, k-medoids, DBSCAN, OPTICS, affinity propagation and spectral clustering.
-For the selection of a fitting algorithm, we provide a binary questionnaire including tool tips.
+For the selection of a fitting algorithm, we currently provide a binary questionnaire including tool tips.
 The translation into domain knowledge is subject to future work.
 
 
-### Cluster Configuration
+### Clustering Algorithm Configuration
 
 The clustering algorithms come with many parameters.
 Our tool provides a modularized view to configure these parameters via standard widgets.
@@ -185,21 +186,24 @@ For enumerations, tooltips are provided for each option.
 ![Hierarchical Configuration 2](readme_images/config_clustering_hierarchical2.png)
 
 The modules also mimic the dependencies between the parameters of the clustering algorithms.
-For example, in hierarchical clustering, there is an alternating dependency between n_clusters and distance_threshold: 
+For example, in hierarchical clustering, there is an alternating dependency between ```n_clusters``` and ```distance_threshold```: 
 only one of the parameters is required.
-The parameter depth is enabled only if the option 'inconsistent' is chosen for the parameter criterion.
+The parameter ```depth``` is enabled only if the option ```inconsistent``` is chosen for the parameter ```criterion```.
 
 
 ### Result
 
 ![Excel Excerpt](readme_images/excel_excerpt2.png)
 
-Currently, 
+Currently, the calculated clusterings are provided via generated Excel files.
+They contain two sheets showing the complete clustering of the orginal values and the clustering of the abstracted data values via original values as representatives, as shown in the screenshot.
+In the second row the number of original values in each cluster is indicated.
+The number of abstracted values per cluster is indicated in the third row.
+Next to each representative value, the number of original values it represents is shown.
 <!---
 there is no real result view implemented.
 Instead
 -->
-the calculated clusterings are provided via generated Excel files.
 <!---
 In the future, we plan to also present the clustering directly in the GUI.
 This shall also include a questionnaire on on how satisfied the experts are with certain aspects of a produced clustering
