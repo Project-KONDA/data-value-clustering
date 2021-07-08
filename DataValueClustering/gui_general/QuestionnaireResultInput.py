@@ -11,12 +11,13 @@ class QuestionnaireResultInput(ABC):
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 
-    def __init__(self, title, config, predefined_answers=None):
+    def __init__(self, title, config, predefined_answers=None, start_row=0):
         # Parameters
         self.config = np.array(config, dtype=object)
         self.n = len(config)
         self.m = len(self.config[0])
         self.check_config()
+        self.start_row = start_row
 
         self.checks = np.empty(self.n, dtype=Checkbutton)
         self.answers = np.empty(self.n, dtype=IntVar)
@@ -53,10 +54,11 @@ class QuestionnaireResultInput(ABC):
         self.question_frame.grid(row=1, column=0, sticky='nw')
 
         for i, question in enumerate(self.config_question):
+            j = start_row + i
             self.answers[i] = IntVar()
             self.answers[i].set(int(self.config_default[i]))
             self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white', text=question, anchor='nw', padx=20)
-            self.checks[i].grid(row=i + 5, column=0, sticky='nw')
+            self.checks[i].grid(row=j + 5, column=0, sticky='nw')
             if self.m > 5:
                 message = str(self.config_notes[i])
                 CreateToolTip(self.checks[i], text=message)
