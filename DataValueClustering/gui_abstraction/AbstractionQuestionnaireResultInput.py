@@ -1,11 +1,11 @@
-from tkinter import StringVar, Label, LEFT
+from tkinter import StringVar, Label, LEFT, OptionMenu
 
-import numpy as np
 import gui_abstraction.abstraction_questions
-from abstraction.abstraction import get_abstraction_method
-from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
+from abstraction.abstraction import *
 
+DEFAULT_CONFIG = "Default Configuration"
+MANUAL_CONFIG = "Manual Configuration"
 
 def abstraction_configuration(data, predefined_answers=None):
     answers = input_questionnaire_abstraction(abstraction_question_array, data, predefined_answers)
@@ -24,10 +24,50 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def __init__(self, config, data, predefined_answers=None):
         self.help_text = "Abstraction of the first 100 data values:\n"
-        super().__init__("Abstraction Configuration", config, predefined_answers)
+        super().__init__("Abstraction Configuration", config, predefined_answers, 10)
+
+        self.predefined_abstractions = np.array([
+            [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
+            [DEFAULT_CONFIG, self.config[:, 3]],
+            ["Maximum Configuration", max_abstraction_function()[1]],
+            ["Duplicate Removal", duplicate_removal_function()[1]],
+            ["letters, digits", char_abstraction_function()[1]],
+            ["case-sensitive letters, digits", char_abstraction_case_sensitive_function()[1]],
+            ["letter sequences and digit sequences", sequence_abstraction_function()[1]],
+            ["case-sensitive letter sequences and digit sequences", sequence_abstraction_case_sensitive_function()[1]],
+            ["letter sequences, digits", letter_sequence_abstraction_function()[1]],
+            ["letters, number sequences", number_sequence_abstraction_function()[1]],
+            ["words", word_abstraction_function()[1]],
+            ["words and decimal", word_decimal_abstraction_function()[1]],
+            ["sentence", word_sequence_abstraction_function()[1]],
+
+            # ["Custom Dictionary", lambda data: custom_dictionary()],
+            # ["Custom Full", lambda data: custom_full()]
+        ])
+
+        self.label = Label(self.question_frame, text="You can start with one of the following predefined configurations:")
+        self.label.grid(row=2, column=0, sticky='we')
+
+        self.predefined_options = list(self.predefined_abstractions[:, 0])
+        self.selected_predefined_option = StringVar()
+        self.selected_predefined_option.set(DEFAULT_CONFIG)
+        self.predefined_option_menu = OptionMenu(self.question_frame, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
+        self.predefined_option_menu.grid(row=2, column=1, sticky='w')
+
         self.data = data
         self.labels = []
-        self.update_visibility_and_result()
+        super().update_visibility_and_result()
+
+    def option_changed(self, *args):
+        selected_option = self.selected_predefined_option.get()
+        answers_of_selected_option = self.predefined_abstractions[np.where(self.predefined_abstractions[:, 0] == selected_option)][:, 1][0]
+        for i, answer in enumerate(answers_of_selected_option):
+            self.answers[i].set(int(answer))
+        super().update_visibility_and_result()
+
+    def update_visibility_and_result(self):
+        super().update_visibility_and_result()
+        self.selected_predefined_option.set(MANUAL_CONFIG)
 
     def apply(self):
         answers = self.get()
@@ -39,12 +79,14 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         for i, key in enumerate(abstraction_dict):
             s1 = StringVar()
             s1.set(key)
-            abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1, bg='lemonchiffon')
+            abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
+                                             bg='lemonchiffon')
             abstraction_target_label.grid(row=i + 10, column=0, sticky='nwse')
             self.labels.append(abstraction_target_label)
             s2 = StringVar()
-            s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key]))-1])
-            abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory', wraplength=540, justify=LEFT)  # TODO: calculate wraplength
+            s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
+            abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
+                                             wraplength=540, justify=LEFT)  # TODO: calculate wraplength
             abstraction_source_label.grid(row=i + 10, column=1, sticky='nwse')
             self.labels.append(abstraction_source_label)
 
@@ -65,11 +107,15 @@ if __name__ == '__main__':
     q_config2 = gui_abstraction.abstraction_questions.abstraction_question_array
 
     qc = AbstractionQuestionnaireResultInput(q_config2,
-                                             ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
-                                         "k", "l", "m", "n", "o", "p", "q", "r", "a", "b", "c", "a", "b", "c", "a", "b",
-                                         "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c",
-                                         "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a",
-                                         "b", "c", "?", "3", "1234"], None)
+                                             ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "d", "e", "f", "g", "h", "i",
+                                              "j",
+                                              "k", "l", "m", "n", "o", "p", "q", "r", "a", "b", "c", "a", "b", "c", "a",
+                                              "b",
+                                              "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b",
+                                              "c",
+                                              "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c",
+                                              "a",
+                                              "b", "c", "?", "3", "1234"], None)
     qc.run()
 
     result = qc.get()
