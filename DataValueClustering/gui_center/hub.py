@@ -107,22 +107,17 @@ class Hub:
         self.update()
 
     def load(self):
-        loadpath = getJsonLoadPath()
-        if not loadpath: return
-        print("loading from " + loadpath + " ...")
-        # show file dialog
-        # path = ...
-        self.configuration.load()
+        load_path = getJsonLoadPath()
+        if not load_path: return
+        print("loading from " + load_path + " ...")
+        self.configuration.load(load_path)
         self.update()
 
     def save(self):
-        savepath = getJsonSavePath()
-        if not savepath: return
-        print("saving to " + savepath + " ...")
-
-        # show file dialog
-        # path = ...
-        self.configuration.save()
+        save_path = getJsonSavePath()
+        if not save_path: return
+        print("saving to " + save_path + " ...")
+        self.configuration.save(save_path)
 
     def update(self):
         if self.configuration.abstraction_configuration_possible():
