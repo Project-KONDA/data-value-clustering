@@ -1,6 +1,7 @@
 from tkinter import Tk, Button, Label, Frame
 
 from export.path import getJsonSavePath, getJsonLoadPath
+from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_center.hub_configuration import HubConfiguration
 
 
@@ -71,14 +72,13 @@ class Hub:
         self.update()
 
     def configure_abstraction(self):
-        # self.configuration.abstraction_f, self.configuration.abstraction_answers = abstraction_configuration(self.data)
-
         # 1. get data from config
         config = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
+        abstraction_answers = abstraction_configuration(self.configuration.data, config)[1]
         # 4. save abstraction into configuration
-        self.configuration.set_abstraction_configuration()
+        self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
         # 6. initiate execution of abstraction in config
         self.configuration.execute_abstraction()
