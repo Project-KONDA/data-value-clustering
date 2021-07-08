@@ -2,7 +2,8 @@
 
 This tool is a proof-of-concept implementation of a bottom-up approach to detecting quality problems in data
 models that manifest in heterogeneous data values.
-It supports an explorative analysis of the existing data and can be configured by domain experts according to their domain knowledge.
+The approach is presented in the research paper provided at ```Paper\Detecting_quality_problems_in_data_models_by_clustering_heterogeneous_data_values-extended_version.pdf```.
+The approach supports an explorative analysis of the existing data and can be configured by domain experts according to their domain knowledge.
 All values of a selected data field are clustered by syntactic similarity.
 Thereby an overview of the data values' diversity in syntax is provided.
 It shall help domain experts to understand how the data model is used in practice and to derive potential quality problems of the data model.
@@ -62,6 +63,7 @@ Required Python packages:
 ## Examples
 
 Four executable example configurations for data on cultural heritage objects, such as paintings and buildings, can be found in ```DataValueClustering\experiments\evaluation```.
+They were used for the initial evaluation of the approach.
 The configurations were created for the following data fields:
 artist name and dating from the data model [MIDAS](https://archiv.ub.uni-heidelberg.de/artdok/3770/) as well as measurement unit and attribution qualifier from the data model [LIDO](http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd/).
 The data values that the configurations are applied to can be found at ```DataValueClustering\data```.
