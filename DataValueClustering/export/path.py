@@ -11,6 +11,7 @@ def getJsonLoadPath():
     )
     return file_name
 
+
 def getJsonSavePath():
     file_name = filedialog.asksaveasfilename(
         initialdir="../",
@@ -21,6 +22,7 @@ def getJsonSavePath():
     if file_name and not file_name.endswith(".json"):
         file_name = file_name + ".json"
     return file_name
+
 
 def getExcelSavePath():
     file_name = filedialog.asksaveasfilename(
@@ -33,13 +35,11 @@ def getExcelSavePath():
         file_name = file_name + ".xlsx"
     return file_name
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     path = getJsonLoadPath()
     print(path)
     path = getJsonSavePath()
     print(path)
     path = getExcelSavePath()
     print(path)
-
-
