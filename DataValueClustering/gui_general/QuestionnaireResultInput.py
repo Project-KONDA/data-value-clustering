@@ -57,7 +57,7 @@ class QuestionnaireResultInput(ABC):
             j = start_row + i
             self.answers[i] = IntVar()
             self.answers[i].set(int(self.config_default[i]))
-            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.update_visibility_and_result, bg='white', text=question, anchor='nw', padx=20)
+            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.selection_changed, bg='white', text=question, anchor='nw', padx=20)
             self.checks[i].grid(row=j + 5, column=0, sticky='nw')
             if self.m > 5:
                 message = str(self.config_notes[i])
@@ -122,7 +122,7 @@ class QuestionnaireResultInput(ABC):
                 self.answers[i].set(False)
             self.visible[i] = should_visible
 
-    def update_visibility_and_result(self):
+    def selection_changed(self):
         self.update_visibility()
         self.apply()
 
@@ -134,6 +134,12 @@ class QuestionnaireResultInput(ABC):
         for nd in self.config_notdep[i]:
             bool &= not self.answers[nd].get()  # or not self.visible[nd]
         return bool
+
+    def update_check_buttons(self, answers):
+        for i, answer in enumerate(answers):
+            self.answers[i].set(int(answer))
+        self.update_visibility()
+        self.apply()
 
     def check_questions(self):
         pass

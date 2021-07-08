@@ -56,17 +56,15 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
         self.data = data
         self.labels = []
-        super().update_visibility_and_result()
+        super().selection_changed()
 
     def option_changed(self, *args):
         selected_option = self.selected_predefined_option.get()
         answers_of_selected_option = self.predefined_abstractions[np.where(self.predefined_abstractions[:, 0] == selected_option)][:, 1][0]
-        for i, answer in enumerate(answers_of_selected_option):
-            self.answers[i].set(int(answer))
-        super().update_visibility_and_result()
+        self.update_check_buttons(answers_of_selected_option)
 
-    def update_visibility_and_result(self):
-        super().update_visibility_and_result()
+    def selection_changed(self):
+        super().selection_changed()
         self.selected_predefined_option.set(MANUAL_CONFIG)
 
     def apply(self):

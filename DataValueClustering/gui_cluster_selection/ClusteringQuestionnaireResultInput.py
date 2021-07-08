@@ -33,7 +33,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         self.choice.set(0)
         self.radio_buttons = np.empty(len(self.algorithms), dtype=Radiobutton)
         self.build_result_frame()
-        self.update_visibility_and_result()
+        self.selection_changed()
 
     def build_result_frame(self):
         for i, algorithm in enumerate(self.algorithms):
