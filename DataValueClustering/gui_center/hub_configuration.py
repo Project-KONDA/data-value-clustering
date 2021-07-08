@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from abstraction.abstraction import get_abstraction_method
 from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from data_extraction import read_data_values_from_file
 from distance import calculate_distance_matrix_map
@@ -20,20 +21,20 @@ class HubConfiguration():
         self.num_data = None
 
         self.abstraction_answers = None
-        self.abstraction_f = None
+        # self.abstraction_f = None
         self.values_abstracted = None
         self.abstraction_dict = None
         self.num_abstracted_data = None
         self.abstraction_rate = None
         self.timedelta_abstraction = None
 
-        self.distance_f = None
+        # self.distance_f = None
         self.distance_matrix_map = None
         self.timedelta_distance = None
 
         self.cluster_answers = None
-        self.cluster_config_f = None
-        self.cluster_f = None
+        # self.cluster_config_f = None
+        # self.cluster_f = None
         self.cluster_sizes = None
         self.noise_size = None
         self.cluster_sizes_abstracted = None
@@ -93,9 +94,9 @@ class HubConfiguration():
         self.data_path = configuration.data_path
         self.data_lower_limit = configuration.lower_limit
         self.data_upper_limit = configuration.upper_limit
-        self.abstraction_f = configuration.get_abstraction()
-        self.distance_f = configuration.distance_functions[configuration.distance_func](configuration.get_costmap())
-        self.cluster_f = configuration.clustering_args_functions[configuration.algorithm](**configuration.params_to_dict())
+        # self.abstraction_f = configuration.get_abstraction()
+        # self.distance_f = configuration.distance_functions[configuration.distance_func](configuration.get_costmap())
+        # self.cluster_f = configuration.clustering_args_functions[configuration.algorithm](**configuration.params_to_dict())
 
         # load results:
 
@@ -106,14 +107,16 @@ class HubConfiguration():
         return not self.data is None
 
     def abstraction_configuration_valid(self):
-        return not self.abstraction_f is None
+        # return not self.abstraction_f is None
+        pass
 
     def distance_configuration_valid(self):
-        return not self.distance_f is None
+        # return not self.distance_f is None
+        pass
 
     def clustering_configuration_valid(self):
-        return not self.cluster_f is None
-
+        # return not self.cluster_f is None
+        pass
 
     "Test if ready for configuration"
     def abstraction_configuration_possible(self):
@@ -134,7 +137,7 @@ class HubConfiguration():
     "Get configuration"
 
     def get_abstraction_configuration(self):
-        pass
+        return self.abstraction_answers
 
     def get_distance_configuration(self):
         pass
@@ -146,8 +149,15 @@ class HubConfiguration():
     #     pass
 
     "Set configuration"
-    def set_abstraction_configuration(self):
-        pass
+    def set_abstraction_configuration(self, abstraction_answers):
+        if not self.abstraction_answers == abstraction_answers:
+            self.abstraction_answers = abstraction_answers
+            self.values_abstracted = None
+            self.abstraction_dict = None
+            self.num_abstracted_data = None
+            self.abstraction_rate = None
+            self.timedelta_abstraction = None
+
 
     def set_distance_configuration(self):
         pass
@@ -157,3 +167,14 @@ class HubConfiguration():
 
     # def set_abstraction_configuration(self):
     #     pass
+
+    "Get functions"
+
+    def get_abstraction_f(self):
+        return get_abstraction_method(self.abstraction_answers)
+
+    def get_distance_f(self):
+        pass
+
+    def get_clustering_f(self):
+        pass
