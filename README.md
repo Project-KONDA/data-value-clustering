@@ -2,7 +2,7 @@
 
 This tool is a proof-of-concept implementation of a bottom-up approach to detecting quality problems in data
 models that manifest in heterogeneous data values.
-The approach is presented in the research paper provided at ```Paper\Detecting_quality_problems_in_data_models_by_clustering_heterogeneous_data_values-extended_version.pdf```.
+The approach is presented in a [research paper](https://github.com/Project-KONDA/data-value-clustering/blob/master/Paper/Detecting_quality_problems_in_data_models_by_clustering_heterogeneous_data_values-extended_version.pdf).
 The approach supports an explorative analysis of the existing data and can be configured by domain experts according to their domain knowledge.
 All values of a selected data field are clustered by syntactic similarity.
 Thereby an overview of the data values' diversity in syntax is provided.
@@ -20,7 +20,7 @@ Clustering Heterogeneous Data Values](################)".
 This diagram gives an overview of the components and their interfaces.
 The core of the tool is the Clustering-based Analyser.
 It realises the workflow and controls the data flows between the other components.
-It is realized via the class ```Main``` (```DataValueClustering\gui_center\main.py```).
+It is realized via the class [```Main```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/main.py).
 
 The Extraction component is extracts a list of data values from the database.
 It is not yet implemented.
@@ -66,8 +66,8 @@ Four executable example configurations for data on cultural heritage objects, su
 They were used for the initial evaluation of the approach.
 The configurations were created for the following data fields:
 artist name and dating from the data model [MIDAS](https://archiv.ub.uni-heidelberg.de/artdok/3770/) as well as measurement unit and attribution qualifier from the data model [LIDO](http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd/).
-The data values that the configurations are applied to can be found at ```DataValueClustering\data```.
-The clustering results can be found in ```DataValueClustering\experiments\exports\study```.
+The data values that the configurations are applied to can be found [here](https://github.com/Project-KONDA/data-value-clustering/tree/master/DataValueClustering/data).
+The clustering results can be found [here](https://github.com/Project-KONDA/data-value-clustering/tree/master/DataValueClustering/experiments/exports/study).
 
 <!---
 These examples also were used for the evaluation of the approach in the associated research paper.
@@ -76,7 +76,7 @@ These examples also were used for the evaluation of the approach in the associat
 
 ## Usage
 
-For running the GUI, ```main.py``` has to be executed. It can be found in ```DataValueClustering\gui_center```.
+For running the GUI, [```main.py```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/main.py) has to be executed.
 
 
 ## GUI
