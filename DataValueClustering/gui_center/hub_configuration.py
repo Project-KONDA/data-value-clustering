@@ -1,11 +1,14 @@
 from datetime import datetime
+import numpy as np
 
 from abstraction.abstraction import get_abstraction_method
-from clustering.clustering import get_clusters_original_values, get_cluster_sizes
+from clustering.clustering import get_clusters_original_values, get_cluster_sizes, clustering_args_functions
 from data_extraction import read_data_values_from_file
 from distance import calculate_distance_matrix_map
+from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
 from export.ExecutionConfiguration import load_ExecutionConfiguration
 from gui_center.cluster_representation import fancy_cluster_representation
+from gui_cluster_selection.algorithm_selection import algorithm_array
 
 
 class HubConfiguration():
@@ -60,7 +63,8 @@ class HubConfiguration():
 
     def execute_abstraction(self):
         time_abstraction_start = datetime.now()
-        self.values_abstracted, self.abstraction_dict = self.abstraction_f(self.data)
+        abstraction_f = self.get_abstraction_function()
+        self.values_abstracted, self.abstraction_dict = abstraction_f(self.data)
         time_abstraction_end = datetime.now()
         self.timedelta_abstraction = time_abstraction_end - time_abstraction_start
         self.num_abstracted_data = len(self.values_abstracted)
@@ -68,15 +72,17 @@ class HubConfiguration():
 
     def execute_distance(self):
         time_distance_start = datetime.now()
-        self.distance_matrix_map = calculate_distance_matrix_map(self.distance_f, self.values_abstracted)
+        distance_f = self.get_distance_function()
+        self.distance_matrix_map = calculate_distance_matrix_map(distance_f, self.values_abstracted)
         time_distance_end = datetime.now()
         self.timedelta_distance = time_distance_end - time_distance_start
 
     def execute_clustering(self):
         time_cluster_start = datetime.now()
-        self.clusters_abstracted = self.cluster_f(self.distance_matrix_map, self.values_abstracted)
+        cluster_f = self.get_clustering_function()
+        self.clusters_abstracted = cluster_f(self.distance_matrix_map, self.values_abstracted)
         time_cluster_end = datetime.now()
-        self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted, self.abstraction_f, self.data)
+        self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted, self.get_abstraction_function(), self.data)
         self.timedelta_cluster = time_cluster_end - time_cluster_start
         self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
         self.cluster_sizes_abstracted, self.noise_size_abstracted = get_cluster_sizes(self.clusters_abstracted)
@@ -84,6 +90,17 @@ class HubConfiguration():
         self.fancy_cluster_list_abstracted, self.noise_abstracted = fancy_cluster_representation(self.values_abstracted, self.clusters_abstracted)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
+
+    def get_abstraction_function(self):
+        return get_abstraction_method(self.abstraction_answers)
+
+    def get_distance_function(self):
+        return get_weighted_levenshtein_distance(self.cost_map)
+
+    def get_clustering_function(self):
+        algorithms = np.array(algorithm_array, dtype=object)
+        clustering_function_parameterized = algorithms[np.where(algorithms[:, 2] == self.clustering_algorithm)][:, 4][0]
+        return clustering_function_parameterized(**self.clustering_parameters)
 
     def save(self, path):
         # TODO: translate fields into distance_func, algorithm, algorithm_params, costmap
