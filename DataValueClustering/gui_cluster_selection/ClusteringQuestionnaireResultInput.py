@@ -11,15 +11,15 @@ from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 def cluster_suggest():
     predefined_answers = None  # TODO
-    answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
-    return answers, cluster_f
+    answers, cluster_f, cluster_algo = input_questionnaire_clustering(clustering_question_array, predefined_answers)
+    return answers, cluster_f, cluster_algo
 
 
 def input_questionnaire_clustering(config, predefined_answers=None):
     questionnaire = ClusteringQuestionnaireResultInput(config, predefined_answers)
     questionnaire.run()
-    answers, cluster_f = questionnaire.get()
-    return answers, cluster_f
+    answers, cluster_f, cluster_algo = questionnaire.get()
+    return answers, cluster_f, cluster_algo
 
 
 class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
@@ -42,7 +42,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
             self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
 
     def close(self, event=None):
-        answers, algorithm = self.get()
+        answers, algorithm, cluster_algo = self.get()
         if algorithm is None:
             self.result_caption_label.config(fg="red")
         else:
@@ -52,9 +52,11 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         answers = super().get()
         if self.choice.get() >= 0:
             selected_algorithm_f = self.algorithms[self.choice.get(), 3]
+            cluster_algo = self.algorithms[self.choice.get(), 2]
         else:
             selected_algorithm_f = None
-        return answers, selected_algorithm_f
+            cluster_algo = None
+        return answers, selected_algorithm_f, cluster_algo
 
     def apply(self):
         answers = self.get()[0]
