@@ -3,6 +3,7 @@ from tkinter import Tk, Button, Label, Frame
 from export.path import getJsonSavePath, getJsonLoadPath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_center.hub_configuration import HubConfiguration
+from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 
 
 class Hub:
@@ -86,14 +87,21 @@ class Hub:
         self.update()
 
     def configure_distance(self):
-        # self.configuration.distance_f =
+        cost_map = self.configuration.get_distance_configuration()
+        distance_config_f = lambda cost_map: None # TODO: implement and call new view
+        cost_map = distance_config_f(cost_map)
+        self.configuration.set_distance_configuration(cost_map)
         self.configuration.execute_distance()
 
         self.update()
 
     def configure_clustering(self):
-        # self.configuration.cluster_answers, self.configuration.cluster_config_f = cluster_suggest
-        # self.configuration.cluster_f = self.cluster_config_f(self.cluster_answers, self.distance_matrix_map, self.values_abstracted)
+        clustering_algorithm, answers = self.configuration.get_clustering_selection()
+        parameters = self.configuration.get_clustering_configuration()
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(clustering_algorithm, answers) # TODO: support preselected answers and algo
+        self.configuration.set_clustering_selection(clustering_algorithm, answers)
+        parameters = cluster_config_f(parameters, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted) # TODO: support predefined parameters
+        self.configuration.set_clustering_configuration(parameters)
         self.configuration.execute_clustering()
 
         self.update()
