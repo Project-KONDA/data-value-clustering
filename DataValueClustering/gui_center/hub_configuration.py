@@ -29,10 +29,14 @@ class HubConfiguration():
         self.timedelta_abstraction = None
 
         # self.distance_f = None
+        # self.distance_algorithm = None # string
+        self.cost_map = None # dict
         self.distance_matrix_map = None
         self.timedelta_distance = None
 
-        self.cluster_answers = None
+        self.clustering_algorithm = None # string
+        self.clustering_parameters = None # dict
+        self.clustering_answers = None
         # self.cluster_config_f = None
         # self.cluster_f = None
         self.cluster_sizes = None
@@ -136,19 +140,29 @@ class HubConfiguration():
 
     "Get configuration"
 
+    def get_data_configuration(self):
+        return self.data_path, self.data_lower_limit, self.data_upper_limit
+
     def get_abstraction_configuration(self):
         return self.abstraction_answers
 
     def get_distance_configuration(self):
-        pass
+        return self.cost_map
+
+    def get_clustering_selection(self):
+        return self.clustering_algorithm, self.clustering_answers
 
     def get_clustering_configuration(self):
-        pass
-
-    # def get_abstraction_configuration(self):
-    #     pass
+        return self.clustering_parameters
 
     "Set configuration"
+    def set_data_configuration(self, data_path, data_lower_limit=None, data_upper_limit=None):
+        if not self.data_path == data_path or not self.data_lower_limit == data_lower_limit or not self.data_upper_limit == data_upper_limit:
+            self.data_path = data_path
+            self.data_lower_limit = data_lower_limit
+            self.data_upper_limit = data_upper_limit
+            self.data = None
+
     def set_abstraction_configuration(self, abstraction_answers):
         if not self.abstraction_answers == abstraction_answers:
             self.abstraction_answers = abstraction_answers
@@ -158,15 +172,43 @@ class HubConfiguration():
             self.abstraction_rate = None
             self.timedelta_abstraction = None
 
+    def set_distance_configuration(self, cost_map):
+        if not self.cost_map == cost_map:
+            self.cost_map = cost_map
+            self.distance_matrix_map = None
+            self.timedelta_distance = None
 
-    def set_distance_configuration(self):
-        pass
+    def set_clustering_selection(self, clustering_algorithm, clustering_answers=None):
+        if not self.clustering_algorithm == clustering_algorithm or not self.clustering_answers == clustering_answers:
+            self.clustering_algorithm = clustering_algorithm
+            self.clustering_answers = clustering_answers
+            self.cluster_sizes = None
+            self.noise_size = None
+            self.cluster_sizes_abstracted = None
+            self.noise_size_abstracted = None
+            self.fancy_cluster_list = None
+            self.noise = None
+            self.fancy_cluster_list_abstracted = None
+            self.noise_abstracted = None
+            self.no_clusters = None
+            self.no_noise = None
+            self.timedelta_cluster = None
 
-    def set_clustering_configuration(self):
-        pass
+    def set_clustering_configuration(self, clustering_parameters):
+        if not self.clustering_parameters == clustering_parameters:
+            self.clustering_parameters = clustering_parameters
+            self.cluster_sizes = None
+            self.noise_size = None
+            self.cluster_sizes_abstracted = None
+            self.noise_size_abstracted = None
+            self.fancy_cluster_list = None
+            self.noise = None
+            self.fancy_cluster_list_abstracted = None
+            self.noise_abstracted = None
+            self.no_clusters = None
+            self.no_noise = None
+            self.timedelta_cluster = None
 
-    # def set_abstraction_configuration(self):
-    #     pass
 
     "Get functions"
 
