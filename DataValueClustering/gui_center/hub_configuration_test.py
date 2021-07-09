@@ -1,6 +1,9 @@
-from distance.weighted_levenshtein_distance import get_cost_map
-from gui_center.hub_configuration import HubConfiguration
+import json
+import datetime as dt
+import numpy
 
+from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
+from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 
 if __name__ == "__main__":
     hub_config = HubConfiguration()
@@ -36,4 +39,11 @@ if __name__ == "__main__":
     hub_config.execute_distance()
     hub_config.execute_clustering()
 
-    print(hub_config.fancy_cluster_list)
+    # print(hub_config.fancy_cluster_list)
+    print(hub_config.distance_matrix_map)
+    hub_config.save("../test.json")
+    hub_loaded = load_hub_configuration("../test.json")
+    print(hub_loaded.distance_matrix_map)
+    print(hub_config.timedelta_distance == hub_loaded.timedelta_distance)
+
+

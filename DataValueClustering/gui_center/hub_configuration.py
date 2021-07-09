@@ -1,17 +1,53 @@
+import datetime as dt
 from datetime import datetime
+import json
+
+import jsbeautifier
+import numpy
 import numpy as np
 
 from abstraction.abstraction import get_abstraction_method
-from clustering.clustering import get_clusters_original_values, get_cluster_sizes, clustering_args_functions
+from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from data_extraction import read_data_values_from_file
 from distance import calculate_distance_matrix_map
-from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
-from export.ExecutionConfiguration import load_ExecutionConfiguration
+from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance, split_cost_map, get_cost_map
 from gui_center.cluster_representation import fancy_cluster_representation
 from gui_cluster_selection.algorithm_selection import algorithm_array
 
 
+def load_hub_configuration(path):
+    text = open(path, "r")
+    json_data = json.load(text)
+    hub = HubConfiguration()
+    hub.fill_hub_configuration_from_dict(json_data)
+    return hub
+
+
+def create_hub_configuration_from_dict(dict):
+    hub = HubConfiguration()
+    hub.fill_hub_configuration_from_dict(dict)
+    return hub
+
+
 class HubConfiguration():
+
+    def fill_hub_configuration_from_dict(self, dic):
+        for key, value in dic.items():
+            if key == "timedelta_abstraction" or key == "timedelta_distance" or key == "timedelta_cluster":
+                value_split = value.split(":")
+                value_adapted = dt.timedelta(hours=float(value_split[0]), minutes=float(value_split[1]), seconds=float(value_split[2]))
+                setattr(self, key, value_adapted)
+            elif key == "values_abstracted" or key == "clusters_abstracted" or key == "clusters":
+                value_adapted = np.array(value)
+                setattr(self, key, value_adapted)
+            elif key == "distance_matrix_map":
+                value_adapted = {"distance_matrix": np.array(value["distance_matrix"]), "condensed_distance_matrix": np.array(value["condensed_distance_matrix"]), "affinity_matrix": np.array(value["affinity_matrix"]), "min_distance": value["min_distance"], "max_distance": value["max_distance"]}
+                setattr(self, key, value_adapted)
+            elif key == "cost_map":
+                value_adapted = get_cost_map(value["weight_case_switch"], value["rgx"], value["w"])
+                setattr(self, key, value_adapted)
+            else:
+                setattr(self, key, value)
 
     def __init__(self):
 
@@ -103,25 +139,34 @@ class HubConfiguration():
         return clustering_function_parameterized(**self.clustering_parameters)
 
     def save(self, path):
-        # TODO: translate fields into distance_func, algorithm, algorithm_params, costmap
-        # ExecutionConfigurationFromParams(self.data_path, self.lower_limit, self.upper_limit, self.abstraction_answers ...).save()
-        pass
+        self.translate_cost_map_to_json()
+        output_text = self.hub_to_json()
+        f = open(path, "w")
+        f.write(output_text)
+        self.translate_cost_map_to_dict()
+        f.close()
 
-    def load(self, path):
-        configuration = load_ExecutionConfiguration(path)
-        # see ExecutionConfiguration.execute()
+    def translate_cost_map_to_json(self):
+        cost_map_case, cost_map_regex, cost_map_weights = split_cost_map(self.cost_map)
+        self.cost_map = {"weight_case_switch": cost_map_case, "rgx": cost_map_regex.tolist(), "w": cost_map_weights.tolist()}
 
-        # load configuration:
-        self.data_path = configuration.data_path
-        self.data_lower_limit = configuration.lower_limit
-        self.data_upper_limit = configuration.upper_limit
-        # self.abstraction_f = configuration.get_abstraction()
-        # self.distance_f = configuration.distance_functions[configuration.distance_func](configuration.get_costmap())
-        # self.cluster_f = configuration.clustering_args_functions[configuration.algorithm](**configuration.params_to_dict())
+    def translate_cost_map_to_dict(self):
+        self.cost_map = get_cost_map(**self.cost_map)
 
-        # load results:
+    def hub_to_json(self):
+        json_text = json.dumps(self, default=self.default_object_to_json)
+        my_options = jsbeautifier.default_options()
+        my_options.indent_size = 2
+        json_text = jsbeautifier.beautify(json_text, my_options)
+        return json_text
 
-
+    def default_object_to_json(self, o):
+        if isinstance(o, numpy.ndarray):
+            return o.tolist()
+        elif isinstance(o, dt.timedelta):
+            return str(o)
+        else:
+            return o.__dict__
 
     "Test configuration validity"
     def data_configuration_valid(self):
