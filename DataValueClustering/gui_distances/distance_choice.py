@@ -43,6 +43,9 @@ class DistanceChoice:
         self.result = result
         self.root.quit()
 
+    def get(self):
+        return self.result
+
 
 if __name__ == "__main__":
     print(get_distance_choice())
