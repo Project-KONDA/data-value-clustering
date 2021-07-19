@@ -13,6 +13,7 @@ from distance import calculate_distance_matrix_map
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance, split_cost_map, get_cost_map
 from gui_center.cluster_representation import fancy_cluster_representation
 from gui_cluster_selection.algorithm_selection import algorithm_array
+from gui_distances.blobinput_helper import get_blob_configuration
 
 
 def load_hub_configuration(path):
@@ -68,6 +69,7 @@ class HubConfiguration():
 
         # self.distance_f = None
         # self.distance_algorithm = None # string
+        self.blob_configuration = None
         self.cost_map = None # dict
         self.distance_matrix_map = None
         self.timedelta_distance = None
@@ -212,7 +214,7 @@ class HubConfiguration():
         return self.abstraction_answers
 
     def get_distance_configuration(self):
-        return self.cost_map
+        return self.cost_map, self.blob_configuration
 
     def get_clustering_selection(self):
         return self.clustering_algorithm, self.clustering_answers
@@ -231,17 +233,16 @@ class HubConfiguration():
     def set_abstraction_configuration(self, abstraction_answers):
         if not self.abstraction_answers == abstraction_answers:
             self.abstraction_answers = abstraction_answers
-            self.values_abstracted = None
-            self.abstraction_dict = None
-            self.num_abstracted_data = None
-            self.abstraction_rate = None
-            self.timedelta_abstraction = None
+            self.reset_abstraction()
+            self.reset_distances()
+            self.reset_clustering()
 
-    def set_distance_configuration(self, cost_map):
+    def set_distance_configuration(self, cost_map, blob_configuration=None):
         if not self.cost_map == cost_map:
             self.cost_map = cost_map
-            self.distance_matrix_map = None
-            self.timedelta_distance = None
+            self.blob_configuration = blob_configuration
+            self.reset_distances()
+            self.reset_clustering()
 
     def set_clustering_selection(self, clustering_algorithm, clustering_answers=None):
         if not self.clustering_algorithm == clustering_algorithm or not self.clustering_answers == clustering_answers:
@@ -262,14 +263,33 @@ class HubConfiguration():
     def set_clustering_configuration(self, clustering_parameters):
         if not self.clustering_parameters == clustering_parameters:
             self.clustering_parameters = clustering_parameters
-            self.cluster_sizes = None
-            self.noise_size = None
-            self.cluster_sizes_abstracted = None
-            self.noise_size_abstracted = None
-            self.fancy_cluster_list = None
-            self.noise = None
-            self.fancy_cluster_list_abstracted = None
-            self.noise_abstracted = None
-            self.no_clusters = None
-            self.no_noise = None
-            self.timedelta_cluster = None
+            self.reset_clustering()
+
+    def reset_abstraction(self):
+        self.blob_configuration = None
+        self.values_abstracted = None
+        self.abstraction_dict = None
+        self.num_abstracted_data = None
+        self.abstraction_rate = None
+        self.timedelta_abstraction = None
+
+    def reset_distances(self):
+        self.distance_matrix_map = None
+        self.timedelta_distance = None
+
+    def reset_clustering(self):
+        self.cluster_sizes = None
+        self.noise_size = None
+        self.cluster_sizes_abstracted = None
+        self.noise_size_abstracted = None
+        self.fancy_cluster_list = None
+        self.noise = None
+        self.fancy_cluster_list_abstracted = None
+        self.noise_abstracted = None
+        self.no_clusters = None
+        self.no_noise = None
+        self.timedelta_cluster = None
+
+    def create_blob_configuration(self):
+        self.blob_configuration = get_blob_configuration(self.abstraction_answers)
+        return self.blob_configuration
