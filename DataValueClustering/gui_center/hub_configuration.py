@@ -18,8 +18,7 @@ from gui_cluster_selection.algorithm_selection import algorithm_array
 def load_hub_configuration(path):
     text = open(path, "r")
     json_data = json.load(text)
-    hub = HubConfiguration()
-    hub.fill_hub_configuration_from_dict(json_data)
+    hub = create_hub_configuration_from_dict(json_data)
     return hub
 
 
@@ -127,6 +126,8 @@ class HubConfiguration():
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
 
+    "Get functions"
+
     def get_abstraction_function(self):
         return get_abstraction_method(self.abstraction_answers)
 
@@ -138,9 +139,11 @@ class HubConfiguration():
         clustering_function_parameterized = algorithms[np.where(algorithms[:, 2] == self.clustering_algorithm)][:, 4][0]
         return clustering_function_parameterized(**self.clustering_parameters)
 
+    "Export"
+
     def save(self, path):
         self.translate_cost_map_to_json()
-        output_text = self.hub_to_json()
+        output_text = self.hub_configuration_to_json()
         f = open(path, "w")
         f.write(output_text)
         self.translate_cost_map_to_dict()
@@ -153,7 +156,7 @@ class HubConfiguration():
     def translate_cost_map_to_dict(self):
         self.cost_map = get_cost_map(**self.cost_map)
 
-    def hub_to_json(self):
+    def hub_configuration_to_json(self):
         json_text = json.dumps(self, default=self.default_object_to_json)
         my_options = jsbeautifier.default_options()
         my_options.indent_size = 2
@@ -270,15 +273,3 @@ class HubConfiguration():
             self.no_clusters = None
             self.no_noise = None
             self.timedelta_cluster = None
-
-
-    "Get functions"
-
-    def get_abstraction_f(self):
-        return get_abstraction_method(self.abstraction_answers)
-
-    def get_distance_f(self):
-        pass
-
-    def get_clustering_f(self):
-        pass
