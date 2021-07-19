@@ -4,6 +4,9 @@ from export.path import getJsonSavePath, getJsonLoadPath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_center.hub_configuration import HubConfiguration
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
+from gui_distances import input_blobs, input_costmap
+from gui_distances.blobinput_helper import get_blob_configuration
+from gui_distances.distance_choice import get_distance_choice, DistanceView
 
 
 class Hub:
@@ -87,10 +90,20 @@ class Hub:
         self.update()
 
     def configure_distance(self):
-        cost_map = self.configuration.get_distance_configuration()
-        distance_config_f = lambda cost_map: None # TODO: implement and call new view
-        cost_map = distance_config_f(cost_map)
-        self.configuration.set_distance_configuration(cost_map)
+        cost_map, blob_configuration = self.configuration.get_distance_configuration()
+        distance_choice = get_distance_choice()
+        if distance_choice == DistanceView.SLIDER:
+            # cost_map = slider_view(cost_map) # TODO: support translation from and to cost map
+            blob_configuration = None
+        elif distance_choice == DistanceView.BLOB:
+            if blob_configuration is None:
+                # TODO: warn user that cost map will be reset if previously specified with other view
+                blob_configuration = self.configuration.create_blob_configuration()
+            cost_map, blob_configuration = input_blobs(blob_configuration)
+        elif distance_choice == DistanceView.MATRIX:
+            cost_map = input_costmap(costmap=cost_map)
+            blob_configuration = None
+        self.configuration.set_distance_configuration(cost_map, blob_configuration)
         self.configuration.execute_distance()
 
         self.update()
