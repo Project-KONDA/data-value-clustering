@@ -48,33 +48,33 @@ def get_regexes_from_map(map):
 
 def costmap_is_valid(map, n=None):
     if type(map) is not type({}):
-        return False
+        raise ValueError
     if n is None:
         n = int(floor(sqrt(len(map))))
     else:
         if not n == int(floor(sqrt(len(map)))):
-            return False
+            raise ValueError
 
     if not len(map) == n * n + n + 1:
-        return False
+        raise ValueError
     # test Values - () is number
     if () not in map:
-        return False
-    if not isinstance(map[()], float):
-        return False
+        raise ValueError
+    if not isinstance(map[()], float) and not isinstance(map[()], int):
+        raise ValueError
     # test Values - (i) is single-character regex
     for i in range(n):
         if i not in map:
-            return False
+            raise ValueError
         if not isinstance(map[i], str):
-            return False
+            raise ValueError
     # test Values - (i,j) is number
     for i in range(n):
         for j in range(n):
             if (i, j) not in map:
-                return False
-            if not isinstance(map[(i, j)], float):
-                return False
+                raise ValueError
+            if not isinstance(map[(i, j)], float) and not isinstance(map[(i, j)], int):
+                raise ValueError
     return True
 
 
@@ -105,16 +105,16 @@ def print_cost_map(map):
 
 
 def preprocess_regexes(regexlist):
-    assert (regexlist[0] == "^$")
-    for i, regex in enumerate(regexlist):
-        assert type(regex) is str
-        assert regex[0] == '^' and regex[len(regex) - 1] == "$"
-
-        r_len = len(regex)
-        if r_len > 2 and regex[1] == "[" and regex[r_len-2] == "]":
-            regexlist[i] = regex[2:r_len - 2]
-        else:
-            regexlist[i] = regex[1:r_len - 1]
+    # assert (regexlist[0] == "^$")
+    # for i, regex in enumerate(regexlist):
+    #     assert type(regex) is str
+    #     assert regex[0] == '^' and regex[len(regex) - 1] == "$"
+    #
+    #     r_len = len(regex)
+    #     if r_len > 2 and regex[1] == "[" and regex[r_len-2] == "]":
+    #         regexlist[i] = regex[2:r_len - 2]
+    #     else:
+    #         regexlist[i] = regex[1:r_len - 1]
     return list(regexlist)
 
 

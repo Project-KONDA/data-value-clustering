@@ -32,17 +32,17 @@ class DistanceChoice:
         self.button_wld_matrix = Button(self.root, text="Matrix View (Hard)", width=30,
                                         command=lambda: quit(DistanceView.MATRIX))
 
-        self.label_other = Label(self.root, text="Other", width=40, bg="white", justify=LEFT, anchor=W)
-        self.button_lcss = Button(self.root, text="Longest Common Subsequence", width=30,
-                                        command=lambda: quit("lcss"))
+        # self.label_other = Label(self.root, text="Other", width=40, bg="white", justify=LEFT, anchor=W)
+        # self.button_lcss = Button(self.root, text="Longest Common Subsequence", width=30,
+        #                                 command=lambda: quit("lcss"))
 
         self.title.pack()
         self.label_wld.pack()
         self.button_wld_slider.pack()
         self.button_wld_blob.pack()
         self.button_wld_matrix.pack()
-        self.label_other.pack()
-        self.button_lcss.pack()
+        # self.label_other.pack()
+        # self.button_lcss.pack()
 
         self.root.mainloop()
 

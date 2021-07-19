@@ -2,6 +2,8 @@ from tkinter import Tk, Button, Label, Entry, Scale, IntVar
 
 import numpy as np
 
+from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map
+
 
 def slider_view(n, matrix=None, texts=None, values=None, fixed=False):
     assert (not (matrix and (texts or values)))
@@ -72,7 +74,14 @@ class SliderInput:
         self.root.mainloop()
 
     def get(self):
-        pass
+        map = {(()): 100., 0: "", (0, 0): 0}
+        for i in range(self.n):
+            map[i + 1] = character_escape(self.texts[i])
+            map[(0, i + 1)] = self.values[i]
+            map[(i + 1, 0)] = self.values[i]
+            for j in range(self.n):
+                map[(i + 1, j + 1)] = max(self.values[i], self.values[j])
+        return map
 
     def plus(self):
         self.quit()
@@ -95,4 +104,7 @@ class SliderInput:
 
 
 if __name__ == "__main__":
-    slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
+    result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
+    print("Costmap result is valid: ", costmap_is_valid(result))
+    print_cost_map(result)
+
