@@ -1,4 +1,11 @@
+from enum import Enum
 from tkinter import Tk, Button, Label, LEFT, W
+
+
+class DistanceView(Enum):
+    SLIDER = 1
+    BLOB = 2
+    MATRIX = 3
 
 
 def get_distance_choice():
@@ -19,11 +26,11 @@ class DistanceChoice:
 
         self.label_wld = Label(self.root, text="Weighted Levenstein Distance", width=40, bg="white", justify=LEFT, anchor=W)
         self.button_wld_slider = Button(self.root, text="Slider View (Easy)", width=30,
-                                        command=lambda: quit("slider"))
+                                        command=lambda: quit(DistanceView.SLIDER))
         self.button_wld_blob = Button(self.root, text="Blob View (Medium)", width=30,
-                                        command=lambda: quit("blob"))
+                                        command=lambda: quit(DistanceView.BLOB))
         self.button_wld_matrix = Button(self.root, text="Matrix View (Hard)", width=30,
-                                        command=lambda: quit("matrix"))
+                                        command=lambda: quit(DistanceView.MATRIX))
 
         self.label_other = Label(self.root, text="Other", width=40, bg="white", justify=LEFT, anchor=W)
         self.button_lcss = Button(self.root, text="Longest Common Subsequence", width=30,
