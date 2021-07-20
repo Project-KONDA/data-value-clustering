@@ -3,9 +3,10 @@ from tkinter import IntVar, Checkbutton
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def create_boolean_frame(name, explanation, default, deactivatable=False, default_active=False, plot_function=None):
-    return lambda parent: BooleanClusteringParameter(
-        parent, name, explanation, default, deactivatable, default_active, plot_function)
+def create_boolean_frame(name, explanation, default, previous_value=None, deactivatable=False, default_active=False,
+                         plot_function=None):
+    return lambda parent: BooleanClusteringParameter(parent, name, explanation, default, previous_value=previous_value, deactivatable=deactivatable,
+                                                     default_active=default_active, plot_function=plot_function)
 
 
 class BooleanClusteringParameter(ClusteringParameter):
@@ -13,12 +14,17 @@ class BooleanClusteringParameter(ClusteringParameter):
     A widget for specifying a boolean parameter of a clusering algorithm via a check button.
     '''
 
-    def __init__(self, parent, name, explanation, default, deactivatable=False, default_active=False, plot_function=None):
+    def __init__(self, parent, name, explanation, default, previous_value=None, deactivatable=False,
+                 default_active=False, plot_function=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
         self.default = default
+        self.previous = previous_value
 
         self.value_var = IntVar()
-        self.value_var.set(int(self.default))
+        if self.previous is None:
+            self.value_var.set(int(self.default))
+        else:
+            self.value_var.set(int(self.previous))
 
         self.check_boolean = Checkbutton(self.frame, variable=self.value_var, bg='white', anchor='nw', padx=20)
         # self.check_boolean.grid(row=0, column=1, sticky='se')
@@ -44,13 +50,9 @@ class BooleanClusteringParameter(ClusteringParameter):
 
 if __name__ == "__main__":
     import gui_cluster_configuration
-    bool1 = create_boolean_frame(
-        "My Param 1", "This is a test parameter.", True, False)
-    bool2 = create_boolean_frame(
-        "My Param 2", "This is a test parameter.", True, True)
-    bool3 = create_boolean_frame(
-        "My Param 3", "This is a test parameter.", False, False)
-    bool4 = create_boolean_frame(
-        "My Param 4", "This is a test parameter.", False, True)
+    bool1 = create_boolean_frame("My Param 1", "This is a test parameter.", True, deactivatable=False)
+    bool2 = create_boolean_frame("My Param 2", "This is a test parameter.", True, deactivatable=True)
+    bool3 = create_boolean_frame("My Param 3", "This is a test parameter.", False, deactivatable=False)
+    bool4 = create_boolean_frame("My Param 4", "This is a test parameter.", False, deactivatable=True)
     bool_input = gui_cluster_configuration.get_configuration_parameters("Test", [bool1, bool2, bool3, bool4])
     print(bool_input.get_result())

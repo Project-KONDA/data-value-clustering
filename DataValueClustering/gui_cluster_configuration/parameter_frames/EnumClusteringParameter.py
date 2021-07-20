@@ -7,9 +7,11 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import Clust
 from gui_general.ToolTip import CreateToolTip
 
 
-def create_enum_frame(name, explanation, dropdown_options, suggestions, deactivatable=False, default_active=False, plot_function=None):
-    return lambda parent: EnumClusteringParameter(
-        parent, name, explanation, dropdown_options, suggestions, deactivatable, default_active, plot_function)
+def create_enum_frame(name, explanation, dropdown_options, suggestions, previous_value=None, deactivatable=False,
+                      default_active=False, plot_function=None):
+    return lambda parent: EnumClusteringParameter(parent, name, explanation, dropdown_options, suggestions, previous_value=previous_value,
+                                                  deactivatable=deactivatable, default_active=default_active,
+                                                  plot_function=plot_function)
 
 
 class EnumClusteringParameter(ClusteringParameter):
@@ -17,7 +19,8 @@ class EnumClusteringParameter(ClusteringParameter):
     A widget for specifying an enumeration parameter of a clusering algorithm via radio buttons.
     '''
 
-    def __init__(self, parent, name, explanation, options, suggestions, deactivatable=False, default_active=False, plot_function=None):
+    def __init__(self, parent, name, explanation, options, suggestions, previous_value=None, deactivatable=False,
+                 default_active=False, plot_function=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
         assert len(suggestions) > 0, name
@@ -31,12 +34,19 @@ class EnumClusteringParameter(ClusteringParameter):
 
         try:
             self.default = np.where(self.option_labels == self.suggestions[0])[0][0]
+            if previous_value is None:
+                self.previous = None
+            else:
+                self.previous = np.where(self.option_labels == previous_value)[0][0]
         except IndexError:
             raise ValueError("Suggestions of parameter " + name + " are not correct: " + str(suggestions))
 
         self.radiobuttons = np.empty(self.n, Radiobutton)
         self.choice = IntVar()
-        self.choice.set(self.default)
+        if self.previous is None:
+            self.choice.set(self.default)
+        else:
+            self.choice.set(self.previous)
 
         for i, option in enumerate(self.options):
             is_suggested = option[0] in self.suggestions
@@ -127,13 +137,9 @@ if __name__ == "__main__":
     options2 = np.array([["0", "00"], ["1", "11"], ["2", "22"]])
     suggestions2 = ["0"]
 
-    enum1 = create_enum_frame(
-        "My Param", "This is a test parameter.", options1, suggestions1, False)
-    enum2 = create_enum_frame(
-        "My Param", "This is a test parameter.", options2, suggestions2, True)
-    enum3 = create_enum_frame(
-        "My Param", "This is a test parameter.", options1, suggestions1, True)
-    enum4 = create_enum_frame(
-        "My Param", "This is a test parameter.", options2, suggestions2, False)
+    enum1 = create_enum_frame("My Param", "This is a test parameter.", options1, suggestions1, deactivatable=False)
+    enum2 = create_enum_frame("My Param", "This is a test parameter.", options2, suggestions2, deactivatable=True)
+    enum3 = create_enum_frame("My Param", "This is a test parameter.", options1, suggestions1, deactivatable=True)
+    enum4 = create_enum_frame("My Param", "This is a test parameter.", options2, suggestions2, deactivatable=False)
     enum_input = gui_cluster_configuration.get_configuration_parameters("Test", [enum1, enum2, enum3, enum4])
     print(enum_input.get_result())

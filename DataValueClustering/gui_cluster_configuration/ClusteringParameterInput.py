@@ -110,24 +110,25 @@ if __name__ == "__main__":
 
     explanation = "This is a test parameter."
     bool_param1 = gui_cluster_configuration.parameter_frames.BooleanClusteringParameter.create_boolean_frame(
-        "First Boolean Parameter", explanation, True, True)
+        "First Boolean Parameter", explanation, True, deactivatable=True)
     bool_param2 = gui_cluster_configuration.parameter_frames.BooleanClusteringParameter.create_boolean_frame(
-        "Second Boolean Parameter", explanation, True, False)
+        "Second Boolean Parameter", explanation, True, deactivatable=False)
 
     enum1_options = np.array([["a", "AA"], ["b", "BB"], ["c", "CC"]])
     enum1_suggestions = ["a", "b"]
+    enum1_previous = ["c"]
     enum2_options = np.array([["0", "00"], ["1", "11"], ["2", "22"]])
     enum2_suggestions = ["0"]
     enum_param1 = gui_cluster_configuration.parameter_frames.EnumClusteringParameter.create_enum_frame(
-        "First Enumeration Parameter", explanation, enum1_options, enum1_suggestions, True)
+        "First Enumeration Parameter", explanation, enum1_options, enum1_suggestions, enum1_previous, deactivatable=True)
     enum_param2 = gui_cluster_configuration.parameter_frames.EnumClusteringParameter.create_enum_frame(
-        "Second Enumeration Parameter", explanation, enum2_options, enum2_suggestions, False)
+        "Second Enumeration Parameter", explanation, enum2_options, enum2_suggestions, deactivatable=False)
 
     slider_param1 = gui_cluster_configuration.parameter_frames.SliderClusteringParameter.create_slider_frame(
-        "First Slider Parameter", explanation, 1, 30, 4, 2, True)
+        "First Slider Parameter", explanation, 1, 30, 4, resolution=2, deactivatable=True)
     slider_param2 = gui_cluster_configuration.parameter_frames.SliderClusteringParameter.create_slider_frame(
-        "Second Slider Parameter", explanation, 1.0, 10.0, 2.0, 0.01, False)
+        "Second Slider Parameter", explanation, 1.0, 10.0, 2.0, resolution=0.01, deactivatable=False)
 
     param_list = [bool_param1, bool_param2, enum_param1, enum_param2, slider_param1, slider_param2]
-    params = get_configuration_parameters("Test", param_list)
+    params = get_configuration_parameters("Test", param_list, list())
     print(params)

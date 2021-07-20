@@ -4,9 +4,11 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import Clust
     DEPENDENCY_VALUE_SLIDER_MAX
 
 
-def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False, plot_function=None):
-    return lambda parent: SliderClusteringParameter(
-        parent, name, explanation, mini, maxi, default, resolution, deactivatable, default_active, plot_function)
+def create_slider_frame(name, explanation, mini, maxi, default, previous_value=None, resolution=1, deactivatable=False,
+                        default_active=False, plot_function=None):
+    return lambda parent: SliderClusteringParameter(parent, name, explanation, mini, maxi, default, previous_value=previous_value,
+                                                    resolution=resolution, deactivatable=deactivatable,
+                                                    default_active=default_active, plot_function=plot_function)
 
 
 class SliderClusteringParameter(ClusteringParameter):
@@ -14,7 +16,8 @@ class SliderClusteringParameter(ClusteringParameter):
     A widget for specifying a number parameter of a clusering algorithm via a slider.
     '''
 
-    def __init__(self, parent, name, explanation, mini, maxi, default, resolution=1, deactivatable=False, default_active=False, plot_function=None):
+    def __init__(self, parent, name, explanation, mini, maxi, default, previous_value=None, resolution=1,
+                 deactivatable=False, default_active=False, plot_function=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
         assert type(mini) == type(maxi) == type(default) == type(resolution), str(name) + str(type(mini)) + str(type(maxi)) + str(type(default)) + str(type(resolution))
@@ -23,16 +26,19 @@ class SliderClusteringParameter(ClusteringParameter):
         self.mini = mini
         self.maxi = maxi
         self.default = default
+        self.previous = previous_value
         self.resolution = resolution
 
         # slider:
         if type(self.resolution) is int:
             self.value_var = IntVar()
-            self.value_var.set(default)
             # self.mini = round(self.mini)
         else:
             self.value_var = DoubleVar()
-            self.value_var.set(default)
+        if self.previous is None:
+            self.value_var.set(self.default)
+        else:
+            self.value_var.set(self.previous)
         self.slider = Scale(self.frame, from_=mini, to=maxi, orient='horizontal', variable=self.value_var, command=self.update_slider, length=400,
                             bg='white', highlightthickness=0, resolution=self.resolution, tickinterval=maxi-mini)
         self.slider.grid(row=2, column=1, sticky='w')
@@ -71,13 +77,11 @@ class SliderClusteringParameter(ClusteringParameter):
 
 if __name__ == '__main__':
     import gui_cluster_configuration
-    slide1 = create_slider_frame(
-        "My Param", "This is a test parameter.", 1, 10, 4, 1, False)
-    slide2 = create_slider_frame(
-        "My Param", "This is a test parameter.", 1, 30, 4, 2, True)
-    slide3 = create_slider_frame(
-        "My Param", "This is a test parameter.", 1.0, 10.0, 2.0, 0.01, False)
-    slide4 = create_slider_frame(
-        "My Param", "This is a test parameter.", 10.0, 14.0, 5.0, 0.1, True)
+    slide1 = create_slider_frame("My Param", "This is a test parameter.", 1, 10, 4, resolution=1, deactivatable=False)
+    slide2 = create_slider_frame("My Param", "This is a test parameter.", 1, 30, 4, resolution=2, deactivatable=True)
+    slide3 = create_slider_frame("My Param", "This is a test parameter.", 1.0, 10.0, 2.0, resolution=0.01,
+                                 deactivatable=False)
+    slide4 = create_slider_frame("My Param", "This is a test parameter.", 10.0, 14.0, 5.0, resolution=0.1,
+                                 deactivatable=True)
     slide_input = gui_cluster_configuration.get_configuration_parameters("Test", [slide1, slide2, slide3, slide4])
     print(slide_input)
