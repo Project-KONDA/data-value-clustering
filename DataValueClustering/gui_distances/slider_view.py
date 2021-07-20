@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Label, Entry, Scale, IntVar
+from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel
 
 import numpy as np
 
@@ -6,22 +6,25 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
     example_costmap
 
 
-def slider_view(n=None, costmap=None, texts=None, values=None, fixed=False):
-    view = SliderInput(n, costmap, texts, values, fixed)
+def slider_view(root, n=None, costmap=None, texts=None, values=None, fixed=False):
+    view = SliderInput(root, n, costmap, texts, values, fixed)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, n=None, costmap=None, text=None, value=None, fixed=False):
+    def __init__(self, root, n=None, costmap=None, text=None, value=None, fixed=False):
         print("n", n, "costmap", costmap, "text", text, "value", value, "fixed", fixed)
         assert (not (costmap and (text or value)))
-        assert (n or costmap)
+        # assert (n or costmap)
 
         self.n = n
         self.texts = text
         self.values = value
         self.fixed = fixed
+
+        if text:
+            self.n = len(text)
 
         if costmap:
             assert(not self.texts and not self.values)
@@ -34,7 +37,7 @@ class SliderInput:
                     self.texts.append(costmap[(i + 1)])
                     self.values.append(costmap[(i + 1, 0)])
 
-        self.root = Tk()
+        self.root = Toplevel(root)
         self.root.title("Slider Input")
         self.root.config(bg="white")
         self.title = Label(self.root, text="Slider View", bg="white",
@@ -106,12 +109,13 @@ class SliderInput:
 
     def quit(self):
         self.update()
+        self.root.quit()
         self.root.destroy()
 
 
 if __name__ == "__main__":
     # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
-    result = slider_view(costmap=example_costmap())
+    result = slider_view(Tk(), costmap=example_costmap())
     print("Costmap result is valid: ", costmap_is_valid(result))
     print_cost_map(result)
 

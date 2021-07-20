@@ -1,5 +1,5 @@
 from enum import Enum
-from tkinter import Tk, Button, Label, LEFT, W
+from tkinter import Tk, Button, Label, LEFT, W, Toplevel
 
 
 class DistanceView(Enum):
@@ -8,17 +8,17 @@ class DistanceView(Enum):
     MATRIX = 3
 
 
-def get_distance_choice():
-    dc = DistanceChoice()
+def get_distance_choice(root):
+    dc = DistanceChoice(root)
     return dc.get()
 
 
 class DistanceChoice:
 
-    def __init__(self):
+    def __init__(self, root):
         self.result = None
 
-        self.root = Tk()
+        self.root = Toplevel(root)
         self.root.title("Distance Choice")
         self.root.config(bg="white")
         self.title = Label(self.root, text="Distance Choice", bg="white",
@@ -49,10 +49,11 @@ class DistanceChoice:
     def quit(self, result):
         self.result = result
         self.root.quit()
+        self.root.destroy()
 
     def get(self):
         return self.result
 
 
 if __name__ == "__main__":
-    print(get_distance_choice())
+    print(get_distance_choice(Tk()))

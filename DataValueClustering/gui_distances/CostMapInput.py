@@ -6,11 +6,11 @@ from gui_distances.costmapinput_helper import validate_input_float, print_cost_m
     preprocess_regexes, example_costmap, get_regexes_from_map
 
 
-def input_costmap(size=None, empty=False, regexes=None, costmap=None):
+def input_costmap(root, size=None, empty=False, regexes=None, costmap=None):
     if size is not None:
         size += 2
     assert (size is None or size in range(2, 21))
-    myMap = CostMapInput(n=size, regexes=regexes, costmap=costmap)
+    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap)
     myMap.record_map(empty)
     return myMap.map
 
@@ -18,7 +18,7 @@ def input_costmap(size=None, empty=False, regexes=None, costmap=None):
 class CostMapInput:
     """ GUI for direct input of the weight matrix for configuring the weighted levenstein distance function """
 
-    def __init__(self, n=None, regexes=None, costmap=None):
+    def __init__(self, root, n=None, regexes=None, costmap=None):
         if costmap is not None:
             regexes = None
 
@@ -27,7 +27,7 @@ class CostMapInput:
             else get_n_from_map(costmap) if costmap is not None \
             else 7
 
-        self.root = Tk()
+        self.root = Toplevel(root)
         self.value_entries = np.full((self.n, self.n), Entry(self.root))
 
         self.root.bind_all("<Return>", self.button_click_output_map)
@@ -182,6 +182,7 @@ class CostMapInput:
 
     def button_click_output_map(self, event=None):
         self.build_output_map()
+        self.root.quit()
         self.root.destroy()
 
 
@@ -192,7 +193,7 @@ if __name__ == '__main__':
 
     # print_cost_map(input_costmap(costmap=test_costmap))
 
-    print_cost_map(input_costmap(regexes=test_regexes))
+    print_cost_map(input_costmap(Tk(),regexes=test_regexes))
 
     # print_cost_map(input_costmap(9))
     # print_cost_map(input_costmap(9, True))

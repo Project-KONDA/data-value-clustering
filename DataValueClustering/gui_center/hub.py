@@ -87,7 +87,7 @@ class Hub:
         config = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
-        abstraction_answers = abstraction_configuration(self.configuration.data, config)[1]
+        abstraction_answers = abstraction_configuration(self.root, self.configuration.data, config)[1]
         # 4. save abstraction into configuration
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
@@ -98,29 +98,38 @@ class Hub:
 
     def configure_distance(self):
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
-        distance_choice = get_distance_choice()
+        distance_choice = get_distance_choice(self.root)
         if distance_choice == DistanceView.SLIDER:
-            cost_map = slider_view(costmap=cost_map)
+            if cost_map is None:
+                blob_configuration = self.configuration.create_blob_configuration()
+                cost_map = slider_view(self.root, texts=list(blob_configuration[1:,1]))
+            else:
+                cost_map = slider_view(self.root, costmap=cost_map)
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if blob_configuration is None:
                 # TODO: warn user that cost map will be reset if previously specified with other view
                 blob_configuration = self.configuration.create_blob_configuration()
-            cost_map, blob_configuration = input_blobs(blob_configuration)
+            cost_map, blob_configuration = input_blobs(self.root, blob_configuration)
         elif distance_choice == DistanceView.MATRIX:
-            cost_map = input_costmap(costmap=cost_map)
+            if cost_map is None:
+                blob_configuration = self.configuration.create_blob_configuration()
+                cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:,1]))
+            else:
+                cost_map = input_costmap(self.root, costmap=cost_map)
             blob_configuration = None
         self.configuration.set_distance_configuration(cost_map, blob_configuration)
         self.configuration.execute_distance()
+        # TODO: show percentage
 
         self.update()
 
     def configure_clustering(self):
         clustering_algorithm, answers = self.configuration.get_clustering_selection()
         parameters = self.configuration.get_clustering_configuration()
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(answers, clustering_algorithm)
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, answers, clustering_algorithm)
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
-        parameters = cluster_config_f(answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, parameters)
+        parameters = cluster_config_f(answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, parameters)  # TODO: pass self.root
         self.configuration.set_clustering_configuration(parameters)
         self.configuration.execute_clustering()
 
@@ -130,7 +139,7 @@ class Hub:
         # (1. call execute from configuration (see above))
         # 2. show result gui
         # 3. read validation results from result gui
-        validation_result = result_view(self.configuration.excel_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
+        validation_result = result_view(self.root, self.configuration.excel_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
                     self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
                     self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
         # 4. save validation into configuration

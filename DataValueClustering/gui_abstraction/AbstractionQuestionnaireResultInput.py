@@ -1,4 +1,4 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk
 
 import gui_abstraction.abstraction_questions
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
@@ -7,13 +7,13 @@ from abstraction.abstraction import *
 DEFAULT_CONFIG = "Default Configuration"
 MANUAL_CONFIG = "Manual Configuration"
 
-def abstraction_configuration(data, predefined_answers=None):
-    answers = input_questionnaire_abstraction(abstraction_question_array, data, predefined_answers)
+def abstraction_configuration(root, data, predefined_answers=None):
+    answers = input_questionnaire_abstraction(root, abstraction_question_array, data, predefined_answers)
     return get_abstraction_method(answers), answers
 
 
-def input_questionnaire_abstraction(config, data, predefined_answers=None):
-    questionnaire = AbstractionQuestionnaireResultInput(config, data, predefined_answers)
+def input_questionnaire_abstraction(root, config, data, predefined_answers=None):
+    questionnaire = AbstractionQuestionnaireResultInput(root, config, data, predefined_answers)
     questionnaire.run()
     answers = questionnaire.get()
     return answers
@@ -22,14 +22,14 @@ def input_questionnaire_abstraction(config, data, predefined_answers=None):
 class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     """ binary questionaire GUI for configuring the abstraction function """
 
-    def __init__(self, config, data, predefined_answers=None):
+    def __init__(self, root, config, data, predefined_answers=None):
         self.help_text = "Abstraction of the first 100 data values:\n"
-        super().__init__("Abstraction Configuration", config, predefined_answers, 10)
+        super().__init__(root, "Abstraction Configuration", config, predefined_answers, 10)
 
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
             [DEFAULT_CONFIG, self.config[:, 3]],
-            ["Maximum Configuration", max_abstraction_function()[1]],
+            ["Maximum Abstraction", max_abstraction_function()[1]],
             ["Duplicate Removal", duplicate_removal_function()[1]],
             ["letters, digits", char_abstraction_function()[1]],
             ["case-sensitive letters, digits", char_abstraction_case_sensitive_function()[1]],
@@ -43,7 +43,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
             # ["Custom Dictionary", lambda data: custom_dictionary()],
             # ["Custom Full", lambda data: custom_full()]
-        ])
+        ],dtype=object)
 
         self.label = Label(self.question_frame, text="You can start with one of the following predefined configurations:")
         self.label.grid(row=2, column=0, sticky='we')
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     q_config2 = gui_abstraction.abstraction_questions.abstraction_question_array
 
-    qc = AbstractionQuestionnaireResultInput(q_config2,
+    qc = AbstractionQuestionnaireResultInput(Tk(), q_config2,
                                              ["abcLBSDH", "bbbGDGD", "c", "a", "b", "c", "d", "e", "f", "g", "h", "i",
                                               "j",
                                               "k", "l", "m", "n", "o", "p", "q", "r", "a", "b", "c", "a", "b", "c", "a",

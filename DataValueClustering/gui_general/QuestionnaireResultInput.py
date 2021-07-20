@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from tkinter import Label, Checkbutton, Button, Tk, IntVar, StringVar, Frame, LEFT, RIGHT, BOTH, GROOVE, font, Canvas, \
-    Scrollbar, FLAT, NORMAL, DISABLED
+    Scrollbar, FLAT, NORMAL, DISABLED, Toplevel
 
 import numpy as np
 
@@ -11,7 +11,7 @@ class QuestionnaireResultInput(ABC):
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 
-    def __init__(self, title, config, predefined_answers=None, start_row=0):
+    def __init__(self, root, title, config, predefined_answers=None, start_row=0):
         # Parameters
         self.config = np.array(config, dtype=object)
         self.n = len(config)
@@ -34,7 +34,7 @@ class QuestionnaireResultInput(ABC):
         self.config_notes = self.config[:, 5] if self.m > 5 else None
 
         # root:
-        self.root = Tk()
+        self.root = Toplevel(root)
         self.root.title(title)
         self.root.config(bg='white')
         self.root.grid_rowconfigure(1, minsize=400)
@@ -45,7 +45,7 @@ class QuestionnaireResultInput(ABC):
         # caption left side:
         self.question_caption = StringVar()
         self.question_caption.set("Please answer the following questions:")
-        self.question_caption_label = Label(self.root, anchor='w', textvariable=self.question_caption, text="test", bg='white',
+        self.question_caption_label = Label(self.root, anchor='w', textvariable=self.question_caption, bg='white',
                                             font=font.Font(size=14), padx=5)
         self.question_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
 
@@ -71,7 +71,7 @@ class QuestionnaireResultInput(ABC):
         # caption right side:
         self.result_caption = StringVar()
         self.result_caption.set(self.help_text)
-        self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, text="test", bg='white',
+        self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, bg='white',
                                           font=font.Font(size=14), padx=5)
         self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
 
@@ -151,6 +151,7 @@ class QuestionnaireResultInput(ABC):
         return answers
 
     def close(self, event=None):
+        self.root.quit()
         self.root.destroy()
 
     @abstractmethod

@@ -1,4 +1,4 @@
-from tkinter import Radiobutton, IntVar, NORMAL, DISABLED
+from tkinter import Radiobutton, IntVar, NORMAL, DISABLED, Tk
 
 import numpy as np
 
@@ -9,12 +9,12 @@ from util.question_result_array_util import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
-def cluster_suggest(answers=None, clustering_algorithm=None):
-    answers, cluster_f, cluster_algo = input_questionnaire_clustering(clustering_question_array, answers, clustering_algorithm)
+def cluster_suggest(root, answers=None, clustering_algorithm=None):
+    answers, cluster_f, cluster_algo = input_questionnaire_clustering(root, clustering_question_array, answers, clustering_algorithm)
     return answers, cluster_f, cluster_algo
 
 
-def input_questionnaire_clustering(config, predefined_answers=None, predefined_algorithm=None):
+def input_questionnaire_clustering(root, config, predefined_answers=None, predefined_algorithm=None):
     questionnaire = ClusteringQuestionnaireResultInput(config, predefined_answers, predefined_algorithm)
     questionnaire.run()
     answers, cluster_f, cluster_algo = questionnaire.get()
@@ -24,9 +24,9 @@ def input_questionnaire_clustering(config, predefined_answers=None, predefined_a
 class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     """Binary questionnaire view to support the selection of the clustering algorithm"""
 
-    def __init__(self, config, predefined_answers=None, predefined_algorithm=None):
+    def __init__(self, root, config, predefined_answers=None, predefined_algorithm=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
-        super().__init__("Clustering Configuration", config, predefined_answers)
+        super().__init__(root, "Clustering Configuration", config, predefined_answers)
         self.algorithms = np.array(algorithm_array, dtype=object)
         self.choice = IntVar()
         if predefined_algorithm is None:
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     q_config3 = gui_cluster_selection.clustering_questions.clustering_question_array
 
     # qc = ClusteringQuestionnaireResultInput(q_config3, [True, True, False, True, True, True])
-    qc = ClusteringQuestionnaireResultInput(q_config3, [True, False, False, False, False, False], "KMedoids")
+    qc = ClusteringQuestionnaireResultInput(Tk(), q_config3, [True, False, False, False, False, False], "KMedoids")
 
     qc.run()
     result = qc.get()

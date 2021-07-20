@@ -1,20 +1,20 @@
 import os
 import subprocess
-from tkinter import Tk, StringVar, Label, font, Frame, Button
+from tkinter import Tk, StringVar, Label, font, Frame, Button, Toplevel
 import numpy as np
 
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 
 
-def result_view(excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+def result_view(root, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
     r = ResultView(excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
     return r.get()
 
 
 class ResultView:
 
-    def __init__(self, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
-        self.root = Tk()
+    def __init__(self, root, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+        self.root = Toplevel(root)
         self.root.title("Result")
 
         self.excel_path = excel_path
@@ -123,6 +123,7 @@ class ResultView:
         return s
 
     def close(self):
+        self.root.quite()
         self.root.destroy()
 
     def get(self):
@@ -144,5 +145,5 @@ if __name__ == '__main__':
      "max_distance": None}
 
     clusters_compressed = [0, 1, 2]
-    r = ResultView("..\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, d, clusters_compressed)
+    r = ResultView(Tk(),"..\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, d, clusters_compressed)
     # r = ResultView("C:\\Users\Viola^ Wenz\Documents\Repositories\data-value-clustering\DataValueClustering\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, distance_matrix, clusters_compressed)

@@ -1,5 +1,5 @@
 from math import sqrt
-from tkinter import Tk, Button, Canvas, Menu, FLAT
+from tkinter import Tk, Button, Canvas, Menu, FLAT, Toplevel
 import numpy as np
 from PIL import Image, ImageTk
 
@@ -10,8 +10,8 @@ from gui_distances.blobinput_helper import get_blob_configuration, \
 from gui_distances.costmapinput_helper import print_cost_map
 
 
-def input_blobs(config):
-    blobs = BlobInput(config)
+def input_blobs(root, config):
+    blobs = BlobInput(root, config)
     cost_map, new_config = blobs.get()
     return cost_map, new_config
 
@@ -22,7 +22,7 @@ class BlobInput:
     by moving and resizing objects on a canvas
     """
 
-    def __init__(self, config):
+    def __init__(self, root, config):
         """
         :param config: array
             config is array of form [label, regex, resizable, info, x, y, size]
@@ -40,7 +40,7 @@ class BlobInput:
         self.canceled = False
 
         """Root"""
-        self.root = Tk()
+        self.root = Toplevel(root)
         self.root.title('Distance Specification')
 
         """Frame"""
@@ -77,7 +77,7 @@ class BlobInput:
         """Canvas"""
         self.canvas_h = 17 * self.h // 18 - 4 * self.gui_spacing
         self.canvas_w = self.w - 3 * self.gui_spacing
-        self.canvas = Canvas(width=self.canvas_w, height=self.canvas_h,
+        self.canvas = Canvas(self.root, width=self.canvas_w, height=self.canvas_h,
                              highlightbackground="black")  # , background="alice blue")
         self.canvas.place(anchor='nw', x=self.gui_spacing, y=self.gui_spacing)
 
@@ -285,7 +285,7 @@ if __name__ == '__main__':
                  True]
     min_config = get_blob_configuration(min_blobs)
     # print(len(min_config), min_config)
-    costmap, config = BlobInput(min_config).get()
+    costmap, config = BlobInput(Tk(),min_config).get()
     print_cost_map(costmap)
 
     # max_blobs = [False, False, True, True, True, True, True, True, True,
