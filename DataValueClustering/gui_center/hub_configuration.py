@@ -228,7 +228,10 @@ class HubConfiguration():
             self.data_path = data_path
             self.data_lower_limit = data_lower_limit
             self.data_upper_limit = data_upper_limit
-            self.data = None
+            self.reset_data()
+            self.reset_abstraction()
+            self.reset_distances()
+            self.reset_clustering()
 
     def set_abstraction_configuration(self, abstraction_answers):
         if not self.abstraction_answers == abstraction_answers:
@@ -254,6 +257,9 @@ class HubConfiguration():
         if not self.clustering_parameters == clustering_parameters:
             self.clustering_parameters = clustering_parameters
             self.reset_clustering()
+
+    def reset_data(self):
+        self.data = None
 
     def reset_abstraction(self):
         self.blob_configuration = None
