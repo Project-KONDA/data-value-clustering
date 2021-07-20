@@ -6,28 +6,25 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
     example_costmap
 
 
-def slider_view(root, n=None, costmap=None, texts=None, values=None, fixed=False):
-    view = SliderInput(root, n, costmap, texts, values, fixed)
+def slider_view(master, n=None, costmap=None, texts=None, values=None, fixed=False):
+    view = SliderInput(master, n, costmap, texts, values, fixed)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, root, n=None, costmap=None, text=None, value=None, fixed=False):
-        print("n", n, "costmap", costmap, "text", text, "value", value, "fixed", fixed)
+    def __init__(self, master, n=None, costmap=None, text=None, value=None, fixed=False):
         assert (not (costmap and (text or value)))
-        # assert (n or costmap)
+        assert (n or costmap or text)
 
-        self.n = n
+        self.n = n if n or costmap else len(text)
         self.texts = text
         self.values = value
         self.fixed = fixed
-
-        if text:
-            self.n = len(text)
+        self.master = master
 
         if costmap:
-            assert(not self.texts and not self.values)
+            assert (not self.texts and not self.values)
             self.texts = list()
             self.values = list()
             if not n:
@@ -37,7 +34,7 @@ class SliderInput:
                     self.texts.append(costmap[(i + 1)])
                     self.values.append(costmap[(i + 1, 0)])
 
-        self.root = Toplevel(root)
+        self.root = Toplevel(self.master)
         self.root.title("Slider Input")
         self.root.config(bg="white")
         self.title = Label(self.root, text="Slider View", bg="white",
@@ -81,6 +78,7 @@ class SliderInput:
         self.root.mainloop()
 
     def get(self):
+        self.update()
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = character_escape(self.texts[i])
@@ -91,31 +89,74 @@ class SliderInput:
         return map
 
     def plus(self):
-        if not self.fixed:
-            self.quit()
-            self.__init__(self.n + 1, text=self.texts, value=self.values, fixed=False)
+        entrylist = np.full(self.n + 1, Entry(self.root))
+        sliderlist = np.full(self.n + 1, Scale(self.root))
+        valuelist = np.full(self.n + 1, IntVar())
+
+        for i in range(self.n):
+            entrylist[i] = self.entrylist[i]
+            sliderlist[i] = self.sliderlist[i]
+            valuelist[i] = self.valuelist[i]
+
+        self.entrylist = entrylist
+        self.sliderlist = sliderlist
+        self.valuelist = valuelist
+
+        self.valuelist[self.n].set(1)
+        self.entrylist[self.n].grid(row=self.n + 2, column=1, sticky='sew', columnspan=2)
+        self.sliderlist[self.n] = Scale(self.root, from_=0, to_=10, orient='horizontal',
+                                        variable=self.valuelist[self.n],
+                                        length=400, bg='white', highlightthickness=0, resolution=1)
+        self.sliderlist[self.n].grid(row=self.n + 2, column=3, sticky='sew', columnspan=2)
+
+        self.n = self.n + 1
+
+        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
+        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
+        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=3, columnspan=2)
 
     def minus(self):
-        if not self.fixed:
-            self.quit()
-            self.__init__(self.n - 1, text=self.texts, value=self.values, fixed=False)
+        if self.n > 1:
+
+            self.n = self.n - 1
+            entrylist = np.full(self.n + 1, Entry(self.root))
+            sliderlist = np.full(self.n + 1, Scale(self.root))
+            valuelist = np.full(self.n + 1, IntVar())
+
+            for i in range(self.n):
+                entrylist[i] = self.entrylist[i]
+                sliderlist[i] = self.sliderlist[i]
+                valuelist[i] = self.valuelist[i]
+
+            self.entrylist[self.n].destroy()
+            self.sliderlist[self.n].destroy()
+
+            self.entrylist = entrylist
+            self.sliderlist = sliderlist
+            self.valuelist = valuelist
+
+            self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
+            self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
+            self.button_ok.grid(sticky='nswe', row=self.n + 5, column=3, columnspan=2)
+            self.root.update()
+
 
     def update(self):
         self.texts = list()
         self.values = list()
         for i in range(self.n):
-            self.texts.append(self.entrylist[i].get())
-            self.values.append(self.sliderlist[i].get())
+            t = self.entrylist[i].get()
+            self.texts.append(t)
+            v = self.sliderlist[i].get()
+            self.values.append(v)
 
     def quit(self):
-        self.update()
         self.root.quit()
-        self.root.destroy()
+        self.root.withdraw()
 
 
 if __name__ == "__main__":
     # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
-    result = slider_view(Tk(), costmap=example_costmap())
+    result = slider_view(None, costmap=example_costmap())
     print("Costmap result is valid: ", costmap_is_valid(result))
     print_cost_map(result)
-
