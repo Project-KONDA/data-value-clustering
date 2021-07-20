@@ -2,33 +2,37 @@ from tkinter import Tk, Button, Label, Entry, Scale, IntVar
 
 import numpy as np
 
-from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map
+from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
+    example_costmap
 
 
-def slider_view(n, matrix=None, texts=None, values=None, fixed=False):
-    assert (not (matrix and (texts or values)))
-    if matrix:
-        texts = list()
-        values = list()
-        for i in range(n):
-            if i in matrix and (i, 0) in matrix:
-                texts.append(matrix(i))
-                values.append(matrix((i, 0)))
-            else:
-                texts.append("")
-                values.append(1)
-
-    view = SliderInput(n, texts, values, fixed)
+def slider_view(n=None, costmap=None, texts=None, values=None, fixed=False):
+    view = SliderInput(n, costmap, texts, values, fixed)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, n, text=None, values=None, fixed=False):
+    def __init__(self, n=None, costmap=None, text=None, value=None, fixed=False):
+        print("n", n, "costmap", costmap, "text", text, "value", value, "fixed", fixed)
+        assert (not (costmap and (text or value)))
+        assert (n or costmap)
+
         self.n = n
         self.texts = text
-        self.values = values
+        self.values = value
         self.fixed = fixed
+
+        if costmap:
+            assert(not self.texts and not self.values)
+            self.texts = list()
+            self.values = list()
+            if not n:
+                self.n = get_n_from_map(costmap) - 1  # n_rows = amount slider + row for deletion/addition
+            for i in range(self.n):
+                if i in costmap and (i, 0) in costmap:
+                    self.texts.append(costmap[(i + 1)])
+                    self.values.append(costmap[(i + 1, 0)])
 
         self.root = Tk()
         self.root.title("Slider Input")
@@ -52,16 +56,16 @@ class SliderInput:
         self.valuelist = np.full(self.n, IntVar())
 
         for i in range(0, self.n):
-            text = ""
-            value = 1
+            t = ""
+            v = 1
             if self.texts and len(self.texts) > i:
-                text = self.texts[i]
+                t = self.texts[i]
             if self.values and len(self.values) > i:
-                value = self.values[i]
+                v = self.values[i]
 
-            self.valuelist[i] = IntVar(self.root, value)
-            self.entrylist[i] = Entry(self.root, font="12", text=text)
-            self.entrylist[i].insert(0, text)
+            self.valuelist[i] = IntVar(self.root, v)
+            self.entrylist[i] = Entry(self.root, font="12", text=t)
+            self.entrylist[i].insert(0, t)
             if self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
@@ -84,12 +88,14 @@ class SliderInput:
         return map
 
     def plus(self):
-        self.quit()
-        self.__init__(self.n + 1, self.texts, self.values, self.fixed)
+        if not self.fixed:
+            self.quit()
+            self.__init__(self.n + 1, text=self.texts, value=self.values, fixed=False)
 
     def minus(self):
-        self.quit()
-        self.__init__(self.n - 1, self.texts, self.values, self.fixed)
+        if not self.fixed:
+            self.quit()
+            self.__init__(self.n - 1, text=self.texts, value=self.values, fixed=False)
 
     def update(self):
         self.texts = list()
@@ -104,7 +110,8 @@ class SliderInput:
 
 
 if __name__ == "__main__":
-    result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
+    # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
+    result = slider_view(costmap=example_costmap())
     print("Costmap result is valid: ", costmap_is_valid(result))
     print_cost_map(result)
 

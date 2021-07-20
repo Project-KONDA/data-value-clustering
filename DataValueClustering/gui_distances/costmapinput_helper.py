@@ -124,3 +124,8 @@ def example_costmap():
         for j in range(5):
             example_map[(i, j)] = float(int(i != j) + 1)
     return example_map
+
+if __name__ == "__main__":
+    print_cost_map(example_costmap())
+    print(costmap_is_valid(example_costmap()))
+    print(len(example_costmap()))
