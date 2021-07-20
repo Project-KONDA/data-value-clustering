@@ -93,7 +93,7 @@ class HubConfiguration():
         self.no_noise = None
         self.timedelta_cluster = None
 
-        self.excel_path = None
+        self.excel_path = None  # TODO: ask user?
         self.timedelta_total = None
 
     def execute_data(self):
@@ -181,16 +181,13 @@ class HubConfiguration():
         return not self.data is None
 
     def abstraction_configuration_valid(self):
-        # return not self.abstraction_f is None
-        pass
+        return not self.values_abstracted is None
 
     def distance_configuration_valid(self):
-        # return not self.distance_f is None
-        pass
+        return not self.distance_matrix_map is None
 
     def clustering_configuration_valid(self):
-        # return not self.cluster_f is None
-        pass
+        return not self.clusters is None
 
     "Test if ready for configuration"
     def abstraction_configuration_possible(self):
