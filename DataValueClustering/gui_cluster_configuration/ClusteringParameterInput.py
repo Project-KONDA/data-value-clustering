@@ -1,11 +1,11 @@
-from tkinter import Label, Button, Tk, StringVar, Frame, font, Canvas, Scrollbar
+from tkinter import Label, Button, Tk, StringVar, Frame, font, Canvas, Scrollbar, Toplevel
 import numpy as np
 
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def get_configuration_parameters(title, parameter_frame_inits, dependencies):
-    input = ClusterConfigurationInput(title, parameter_frame_inits, dependencies)
+def get_configuration_parameters(master, title, parameter_frame_inits, dependencies):
+    input = ClusterConfigurationInput(master, title, parameter_frame_inits, dependencies)
     return input.get()
 
 
@@ -14,8 +14,8 @@ class ClusterConfigurationInput:
     A view that contains widgets for specifying the parameters of the clustering algorithm.
     '''
 
-    def __init__(self, title, parameter_frame_inits, dependencies):
-        self.root = Tk()
+    def __init__(self, master, title, parameter_frame_inits, dependencies):
+        self.root = Toplevel(master)
         self.root.title(title)
         self.root.resizable(False, True)
         self.root.minsize(200, 200)
@@ -75,6 +75,7 @@ class ClusterConfigurationInput:
             self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
 
     def close(self, event=None):
+        self.root.quit()
         self.root.destroy()
 
     def record_parameters(self):
