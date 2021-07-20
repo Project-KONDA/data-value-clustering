@@ -17,7 +17,7 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPEN
     DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX
 
 
-def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
+def cluster_hierarchical(cluster_answers, distance_matrix_map, values, previous_parameters=None):
     if cluster_answers is None:
         cluster_answers = None
         # cluster_answers = not None
@@ -28,7 +28,7 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     # ask user for 'method' argument
     # method = 'single'
     method_info = hierarchical_method_config(cluster_answers)
-    method_frame = create_enum_frame(*method_info)
+    method_frame = create_enum_frame(*method_info, previous_value=None if previous_parameters is None else previous_parameters[method_info[0]])
 
     param_frames = [method_frame]
     method, = get_configuration_parameters(
@@ -38,24 +38,24 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
 
     # n_clusters = None  # TODO: support elbow method & Co.
     n_clusters_info = hierarchical_n_clusters_config(len(values))
-    n_clusters_frame = create_slider_frame(*n_clusters_info, plot_function=lambda current_value: show_dendrogram(linkage_matrix, values))
+    n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, values))
     # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
     # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
 
     # distance_threshold = 3.8  # 15  # 3.8  # depends on distances
     distance_threshold_info = hierarchical_distance_threshold_config(linkage_matrix,
                                                                      distance_matrix_map["min_distance"])
-    distance_threshold_frame = create_slider_frame(*distance_threshold_info, plot_function=lambda current_value: show_dendrogram(linkage_matrix, values))
+    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, values))
 
     # criterion = 'distance'
     criterion_info = hierarchical_criterion_config()
-    criterion_frame = create_enum_frame(*criterion_info)
+    criterion_frame = create_enum_frame(*criterion_info, previous_value=None if previous_parameters is None else previous_parameters[criterion_info[0]])
     # max number of clusters: 'maxclust', 'maxclust_monocrit'
     # threshold: 'distance', 'inconsistent', 'monocrit'
 
     # depth = 2
     depth_info = hierarchical_depth_config()
-    depth_frame = create_slider_frame(*depth_info)
+    depth_frame = create_slider_frame(*depth_info, previous_value=None if previous_parameters is None else previous_parameters[depth_info[0]])
 
     # monocrit = None
     # monocrit_info = hierarchical_monocrit_config()
@@ -77,12 +77,12 @@ def cluster_hierarchical(cluster_answers, distance_matrix_map, values):
     # return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
 
-def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
+def cluster_kmedoids(cluster_answers, distance_matrix_map, values, previous_parameters=None):
     # TODO: show questionnaire if not shown already
 
     # n_clusters = 7  # TODO: support elbow method
     n_clusters_info = kmedoids_n_clusters_config(len(values))
-    n_clusters_frame = create_slider_frame(*n_clusters_info)
+    n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]])
 
     # # method = 'alternate'  # TODO: unexpected keyword argument error
     # method_info = kmedoids_method_config(cluster_answers)
@@ -90,11 +90,11 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
 
     # init = 'heuristic'  # "if there are outliers in the dataset, use another initialization than build"
     init_info = kmedoids_init_config(cluster_answers)
-    init_frame = create_enum_frame(*init_info)
+    init_frame = create_enum_frame(*init_info, previous_value=None if previous_parameters is None else previous_parameters[init_info[0]])
 
     # max_iter = 300  # depends on efficiency vs. quality preference
     max_iter_info = kmedoids_max_iter_config()
-    max_iter_frame = create_slider_frame(*max_iter_info)
+    max_iter_frame = create_slider_frame(*max_iter_info, previous_value=None if previous_parameters is None else previous_parameters[max_iter_info[0]])
 
     frames = [n_clusters_frame, init_frame, max_iter_frame]
 
@@ -105,21 +105,21 @@ def cluster_kmedoids(cluster_answers, distance_matrix_map, values):
     # return kmedoids_args(n_clusters, init, max_iter)
 
 
-def cluster_dbscan(cluster_answers, distance_matrix_map, values):
+def cluster_dbscan(cluster_answers, distance_matrix_map, values, previous_parameters=None):
     # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     # TODO: and https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
     n_values = len(values)
     # min_samples = 3  # depends on number of values
     min_samples_info = dbscan_min_samples_config(n_values, cluster_answers)
-    min_samples_frame = create_slider_frame(*min_samples_info, plot_function=lambda current_value: show_k_distance_graph(distance_matrix_map["distance_matrix"], current_value))
+    min_samples_frame = create_slider_frame(*min_samples_info, previous_value=None if previous_parameters is None else previous_parameters[min_samples_info[0]], plot_function=lambda current_value: show_k_distance_graph(distance_matrix_map["distance_matrix"], current_value))
 
     # eps = 4.8  # depends on distances
     eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"], n_values)
-    eps_frame = create_slider_frame(*eps_info)
+    eps_frame = create_slider_frame(*eps_info, previous_value=None if previous_parameters is None else previous_parameters[eps_info[0]])
 
     # n_jobs = None
     n_jobs_info = dbscan_n_jobs_config()
-    n_jobs_frame = create_slider_frame(*n_jobs_info)
+    n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]])
 
     frames = [min_samples_frame, eps_frame, n_jobs_frame]
     dependencies = [
@@ -132,38 +132,38 @@ def cluster_dbscan(cluster_answers, distance_matrix_map, values):
     # return dbscan_args(eps, min_samples, n_jobs)
 
 
-def cluster_optics(cluster_answers, distance_matrix_map, values):
+def cluster_optics(cluster_answers, distance_matrix_map, values, previous_parameters=None):
     # min_samples = 2
     min_samples_info = optics_min_samples_config(len(values), cluster_answers)
-    min_samples_frame = create_slider_frame(*min_samples_info)
+    min_samples_frame = create_slider_frame(*min_samples_info, previous_value=None if previous_parameters is None else previous_parameters[min_samples_info[0]])
 
     # max_eps = np.inf
     max_eps_info = optics_max_eps_config()
-    max_eps_frame = create_slider_frame(*max_eps_info)
+    max_eps_frame = create_slider_frame(*max_eps_info, previous_value=None if previous_parameters is None else previous_parameters[max_eps_info[0]])
 
     # cluster_method = 'xi'
     cluster_method_info = optics_cluster_method_config()
-    cluster_method_frame = create_enum_frame(*cluster_method_info)
+    cluster_method_frame = create_enum_frame(*cluster_method_info, previous_value=None if previous_parameters is None else previous_parameters[cluster_method_info[0]])
 
     # eps = None
     eps_info = optics_eps_config()
-    eps_frame = create_slider_frame(*eps_info)
+    eps_frame = create_slider_frame(*eps_info, previous_value=None if previous_parameters is None else previous_parameters[eps_info[0]])
 
     # xi = 0.05
     xi_info = optics_xi_config()
-    xi_frame = create_slider_frame(*xi_info)
+    xi_frame = create_slider_frame(*xi_info, previous_value=None if previous_parameters is None else previous_parameters[xi_info[0]])
 
     # predecessor_correction = True
     predecessor_correction_info = optics_predecessor_correction_config()
-    predecessor_correction_frame = create_boolean_frame(*predecessor_correction_info)
+    predecessor_correction_frame = create_boolean_frame(*predecessor_correction_info, previous_value=None if previous_parameters is None else previous_parameters[predecessor_correction_info[0]])
 
     # min_cluster_size = None
     min_cluster_size_info = optics_min_cluster_size_config()
-    min_cluster_size_frame = create_slider_frame(*min_cluster_size_info)
+    min_cluster_size_frame = create_slider_frame(*min_cluster_size_info, previous_value=None if previous_parameters is None else previous_parameters[min_cluster_size_info[0]])
 
     # n_jobs = None
     n_jobs_info = optics_n_jobs_config()
-    n_jobs_frame = create_slider_frame(*n_jobs_info)
+    n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]])
 
     frames = [min_samples_frame, max_eps_frame, cluster_method_frame, eps_frame, xi_frame,
               predecessor_correction_frame, min_cluster_size_frame,
@@ -187,22 +187,22 @@ def cluster_optics(cluster_answers, distance_matrix_map, values):
     #                       n_jobs)
 
 
-def cluster_affinity(cluster_answers, distance_matrix_map, values):
+def cluster_affinity(cluster_answers, distance_matrix_map, values, previous_parameters=None):
     # damping = 0.99
     damping_info = affinity_damping_config()
-    damping_frame = create_slider_frame(*damping_info)
+    damping_frame = create_slider_frame(*damping_info, previous_value=None if previous_parameters is None else previous_parameters[damping_info[0]])
 
     # max_iter = 200
     max_iter_info = affinity_max_iter_config(cluster_answers)
-    max_iter_frames = create_slider_frame(*max_iter_info)
+    max_iter_frames = create_slider_frame(*max_iter_info, previous_value=None if previous_parameters is None else previous_parameters[max_iter_info[0]])
 
     # convergence_iter = 15
     convergence_iter_info = affinity_convergence_iter_config()
-    convergence_iter_frame = create_slider_frame(*convergence_iter_info)
+    convergence_iter_frame = create_slider_frame(*convergence_iter_info, previous_value=None if previous_parameters is None else previous_parameters[convergence_iter_info[0]])
 
     # preference = None
     preference_info = affinity_preference_config(distance_matrix_map["affinity_matrix"])
-    preference_frame = create_slider_frame(*preference_info)
+    preference_frame = create_slider_frame(*preference_info, previous_value=None if previous_parameters is None else previous_parameters[preference_info[0]])
 
     frames = [damping_frame, max_iter_frames, convergence_iter_frame, preference_frame]
     dependencies = [
@@ -214,31 +214,31 @@ def cluster_affinity(cluster_answers, distance_matrix_map, values):
     # return affinity_args(damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, preference=preference)
 
 
-def cluster_spectral(cluster_answers, distance_matrix_map, values):
+def cluster_spectral(cluster_answers, distance_matrix_map, values, previous_parameters=None):
     num_values = len(values)
     # n_clusters = 5
     n_clusters_info = spectral_n_clusters_config(num_values)
-    n_clusters_frame = create_slider_frame(*n_clusters_info)
+    n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]])
 
     # eigen_solver = None
     eigen_solver_info = spectral_eigen_solver_config()
-    eigen_solver_frame = create_enum_frame(*eigen_solver_info)
+    eigen_solver_frame = create_enum_frame(*eigen_solver_info, previous_value=None if previous_parameters is None else previous_parameters[eigen_solver_info[0]])
 
     # n_components = n_clusters
     n_components_info = spectral_n_components_config(num_values)
-    n_components_frame = create_slider_frame(*n_components_info)
+    n_components_frame = create_slider_frame(*n_components_info, previous_value=None if previous_parameters is None else previous_parameters[n_components_info[0]])
 
     # n_init = 10
     n_init_info = spectral_n_init_config(num_values)
-    n_init_frame = create_slider_frame(*n_init_info)
+    n_init_frame = create_slider_frame(*n_init_info, previous_value=None if previous_parameters is None else previous_parameters[n_init_info[0]])
 
     # eigen_tol = 0.0
     eigen_tol_info = spectral_eigen_tol_config()
-    eigen_tol_frame = create_slider_frame(*eigen_tol_info)
+    eigen_tol_frame = create_slider_frame(*eigen_tol_info, previous_value=None if previous_parameters is None else previous_parameters[eigen_tol_info[0]])
 
     # assign_labels = 'kmeans'
     assign_labels_info = spectral_assign_labels_config()
-    assign_labels_frame = create_enum_frame(*assign_labels_info)
+    assign_labels_frame = create_enum_frame(*assign_labels_info, previous_value=None if previous_parameters is None else previous_parameters[assign_labels_info[0]])
 
     frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame,
               eigen_tol_frame, assign_labels_frame]
