@@ -84,7 +84,7 @@ class Hub:
 
     def configure_data(self):
         data_name = select_data(self.root)
-        self.configuration.data_path = str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt"
+        self.configuration.set_data_configuration(str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt")
 
         self.configuration.execute_data()
         self.update()
