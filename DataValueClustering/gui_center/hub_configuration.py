@@ -79,6 +79,8 @@ class HubConfiguration():
         self.clustering_answers = None
         # self.cluster_config_f = None
         # self.cluster_f = None
+        self.clusters_abstracted = None
+        self.clusters = None
         self.cluster_sizes = None
         self.noise_size = None
         self.cluster_sizes_abstracted = None
@@ -91,8 +93,8 @@ class HubConfiguration():
         self.no_noise = None
         self.timedelta_cluster = None
 
-        self.clusters_abstracted = None
-        self.clusters = None
+        self.excel_path = None
+        self.timedelta_total = None
 
     def execute_data(self):
         self.data = read_data_values_from_file(self.data_path)[self.data_lower_limit:self.data_upper_limit]
@@ -121,6 +123,7 @@ class HubConfiguration():
         time_cluster_end = datetime.now()
         self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted, self.get_abstraction_function(), self.data)
         self.timedelta_cluster = time_cluster_end - time_cluster_start
+        self.timedelta_total = self.timedelta_cluster + self.timedelta_distance + self.timedelta_abstraction
         self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
         self.cluster_sizes_abstracted, self.noise_size_abstracted = get_cluster_sizes(self.clusters_abstracted)
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
@@ -272,10 +275,12 @@ class HubConfiguration():
         self.num_abstracted_data = None
         self.abstraction_rate = None
         self.timedelta_abstraction = None
+        self.timedelta_total = None
 
     def reset_distances(self):
         self.distance_matrix_map = None
         self.timedelta_distance = None
+        self.timedelta_total = None
 
     def reset_clustering(self):
         self.cluster_sizes = None
@@ -289,6 +294,9 @@ class HubConfiguration():
         self.no_clusters = None
         self.no_noise = None
         self.timedelta_cluster = None
+        self.timedelta_total = None
+        self.clusters = None
+        self.clusters_abstracted = None
 
     def create_blob_configuration(self):
         self.blob_configuration = get_blob_configuration(self.abstraction_answers)
