@@ -3,7 +3,7 @@ from tkinter import filedialog
 
 
 def getJsonLoadPath():
-    file_name = filedialog.asksaveasfilename(
+    file_name = filedialog.askopenfilename(
         initialdir="../",
         title="Load File",
         filetypes=(("Json Files", "*.json"),
