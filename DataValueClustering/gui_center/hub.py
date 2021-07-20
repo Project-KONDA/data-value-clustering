@@ -26,7 +26,7 @@ class Hub:
         self.configuration = HubConfiguration()
 
         "keys"
-        self.root.bind_all("<Return>", self.execute)
+        self.root.bind_all("<Return>", self.show_result)
 
         "labels"
         self.label_title = Label(self.root, text="Clustering Configuration Hub", bg="white",
@@ -51,9 +51,9 @@ class Hub:
 
         self.button_load = Button(self.root, text='Load', command=self.load)
         self.button_save = Button(self.root, text='Save', command=self.save)
-        self.button_execute = Button(self.root, text='Execute', command=self.execute, state="disabled")
+        self.button_show_result = Button(self.root, text='Show Result', command=self.show_result, state="disabled")
 
-        self.button_execute.grid(sticky='nswe', row=6, column=3, columnspan=2)
+        self.button_show_result.grid(sticky='nswe', row=6, column=3, columnspan=2)
         self.button_load.grid(sticky='nswe', row=6, column=1, columnspan=1)
         self.button_save.grid(sticky='nswe', row=6, column=2, columnspan=1)
 
@@ -73,6 +73,13 @@ class Hub:
         self.frame_distance.grid(sticky='nswe', row=3, column=3, columnspan=2)
         self.frame_clustering.grid(sticky='nswe', row=4, column=3, columnspan=2)
 
+        # self.frame_config = Frame(self.root, bg="grey90", width=200, height=200)  # TODO: pass this frame as root
+        # self.frame_config.configure(highlightbackground="grey", highlightthickness=1)
+        # self.frame_config.grid(sticky='nswe', row=1, column=5, columnspan=2, rowspan=4)
+
+
+
+        self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
     def configure_data(self):
@@ -135,14 +142,13 @@ class Hub:
 
         self.update()
 
-    def execute(self):
-        # (1. call execute from configuration (see above))
-        # 2. show result gui
-        # 3. read validation results from result gui
+    def show_result(self):
+        # 1. show result gui
+        # 2. read validation results from result gui
         validation_result = result_view(self.root, self.configuration.excel_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
                     self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
                     self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
-        # 4. save validation into configuration
+        # 3. TODO: save validation into configuration
 
         self.update()
 
@@ -176,9 +182,9 @@ class Hub:
             self.button_clustering.configure(state="disabled")
 
         if self.configuration.execute_possible():
-            self.button_execute.configure(state="normal")
+            self.button_show_result.configure(state="normal")
         else:
-            self.button_execute.configure(state="disabled")
+            self.button_show_result.configure(state="disabled")
 
         self.update_frame_data()
         self.update_frame_abstraction()
