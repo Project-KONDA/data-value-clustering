@@ -1,15 +1,19 @@
 import os
 import subprocess
 from tkinter import Tk, StringVar, Label, font, Frame, Button
-
-from pandas import np
+import numpy as np
 
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 
 
+def result_view(excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+    r = ResultView(excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
+    return r.get()
+
+
 class ResultView:
 
-    def __init__(self, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_compressed, distance_matrix, clusters_compressed):
+    def __init__(self, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
         self.root = Tk()
         self.root.title("Result")
 
@@ -25,11 +29,9 @@ class ResultView:
         self.timedelta_clustering = timedelta_clustering
         self.timedelta_total = timedelta_total
 
-        self.values_compressed = values_compressed
-        self.distance_matrix = distance_matrix
-        self.clusters_compressed = clusters_compressed
-
-
+        self.values_abstracted = values_abstracted
+        self.distance_matrix_map = distance_matrix_map
+        self.clusters_abstracted = clusters_abstracted
 
         # summary:
         self.summary_frame = Frame(self.root, padx=10, bg="white", pady=10)
@@ -53,7 +55,7 @@ class ResultView:
         self.info_label.grid(row=1, column=0, sticky='nwes', columnspan=1)
 
         # scatter plot in summary_frame
-        show_mds_scatter_plot_integrated(self.summary_frame, self.values_compressed, self.distance_matrix, self.clusters_compressed)
+        show_mds_scatter_plot_integrated(self.summary_frame, self.values_abstracted, self.distance_matrix_map["distance_matrix"], self.clusters_abstracted)
 
         # excel button
         self.button = Button(self.summary_frame, text='Open Excel File Showing Clustering', command=self.open_excel,
@@ -107,11 +109,11 @@ class ResultView:
         s = "Number of Data Values: " + str(self.num_data)
         s += "\nNumber of Abstracted Data Values: " + str(self.num_abstracted_data)
         s += "\nAbstraction Rate: " + str(self.abstraction_rate)
-        s += "\nNumber of clusters: " + str(self.no_clusters)
+        s += "\n\nNumber of clusters: " + str(self.no_clusters)
         s += "\nNumber of noisy values: " + str(self.no_noise)
 
-        s += "\nTime Abstraction: " + str(self.timedelta_abstraction)
-        s += "\nTime Distance-Matrix: " + str(self.timedelta_distance)
+        s += "\n\nTime Abstraction: " + str(self.timedelta_abstraction)
+        s += "\nTime Distance: " + str(self.timedelta_distance)
         s += "\nTime Clustering: " + str(self.timedelta_clustering)
         s += "\nTime Total: " + str(self.timedelta_total)
 
@@ -123,6 +125,9 @@ class ResultView:
     def close(self):
         self.root.destroy()
 
+    def get(self):
+        pass
+
 
 if __name__ == '__main__':
     values_compressed = ["a", "1", "?"]
@@ -131,6 +136,13 @@ if __name__ == '__main__':
         [0, 0, 1.5],
         [0, 0, 0]
     ])
+
+    d = {"distance_matrix": distance_matrix,
+     "condensed_distance_matrix": None,
+     "affinity_matrix": None,
+     "min_distance": None,
+     "max_distance": None}
+
     clusters_compressed = [0, 1, 2]
-    r = ResultView("..\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, distance_matrix, clusters_compressed)
+    r = ResultView("..\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, d, clusters_compressed)
     # r = ResultView("C:\\Users\Viola^ Wenz\Documents\Repositories\data-value-clustering\DataValueClustering\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, distance_matrix, clusters_compressed)

@@ -7,6 +7,7 @@ from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_sug
 from gui_distances import input_blobs, input_costmap
 from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
+from gui_result.ResultView import result_view
 
 
 class Hub:
@@ -93,7 +94,7 @@ class Hub:
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         distance_choice = get_distance_choice()
         if distance_choice == DistanceView.SLIDER:
-            # cost_map = slider_view(cost_map) # TODO: support translation from and to cost map
+            # cost_map = slider_view(matrix=cost_map) # TODO: support translation from and to cost map
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if blob_configuration is None:
@@ -120,9 +121,12 @@ class Hub:
         self.update()
 
     def execute(self):
-        # 1. call execute from configuration (see above)
+        # (1. call execute from configuration (see above))
         # 2. show result gui
         # 3. read validation results from result gui
+        validation_result = result_view(self.configuration.excel_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
+                    self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
+                    self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
         # 4. save validation into configuration
 
         self.update()
