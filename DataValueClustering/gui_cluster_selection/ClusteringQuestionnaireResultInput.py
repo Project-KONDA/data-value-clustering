@@ -15,7 +15,7 @@ def cluster_suggest(master, answers=None, clustering_algorithm=None):
 
 
 def input_questionnaire_clustering(master, config, predefined_answers=None, predefined_algorithm=None):
-    questionnaire = ClusteringQuestionnaireResultInput(config, predefined_answers, predefined_algorithm)
+    questionnaire = ClusteringQuestionnaireResultInput(master, config, predefined_answers, predefined_algorithm)
     questionnaire.run()
     answers, cluster_f, cluster_algo = questionnaire.get()
     return answers, cluster_f, cluster_algo
