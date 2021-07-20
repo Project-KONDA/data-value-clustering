@@ -26,11 +26,11 @@ class DistanceChoice:
 
         self.label_wld = Label(self.root, text="Weighted Levenstein Distance", width=40, bg="white", justify=LEFT, anchor=W)
         self.button_wld_slider = Button(self.root, text="Slider View (Easy)", width=30,
-                                        command=lambda: quit(DistanceView.SLIDER))
+                                        command=lambda: self.close(DistanceView.SLIDER))
         self.button_wld_blob = Button(self.root, text="Blob View (Medium)", width=30,
-                                        command=lambda: quit(DistanceView.BLOB))
+                                        command=lambda: self.close(DistanceView.BLOB))
         self.button_wld_matrix = Button(self.root, text="Matrix View (Hard)", width=30,
-                                        command=lambda: quit(DistanceView.MATRIX))
+                                        command=lambda: self.close(DistanceView.MATRIX))
 
         # self.label_other = Label(self.root, text="Other", width=40, bg="white", justify=LEFT, anchor=W)
         # self.button_lcss = Button(self.root, text="Longest Common Subsequence", width=30,
@@ -46,7 +46,7 @@ class DistanceChoice:
 
         self.root.mainloop()
 
-    def quit(self, result):
+    def close(self, result):
         self.result = result
         self.root.quit()
         self.root.destroy()
