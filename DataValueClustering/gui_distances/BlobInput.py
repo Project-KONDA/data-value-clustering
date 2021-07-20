@@ -40,7 +40,8 @@ class BlobInput:
         self.canceled = False
 
         """Root"""
-        self.root = Toplevel(master)
+        self.master = master
+        self.root = Toplevel(self.master)
         self.root.title('Distance Specification')
 
         """Frame"""
@@ -249,7 +250,7 @@ class BlobInput:
                 configuration[i, j+4] = new_coordinates[i, j]
 
         self.root.destroy()
-        self.__init__(configuration)
+        self.__init__(self.master, configuration)
 
     def get_absolute_coordinate_value(self, relative_value, x=True):
         # ca. (-0.2, 1.2) -> (0-1920)
