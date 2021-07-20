@@ -1,9 +1,12 @@
 from tkinter import Tk, Button, Label, Frame
+from pathlib import Path
+
 
 from export.path import getJsonSavePath, getJsonLoadPath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
+from gui_data.select_data import select_data
 from gui_distances import input_blobs, input_costmap
 from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
@@ -73,7 +76,9 @@ class Hub:
         self.root.mainloop()
 
     def configure_data(self):
-        # self.configuration.data_path =
+        data_name = select_data(self.root)
+        self.configuration.data_path = str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt"
+
         self.configuration.execute_data()
         self.update()
 

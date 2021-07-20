@@ -1,4 +1,4 @@
-from tkinter import Tk, Listbox, Button, Label, END, Scrollbar
+from tkinter import Tk, Listbox, Button, Label, END, Scrollbar, Toplevel
 
 from data_extraction import get_sources_in_experiment_data_directory
 
@@ -7,12 +7,18 @@ def get_list(path=""):
     return get_sources_in_experiment_data_directory()[:, 0]
 
 
+def select_data(root):
+    return SelectData("", root).get()
+
+
 class SelectData:
-    def __init__(self, path):
+    def __init__(self, path, root):
         self.path = path
 
-        self.root = Tk()
-        self.root.title("Select Data")
+        self.root = Toplevel(root)
+        # self.root.title("Select Data")
+
+        self.result = None
 
         self.label_title = Label(self.root, text="Select Data Set", bg="white",
                                  font=('Helvatical bold', 19))
@@ -45,10 +51,17 @@ class SelectData:
             index = index[0]
         except:
             return
-        print(self.datalist[index])
+        # print(self.datalist[index])
+        self.result = self.datalist[index]
+        self.root.quit()
         self.root.destroy()
 
 
+    def get(self):
+        return self.result
+
+
 if __name__ == "__main__":
-    path = ""
-    SelectData(path)
+    # path = ""
+    # SelectData(path)
+    print(select_data(Tk()))
