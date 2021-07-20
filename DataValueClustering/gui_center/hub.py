@@ -7,6 +7,7 @@ from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_sug
 from gui_distances import input_blobs, input_costmap
 from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
+from gui_distances.slider_view import slider_view
 from gui_result.ResultView import result_view
 
 
@@ -94,7 +95,7 @@ class Hub:
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         distance_choice = get_distance_choice()
         if distance_choice == DistanceView.SLIDER:
-            # cost_map = slider_view(matrix=cost_map) # TODO: support translation from and to cost map
+            cost_map = slider_view(costmap=cost_map)
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if blob_configuration is None:
