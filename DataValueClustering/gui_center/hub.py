@@ -111,7 +111,7 @@ class Hub:
     def configure_clustering(self):
         clustering_algorithm, answers = self.configuration.get_clustering_selection()
         parameters = self.configuration.get_clustering_configuration()
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(clustering_algorithm, answers) # TODO: support preselected answers and algo
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(answers, clustering_algorithm)
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         parameters = cluster_config_f(parameters, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted) # TODO: support predefined parameters
         self.configuration.set_clustering_configuration(parameters)
