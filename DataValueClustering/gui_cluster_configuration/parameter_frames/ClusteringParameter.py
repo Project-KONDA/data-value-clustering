@@ -52,10 +52,18 @@ class ClusteringParameter(ABC):
                                        wraplength=500, justify='left')
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
+        # reset button:
+        self.reset_button = Button(self.frame, anchor='nw', text="Reset", command=self.reset)
+        self.reset_button.grid(row=1, column=1, sticky='ne', padx=5, pady=5)
+
         # plot
         if plot_function:
             self.plot_button = Button(self.frame, anchor='nw', text="Show plot", command=self.plot_button_pressed)
             self.plot_button.grid(row=0, column=1, sticky='ne', padx=5, pady=5)
+
+    @abstractmethod
+    def reset(self):
+        pass
 
     def plot_button_pressed(self):
         self.plot_function(self.get_result())
@@ -97,6 +105,7 @@ class ClusteringParameter(ABC):
         self.is_activated.set(int(False))
         self.label.config(state='disabled', bg='grey90')
         self.label_explanation.config(state='disabled', bg='grey90')
+        self.reset_button.config(state='disabled', bg='grey90')
         self.frame.config(bg='grey90')
         if self.deactivatable:
             self.check_active.config(bg='grey90')
@@ -105,6 +114,7 @@ class ClusteringParameter(ABC):
         self.is_activated.set(int(True))
         self.label.config(state='normal', bg='white')
         self.label_explanation.config(state='normal', bg='white')
+        self.reset_button.config(state='normal', bg='white')
         self.frame.config(bg='white')
         if self.deactivatable:
             self.check_active.config(bg='white')

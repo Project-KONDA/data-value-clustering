@@ -62,6 +62,9 @@ class SliderClusteringParameter(ClusteringParameter):
         super().deactivate()
         self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
 
+    def reset(self):
+        self.value_var.set(self.default)
+
     def get_result(self):
         return self.value_var.get() if self.is_activated.get() else None
 

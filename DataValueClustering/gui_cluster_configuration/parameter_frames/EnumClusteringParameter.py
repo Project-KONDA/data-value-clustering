@@ -113,6 +113,9 @@ class EnumClusteringParameter(ClusteringParameter):
             self.radiobuttons[i].config(state='disabled')
             self.radiobuttons[i].config(bg='grey90')  # fg
 
+    def reset(self):
+        self.choice.set(self.default)
+
     def get_result(self):
         return self.option_labels[self.choice.get()] if self.is_activated.get() else None
 
