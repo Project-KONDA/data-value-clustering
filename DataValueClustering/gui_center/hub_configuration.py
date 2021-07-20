@@ -251,17 +251,7 @@ class HubConfiguration():
         if not self.clustering_algorithm == clustering_algorithm or not self.clustering_answers == clustering_answers:
             self.clustering_algorithm = clustering_algorithm
             self.clustering_answers = clustering_answers
-            self.cluster_sizes = None
-            self.noise_size = None
-            self.cluster_sizes_abstracted = None
-            self.noise_size_abstracted = None
-            self.fancy_cluster_list = None
-            self.noise = None
-            self.fancy_cluster_list_abstracted = None
-            self.noise_abstracted = None
-            self.no_clusters = None
-            self.no_noise = None
-            self.timedelta_cluster = None
+            self.reset_clustering()
 
     def set_clustering_configuration(self, clustering_parameters):
         if not self.clustering_parameters == clustering_parameters:
