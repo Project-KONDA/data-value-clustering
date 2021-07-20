@@ -2,7 +2,7 @@ from tkinter import Tk, Button, Label, Frame
 
 from export.path import getJsonSavePath, getJsonLoadPath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
-from gui_center.hub_configuration import HubConfiguration
+from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 from gui_distances import input_blobs, input_costmap
 from gui_distances.blobinput_helper import get_blob_configuration
@@ -131,7 +131,7 @@ class Hub:
         load_path = getJsonLoadPath()
         if not load_path: return
         print("loading from " + load_path + " ...")
-        self.configuration.load(load_path)
+        self.configuration = load_hub_configuration(load_path)
         self.update()
 
     def save(self):
