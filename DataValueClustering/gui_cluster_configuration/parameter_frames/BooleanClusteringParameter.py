@@ -3,8 +3,8 @@ from tkinter import IntVar, Checkbutton
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def create_boolean_frame(name, explanation, default, previous_value=None, deactivatable=False, default_active=False,
-                         plot_function=None):
+def create_boolean_frame(name, explanation, default, deactivatable=False, default_active=False,
+                         plot_function=None, previous_value=None):
     return lambda parent: BooleanClusteringParameter(parent, name, explanation, default, previous_value=previous_value, deactivatable=deactivatable,
                                                      default_active=default_active, plot_function=plot_function)
 

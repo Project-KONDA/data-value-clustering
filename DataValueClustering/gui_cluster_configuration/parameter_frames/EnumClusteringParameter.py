@@ -7,8 +7,8 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import Clust
 from gui_general.ToolTip import CreateToolTip
 
 
-def create_enum_frame(name, explanation, dropdown_options, suggestions, previous_value=None, deactivatable=False,
-                      default_active=False, plot_function=None):
+def create_enum_frame(name, explanation, dropdown_options, suggestions, deactivatable=False,
+                      default_active=False, plot_function=None, previous_value=None):
     return lambda parent: EnumClusteringParameter(parent, name, explanation, dropdown_options, suggestions, previous_value=previous_value,
                                                   deactivatable=deactivatable, default_active=default_active,
                                                   plot_function=plot_function)

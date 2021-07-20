@@ -120,7 +120,7 @@ if __name__ == "__main__":
     enum2_options = np.array([["0", "00"], ["1", "11"], ["2", "22"]])
     enum2_suggestions = ["0"]
     enum_param1 = gui_cluster_configuration.parameter_frames.EnumClusteringParameter.create_enum_frame(
-        "First Enumeration Parameter", explanation, enum1_options, enum1_suggestions, enum1_previous, deactivatable=True)
+        "First Enumeration Parameter", explanation, enum1_options, enum1_suggestions, previous_value=enum1_previous, deactivatable=True)
     enum_param2 = gui_cluster_configuration.parameter_frames.EnumClusteringParameter.create_enum_frame(
         "Second Enumeration Parameter", explanation, enum2_options, enum2_suggestions, deactivatable=False)
 

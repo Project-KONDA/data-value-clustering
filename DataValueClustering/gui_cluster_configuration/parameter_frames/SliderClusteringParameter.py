@@ -4,8 +4,8 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import Clust
     DEPENDENCY_VALUE_SLIDER_MAX
 
 
-def create_slider_frame(name, explanation, mini, maxi, default, previous_value=None, resolution=1, deactivatable=False,
-                        default_active=False, plot_function=None):
+def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False,
+                        default_active=False, plot_function=None, previous_value=None):
     return lambda parent: SliderClusteringParameter(parent, name, explanation, mini, maxi, default, previous_value=previous_value,
                                                     resolution=resolution, deactivatable=deactivatable,
                                                     default_active=default_active, plot_function=plot_function)
