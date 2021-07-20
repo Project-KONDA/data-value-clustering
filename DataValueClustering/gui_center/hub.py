@@ -129,7 +129,7 @@ class Hub:
         parameters = self.configuration.get_clustering_configuration()
         answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, answers, clustering_algorithm)
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
-        parameters = cluster_config_f(answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, parameters)  # TODO: pass self.root
+        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, parameters)  # TODO: pass self.root
         self.configuration.set_clustering_configuration(parameters)
         self.configuration.execute_clustering()
 
