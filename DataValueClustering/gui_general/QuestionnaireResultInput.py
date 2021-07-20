@@ -11,7 +11,7 @@ class QuestionnaireResultInput(ABC):
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 
-    def __init__(self, root, title, config, predefined_answers=None, start_row=0):
+    def __init__(self, master, title, config, predefined_answers=None, start_row=0):
         # Parameters
         self.config = np.array(config, dtype=object)
         self.n = len(config)
@@ -34,7 +34,7 @@ class QuestionnaireResultInput(ABC):
         self.config_notes = self.config[:, 5] if self.m > 5 else None
 
         # root:
-        self.root = Toplevel(root)
+        self.root = Toplevel(master)
         self.root.title(title)
         self.root.config(bg='white')
         self.root.grid_rowconfigure(1, minsize=400)

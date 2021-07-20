@@ -13,8 +13,8 @@ def result_view(root, excel_path, num_data, num_abstracted_data, abstraction_rat
 
 class ResultView:
 
-    def __init__(self, root, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
-        self.root = Toplevel(root)
+    def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+        self.root = Toplevel(master)
         self.root.title("Result")
 
         self.excel_path = excel_path

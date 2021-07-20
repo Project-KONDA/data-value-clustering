@@ -7,15 +7,15 @@ def get_list(path=""):
     return get_sources_in_experiment_data_directory()[:, 0]
 
 
-def select_data(root):
-    return SelectData("", root).get()
+def select_data(master):
+    return SelectData("", master).get()
 
 
 class SelectData:
-    def __init__(self, path, root):
+    def __init__(self, path, master):
         self.path = path
 
-        self.root = Toplevel(root)
+        self.root = Toplevel(master)
         # self.root.title("Select Data")
 
         self.result = None

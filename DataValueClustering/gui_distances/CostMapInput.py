@@ -18,7 +18,7 @@ def input_costmap(root, size=None, empty=False, regexes=None, costmap=None):
 class CostMapInput:
     """ GUI for direct input of the weight matrix for configuring the weighted levenstein distance function """
 
-    def __init__(self, root, n=None, regexes=None, costmap=None):
+    def __init__(self, master, n=None, regexes=None, costmap=None):
         if costmap is not None:
             regexes = None
 
@@ -27,7 +27,7 @@ class CostMapInput:
             else get_n_from_map(costmap) if costmap is not None \
             else 7
 
-        self.root = Toplevel(root)
+        self.root = Toplevel(master)
         self.value_entries = np.full((self.n, self.n), Entry(self.root))
 
         self.root.bind_all("<Return>", self.button_click_output_map)

@@ -7,13 +7,13 @@ from abstraction.abstraction import *
 DEFAULT_CONFIG = "Default Configuration"
 MANUAL_CONFIG = "Manual Configuration"
 
-def abstraction_configuration(root, data, predefined_answers=None):
-    answers = input_questionnaire_abstraction(root, abstraction_question_array, data, predefined_answers)
+def abstraction_configuration(master, data, predefined_answers=None):
+    answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers)
     return get_abstraction_method(answers), answers
 
 
-def input_questionnaire_abstraction(root, config, data, predefined_answers=None):
-    questionnaire = AbstractionQuestionnaireResultInput(root, config, data, predefined_answers)
+def input_questionnaire_abstraction(master, config, data, predefined_answers=None):
+    questionnaire = AbstractionQuestionnaireResultInput(master, config, data, predefined_answers)
     questionnaire.run()
     answers = questionnaire.get()
     return answers
@@ -22,9 +22,9 @@ def input_questionnaire_abstraction(root, config, data, predefined_answers=None)
 class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     """ binary questionaire GUI for configuring the abstraction function """
 
-    def __init__(self, root, config, data, predefined_answers=None):
+    def __init__(self, master, config, data, predefined_answers=None):
         self.help_text = "Abstraction of the first 100 data values:\n"
-        super().__init__(root, "Abstraction Configuration", config, predefined_answers, 10)
+        super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10)
 
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
@@ -43,7 +43,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
             # ["Custom Dictionary", lambda data: custom_dictionary()],
             # ["Custom Full", lambda data: custom_full()]
-        ],dtype=object)
+        ], dtype=object)
 
         self.label = Label(self.question_frame, text="You can start with one of the following predefined configurations:")
         self.label.grid(row=2, column=0, sticky='we')

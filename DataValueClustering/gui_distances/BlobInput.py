@@ -22,7 +22,7 @@ class BlobInput:
     by moving and resizing objects on a canvas
     """
 
-    def __init__(self, root, config):
+    def __init__(self, master, config):
         """
         :param config: array
             config is array of form [label, regex, resizable, info, x, y, size]
@@ -40,7 +40,7 @@ class BlobInput:
         self.canceled = False
 
         """Root"""
-        self.root = Toplevel(root)
+        self.root = Toplevel(master)
         self.root.title('Distance Specification')
 
         """Frame"""

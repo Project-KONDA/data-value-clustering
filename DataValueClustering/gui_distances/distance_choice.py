@@ -15,10 +15,10 @@ def get_distance_choice(root):
 
 class DistanceChoice:
 
-    def __init__(self, root):
+    def __init__(self, master):
         self.result = None
 
-        self.root = Toplevel(root)
+        self.root = Toplevel(master)
         self.root.title("Distance Choice")
         self.root.config(bg="white")
         self.title = Label(self.root, text="Distance Choice", bg="white",
