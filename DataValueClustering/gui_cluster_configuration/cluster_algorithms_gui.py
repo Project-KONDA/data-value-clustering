@@ -73,7 +73,7 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     n_clusters, distance_threshold, criterion, depth = \
         get_configuration_parameters(master, "", frames, dependencies2)
 
-    return {"n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": criterion, "depth": depth}
+    return {"method": method, "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": criterion, "depth": depth}
     # return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
 
