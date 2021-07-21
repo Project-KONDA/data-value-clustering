@@ -20,7 +20,7 @@ class Hub:
 
         "initialisation"
         self.root = Tk()
-        self.root.title("Clustering HUB")
+        self.root.title("Clustering Configuration Hub")
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
@@ -34,46 +34,56 @@ class Hub:
         self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=3)
 
         "buttons"
-        self.button_data = Button(self.root, text='Data', command=self.configure_data)
-        self.button_abstraction = Button(self.root, text='Abstraction', command=self.configure_abstraction)
-        self.button_distance = Button(self.root, text='Distance', command=self.configure_distance)
-        self.button_clustering = Button(self.root, text='Clustering', command=self.configure_clustering)
+        self.button_load = Button(self.root, text='Load Configuration...', command=self.load)
+        self.button_save = Button(self.root, text='Save Configuration', command=self.save, state="disabled")
+        self.button_path = Button(self.root, text='Configure Save Path...', command=self.configure_path)
+        self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data)
+        self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction)
+        self.button_distance = Button(self.root, text='Configure Distance...', command=self.configure_distance)
+        self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering)
 
-        self.button_data.configure(width=20, height=2)
+        self.button_path.configure(width=20, height=2)
+        self.button_data.configure(width=20, height=2, state="disabled")
         self.button_abstraction.configure(width=20, height=2, state="disabled")
         self.button_distance.configure(width=20, height=2, state="disabled")
         self.button_clustering.configure(width=20, height=2, state="disabled")
 
-        self.button_data.grid(sticky='we', row=1, column=1, columnspan=2)
-        self.button_abstraction.grid(sticky='we', row=2, column=1, columnspan=2)
-        self.button_distance.grid(sticky='we', row=3, column=1, columnspan=2)
-        self.button_clustering.grid(sticky='we', row=4, column=1, columnspan=2)
+        self.button_load.grid(sticky='ne', row=1, column=4, columnspan=1, padx=10, pady=10)
+        self.button_save.grid(sticky='nw', row=1, column=1, columnspan=1, padx=10, pady=10)
+        self.button_path.grid(sticky='we', row=2, column=1, columnspan=2, padx=10, pady=10)
+        self.button_data.grid(sticky='we', row=3, column=1, columnspan=2, padx=10, pady=10)
+        self.button_abstraction.grid(sticky='we', row=4, column=1, columnspan=2, padx=10, pady=10)
+        self.button_distance.grid(sticky='we', row=5, column=1, columnspan=2, padx=10, pady=10)
+        self.button_clustering.grid(sticky='we', row=6, column=1, columnspan=2, padx=10, pady=10)
 
-        self.button_load = Button(self.root, text='Load', command=self.load)
-        self.button_save = Button(self.root, text='Save', command=self.save)
-        self.button_show_result = Button(self.root, text='Show Result', command=self.show_result, state="disabled")
+        self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled", font = ('Sans','10','bold'))
+        # self.button_save = Button(self.root, text='Save', command=self.save)
 
-        self.button_show_result.grid(sticky='nswe', row=6, column=3, columnspan=2)
-        self.button_load.grid(sticky='nswe', row=6, column=1, columnspan=1)
-        self.button_save.grid(sticky='nswe', row=6, column=2, columnspan=1)
+        self.button_show_result.configure(width=20, height=2)
+
+        self.button_show_result.grid(sticky='nswe', row=7, column=1, columnspan=4, padx=10, pady=10)
+        # self.button_save.grid(sticky='nswe', row=6, column=2, columnspan=1)
 
         "frames"
+        self.frame_path = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_data = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_abstraction = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_distance = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_clustering = Frame(self.root, bg="grey90", width=200, height=100)
 
+        self.frame_path.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_data.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_abstraction.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_distance.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_clustering.configure(highlightbackground="grey", highlightthickness=1)
 
-        self.frame_data.grid(sticky='nswe', row=1, column=3, columnspan=2)
-        self.frame_abstraction.grid(sticky='nswe', row=2, column=3, columnspan=2)
-        self.frame_distance.grid(sticky='nswe', row=3, column=3, columnspan=2)
-        self.frame_clustering.grid(sticky='nswe', row=4, column=3, columnspan=2)
+        self.frame_path.grid(sticky='nswe', row=2, column=3, columnspan=2, padx=10, pady=10)
+        self.frame_data.grid(sticky='nswe', row=3, column=3, columnspan=2, padx=10, pady=10)
+        self.frame_abstraction.grid(sticky='nswe', row=4, column=3, columnspan=2, padx=10, pady=10)
+        self.frame_distance.grid(sticky='nswe', row=5, column=3, columnspan=2, padx=10, pady=10)
+        self.frame_clustering.grid(sticky='nswe', row=6, column=3, columnspan=2, padx=10, pady=10)
 
-        # self.frame_config = Frame(self.root, bg="grey90", width=200, height=200)  # TODO: pass this frame as root
+        # self.frame_config = Frame(self.root, bg="grey90", width=200, height=200)  # pass this frame as root
         # self.frame_config.configure(highlightbackground="grey", highlightthickness=1)
         # self.frame_config.grid(sticky='nswe', row=1, column=5, columnspan=2, rowspan=4)
 
@@ -82,12 +92,24 @@ class Hub:
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
+    def configure_path(self):
+        self.configuration.json_save_path = getJsonSavePath(self.configuration.json_save_path)
+        self.configuration.excel_save_path = self.configuration.json_save_path[0:len(self.configuration.json_save_path)-len(".json")] + ".xlsx"
+        # if not save_path: return
+        # print("saving to " + save_path + " ...")
+        # self.configuration.save(save_path)
+
+        self.update()
+        # self.configuration.save_as_json()
+
     def configure_data(self):
         data_name = select_data(self.root)
         self.configuration.set_data_configuration(str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt")
 
         self.configuration.execute_data()
+
         self.update()
+        # self.configuration.save_as_json()
 
     def configure_abstraction(self):
         # 1. get data from config
@@ -102,6 +124,7 @@ class Hub:
         self.configuration.execute_abstraction()
 
         self.update()
+        # self.configuration.save_as_json()
 
     def configure_distance(self):
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
@@ -130,6 +153,7 @@ class Hub:
         # TODO: show percentage
 
         self.update()
+        # self.configuration.save_as_json()
 
     def configure_clustering(self):
         clustering_algorithm, answers = self.configuration.get_clustering_selection()
@@ -141,31 +165,38 @@ class Hub:
         self.configuration.execute_clustering()
 
         self.update()
+        self.configuration.save_as_json()
+        self.configuration.save_as_excel()
 
     def show_result(self):
-        # 1. show result gui
-        # 2. read validation results from result gui
-        validation_result = result_view(self.root, self.configuration.excel_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
+        validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
                     self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
                     self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
-        # 3. TODO: save validation into configuration
+        # TODO: save validation into configuration
 
         self.update()
 
     def load(self):
-        load_path = getJsonLoadPath()
+        load_path = getJsonLoadPath(self.configuration.json_save_path)
         if not load_path: return
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.update()
 
     def save(self):
-        save_path = getJsonSavePath()
-        if not save_path: return
-        print("saving to " + save_path + " ...")
-        self.configuration.save(save_path)
+        self.configuration.save_as_json()
 
     def update(self):
+        if self.configuration.saving_possible():
+            self.button_save.configure(state="normal")
+        else:
+            self.button_save.configure(state="disabled")
+
+        if self.configuration.data_configuration_possible():
+            self.button_data.configure(state="normal")
+        else:
+            self.button_data.configure(state="disabled")
+
         if self.configuration.abstraction_configuration_possible():
             self.button_abstraction.configure(state="normal")
         else:
@@ -182,7 +213,7 @@ class Hub:
             self.button_clustering.configure(state="disabled")
 
         if self.configuration.execute_possible():
-            self.button_show_result.configure(state="normal")
+            self.button_show_result.configure(state="normal", bg='pale green')
         else:
             self.button_show_result.configure(state="disabled")
 
