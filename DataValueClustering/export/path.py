@@ -2,9 +2,11 @@
 from tkinter import filedialog
 
 
-def getJsonLoadPath():
+def getJsonLoadPath(initial_dir=None):
+    if initial_dir is None:
+        initial_dir = "../"
     file_name = filedialog.askopenfilename(
-        initialdir="../",
+        initialdir=initial_dir,
         title="Load File",
         filetypes=(("Json Files", "*.json"),
                    ("All Files", "*.*"))
@@ -12,9 +14,11 @@ def getJsonLoadPath():
     return file_name
 
 
-def getJsonSavePath():
+def getJsonSavePath(initial_dir=None):
+    if initial_dir is None:
+        initial_dir = "../"
     file_name = filedialog.asksaveasfilename(
-        initialdir="../",
+        initialdir=initial_dir,
         title="Save File",
         filetypes=(("Json Files", "*.json"),
                    ("All Files", "*.*"))
