@@ -17,6 +17,7 @@ class DistanceChoice:
 
     def __init__(self, master):
         self.result = None
+        self.canceled = False
 
         self.root = Toplevel(master)
         self.root.title("Distance Choice")
@@ -44,7 +45,13 @@ class DistanceChoice:
         # self.label_other.pack()
         # self.button_lcss.pack()
 
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
+
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.destroy()
 
     def close(self, result):
         self.result = result
@@ -52,6 +59,8 @@ class DistanceChoice:
         self.root.destroy()
 
     def get(self):
+        if self.canceled:
+            return None
         return self.result
 
 

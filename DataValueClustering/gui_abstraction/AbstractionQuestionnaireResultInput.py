@@ -9,6 +9,8 @@ MANUAL_CONFIG = "Manual Configuration"
 
 def abstraction_configuration(master, data, predefined_answers=None):
     answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers)
+    if answers is None:
+        return None, None
     return get_abstraction_method(answers), answers
 
 

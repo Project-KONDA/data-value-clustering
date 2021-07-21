@@ -23,6 +23,8 @@ class SliderInput:
         self.fixed = fixed
         self.master = master
 
+        self.canceled = False
+
         if costmap:
             assert (not self.texts and not self.values)
             self.texts = list()
@@ -75,9 +77,12 @@ class SliderInput:
             self.entrylist[i].grid(row=i + 2, column=1, sticky='sew', columnspan=2)
             self.sliderlist[i].grid(row=i + 2, column=3, sticky='sew', columnspan=2)
 
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
     def get(self):
+        if self.canceled:
+            return None
         self.update()
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
@@ -149,6 +154,11 @@ class SliderInput:
             self.texts.append(t)
             v = self.sliderlist[i].get()
             self.values.append(v)
+
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.destroy()
 
     def quit(self):
         self.root.quit()

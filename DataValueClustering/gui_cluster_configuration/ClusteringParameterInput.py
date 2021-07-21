@@ -21,6 +21,7 @@ class ClusterConfigurationInput:
         self.root.minsize(200, 200)
         self.root.grid_rowconfigure(1, weight=1)
         self.root.config(bg='white')
+        self.canceled = False
 
         self.root.bind_all("<Return>", self.close)
 
@@ -97,12 +98,22 @@ class ClusterConfigurationInput:
         self.root.geometry(f"+%s+%s" % (midx, midy))
 
         self.root.after(1, lambda: self.root.focus_force())
+
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
+
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.destroy()
 
     def get(self):
         parameter_values = ()
         for i, param in enumerate(self.parameters):
-            parameter_values += (param.get_result(),)
+            if self.canceled:
+                parameter_values += (None, )
+            else:
+                parameter_values += (param.get_result(),)
         return parameter_values
 
 

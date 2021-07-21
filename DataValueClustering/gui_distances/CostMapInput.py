@@ -11,7 +11,7 @@ def input_costmap(root, size=None, empty=False, regexes=None, costmap=None):
         size += 2
     assert (size is None or size in range(2, 21))
     myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty)
-    return myMap.map
+    return myMap.get()
 
 
 class CostMapInput:
@@ -21,6 +21,8 @@ class CostMapInput:
         if costmap is not None:
             regexes = None
         self.empty = empty
+
+        self.canceled = False
 
         self.n = n if n is not None \
             else len(regexes) if regexes is not None \
@@ -137,6 +139,7 @@ class CostMapInput:
         self.root.geometry(f"+%s+%s" % (midx, midy))
 
         self.root.after(1, lambda: self.root.focus_force())
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
     def copy_to_column(self, i, text):
@@ -277,10 +280,21 @@ class CostMapInput:
             self.label = label
             self.value_entries = value_entries
 
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.withdraw()
+
     def quit(self):
         self.root.update()
         self.root.quit()
         self.root.withdraw()
+
+    def get(self):
+        if self.canceled:
+            return None
+        else:
+            return self.map
 
 
 if __name__ == '__main__':

@@ -19,6 +19,8 @@ class QuestionnaireResultInput(ABC):
         self.check_config()
         self.start_row = start_row
 
+        self.canceled = False
+
         self.checks = np.empty(self.n, dtype=Checkbutton)
         self.answers = np.empty(self.n, dtype=IntVar)
 
@@ -107,6 +109,9 @@ class QuestionnaireResultInput(ABC):
         self.root.geometry(f"+%s+%s" % (midx, midy))
 
         self.root.after(1, lambda: self.root.focus_force())
+
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+
         self.root.mainloop()
 
     def update_visibility(self):
@@ -145,10 +150,17 @@ class QuestionnaireResultInput(ABC):
         pass
 
     def get(self):
+        if self.canceled is True:
+            return None
         answers = []
         for i, v in enumerate(self.answers):
             answers.append(v.get() == 1)
         return answers
+
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.destroy()
 
     def close(self, event=None):
         self.root.quit()

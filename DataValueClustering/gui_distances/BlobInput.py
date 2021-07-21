@@ -136,6 +136,7 @@ class BlobInput:
         self.button_ok.place(anchor='se', x=self.w - self.gui_spacing - 1, y=self.h - self.gui_spacing)
 
         self.root.after(1, lambda: self.root.focus_force())
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
     def canvas_blob_info(self, event):
@@ -233,7 +234,14 @@ class BlobInput:
         return distance_map  # TODO: return modified blob_configuration
 
     def get(self):
+        if self.canceled:
+            return None, None
         return self.get_distance_map(), self.get_config()
+
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.destroy()
 
     def close(self, event=None, canceled=False):
         """Close Tk Window"""

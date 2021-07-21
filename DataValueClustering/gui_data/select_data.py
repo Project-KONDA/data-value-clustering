@@ -19,6 +19,7 @@ class SelectData:
         # self.root.title("Select Data")
 
         self.result = None
+        self.canceled = False
 
         self.label_title = Label(self.root, text="Select Data Set", bg="white",
                                  font=('Helvatical bold', 19))
@@ -34,6 +35,7 @@ class SelectData:
         self.button_ok.grid(sticky='nswe', row=5, column=2, columnspan=1)
 
         self.load()
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
     def load(self):
@@ -45,19 +47,27 @@ class SelectData:
         # TODO load
         self.load()
 
+    def cancel(self):
+        self.canceled = True
+        self.root.quit()
+        self.root.destroy()
+
     def close(self):
         index = self.listbox.curselection()
         try:
             index = index[0]
+            self.result = self.datalist[index]
         except:
-            return
+            self.result = None
         # print(self.datalist[index])
-        self.result = self.datalist[index]
+
         self.root.quit()
         self.root.destroy()
 
 
     def get(self):
+        if self.canceled:
+            return None
         return self.result
 
 

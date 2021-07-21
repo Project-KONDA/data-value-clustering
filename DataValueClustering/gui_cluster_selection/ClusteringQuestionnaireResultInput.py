@@ -51,6 +51,8 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
             super().close()
 
     def get(self):
+        if self.canceled:
+            return None, None, None
         answers = super().get()
         if self.choice.get() >= 0:
             selected_algorithm_f = self.algorithms[self.choice.get(), 3]

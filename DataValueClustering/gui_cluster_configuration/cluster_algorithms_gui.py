@@ -34,6 +34,9 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     method, = get_configuration_parameters(master,
         "Hierarchical Clustering Configuration Part 1/2", param_frames, [])
 
+    if method is None:
+        return None
+
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method)
 
     # n_clusters = None  # TODO: support elbow method & Co.
@@ -73,6 +76,9 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     n_clusters, distance_threshold, criterion, depth = \
         get_configuration_parameters(master, "", frames, dependencies2)
 
+    if n_clusters is None:
+        return None
+
     return {"method": method, "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": criterion, "depth": depth}
     # return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
@@ -101,6 +107,9 @@ def cluster_kmedoids(master, cluster_answers, distance_matrix_map, values, previ
     n_clusters, init, max_iter = \
         get_configuration_parameters(master, "", frames, [])
 
+    if n_clusters is None:
+        return None
+
     return {"n_clusters": n_clusters, "init": init, "max_iter": max_iter}
     # return kmedoids_args(n_clusters, init, max_iter)
 
@@ -127,6 +136,9 @@ def cluster_dbscan(master, cluster_answers, distance_matrix_map, values, previou
          lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
     ]
     min_samples, eps, n_jobs = get_configuration_parameters(master, "", frames, dependencies)
+
+    if min_samples is None:
+        return None
 
     return {"min_samples": min_samples, "eps": eps, "n_jobs": n_jobs}
     # return dbscan_args(eps, min_samples, n_jobs)
@@ -181,6 +193,9 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     if not max_eps:
         max_eps = np.inf
 
+    if min_samples is None:
+        return None
+
     return {"min_samples": min_samples, "max_eps": max_eps, "cluster_method": cluster_method, "eps": eps, "xi": xi, "predecessor_correction": predecessor_correction, "min_cluster_size": min_cluster_size, "n_jobs": n_jobs}
     # return optics_args(min_samples, max_eps, cluster_method,
     #                       eps, xi, predecessor_correction, min_cluster_size,
@@ -209,6 +224,9 @@ def cluster_affinity(master, cluster_answers, distance_matrix_map, values, previ
         [affinity_propagation_clustering.MAX_ITER, affinity_propagation_clustering.CONVERGENCE_ITER, DEPENDENCY_VALUE_SLIDER_MAX, lambda new_max_iter: new_max_iter],
     ]
     damping, max_iter, convergence_iter, preference = get_configuration_parameters(master, "", frames, dependencies)
+
+    if damping is None:
+        return None
 
     return {"damping": damping, "max_iter": max_iter, "convergence_iter": convergence_iter, "preference": preference}
     # return affinity_args(damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, preference=preference)
@@ -250,6 +268,9 @@ def cluster_spectral(master, cluster_answers, distance_matrix_map, values, previ
 
     if not n_components:
         n_components = n_clusters
+
+    if n_clusters is None:
+        return None
 
     return {"n_clusters": n_clusters, "eigen_solver": eigen_solver, "n_components": n_components, "n_init": n_init, "eigen_tol": eigen_tol, "assign_labels": assign_labels}
 
