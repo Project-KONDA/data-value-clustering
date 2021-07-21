@@ -33,7 +33,9 @@ class HubConfiguration():
 
     def fill_hub_configuration_from_dict(self, dic):
         for key, value in dic.items():
-            if key == "timedelta_abstraction" or key == "timedelta_distance" or key == "timedelta_cluster":
+            if value is None:
+                setattr(self, key, None)
+            elif key == "timedelta_abstraction" or key == "timedelta_distance" or key == "timedelta_cluster":
                 value_split = value.split(":")
                 value_adapted = dt.timedelta(hours=float(value_split[0]), minutes=float(value_split[1]), seconds=float(value_split[2]))
                 setattr(self, key, value_adapted)
@@ -155,11 +157,12 @@ class HubConfiguration():
         f.close()
 
     def translate_cost_map_to_json(self):
-        cost_map_case, cost_map_regex, cost_map_weights = split_cost_map(self.cost_map)
-        self.cost_map = {"weight_case_switch": cost_map_case, "rgx": cost_map_regex.tolist(), "w": cost_map_weights.tolist()}
+        if not self.cost_map is None:
+            cost_map_case, cost_map_regex, cost_map_weights = split_cost_map(self.cost_map)
+            self.cost_map = {"weight_case_switch": cost_map_case, "rgx": cost_map_regex.tolist(), "w": cost_map_weights.tolist()}
 
     def translate_cost_map_to_dict(self):
-        self.cost_map = get_cost_map(**self.cost_map)
+        self.cost_map = None if self.cost_map is None else get_cost_map(**self.cost_map)
 
     def hub_configuration_to_json(self):
         json_text = json.dumps(self, default=self.default_object_to_json)
