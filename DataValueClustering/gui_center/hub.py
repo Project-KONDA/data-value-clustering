@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Label, Frame
+from tkinter import Tk, Button, Label, Frame, messagebox
 from pathlib import Path
 
 
@@ -87,10 +87,14 @@ class Hub:
         # self.frame_config.configure(highlightbackground="grey", highlightthickness=1)
         # self.frame_config.grid(sticky='nswe', row=1, column=5, columnspan=2, rowspan=4)
 
-
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
+
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?"):
+            self.root.destroy()
 
     def configure_path(self):
         self.configuration.json_save_path = getJsonSavePath(self.configuration.json_save_path)
