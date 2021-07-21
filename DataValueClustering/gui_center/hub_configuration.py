@@ -202,6 +202,9 @@ class HubConfiguration():
             return o.__dict__
 
     "Test configuration validity"
+    def path_configuration_valid(self):
+        return not self.json_save_path is None
+
     def data_configuration_valid(self):
         return not self.data is None
 
@@ -216,7 +219,8 @@ class HubConfiguration():
 
     "Test if ready for configuration"
     def abstraction_configuration_possible(self):
-        return self.data_configuration_valid()
+        return self.data_configuration_possible \
+            and self.data_configuration_valid()
 
     def distance_configuration_possible(self):
         return self.abstraction_configuration_possible() \
