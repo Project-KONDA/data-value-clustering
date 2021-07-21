@@ -242,11 +242,13 @@ class Hub:
         self.label_clustering_progress['text'] = "Clustering configuration in progress ..."
         self.label_clustering_progress['fg'] = 'DarkOrange1'
         self.root.update()
-        clustering_algorithm, answers = self.configuration.get_clustering_selection()
-        parameters = self.configuration.get_clustering_configuration()
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, answers, clustering_algorithm)
+        prev_clustering_algorithm, answers = self.configuration.get_clustering_selection()
+        prev_parameters = self.configuration.get_clustering_configuration()
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, answers, prev_clustering_algorithm)
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
-        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, parameters)  # TODO: pass self.root
+        if prev_clustering_algorithm != clustering_algorithm:
+            prev_parameters = None
+        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters)
         self.configuration.set_clustering_configuration(parameters)
 
         self.update()
