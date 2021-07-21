@@ -89,8 +89,8 @@ class Hub:
         # self.clustering_progress.grid(sticky='nwe', row=12, column=1, columnspan=1, padx=20, pady=10)
 
         "progress labels"
-        self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", state="disabled")
-        self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", state="disabled")
+        self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
         self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", state="disabled")
         self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white", state="disabled")
 
@@ -149,6 +149,16 @@ class Hub:
         self.configuration.execute_data()
 
         self.update()
+
+        # TODO: execute only if configuration was changed
+        self.label_abstraction_progress['text'] = "Abstraction in progress ..."
+        self.label_abstraction_progress['fg'] = 'RoyalBlue1'
+        self.root.update()
+
+        if self.configuration.abstraction_configuration_valid():
+            self.configuration.execute_abstraction()
+        self.update()
+
         # self.configuration.save_as_json()
 
     def configure_abstraction(self):
@@ -178,7 +188,8 @@ class Hub:
         self.label_abstraction_progress['fg'] = 'RoyalBlue1'
         self.root.update()
 
-        self.configuration.execute_abstraction()
+        if self.configuration.data_configuration_valid():
+            self.configuration.execute_abstraction()
 
         self.update()
         # self.configuration.save_as_json()
@@ -333,9 +344,14 @@ class Hub:
             self.label_data_progress['fg'] = 'red'
 
         if self.configuration.abstraction_configuration_valid():
-            # self.abstraction_progress['value'] = 100
-            self.label_abstraction_progress['text'] = "Abstraction done"
-            self.label_abstraction_progress['fg'] = 'green'
+            if self.configuration.data_configuration_valid():
+                # self.abstraction_progress['value'] = 100
+                self.label_abstraction_progress['text'] = "Abstraction done"
+                self.label_abstraction_progress['fg'] = 'green'
+            else:
+                # self.abstraction_progress['value'] = 100
+                self.label_abstraction_progress['text'] = "Abstraction configured"
+                self.label_abstraction_progress['fg'] = 'green'
         else:
             # self.abstraction_progress['value'] = 0
             self.label_abstraction_progress['text'] = ABSTRACTION_NOT_CONFIGURED

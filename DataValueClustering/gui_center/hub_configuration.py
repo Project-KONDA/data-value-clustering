@@ -206,16 +206,16 @@ class HubConfiguration():
         return not self.json_save_path is None and not self.json_save_path == ""
 
     def data_configuration_valid(self):
-        return not self.data is None
+        return self.data is not None
 
     def abstraction_configuration_valid(self):
-        return not self.values_abstracted is None
+        return self.abstraction_answers is not None
 
     def distance_configuration_valid(self):
-        return not self.distance_matrix_map is None
+        return self.distance_matrix_map is not None
 
     def clustering_configuration_valid(self):
-        return not self.clusters is None
+        return self.clusters is not None
 
     "Test if ready for configuration"
     def saving_possible(self):
