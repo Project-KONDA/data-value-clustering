@@ -9,11 +9,14 @@ import numpy as np
 from abstraction.abstraction import get_abstraction_method
 from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from data_extraction import read_data_values_from_file
+from data_extraction.write_cluster_excel import cluster_to_excel
 from distance import calculate_distance_matrix_map
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance, split_cost_map, get_cost_map
 from gui_center.cluster_representation import fancy_cluster_representation
 from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_distances.blobinput_helper import get_blob_configuration
+from validation.intra_inter_cluster_distance import max_intra_cluster_distances, \
+    average_intra_cluster_distances_per_cluster_per_value
 
 
 def load_hub_configuration(path):
@@ -95,7 +98,9 @@ class HubConfiguration():
         self.no_noise = None
         self.timedelta_cluster = None
 
-        self.excel_path = None  # TODO: ask user?
+        self.json_save_path = None
+        self.excel_save_path = None
+
         self.timedelta_total = None
 
     def execute_data(self):
@@ -132,6 +137,23 @@ class HubConfiguration():
         self.fancy_cluster_list_abstracted, self.noise_abstracted = fancy_cluster_representation(self.values_abstracted, self.clusters_abstracted)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
+
+    def save_as_excel(self):
+        # TODO: add the following to json exports?
+        comp_to_normal_map = [list(elem) for elem in self.abstraction_dict.items()]
+        map = dict([tuple(l) for l in comp_to_normal_map])
+        lines = np.where(self.clusters_abstracted != -1)[0]
+        distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
+        filtered_distance_matrix = distance_matrix_lines[:, lines]
+        index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix
+        intra_cluster_distances = max_intra_cluster_distances(*index_parameters).tolist()
+        intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(*index_parameters)
+        cluster_to_excel(self.excel_save_path, self.fancy_cluster_list, self.noise, self.fancy_cluster_list_abstracted,
+                         self.noise_abstracted, map,
+                         self.cluster_sizes,
+                         self.noise_size, self.cluster_sizes_abstracted, self.noise_size_abstracted,
+                         intra_cluster_distances_per_cluster_per_value,
+                         intra_cluster_distances)
 
     "Get functions"
 
