@@ -100,8 +100,8 @@ class ResultView:
         self.root.mainloop()
 
     def open_excel(self):
-        os.system(self.excel_path)
-        # os.system('"' + self.excel_path + '"')
+        # os.system(self.excel_path)
+        os.system('"' + self.excel_path + '"')
         # subprocess.call([self.excel_path])
         # subprocess.run(['open', self.excel_path], check=True)
 
