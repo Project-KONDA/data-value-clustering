@@ -170,10 +170,10 @@ class HubConfiguration():
 
     "Export"
 
-    def save(self, path):
+    def save_as_json(self):
         self.translate_cost_map_to_json()
         output_text = self.hub_configuration_to_json()
-        f = open(path, "w")
+        f = open(self.json_save_path, "w")
         f.write(output_text)
         self.translate_cost_map_to_dict()
         f.close()
