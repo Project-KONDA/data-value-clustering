@@ -203,7 +203,7 @@ class HubConfiguration():
 
     "Test configuration validity"
     def path_configuration_valid(self):
-        return not self.json_save_path is None
+        return not self.json_save_path is None and not self.json_save_path == ""
 
     def data_configuration_valid(self):
         return not self.data is None
