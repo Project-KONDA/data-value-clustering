@@ -337,11 +337,11 @@ class Hub:
 
         if self.configuration.clustering_configuration_valid():
             # self.clustering_progress['value'] = 100
-            self.label_clustering_progress['text'] = "Clustering done"
+            self.label_clustering_progress['text'] = "Clustering & Saving done"
             self.label_clustering_progress['fg'] = 'green'
         else:
             # self.clustering_progress['value'] = 0
-            self.label_distance_progress['text'] = CLUSTERING_NOT_CONFIGURED
+            self.label_clustering_progress['text'] = CLUSTERING_NOT_CONFIGURED
             self.label_clustering_progress['fg'] = 'red'
 
 
