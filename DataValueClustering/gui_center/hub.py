@@ -1,6 +1,6 @@
 from tkinter import Tk, Button, Label, Frame, messagebox
 from pathlib import Path
-
+from tkinter.messagebox import WARNING
 
 from export.path import getJsonSavePath, getJsonLoadPath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
@@ -93,7 +93,7 @@ class Hub:
         self.root.mainloop()
 
     def on_closing(self):
-        if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?"):
+        if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
             self.root.destroy()
 
     def configure_path(self):
@@ -142,8 +142,12 @@ class Hub:
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if blob_configuration is None:
-                # TODO: warn user that cost map will be reset if previously specified with other view
-                blob_configuration = self.configuration.create_blob_configuration()
+                if cost_map is None or messagebox.askokcancel("Potential Information Loss", "You previously configured the distance "
+                                                                "calculation via a different method. This configuration will be "
+                                                                "lost upon opening the Blob Configuration View. Do you want to proceed?", icon=WARNING):
+                    blob_configuration = self.configuration.create_blob_configuration()
+                else:
+                    self.configure_distance()
             cost_map, blob_configuration = input_blobs(self.root, blob_configuration)
         elif distance_choice == DistanceView.MATRIX:
             if cost_map is None:
