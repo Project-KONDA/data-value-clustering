@@ -123,7 +123,7 @@ class ResultView:
         return s
 
     def close(self):
-        self.root.quite()
+        self.root.quit()
         self.root.destroy()
 
     def get(self):
