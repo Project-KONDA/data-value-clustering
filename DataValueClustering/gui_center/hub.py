@@ -1,9 +1,9 @@
-from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk
+from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu
 from pathlib import Path
 from tkinter.messagebox import WARNING
 from tkinter.ttk import Progressbar
 
-from export.path import getJsonSavePath, getJsonLoadPath
+from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
@@ -40,38 +40,36 @@ class Hub:
                                  font=('Helvatical bold', 19))
         self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=3)
 
+        "menu"
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Save", command=self.menu_save)
+        self.menu.add_command(label="Save As ..", command=self.menu_saveas)
+        self.menu.add_command(label="Load", command=self.menu_load)
+        self.root.config(menu=self.menu)
+
         "buttons"
-        self.button_load = Button(self.root, text='Load Configuration...', command=self.load)
-        self.button_save = Button(self.root, text='Save Configuration', command=self.save, state="disabled")
-        self.button_path = Button(self.root, text='Configure Save Path...', command=self.configure_path)
         self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data)
         self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction)
         self.button_distance = Button(self.root, text='Configure Distance...', command=self.configure_distance)
         self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering)
 
-        self.orig_button_color = self.button_load.cget("background")
+        self.button_data.configure(width=35, height=2)
+        self.button_abstraction.configure(width=35, height=2)
+        self.button_distance.configure(width=35, height=2, state="disabled")
+        self.button_clustering.configure(width=35, height=2, state="disabled")
 
-        self.button_path.configure(width=20, height=2)
-        self.button_data.configure(width=20, height=2, state="disabled")
-        self.button_abstraction.configure(width=20, height=2, state="disabled")
-        self.button_distance.configure(width=20, height=2, state="disabled")
-        self.button_clustering.configure(width=20, height=2, state="disabled")
-
-        self.button_load.grid(sticky='ne', row=1, column=4, columnspan=1, padx=10, pady=10)
-        self.button_save.grid(sticky='nw', row=1, column=1, columnspan=1, padx=10, pady=10)
-        self.button_path.grid(sticky='nwe', row=3, column=1, columnspan=2, padx=10, pady=10)
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=7, column=1, columnspan=2, padx=10, pady=10)
         self.button_distance.grid(sticky='nwe', row=9, column=1, columnspan=2, padx=10, pady=10)
         self.button_clustering.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
 
-        self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled", font = ('Sans','10','bold'))
-        # self.button_save = Button(self.root, text='Save', command=self.save)
+        self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
+                                         font=('Sans', '10', 'bold'))
 
         self.button_show_result.configure(width=20, height=2)
 
         self.button_show_result.grid(sticky='nswe', row=14, column=1, columnspan=4, padx=10, pady=10)
-        # self.button_save.grid(sticky='nswe', row=6, column=2, columnspan=1)
 
         # "progress bars"
         # self.path_progress = Progressbar(self.root, orient=HORIZONTAL, length=100, mode='determinate')
@@ -87,13 +85,11 @@ class Hub:
         # self.clustering_progress.grid(sticky='nwe', row=12, column=1, columnspan=1, padx=20, pady=10)
 
         "progress labels"
-        self.label_path_progress = Label(self.root, text=PATH_NOT_CONFIGURED, bg="white", fg='red')
         self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", state="disabled")
         self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", state="disabled")
         self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", state="disabled")
         self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white", state="disabled")
 
-        self.label_path_progress.grid(sticky='nw', row=4, column=1, columnspan=1, padx=20, pady=10)
         self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=1, padx=20, pady=10)
         self.label_abstraction_progress.grid(sticky='nw', row=8, column=1, columnspan=1, padx=20, pady=10)
         self.label_distance_progress.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=10)
@@ -101,27 +97,20 @@ class Hub:
 
 
         "frames"
-        self.frame_path = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_data = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_abstraction = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_distance = Frame(self.root, bg="grey90", width=200, height=100)
         self.frame_clustering = Frame(self.root, bg="grey90", width=200, height=100)
 
-        self.frame_path.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_data.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_abstraction.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_distance.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_clustering.configure(highlightbackground="grey", highlightthickness=1)
 
-        self.frame_path.grid(sticky='nswe', row=3, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
         self.frame_data.grid(sticky='nswe', row=5, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
         self.frame_abstraction.grid(sticky='nswe', row=7, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
         self.frame_distance.grid(sticky='nswe', row=9, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
         self.frame_clustering.grid(sticky='nswe', row=11, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
-
-        # self.frame_config = Frame(self.root, bg="grey90", width=200, height=200)  # pass this frame as root
-        # self.frame_config.configure(highlightbackground="grey", highlightthickness=1)
-        # self.frame_config.grid(sticky='nswe', row=1, column=5, columnspan=2, rowspan=4)
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -131,19 +120,6 @@ class Hub:
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
             self.root.destroy()
-
-    def configure_path(self):
-        self.label_path_progress['text'] = "Path configuration in progress ..."
-        self.label_path_progress['fg'] = 'DarkOrange1'
-        self.root.update()
-        self.configuration.json_save_path = getJsonSavePath(self.configuration.json_save_path)
-        self.configuration.excel_save_path = self.configuration.json_save_path[0:len(self.configuration.json_save_path)-len(".json")] + ".xlsx"
-        # if not save_path: return
-        # print("saving to " + save_path + " ...")
-        # self.configuration.save(save_path)
-
-        self.update()
-        # self.configuration.save_as_json()
 
     def configure_data(self):
         self.label_data_progress['text'] = "Data configuration in progress ..."
@@ -294,19 +270,20 @@ class Hub:
 
         # self.update()
 
-        self.label_clustering_progress['text'] = "Saving in progress ..."
-        self.label_clustering_progress['fg'] = 'RoyalBlue1'
-        self.root.update()
-
-        self.configuration.save_as_json()
-        self.configuration.save_as_excel()
+        # self.label_clustering_progress['text'] = "Saving in progress ..."
+        # self.label_clustering_progress['fg'] = 'RoyalBlue1'
+        # self.root.update()
+        #
+        # self.configuration.save_as_json()
+        # self.configuration.save_as_excel()
 
         self.update()
 
     def show_result(self):
-        validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
-                    self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
-                    self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
+        # validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
+        #             self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
+        #             self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
+        validation_result = result_view(self.root, self.configuration)
         # TODO: save validation into configuration
 
         self.update()
@@ -319,26 +296,25 @@ class Hub:
     #     self.distance_progress['value'] = percentage
     #     self.root.update()
 
-    def load(self):
+    def menu_load(self):
         load_path = getJsonLoadPath(self.configuration.json_save_path)
         if not load_path: return
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.update()
 
-    def save(self):
-        self.configuration.save_as_json()
+    def menu_save(self):
+        if self.configuration.json_save_path:
+            self.configuration.save_as_json()
+        else:
+            self.menu_saveas()
+
+    def menu_saveas(self):
+        self.configuration.json_save_path = getJsonSavePath()
+        self.menu_save()
+
 
     def update(self):
-        if self.configuration.path_configuration_valid():
-            # self.path_progress['value'] = 100
-            self.label_path_progress['text'] = "Path saving done"
-            self.label_path_progress['fg'] = 'green'
-        else:
-            # self.path_progress['value'] = 0
-            self.label_path_progress['text'] = PATH_NOT_CONFIGURED
-            self.label_path_progress['fg'] = 'red'
-
         if self.configuration.data_configuration_valid():
             # self.data_progress['value'] = 100
             self.label_data_progress['text'] = "Data extraction done"
@@ -368,32 +344,12 @@ class Hub:
 
         if self.configuration.clustering_configuration_valid():
             # self.clustering_progress['value'] = 100
-            self.label_clustering_progress['text'] = "Clustering & Saving done"
+            self.label_clustering_progress['text'] = "Clustering done"
             self.label_clustering_progress['fg'] = 'green'
         else:
             # self.clustering_progress['value'] = 0
             self.label_clustering_progress['text'] = CLUSTERING_NOT_CONFIGURED
             self.label_clustering_progress['fg'] = 'red'
-
-
-        if self.configuration.saving_possible():
-            self.button_save.configure(state="normal")
-        else:
-            self.button_save.configure(state="disabled")
-
-        if self.configuration.data_configuration_possible():
-            self.button_data.configure(state="normal")
-            self.label_data_progress.configure(state="normal")
-        else:
-            self.button_data.configure(state="disabled")
-            self.label_data_progress.configure(state="disabled")
-
-        if self.configuration.abstraction_configuration_possible():
-            self.button_abstraction.configure(state="normal")
-            self.label_abstraction_progress.configure(state="normal")
-        else:
-            self.button_abstraction.configure(state="disabled")
-            self.label_abstraction_progress.configure(state="disabled")
 
         if self.configuration.distance_configuration_possible():
             self.button_distance.configure(state="normal")
@@ -412,7 +368,7 @@ class Hub:
         if self.configuration.execute_possible():
             self.button_show_result.configure(state="normal", bg='pale green')
         else:
-            self.button_show_result.configure(state="disabled", bg=self.orig_button_color)
+            self.button_show_result.configure(state="disabled") #, bg=self.orig_button_color)
 
         self.update_frame_data()
         self.update_frame_abstraction()
