@@ -66,10 +66,14 @@ class Hub:
 
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'))
+        self.button_show_result.configure(width=45, height=2)
+        self.button_show_result.grid(sticky='nswe', row=14, column=1, columnspan=3, padx=10, pady=10)
 
-        self.button_show_result.configure(width=20, height=2)
+        self.button_save_result = Button(self.root, text='Save Excel', command=self.save_excel, state="disabled",
+                                         font=('Sans', '10', 'bold'))
+        self.button_save_result.configure(height=2)
+        self.button_save_result.grid(sticky='nswe', row=14, column=4, padx=10, pady=10)
 
-        self.button_show_result.grid(sticky='nswe', row=14, column=1, columnspan=4, padx=10, pady=10)
 
         # "progress bars"
         # self.path_progress = Progressbar(self.root, orient=HORIZONTAL, length=100, mode='determinate')
@@ -314,6 +318,9 @@ class Hub:
         if self.configuration.json_save_path:
             self.menu_save()
 
+    def save_excel(self):
+        self.configuration.excel_save_path = getExcelSavePath()
+        self.configuration.save_as_excel()
 
     def update(self):
         if self.configuration.data_configuration_valid():
@@ -368,8 +375,10 @@ class Hub:
 
         if self.configuration.execute_possible():
             self.button_show_result.configure(state="normal", bg='pale green')
+            self.button_save_result.configure(state="normal", bg='pale green')
         else:
             self.button_show_result.configure(state="disabled") #, bg=self.orig_button_color)
+            self.button_save_result.configure(state="disabled")
 
         self.update_frame_data()
         self.update_frame_abstraction()
