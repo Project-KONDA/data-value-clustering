@@ -70,6 +70,8 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.selected_predefined_option.set(MANUAL_CONFIG)
 
     def apply(self):
+        if self.data is None:
+            return
         answers = self.get()
         abstraction_f = get_abstraction_method(answers)
         values_abstracted, abstraction_dict = abstraction_f(self.data[0:100])

@@ -311,7 +311,8 @@ class Hub:
 
     def menu_saveas(self):
         self.configuration.json_save_path = getJsonSavePath()
-        self.menu_save()
+        if self.configuration.json_save_path:
+            self.menu_save()
 
 
     def update(self):
