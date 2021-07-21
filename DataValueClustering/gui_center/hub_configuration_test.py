@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     # print(hub_config.fancy_cluster_list)
     print(hub_config.distance_matrix_map)
-    hub_config.save("../test.json")
+    hub_config.save_as_json("../test.json")
     hub_loaded = load_hub_configuration("../test.json")
     print(hub_loaded.distance_matrix_map)
     print(hub_config.timedelta_distance == hub_loaded.timedelta_distance)
