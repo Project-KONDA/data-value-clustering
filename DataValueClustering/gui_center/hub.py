@@ -150,6 +150,12 @@ class Hub:
         self.label_data_progress['fg'] = 'DarkOrange1'
         self.root.update()
         data_name = select_data(self.root)
+
+        if data_name is None:
+            self.update()
+            self.root.update()
+            return
+
         self.configuration.set_data_configuration(str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt")
 
         self.update()
@@ -174,6 +180,11 @@ class Hub:
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
         abstraction_answers = abstraction_configuration(self.root, self.configuration.data, config)[1]
+        if abstraction_answers is None:
+            self.update()
+            self.root.update()
+            return
+
         # 4. save abstraction into configuration
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
@@ -198,6 +209,11 @@ class Hub:
         self.root.update()
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         distance_choice = get_distance_choice(self.root)
+        if distance_choice is None:
+            self.update()
+            self.root.update()
+            return
+
         if distance_choice == DistanceView.SLIDER:
             if cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
@@ -221,6 +237,12 @@ class Hub:
             else:
                 cost_map = input_costmap(self.root, costmap=cost_map)
             blob_configuration = None
+
+        if cost_map is None:
+            self.update()
+            self.root.update()
+            return
+
         self.configuration.set_distance_configuration(cost_map, blob_configuration)
 
         self.update()
@@ -242,13 +264,22 @@ class Hub:
         self.label_clustering_progress['text'] = "Clustering configuration in progress ..."
         self.label_clustering_progress['fg'] = 'DarkOrange1'
         self.root.update()
-        prev_clustering_algorithm, answers = self.configuration.get_clustering_selection()
+        prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, answers, prev_clustering_algorithm)
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm)
+        if clustering_algorithm is None:
+            self.update()
+            self.root.update()
+            return
+
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
         parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters)
+        if parameters is None:
+            self.update()
+            self.root.update()
+            return
         self.configuration.set_clustering_configuration(parameters)
 
         self.update()
