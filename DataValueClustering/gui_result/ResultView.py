@@ -3,35 +3,40 @@ import subprocess
 from tkinter import Tk, StringVar, Label, font, Frame, Button, Toplevel
 import numpy as np
 
+from export.path import getExcelSavePath
+from gui_center.hub_configuration import HubConfiguration
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 
 
-def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
-    r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
-    return r.get()
+# def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+#     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
+def result_view(master, configuration):
+    res = ResultView(master, configuration)
+    return res.get()
 
 
 class ResultView:
 
-    def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+    # def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
+    def __init__(self, master, configuration):
         self.root = Toplevel(master)
         self.root.title("Result")
 
-        self.excel_path = excel_path
+        self.configuration = configuration
 
-        self.num_data = num_data
-        self.num_abstracted_data = num_abstracted_data
-        self.abstraction_rate = abstraction_rate
-        self.no_clusters = no_clusters
-        self.no_noise = no_noise
-        self.timedelta_abstraction = timedelta_abstraction
-        self.timedelta_distance = timedelta_distance
-        self.timedelta_clustering = timedelta_clustering
-        self.timedelta_total = timedelta_total
-
-        self.values_abstracted = values_abstracted
-        self.distance_matrix_map = distance_matrix_map
-        self.clusters_abstracted = clusters_abstracted
+        # self.excel_path = excel_path
+        # self.num_data = num_data
+        # self.num_abstracted_data = num_abstracted_data
+        # self.abstraction_rate = abstraction_rate
+        # self.no_clusters = no_clusters
+        # self.no_noise = no_noise
+        # self.timedelta_abstraction = timedelta_abstraction
+        # self.timedelta_distance = timedelta_distance
+        # self.timedelta_clustering = timedelta_clustering
+        # self.timedelta_total = timedelta_total
+        # self.values_abstracted = values_abstracted
+        # self.distance_matrix_map = distance_matrix_map
+        # self.clusters_abstracted = clusters_abstracted
 
         # summary:
         self.summary_frame = Frame(self.root, padx=10, bg="white", pady=10)
@@ -55,7 +60,7 @@ class ResultView:
         self.info_label.grid(row=1, column=0, sticky='nwes', columnspan=1)
 
         # scatter plot in summary_frame
-        show_mds_scatter_plot_integrated(self.summary_frame, self.values_abstracted, self.distance_matrix_map["distance_matrix"], self.clusters_abstracted)
+        show_mds_scatter_plot_integrated(self.summary_frame, self.configuration.values_abstracted, self.configuration.distance_matrix_map["distance_matrix"], self.configuration.clusters_abstracted)
 
         # excel button
         self.button = Button(self.summary_frame, text='Open Excel File Showing Clustering', command=self.open_excel,
@@ -88,7 +93,7 @@ class ResultView:
         # ...
 
         # button:
-        self.button = Button(self.root, text='Go to Configuration Hub', command=self.close, bg='azure')
+        self.button = Button(self.root, text='Close', command=self.close, bg='azure')
         self.button.grid(row=2, column=0, sticky='we', columnspan=3)
 
         self.root.update_idletasks()
@@ -106,16 +111,16 @@ class ResultView:
         # subprocess.run(['open', self.excel_path], check=True)
 
     def get_info(self):
-        s = "Number of Data Values: " + str(self.num_data)
-        s += "\nNumber of Abstracted Data Values: " + str(self.num_abstracted_data)
-        s += "\nAbstraction Rate: " + str(self.abstraction_rate)
-        s += "\n\nNumber of clusters: " + str(self.no_clusters)
-        s += "\nNumber of noisy values: " + str(self.no_noise)
+        s = "Number of Data Values: " + str(self.configuration.num_data)
+        s += "\nNumber of Abstracted Data Values: " + str(self.configuration.num_abstracted_data)
+        s += "\nAbstraction Rate: " + str(self.configuration.abstraction_rate)
+        s += "\n\nNumber of clusters: " + str(self.configuration.no_clusters)
+        s += "\nNumber of noisy values: " + str(self.configuration.no_noise)
 
-        s += "\n\nTime Abstraction: " + str(self.timedelta_abstraction)
-        s += "\nTime Distance: " + str(self.timedelta_distance)
-        s += "\nTime Clustering: " + str(self.timedelta_clustering)
-        s += "\nTime Total: " + str(self.timedelta_total)
+        s += "\n\nTime Abstraction: " + str(self.configuration.timedelta_abstraction)
+        s += "\nTime Distance: " + str(self.configuration.timedelta_distance)
+        s += "\nTime Clustering: " + str(self.configuration.timedelta_cluster)
+        s += "\nTime Total: " + str(self.configuration.timedelta_total)
 
         # s += "wb-Index:                " + str(self.wb_index)
         # s += "Calinski-Harabasz Index: " + str(self.calinski_harabasz_index)
@@ -131,19 +136,30 @@ class ResultView:
 
 
 if __name__ == '__main__':
-    values_compressed = ["a", "1", "?"]
+
+    config = HubConfiguration()
+
+    config.excel_path = "..\experiments\exports\study\\1_Attribution_Qualifier.xlsx"
+    config.num_data = 0
+    config.num_abstracted_data = 1
+    config.abstraction_rate = 2
+    config.no_clusters = 3
+    config.no_noise = 4
+    config.timedelta_abstraction = 5
+    config.timedelta_distance = 6
+    config.timedelta_clustering = 7
+    config.timedelta_total = 8
+    config.values_abstracted = ["a", "1", "?"]
     distance_matrix = np.array([
         [0, 1, 2],
         [0, 0, 1.5],
         [0, 0, 0]
     ])
+    config.distance_matrix_map = {"distance_matrix": distance_matrix,
+                                  "condensed_distance_matrix": None,
+                                  "affinity_matrix": None,
+                                  "min_distance": None,
+                                  "max_distance": None}
+    config.clusters_abstracted = [0, 1, 2]
 
-    d = {"distance_matrix": distance_matrix,
-     "condensed_distance_matrix": None,
-     "affinity_matrix": None,
-     "min_distance": None,
-     "max_distance": None}
-
-    clusters_compressed = [0, 1, 2]
-    r = ResultView(Tk(),"..\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, d, clusters_compressed)
-    # r = ResultView("C:\\Users\Viola^ Wenz\Documents\Repositories\data-value-clustering\DataValueClustering\experiments\exports\study\\1_Attribution_Qualifier.xlsx",0,1,2,3,4,5,6,7,8,values_compressed, distance_matrix, clusters_compressed)
+    r = ResultView(Tk(), config)
