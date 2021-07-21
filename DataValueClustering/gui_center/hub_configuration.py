@@ -218,6 +218,12 @@ class HubConfiguration():
         return not self.clusters is None
 
     "Test if ready for configuration"
+    def saving_possible(self):
+        return self.abstraction_configuration_possible()
+
+    def data_configuration_possible(self):
+        return self.path_configuration_valid()
+
     def abstraction_configuration_possible(self):
         return self.data_configuration_possible \
             and self.data_configuration_valid()
