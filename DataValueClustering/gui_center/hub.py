@@ -31,6 +31,7 @@ class Hub:
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
+        self.saved = False
 
         "keys"
         self.root.bind_all("<Return>", self.show_result)
@@ -124,7 +125,7 @@ class Hub:
         self.root.mainloop()
 
     def on_closing(self):
-        if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
+        if self.saved or messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
             self.root.destroy()
 
     def configure_data(self):
@@ -139,6 +140,7 @@ class Hub:
             self.root.update()
             return
 
+        self.saved = False
         self.configuration.set_data_configuration(str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt")
 
         self.update()
@@ -179,6 +181,7 @@ class Hub:
             return
 
         # 4. save abstraction into configuration
+        self.saved = False
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
         # 6. initiate execution of abstraction in config
@@ -209,6 +212,7 @@ class Hub:
             self.root.update()
             return
 
+        self.saved = False
         if distance_choice == DistanceView.SLIDER:
             if cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
@@ -268,6 +272,7 @@ class Hub:
             self.root.update()
             return
 
+        self.saved = False
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
@@ -322,10 +327,12 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.update()
+        self.saved = True
 
     def menu_save(self):
         if self.configuration.json_save_path:
             self.configuration.save_as_json()
+            self.saved = True
         else:
             self.menu_saveas()
 
