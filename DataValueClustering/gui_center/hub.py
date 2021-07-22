@@ -31,6 +31,7 @@ class Hub:
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
+        self.saved = False
 
         "keys"
         self.root.bind_all("<Return>", self.show_result)
@@ -93,8 +94,8 @@ class Hub:
         "progress labels"
         self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
         self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
-        self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", state="disabled")
-        self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white", state="disabled")
+        self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white")
+        self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white")
 
         self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=1, padx=20, pady=10)
         self.label_abstraction_progress.grid(sticky='nw', row=8, column=1, columnspan=1, padx=20, pady=10)
@@ -124,7 +125,7 @@ class Hub:
         self.root.mainloop()
 
     def on_closing(self):
-        if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
+        if self.saved or messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
             self.root.destroy()
 
     def data_path_from_name(self, data_name):
@@ -145,6 +146,7 @@ class Hub:
         self.label_data_progress['text'] = "Data configuration in progress ..."
         self.label_data_progress['fg'] = 'DarkOrange1'
         self.root.update()
+        self.disable()
         previous_data_path = self.configuration.get_data_configuration()[0]
         previous_data_name = self.data_name_from_path(previous_data_path)
 
@@ -155,6 +157,7 @@ class Hub:
             self.root.update()
             return
 
+        self.saved = False
         self.configuration.set_data_configuration(self.data_path_from_name(data_name))
 
         self.update()
@@ -184,6 +187,7 @@ class Hub:
         self.label_abstraction_progress['fg'] = 'DarkOrange1'
         self.root.update()
         # 1. get data from config
+        self.disable()
         config = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
@@ -194,6 +198,7 @@ class Hub:
             return
 
         # 4. save abstraction into configuration
+        self.saved = False
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
         # 6. initiate execution of abstraction in config
@@ -216,6 +221,7 @@ class Hub:
         self.label_distance_progress['text'] = "Distance configuration in progress ..."
         self.label_distance_progress['fg'] = 'DarkOrange1'
         self.root.update()
+        self.disable()
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         distance_choice = get_distance_choice(self.root)
         if distance_choice is None:
@@ -223,6 +229,7 @@ class Hub:
             self.root.update()
             return
 
+        self.saved = False
         if distance_choice == DistanceView.SLIDER:
             if cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
@@ -273,6 +280,7 @@ class Hub:
         self.label_clustering_progress['text'] = "Clustering configuration in progress ..."
         self.label_clustering_progress['fg'] = 'DarkOrange1'
         self.root.update()
+        self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
         answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm)
@@ -281,6 +289,7 @@ class Hub:
             self.root.update()
             return
 
+        self.saved = False
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
@@ -335,10 +344,12 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.update()
+        self.saved = True
 
     def menu_save(self):
         if self.configuration.json_save_path:
             self.configuration.save_as_json()
+            self.saved = True
         else:
             self.menu_saveas()
 
@@ -351,7 +362,19 @@ class Hub:
         self.configuration.excel_save_path = getExcelSavePath()
         self.configuration.save_as_excel()
 
+
+    def disable(self):
+        self.button_data.configure(state="disabled")
+        self.button_abstraction.configure(state="disabled")
+        self.button_distance.configure(state="disabled")
+        self.button_clustering.configure(state="disabled")
+        self.button_show_result.configure(state="disabled")
+        self.button_save_result.configure(state="disabled")
+
     def update(self):
+        self.button_data.configure(state="normal")
+        self.button_abstraction.configure(state="normal")
+
         if self.configuration.data_configuration_valid():
             # self.data_progress['value'] = 100
             self.label_data_progress['text'] = "Data extraction done"
@@ -395,17 +418,16 @@ class Hub:
 
         if self.configuration.distance_configuration_possible():
             self.button_distance.configure(state="normal")
-            self.label_distance_progress.configure(state="normal")
+            # self.label_distance_progress.configure(state="normal")
         else:
             self.button_distance.configure(state="disabled")
-            self.label_distance_progress.configure(state="disabled")
+            self.label_distance_progress['fg'] = 'red'
 
         if self.configuration.clustering_configuration_possible():
             self.button_clustering.configure(state="normal")
-            self.label_clustering_progress.configure(state="normal")
         else:
             self.button_clustering.configure(state="disabled")
-            self.label_clustering_progress.configure(state="disabled")
+            self.label_clustering_progress['fg'] = 'red'
 
         if self.configuration.execute_possible():
             self.button_show_result.configure(state="normal", bg='pale green')
