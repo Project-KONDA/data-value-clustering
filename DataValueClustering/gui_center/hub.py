@@ -153,13 +153,12 @@ class Hub:
         self.update()
 
         # TODO: execute only if configuration was changed
-        self.label_abstraction_progress['text'] = "Abstraction in progress ..."
-        self.label_abstraction_progress['fg'] = 'RoyalBlue1'
-        self.root.update()
-
         if self.configuration.abstraction_configuration_valid():
+            self.label_abstraction_progress['text'] = "Abstraction in progress ..."
+            self.label_abstraction_progress['fg'] = 'RoyalBlue1'
+            self.root.update()
             self.configuration.execute_abstraction()
-        self.update()
+            self.update()
 
         # self.configuration.save_as_json()
 
