@@ -139,6 +139,18 @@ class BlobInput:
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
+    def unbind_all(self):
+        self.root.unbind_all("<Return>")
+        self.root.unbind_all("<Escape>")
+        self.canvas.unbind_all("<MouseWheel>")
+        self.canvas.unbind_all("<Motion>")
+        self.canvas.unbind_all("<n>")
+        self.canvas.unbind_all("<ButtonPress-1>")
+        self.canvas.unbind_all("<ButtonRelease-1>")
+        self.canvas.unbind_all("<B1-Motion>")
+        self.canvas.unbind_all("<ButtonPress-1>")
+
+
     def canvas_blob_info(self, event):
         """On mouse over show Information of Blob in Canvas"""
         self.find_nearest_blob(event.x, event.y)
@@ -240,12 +252,12 @@ class BlobInput:
 
     def cancel(self):
         self.canceled = True
-        self.root.quit()
-        self.root.destroy()
+        self.close(True)
 
     def close(self, event=None, canceled=False):
         """Close Tk Window"""
         self.canceled = canceled
+        self.unbind_all()
         self.root.destroy()
 
     def restart(self):

@@ -76,6 +76,7 @@ class ClusterConfigurationInput:
             self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
 
     def close(self, event=None):
+        self.unbind_all()
         self.root.quit()
         self.root.destroy()
 
@@ -102,10 +103,13 @@ class ClusterConfigurationInput:
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
+    def unbind_all(self):
+        self.root.unbind_all("<Return>")
+        self.root.unbind_all("<MouseWheel>")
+
     def cancel(self):
         self.canceled = True
-        self.root.quit()
-        self.root.destroy()
+        self.close()
 
     def get(self):
         parameter_values = ()

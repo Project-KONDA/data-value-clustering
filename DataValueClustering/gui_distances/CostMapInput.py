@@ -280,13 +280,16 @@ class CostMapInput:
             self.label = label
             self.value_entries = value_entries
 
+    def unbind_all(self):
+        self.root.unbind_all("<Return>")
+
     def cancel(self):
         self.canceled = True
-        self.root.quit()
-        self.root.withdraw()
+        self.quit()
 
     def quit(self):
         self.root.update()
+        self.unbind_all()
         self.root.quit()
         self.root.withdraw()
 

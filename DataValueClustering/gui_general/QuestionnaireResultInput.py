@@ -159,12 +159,17 @@ class QuestionnaireResultInput(ABC):
 
     def cancel(self):
         self.canceled = True
+        self.close()
+
+    def close(self, event=None):
+        self.unbind_all()
         self.root.quit()
         self.root.destroy()
 
-    def close(self, event=None):
-        self.root.quit()
-        self.root.destroy()
+    def unbind_all(self):
+        self.canvas.unbind_all("<MouseWheel>")
+        self.root.unbind_all("<Return>")
+
 
     @abstractmethod
     def apply(self):
