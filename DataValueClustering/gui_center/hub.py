@@ -54,15 +54,14 @@ class Hub:
         self.root.config(menu=self.menu)
 
         "buttons"
-        self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data)
-        self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction)
-        self.button_distance = Button(self.root, text='Configure Distance...', command=self.configure_distance)
-        self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering)
-
-        self.button_data.configure(width=35, height=2)
-        self.button_abstraction.configure(width=35, height=2)
-        self.button_distance.configure(width=35, height=2, state="disabled")
-        self.button_clustering.configure(width=35, height=2, state="disabled")
+        self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data,
+                                  width=42, height=2, bg='paleturquoise1')
+        self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction,
+                                         width=42, height=2, bg='paleturquoise1')
+        self.button_distance = Button(self.root, text='Configure Distance...', command=self.configure_distance,
+                                      width=42, height=2, state="disabled")
+        self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering,
+                                        width=42, height=2, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=7, column=1, columnspan=2, padx=10, pady=10)
@@ -77,13 +76,11 @@ class Hub:
         self.button_clustering_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10)
 
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
-                                         font=('Sans', '10', 'bold'))
-        self.button_show_result.configure(width=45, height=2)
+                                         font=('Sans', '10', 'bold'), width=45, height=2)
         self.button_show_result.grid(sticky='nswe', row=14, column=1, columnspan=3, padx=10, pady=10)
 
         self.button_save_result = Button(self.root, text='Save Excel', command=self.save_excel, state="disabled",
-                                         font=('Sans', '10', 'bold'))
-        self.button_save_result.configure(height=2)
+                                         font=('Sans', '10', 'bold'), height=2)
         self.button_save_result.grid(sticky='nswe', row=14, column=4, padx=10, pady=10)
 
         # "progress bars"
@@ -399,65 +396,66 @@ class Hub:
         self.button_abstraction.configure(state="normal")
 
         if self.configuration.data_configuration_valid():
-            # self.data_progress['value'] = 100
-            self.label_data_progress['text'] = "Data extraction done"
-            self.label_data_progress['fg'] = 'green'
+            self.label_data_progress.configure(text='Data extraction done', fg='green')
+            self.button_data.configure(bg=self.original_button_color)
         else:
-            # self.data_progress['value'] = 0
-            self.label_data_progress['text'] = DATA_NOT_CONFIGURED
-            self.label_data_progress['fg'] = 'red'
+            self.label_data_progress.configure(text=DATA_NOT_CONFIGURED, fg='red')
+            self.button_data.configure(bg="paleturquoise1")
 
         if self.configuration.abstraction_configuration_valid():
+            self.button_abstraction.configure(bg=self.original_button_color)
             if self.configuration.data_configuration_valid():
-                # self.abstraction_progress['value'] = 100
-                self.label_abstraction_progress['text'] = "Abstraction done"
-                self.label_abstraction_progress['fg'] = 'green'
+                self.label_abstraction_progress.configure(text='Abstraction done', fg='green')
             else:
-                # self.abstraction_progress['value'] = 100
-                self.label_abstraction_progress['text'] = "Abstraction configured"
-                self.label_abstraction_progress['fg'] = 'green'
+                self.label_abstraction_progress.configure(text='Abstraction configured', fg='orange')
         else:
-            # self.abstraction_progress['value'] = 0
-            self.label_abstraction_progress['text'] = ABSTRACTION_NOT_CONFIGURED
-            self.label_abstraction_progress['fg'] = 'red'
-
-        if self.configuration.distance_configuration_valid():
-            # self.distance_progress['value'] = 100
-            self.label_distance_progress['text'] = "Distance calculation done"
-            self.label_distance_progress['fg'] = 'green'
-        else:
-            # self.distance_progress['value'] = 0
-            self.label_distance_progress['text'] = DISTANCE_NOT_CONFIGURED
-            self.label_distance_progress['fg'] = 'red'
-
-        if self.configuration.clustering_configuration_valid():
-            # self.clustering_progress['value'] = 100
-            self.label_clustering_progress['text'] = "Clustering done"
-            self.label_clustering_progress['fg'] = 'green'
-        else:
-            # self.clustering_progress['value'] = 0
-            self.label_clustering_progress['text'] = CLUSTERING_NOT_CONFIGURED
-            self.label_clustering_progress['fg'] = 'red'
+            self.button_abstraction.configure(bg='paleturquoise1')
+            self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
 
         if self.configuration.distance_configuration_possible():
-            self.button_distance.configure(state="normal")
+            if self.configuration.distance_configuration_valid():
+                self.button_distance.configure(state="normal", bg=self.original_button_color)
+            else:
+                self.button_distance.configure(state="normal", bg='paleturquoise1')
             # self.label_distance_progress.configure(state="normal")
         else:
             self.button_distance.configure(state="disabled")
-            self.label_distance_progress['fg'] = 'red'
+            self.label_distance_progress.configure(fg='red')
 
         if self.configuration.clustering_configuration_possible():
-            self.button_clustering.configure(state="normal")
+            self.label_distance_progress.configure(text='Distance calculation done', fg='green')
+            self.button_distance_play.configure(state="normal", bg=self.original_button_color)
+            if self.configuration.clustering_configuration_valid():
+                self.button_clustering.configure(state="normal", bg=self.original_button_color)
+            else:
+                self.button_clustering.configure(state="normal", bg="paleturquoise1")
         else:
-            self.button_clustering.configure(state="disabled")
-            self.label_clustering_progress['fg'] = 'red'
+            self.button_clustering.configure(state="disabled", bg=self.original_button_color)
+            self.label_clustering_progress.configure(fg='red')
 
-        if self.configuration.execute_possible():
+            if self.configuration.distance_configuration_valid():
+                self.label_distance_progress.configure(text='Distance calculation ready', fg='orange')
+                self.button_distance_play.configure(state="normal", bg='paleturquoise1')
+            else:
+                self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
+                self.button_distance_play.configure(state="disabled", bg=self.original_button_color)
+
+        if self.configuration.result_is_ready():
             self.button_show_result.configure(state="normal", bg='pale green')
             self.button_save_result.configure(state="normal", bg='pale green')
+            self.label_clustering_progress.configure(text='Clustering done', fg='green')
+            self.button_clustering_play.configure(state="normal", bg=self.original_button_color)
         else:
             self.button_show_result.configure(state="disabled", bg=self.original_button_color)
             self.button_save_result.configure(state="disabled", bg=self.original_button_color)
+            if self.configuration.clustering_execution_possible():
+                # self.clustering_progress['value'] = 100
+                self.label_clustering_progress.configure(text='Clustering ready', fg='orange')
+                self.button_clustering_play.configure(state="normal", bg='paleturquoise1')
+            else:
+                # self.clustering_progress['value'] = 0
+                self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
+                self.button_clustering_play.configure(state="disabled", bg=self.original_button_color)
 
         self.update_frame_data()
         self.update_frame_abstraction()
