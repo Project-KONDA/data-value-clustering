@@ -34,6 +34,39 @@ def character_escape(s):
     return '^[' + s + ']$'
 
 
+def groups_to_enumerations(s):
+    s = s.replace("-", "\-")
+    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    alphabet_capitalized = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    digits = "0123456789"
+    regex_alphabet = '[a-z]\\\-[a-z]'
+    regex_alphabet_capitalized = '[A-Z]\\\-[A-Z]'
+    regex_digits = '[0-9]\\\-[0-9]'
+    s = replace_interval_by_enumeration(alphabet, regex_alphabet, s)
+    s = replace_interval_by_enumeration(alphabet_capitalized, regex_alphabet_capitalized, s)
+    s = replace_interval_by_enumeration(digits, regex_digits, s)
+    return s
+
+
+def replace_interval_by_enumeration(alphabet, regex_alphabet, s):
+    match_object = re.search(regex_alphabet, s)
+    while match_object is not None:
+        match = match_object.group()
+        match_split = match.split("\-")
+        start = match_split[0]
+        end = match_split[1]
+        start_index = alphabet.index(start)
+        end_index = alphabet.index(end) + 1
+        if start_index < end_index:
+            enumeration = alphabet[start_index: end_index]
+            s = s.replace(match, enumeration)
+        else:
+            match_unescaped = match.replace("\-", "-")
+            s = s.replace(match, match_unescaped)
+        match_object = re.search(regex_alphabet, s)
+    return s
+
+
 def get_n_from_map(map):
     return int(floor(sqrt(len(map))))
 
@@ -129,3 +162,6 @@ if __name__ == "__main__":
     print_cost_map(example_costmap())
     print(costmap_is_valid(example_costmap()))
     print(len(example_costmap()))
+
+    print(groups_to_enumerations(""))
+    print("1\\3"[1] == "\\")

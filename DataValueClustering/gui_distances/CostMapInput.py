@@ -3,7 +3,7 @@ import numpy as np
 
 from gui_general.help_popup_gui import menu_help_cost_map
 from gui_distances.costmapinput_helper import validate_input_float, print_cost_map, character_escape, get_n_from_map, \
-    preprocess_regexes, example_costmap, get_regexes_from_map
+    preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
 
 
 def input_costmap(root, size=None, empty=False, regexes=None, costmap=None):
@@ -170,13 +170,10 @@ class CostMapInput:
             self.map[()] = 1.
 
         # single character regex
-        self.map[0] = '^$'
-        for i in range(1, self.n - 1):
-            if self.label_text[i] != '':
-                self.map[i] = character_escape(self.label_text[i])
-            else:
-                self.map[i] = '.^'
-        self.map[self.n - 1] = '^.$'
+        self.map[0] = ''
+        for i in range(1, self.n):
+            self.map[i] = groups_to_enumerations(self.label_text[i])
+        # self.map[self.n - 1] = ''
 
         # weights
         for i in range(self.n):

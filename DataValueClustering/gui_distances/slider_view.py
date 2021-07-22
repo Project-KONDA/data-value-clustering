@@ -3,7 +3,7 @@ from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel
 import numpy as np
 
 from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
-    example_costmap
+    example_costmap, groups_to_enumerations
 
 
 def slider_view(master, n=None, costmap=None, texts=None, values=None, fixed=False):
@@ -86,7 +86,7 @@ class SliderInput:
         self.update()
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
-            map[i + 1] = character_escape(self.texts[i])
+            map[i + 1] = groups_to_enumerations(self.texts[i])
             map[(0, i + 1)] = self.values[i]
             map[(i + 1, 0)] = self.values[i]
             for j in range(self.n):
