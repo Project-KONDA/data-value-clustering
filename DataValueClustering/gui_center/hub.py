@@ -88,6 +88,8 @@ class Hub:
         # self.distance_progress.grid(sticky='nwe', row=10, column=1, columnspan=1, padx=20, pady=10)
         # self.clustering_progress.grid(sticky='nwe', row=12, column=1, columnspan=1, padx=20, pady=10)
 
+        self.original_button_color = self.button_show_result.cget("background")
+
         "progress labels"
         self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
         self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
@@ -393,8 +395,8 @@ class Hub:
             self.button_show_result.configure(state="normal", bg='pale green')
             self.button_save_result.configure(state="normal", bg='pale green')
         else:
-            self.button_show_result.configure(state="disabled") #, bg=self.orig_button_color)
-            self.button_save_result.configure(state="disabled")
+            self.button_show_result.configure(state="disabled", bg=self.original_button_color)
+            self.button_save_result.configure(state="disabled", bg=self.original_button_color)
 
         self.update_frame_data()
         self.update_frame_abstraction()
