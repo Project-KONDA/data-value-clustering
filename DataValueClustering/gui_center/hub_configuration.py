@@ -222,7 +222,7 @@ class HubConfiguration():
 
     "Test if ready for configuration"
     def distance_configuration_possible(self):
-        return self.abstraction_configuration_valid()
+        return self.data_configuration_valid() and self.abstraction_configuration_valid()
 
     def clustering_configuration_possible(self):
         return self.distance_configuration_possible() \
