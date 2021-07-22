@@ -40,13 +40,17 @@ class HubConfiguration():
                 setattr(self, key, None)
             elif key == "timedelta_abstraction" or key == "timedelta_distance" or key == "timedelta_cluster":
                 value_split = value.split(":")
-                value_adapted = dt.timedelta(hours=float(value_split[0]), minutes=float(value_split[1]), seconds=float(value_split[2]))
+                value_adapted = dt.timedelta(hours=float(value_split[0]), minutes=float(value_split[1]),
+                                             seconds=float(value_split[2]))
                 setattr(self, key, value_adapted)
             elif key == "values_abstracted" or key == "clusters_abstracted" or key == "clusters":
                 value_adapted = np.array(value)
                 setattr(self, key, value_adapted)
             elif key == "distance_matrix_map":
-                value_adapted = {"distance_matrix": np.array(value["distance_matrix"]), "condensed_distance_matrix": np.array(value["condensed_distance_matrix"]), "affinity_matrix": np.array(value["affinity_matrix"]), "min_distance": value["min_distance"], "max_distance": value["max_distance"]}
+                value_adapted = {"distance_matrix": np.array(value["distance_matrix"]),
+                                 "condensed_distance_matrix": np.array(value["condensed_distance_matrix"]),
+                                 "affinity_matrix": np.array(value["affinity_matrix"]),
+                                 "min_distance": value["min_distance"], "max_distance": value["max_distance"]}
                 setattr(self, key, value_adapted)
             elif key == "cost_map":
                 value_adapted = get_cost_map(value["weight_case_switch"], value["rgx"], value["w"])
@@ -75,12 +79,12 @@ class HubConfiguration():
         # self.distance_f = None
         # self.distance_algorithm = None # string
         self.blob_configuration = None
-        self.cost_map = None # dict
+        self.cost_map = None  # dict
         self.distance_matrix_map = None
         self.timedelta_distance = None
 
-        self.clustering_algorithm = None # string
-        self.clustering_parameters = None # dict
+        self.clustering_algorithm = None  # string
+        self.clustering_parameters = None  # dict
         self.clustering_answers = None
         # self.cluster_config_f = None
         # self.cluster_f = None
@@ -128,13 +132,15 @@ class HubConfiguration():
         cluster_f = self.get_clustering_function()
         self.clusters_abstracted = cluster_f(self.distance_matrix_map, self.values_abstracted)
         time_cluster_end = datetime.now()
-        self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted, self.get_abstraction_function(), self.data)
+        self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted,
+                                                     self.get_abstraction_function(), self.data)
         self.timedelta_cluster = time_cluster_end - time_cluster_start
         self.timedelta_total = self.timedelta_cluster + self.timedelta_distance + self.timedelta_abstraction
         self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
         self.cluster_sizes_abstracted, self.noise_size_abstracted = get_cluster_sizes(self.clusters_abstracted)
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
-        self.fancy_cluster_list_abstracted, self.noise_abstracted = fancy_cluster_representation(self.values_abstracted, self.clusters_abstracted)
+        self.fancy_cluster_list_abstracted, self.noise_abstracted = fancy_cluster_representation(self.values_abstracted,
+                                                                                                 self.clusters_abstracted)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
 
@@ -147,7 +153,8 @@ class HubConfiguration():
         filtered_distance_matrix = distance_matrix_lines[:, lines]
         index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix
         intra_cluster_distances = max_intra_cluster_distances(*index_parameters).tolist()
-        intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(*index_parameters)
+        intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(
+            *index_parameters)
         cluster_to_excel(self.excel_save_path, self.fancy_cluster_list, self.noise, self.fancy_cluster_list_abstracted,
                          self.noise_abstracted, map,
                          self.cluster_sizes,
@@ -181,7 +188,8 @@ class HubConfiguration():
     def translate_cost_map_to_json(self):
         if not self.cost_map is None:
             cost_map_case, cost_map_regex, cost_map_weights = split_cost_map(self.cost_map)
-            self.cost_map = {"weight_case_switch": cost_map_case, "rgx": cost_map_regex.tolist(), "w": cost_map_weights.tolist()}
+            self.cost_map = {"weight_case_switch": cost_map_case, "rgx": cost_map_regex.tolist(),
+                             "w": cost_map_weights.tolist()}
 
     def translate_cost_map_to_dict(self):
         self.cost_map = None if self.cost_map is None else get_cost_map(**self.cost_map)
@@ -202,11 +210,14 @@ class HubConfiguration():
             return o.__dict__
 
     "Test configuration validity"
+
     def json_path_configuration_valid(self):
-        return not self.json_save_path is None and not self.json_save_path == ""
+        return not self.json_save_path is None \
+               and not self.json_save_path == ""
 
     def excel_path_configuration_valid(self):
-        return not self.excel_save_path is None and not self.excel_save_path == ""
+        return not self.excel_save_path is None \
+               and not self.excel_save_path == ""
 
     def data_configuration_valid(self):
         return self.data is not None
@@ -214,23 +225,45 @@ class HubConfiguration():
     def abstraction_configuration_valid(self):
         return self.abstraction_answers is not None
 
+    def abstraction_result_valid(self):
+        return self.values_abstracted is not None
+
     def distance_configuration_valid(self):
+        return self.cost_map is not None
+
+    def distance_result_valid(self):
         return self.distance_matrix_map is not None
 
     def clustering_configuration_valid(self):
+        return self.clustering_algorithm is not None \
+               and self.clustering_answers is not None \
+               and self.clustering_parameters is not None
+
+    def clustering_result_valid(self):
         return self.clusters is not None
 
     "Test if ready for configuration"
+
     def distance_configuration_possible(self):
-        return self.data_configuration_valid() and self.abstraction_configuration_valid()
+        return self.data_configuration_valid() \
+               and self.abstraction_configuration_valid() \
+               and self.abstraction_result_valid()
+
+    def distance_execution_possible(self):
+        return self.distance_configuration_possible() \
+               and self.distance_configuration_valid()
 
     def clustering_configuration_possible(self):
-        return self.distance_configuration_possible() \
-            and self.distance_configuration_valid()
+        return self.distance_execution_possible() \
+               and self.distance_result_valid()
 
-    def execute_possible(self):
+    def clustering_execution_possible(self):
         return self.clustering_configuration_possible() \
-            and self.clustering_configuration_valid()
+               and self.clustering_configuration_valid()
+
+    def result_is_ready(self):
+        return self.clustering_execution_possible() \
+               and self.clustering_result_valid()
 
     "Get configuration"
 
@@ -250,6 +283,7 @@ class HubConfiguration():
         return self.clustering_parameters
 
     "Set configuration"
+
     def set_data_configuration(self, data_path, data_lower_limit=None, data_upper_limit=None):
         if not self.data_path == data_path or not self.data_lower_limit == data_lower_limit or not self.data_upper_limit == data_upper_limit:
             self.data_path = data_path

@@ -69,6 +69,13 @@ class Hub:
         self.button_distance.grid(sticky='nwe', row=9, column=1, columnspan=2, padx=10, pady=10)
         self.button_clustering.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
 
+        self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
+                                           width=4, height=2, state="disabled")
+        self.button_distance_play.grid(sticky='ne', row=10, column=2, padx=10, pady=10)
+        self.button_clustering_play = Button(self.root, text='▶', command=self.execute_clustering,
+                                             width=4, height=2, state="disabled")
+        self.button_clustering_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10)
+
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'))
         self.button_show_result.configure(width=45, height=2)
@@ -78,7 +85,6 @@ class Hub:
                                          font=('Sans', '10', 'bold'))
         self.button_save_result.configure(height=2)
         self.button_save_result.grid(sticky='nswe', row=14, column=4, padx=10, pady=10)
-
 
         # "progress bars"
         # self.path_progress = Progressbar(self.root, orient=HORIZONTAL, length=100, mode='determinate')
@@ -105,7 +111,6 @@ class Hub:
         self.label_abstraction_progress.grid(sticky='nw', row=8, column=1, columnspan=1, padx=20, pady=10)
         self.label_distance_progress.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=10)
         self.label_clustering_progress.grid(sticky='nw', row=12, column=1, columnspan=1, padx=20, pady=10)
-
 
         "frames"
         self.frame_data = Frame(self.root, bg="grey90", width=200, height=100)
@@ -169,8 +174,7 @@ class Hub:
         return data_name
 
     def configure_data(self):
-        self.label_data_progress['text'] = "Data configuration in progress ..."
-        self.label_data_progress['fg'] = 'DarkOrange1'
+        self.label_data_progress.configure(text="Data configuration in progress ...", fg='DarkOrange1')
         self.root.update()
         self.disable()
         previous_data_path = self.configuration.get_data_configuration()[0]
@@ -190,8 +194,7 @@ class Hub:
         self.root.update()
 
         # TODO: execute only if configuration was changed
-        self.label_data_progress['text'] = "Data extraction in progress ..."
-        self.label_data_progress['fg'] = 'RoyalBlue1'
+        self.label_data_progress.configure(text="Data extraction in progress ...", fg='RoyalBlue1')
         self.root.update()
 
         self.configuration.execute_data()
@@ -200,8 +203,7 @@ class Hub:
 
         # TODO: execute only if configuration was changed
         if self.configuration.abstraction_configuration_valid():
-            self.label_abstraction_progress['text'] = "Abstraction in progress ..."
-            self.label_abstraction_progress['fg'] = 'RoyalBlue1'
+            self.label_abstraction_progress.configure(text="Abstraction in progress ...", fg='RoyalBlue1')
             self.root.update()
             self.configuration.execute_abstraction()
             self.update()
@@ -209,8 +211,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_abstraction(self):
-        self.label_abstraction_progress['text'] = "Abstraction configuration in progress ..."
-        self.label_abstraction_progress['fg'] = 'DarkOrange1'
+        self.label_abstraction_progress.configure(text="Abstraction configuration in progress ...", fg='DarkOrange1')
         self.root.update()
         # 1. get data from config
         self.disable()
@@ -233,8 +234,7 @@ class Hub:
         self.root.update()
 
         # TODO: execute only if configuration was changed
-        self.label_abstraction_progress['text'] = "Abstraction in progress ..."
-        self.label_abstraction_progress['fg'] = 'RoyalBlue1'
+        self.label_abstraction_progress.configure(text="Abstraction in progress ...", fg='RoyalBlue1')
         self.root.update()
 
         if self.configuration.data_configuration_valid():
@@ -244,8 +244,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_distance(self):
-        self.label_distance_progress['text'] = "Distance configuration in progress ..."
-        self.label_distance_progress['fg'] = 'DarkOrange1'
+        self.label_distance_progress.configure(text="Distance configuration in progress ...", fg='DarkOrange1')
         self.root.update()
         self.disable()
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
@@ -290,9 +289,9 @@ class Hub:
         self.update()
         self.root.update()
 
+    def execute_distance(self):
         # TODO: execute only if configuration was changed
-        self.label_distance_progress['text'] = "Distance calculation in progress ..."
-        self.label_distance_progress['fg'] = 'RoyalBlue1'
+        self.label_distance_progress.configure(text="Distance calculation in progress ...", fg='RoyalBlue1')
         self.root.update()
 
         self.configuration.execute_distance()
@@ -303,8 +302,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_clustering(self):
-        self.label_clustering_progress['text'] = "Clustering configuration in progress ..."
-        self.label_clustering_progress['fg'] = 'DarkOrange1'
+        self.label_clustering_progress.configure(text="Clustering configuration in progress ...", fg='DarkOrange1' )
         self.root.update()
         self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
@@ -329,17 +327,16 @@ class Hub:
         self.update()
         self.root.update()
 
+    def execute_clustering(self):
         # TODO: execute only if configuration was changed
-        self.label_clustering_progress['text'] = "Clustering in progress ..."
-        self.label_clustering_progress['fg'] = 'RoyalBlue1'
+        self.label_clustering_progress.configure(text="Clustering in progress ...", fg='RoyalBlue1')
         self.root.update()
 
         self.configuration.execute_clustering()
 
         # self.update()
 
-        # self.label_clustering_progress['text'] = "Saving in progress ..."
-        # self.label_clustering_progress['fg'] = 'RoyalBlue1'
+        # self.label_clustering_progress.configure(text="Saving in progress ...", fg='RoyalBlue1')
         # self.root.update()
         #
         # self.configuration.save_as_json()
@@ -348,12 +345,11 @@ class Hub:
         self.update()
 
     def show_result(self):
+        self.disable()
         # validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
         #             self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
         #             self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
-        validation_result = result_view(self.root, self.configuration)
-        # TODO: save validation into configuration
-
+        result_view(self.root, self.configuration)
         self.update()
 
     # def abstraction_callback(self, percentage):
@@ -388,12 +384,13 @@ class Hub:
         self.configuration.excel_save_path = getExcelSavePath()
         self.configuration.save_as_excel()
 
-
     def disable(self):
         self.button_data.configure(state="disabled")
         self.button_abstraction.configure(state="disabled")
         self.button_distance.configure(state="disabled")
         self.button_clustering.configure(state="disabled")
+        self.button_distance_play.configure(state="disabled")
+        self.button_clustering_play.configure(state="disabled")
         self.button_show_result.configure(state="disabled")
         self.button_save_result.configure(state="disabled")
 
@@ -472,7 +469,7 @@ class Hub:
     def update_frame_data(self):
         data_path, data_lower_limit, data_upper_limit = self.configuration.get_data_configuration()
         if data_path is None:
-            self.label_data_config['text'] = NONE
+            self.label_data_config.configure(text=NONE)
         else:
             text = self.data_name_from_path(data_path)
             if data_lower_limit is not None:
@@ -481,12 +478,12 @@ class Hub:
                 text += str(data_upper_limit)
             if data_lower_limit is not None or data_upper_limit is not None:
                 text += "]"
-            self.label_data_config['text'] = text
+            self.label_data_config.configure(text=text)
 
     def update_frame_abstraction(self):
         answers = self.configuration.get_abstraction_configuration()
         if answers is None:
-            self.label_abstraction_config['text'] = NONE
+            self.label_abstraction_config.configure(text=NONE)
         else:
             abbreviations = np.array(abstraction_question_array, dtype=object)[:, 2]
             text = ""
@@ -496,21 +493,21 @@ class Hub:
                     if i % 3 == 0:
                         text += "\n"
                 text += abb + "=" + str(answers[i])
-            self.label_abstraction_config['text'] = text
+            self.label_abstraction_config.configure(text=text)
 
     def update_frame_distance(self):
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         if cost_map is None:
-            self.label_distance_config['text'] = NONE
+            self.label_distance_config.configure(text=NONE)
         else:
             costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
             text = str(regex_np) + "\n" + str(costmap_weights)
-            self.label_distance_config['text'] = text
+            self.label_distance_config.configure(text=text)
 
     def update_frame_clustering(self):
         clustering_algorithm, clustering_answers = self.configuration.get_clustering_selection()
         if clustering_algorithm is None:
-            self.label_clustering_config['text'] = NONE
+            self.label_clustering_config.configure(text=NONE)
         else:
             clustering_parameters = self.configuration.get_clustering_configuration()
             text = "Algorithm: " + clustering_algorithm + "\nParameters: "
@@ -520,7 +517,7 @@ class Hub:
                     if i % 3 == 0:
                         text += "\n\t"
                 text += key + "=" + str(clustering_parameters[key])
-            self.label_clustering_config['text'] = text
+            self.label_clustering_config.configure(text=text)
 
 
 
