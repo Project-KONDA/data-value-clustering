@@ -127,18 +127,35 @@ class Hub:
         if messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
             self.root.destroy()
 
+    def data_path_from_name(self, data_name):
+        if data_name is None:
+            return None
+        return str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt"
+
+    def data_name_from_path(self, data_path):
+        if data_path is None:
+            return None
+        data_path_split = data_path.split("\\")
+        last = data_path_split[len(data_path_split)-1]
+        last_split = last.split(".")
+        data_name = last_split[0]
+        return data_name
+
     def configure_data(self):
         self.label_data_progress['text'] = "Data configuration in progress ..."
         self.label_data_progress['fg'] = 'DarkOrange1'
         self.root.update()
-        data_name = select_data(self.root)
+        previous_data_path = self.configuration.get_data_configuration()[0]
+        previous_data_name = self.data_name_from_path(previous_data_path)
+
+        data_name = select_data(self.root, previous_data_name)
 
         if data_name is None:
             self.update()
             self.root.update()
             return
 
-        self.configuration.set_data_configuration(str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt")
+        self.configuration.set_data_configuration(self.data_path_from_name(data_name))
 
         self.update()
         self.root.update()

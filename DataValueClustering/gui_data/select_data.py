@@ -1,4 +1,5 @@
 from tkinter import Tk, Listbox, Button, Label, END, Scrollbar, Toplevel
+import numpy as np
 
 from data_extraction import get_sources_in_experiment_data_directory
 
@@ -7,13 +8,14 @@ def get_list(path=""):
     return get_sources_in_experiment_data_directory()[:, 0]
 
 
-def select_data(master):
-    return SelectData("", master).get()
+def select_data(master, previous=None):
+    return SelectData("", master, previous).get()
 
 
 class SelectData:
-    def __init__(self, path, master):
+    def __init__(self, path, master, previous=None):
         self.path = path
+        self.previous = previous
 
         self.root = Toplevel(master)
         # self.root.title("Select Data")
@@ -42,6 +44,9 @@ class SelectData:
         self.datalist = get_list(self.path)
         for i in self.datalist:
             self.listbox.insert(END, i)
+        if self.previous is not None:
+            index = np.where(self.datalist == self.previous)[0][0]
+            self.listbox.select_set(index)
 
     def add(self):
         # TODO load
