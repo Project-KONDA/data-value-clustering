@@ -2,9 +2,12 @@ from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu
 from pathlib import Path
 from tkinter.messagebox import WARNING
 from tkinter.ttk import Progressbar
+import numpy as np
 
+from distance.weighted_levenshtein_distance import get_costmap_num, split_cost_map
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
+from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 from gui_data.select_data import select_data
@@ -19,6 +22,7 @@ DISTANCE_NOT_CONFIGURED = "Distance not configured"
 ABSTRACTION_NOT_CONFIGURED = "Abstraction not configured"
 DATA_NOT_CONFIGURED = "Data not configured"
 PATH_NOT_CONFIGURED = "Save path not configured"
+NONE = "None"
 
 
 class Hub:
@@ -118,6 +122,28 @@ class Hub:
         self.frame_abstraction.grid(sticky='nswe', row=7, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
         self.frame_distance.grid(sticky='nswe', row=9, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
         self.frame_clustering.grid(sticky='nswe', row=11, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
+
+        "labels in frames"
+        self.label_data_config_heading = Label(self.frame_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left")
+        self.label_abstraction_config_heading = Label(self.frame_abstraction, text="Current Abstraction Configuration:", bg="grey90", anchor="w",
+                                              justify="left")
+        self.label_distance_config_heading = Label(self.frame_distance, text="Current Distance Configuration:", bg="grey90", anchor="w", justify="left")
+        self.label_clustering_config_heading = Label(self.frame_clustering, text="Current Clustering Configuration:", bg="grey90", anchor="w", justify="left")
+
+        self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
+        self.label_abstraction_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
+        self.label_distance_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
+        self.label_clustering_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
+
+        self.label_data_config = Label(self.frame_data, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
+        self.label_abstraction_config = Label(self.frame_abstraction, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
+        self.label_distance_config = Label(self.frame_distance, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
+        self.label_clustering_config = Label(self.frame_clustering, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
+
+        self.label_data_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
+        self.label_abstraction_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
+        self.label_distance_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
+        self.label_clustering_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
@@ -444,17 +470,58 @@ class Hub:
         self.root.update()
 
     def update_frame_data(self):
-
-        pass
+        data_path, data_lower_limit, data_upper_limit = self.configuration.get_data_configuration()
+        if data_path is None:
+            self.label_data_config['text'] = NONE
+        else:
+            text = self.data_name_from_path(data_path)
+            if data_lower_limit is not None:
+                text += "[" + str(data_lower_limit) + ".."
+            if data_upper_limit is not None:
+                text += str(data_upper_limit)
+            if data_lower_limit is not None or data_upper_limit is not None:
+                text += "]"
+            self.label_data_config['text'] = text
 
     def update_frame_abstraction(self):
-        pass
+        answers = self.configuration.get_abstraction_configuration()
+        if answers is None:
+            self.label_abstraction_config['text'] = NONE
+        else:
+            abbreviations = np.array(abstraction_question_array, dtype=object)[:, 2]
+            text = ""
+            for i, abb in enumerate(abbreviations):
+                if i>0:
+                    text += ", "
+                    if i % 3 == 0:
+                        text += "\n"
+                text += abb + "=" + str(answers[i])
+            self.label_abstraction_config['text'] = text
 
     def update_frame_distance(self):
-        pass
+        cost_map, blob_configuration = self.configuration.get_distance_configuration()
+        if cost_map is None:
+            self.label_distance_config['text'] = NONE
+        else:
+            costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
+            text = str(regex_np) + "\n" + str(costmap_weights)
+            self.label_distance_config['text'] = text
 
     def update_frame_clustering(self):
-        pass
+        clustering_algorithm, clustering_answers = self.configuration.get_clustering_selection()
+        if clustering_algorithm is None:
+            self.label_clustering_config['text'] = NONE
+        else:
+            clustering_parameters = self.configuration.get_clustering_configuration()
+            text = "Algorithm: " + clustering_algorithm + "\nParameters: "
+            for i, key in enumerate(clustering_parameters.keys()):
+                if i>0:
+                    text += ", "
+                    if i % 3 == 0:
+                        text += "\n\t"
+                text += key + "=" + str(clustering_parameters[key])
+            self.label_clustering_config['text'] = text
+
 
 
 if __name__ == "__main__":
