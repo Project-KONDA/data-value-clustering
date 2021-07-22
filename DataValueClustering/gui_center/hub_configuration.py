@@ -202,8 +202,11 @@ class HubConfiguration():
             return o.__dict__
 
     "Test configuration validity"
-    def path_configuration_valid(self):
+    def json_path_configuration_valid(self):
         return not self.json_save_path is None and not self.json_save_path == ""
+
+    def excel_path_configuration_valid(self):
+        return not self.excel_save_path is None and not self.excel_save_path == ""
 
     def data_configuration_valid(self):
         return self.data is not None
@@ -218,19 +221,8 @@ class HubConfiguration():
         return self.clusters is not None
 
     "Test if ready for configuration"
-    def saving_possible(self):
-        return self.abstraction_configuration_possible()
-
-    def data_configuration_possible(self):
-        return self.path_configuration_valid()
-
-    def abstraction_configuration_possible(self):
-        return self.data_configuration_possible \
-            and self.data_configuration_valid()
-
     def distance_configuration_possible(self):
-        return self.abstraction_configuration_possible() \
-            and self.abstraction_configuration_valid()
+        return self.abstraction_configuration_valid()
 
     def clustering_configuration_possible(self):
         return self.distance_configuration_possible() \
