@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 
 
 def show_dendrogram(linkage_matrix, labels=None):
+    plt.ion()
     fig = plt.figure(figsize=(10, 7))
     fig.canvas.set_window_title('Dendrogram')
     fig.suptitle('Dendrogram')
