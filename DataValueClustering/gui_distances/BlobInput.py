@@ -37,12 +37,12 @@ class BlobInput:
         self.chars_info = config[:, 3]
         self.coordinates = config[:, (4, 5)]
         self.sizes = config[:, 6]
-        self.canceled = False
 
         """Root"""
         self.master = master
         self.root = Toplevel(self.master)
         self.root.title('Distance Specification')
+        self.canceled = False
 
         """Frame"""
         self.window_size = 3/4
@@ -252,12 +252,13 @@ class BlobInput:
 
     def cancel(self):
         self.canceled = True
-        self.close(True)
+        self.close(canceled=True)
 
     def close(self, event=None, canceled=False):
         """Close Tk Window"""
         self.canceled = canceled
         self.unbind_all()
+        self.root.quit()
         self.root.destroy()
 
     def restart(self):
