@@ -66,7 +66,7 @@ class SliderInput:
                 v = self.values[i]
 
             self.valuelist[i] = IntVar(self.root, v)
-            self.entrylist[i] = Entry(self.root, font="12", text=t)
+            self.entrylist[i] = Entry(self.root, font="12")
             self.entrylist[i].insert(0, t)
             if self.fixed:
                 self.entrylist[i].configure(state="disabled")
