@@ -22,6 +22,8 @@ class ResultView:
         self.root = Toplevel(master)
         self.root.title("Result")
 
+        self.canceled = False
+
         self.configuration = configuration
 
         # self.excel_path = excel_path
@@ -102,6 +104,8 @@ class ResultView:
         self.root.geometry(f"+%s+%s" % (midx, midy))
 
         self.root.after(1, lambda: self.root.focus_force())
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+
         self.root.mainloop()
 
     def open_excel(self):
@@ -134,6 +138,10 @@ class ResultView:
     def close(self):
         self.root.quit()
         self.root.destroy()
+
+    def cancel(self):
+        self.canceled = True
+        self.close()
 
     def get(self):
         pass
