@@ -508,14 +508,18 @@ class Hub:
             self.label_clustering_config.configure(text=NONE)
         else:
             clustering_parameters = self.configuration.get_clustering_configuration()
-            text = "Algorithm: " + clustering_algorithm + "\nParameters: "
-            for i, key in enumerate(clustering_parameters.keys()):
-                if i>0:
-                    text += ", "
-                    if i % 3 == 0:
-                        text += "\n\t"
-                text += key + "=" + str(clustering_parameters[key])
-            self.label_clustering_config.configure(text=text)
+            text = "Algorithm: " + clustering_algorithm
+            if clustering_parameters is None:
+                self.label_clustering_config.configure(text=text)
+            else:
+                text += "\nParameters: "
+                for i, key in enumerate(clustering_parameters.keys()):
+                    if i>0:
+                        text += ", "
+                        if i % 3 == 0:
+                            text += "\n\t"
+                    text += key + "=" + str(clustering_parameters[key])
+                self.label_clustering_config.configure(text=text)
 
 
 
