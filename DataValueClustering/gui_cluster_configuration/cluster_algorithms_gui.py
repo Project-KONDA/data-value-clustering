@@ -185,6 +185,7 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
         [optics_clustering.CLUSTER_METHOD, optics_clustering.XI, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
         [optics_clustering.CLUSTER_METHOD, optics_clustering.PREDECESSOR_CORRECTION, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
         [optics_clustering.CLUSTER_METHOD, optics_clustering.MIN_CLUSTER_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [optics_clustering.MAX_EPS, optics_clustering.EPS, DEPENDENCY_VALUE_SLIDER_MAX, lambda max_eps: max_eps]
     ]
     min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
     n_jobs \

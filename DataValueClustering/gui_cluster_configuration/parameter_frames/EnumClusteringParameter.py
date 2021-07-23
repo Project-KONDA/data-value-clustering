@@ -125,6 +125,7 @@ class EnumClusteringParameter(ClusteringParameter):
 
     def reset(self):
         self.choice.set(self.default)
+        super().reset()
 
     def get_result(self):
         return self.option_labels[self.choice.get()] if self.is_activated.get() else None

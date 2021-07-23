@@ -25,6 +25,7 @@ class SliderClusteringParameter(ClusteringParameter):
 
         self.mini = mini
         self.maxi = maxi
+        self.maxi_default = maxi
         self.default = default
         self.previous = previous_value
         self.resolution = resolution
@@ -57,11 +58,15 @@ class SliderClusteringParameter(ClusteringParameter):
         if type == DEPENDENCY_VALUE_SLIDER_MAX:
             for i, dep in enumerate(self.dependencies[type]):
                 [other_param, dependency_param] = dep
-                other_param.maxi = dependency_param(self.value_var.get())
+                if not self.deactivatable or self.is_activated.get() == 1:
+                    other_param.maxi = dependency_param(self.value_var.get())
+                else:
+                    other_param.maxi = other_param.maxi_default
                 other_param.slider.config(to=other_param.maxi, tickinterval=other_param.maxi-other_param.mini)
 
     def activate(self):
         super().activate()
+        self.update_dependency(DEPENDENCY_VALUE_SLIDER_MAX)
         self.slider.config(state='normal', fg='black', troughcolor='SystemScrollbar', bg='white')
 
     def deactivate(self):
@@ -70,6 +75,7 @@ class SliderClusteringParameter(ClusteringParameter):
 
     def reset(self):
         self.value_var.set(self.default)
+        super().reset()
 
     def get_result(self):
         return self.value_var.get() if self.is_activated.get() else None

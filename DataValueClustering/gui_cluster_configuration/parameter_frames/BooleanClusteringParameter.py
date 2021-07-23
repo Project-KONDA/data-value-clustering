@@ -43,6 +43,7 @@ class BooleanClusteringParameter(ClusteringParameter):
 
     def reset(self):
         self.value_var.set(int(self.default))
+        super().reset()
 
     def get_result(self):
         return bool(self.value_var.get()) if self.is_activated.get() else None

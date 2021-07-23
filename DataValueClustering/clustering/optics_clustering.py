@@ -44,7 +44,7 @@ def optics_max_eps_config():
     # see DBSCAN
     name = MAX_EPS  # TODO
     explanation = "Default value of infinite will identify clusters across all scales. Reducing max_eps will result in shorter run times."
-    mini = 0.  # TODO
+    mini = 0.01  # TODO
     maxi = 2.  # TODO: handle infinity
     default = 1.  # TODO
     resolution = 0.01  # TODO
