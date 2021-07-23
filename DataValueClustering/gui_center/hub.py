@@ -360,22 +360,29 @@ class Hub:
     #     self.root.update()
 
     def menu_load(self):
+        self.disable()
         load_path = getJsonLoadPath(self.configuration.json_save_path)
-        if not load_path: return
+        if not load_path:
+            self.update()
+            return
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
-        self.update()
+        self.root.title(self.configuration.json_save_path)
         self.saved = True
+        self.update()
 
     def menu_save(self):
+        self.disable()
         if self.configuration.json_save_path:
             self.configuration.save_as_json()
             self.saved = True
         else:
             self.menu_saveas()
+        self.update()
 
     def menu_saveas(self):
         self.configuration.json_save_path = getJsonSavePath()
+        self.root.title(self.configuration.json_save_path)
         if self.configuration.json_save_path:
             self.menu_save()
 

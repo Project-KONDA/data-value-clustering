@@ -12,11 +12,11 @@ def get_list(path=""):
 
 
 def select_data(master, previous=None):
-    return SelectData("", master, previous).get()
+    return SelectData(master, "", previous).get()
 
 
 class SelectData:
-    def __init__(self, path, master, previous=None):
+    def __init__(self, master, path, previous=None):
         self.path = path
         self.previous = previous
 
