@@ -310,8 +310,6 @@ class Hub:
             self.root.update()
             return
 
-        self.saved = False
-        self.configuration.set_clustering_selection(clustering_algorithm, answers)
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
         parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters)
@@ -319,6 +317,9 @@ class Hub:
             self.update()
             self.root.update()
             return
+
+        self.saved = False
+        self.configuration.set_clustering_selection(clustering_algorithm, answers)
         self.configuration.set_clustering_configuration(parameters)
 
         self.update()
