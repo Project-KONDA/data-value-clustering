@@ -101,8 +101,8 @@ class Hub:
         "progress labels"
         self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
         self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
-        self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white")
-        self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white")
+        self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white", fg="red")
 
         self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=1, padx=20, pady=10)
         self.label_abstraction_progress.grid(sticky='nw', row=8, column=1, columnspan=1, padx=20, pady=10)
