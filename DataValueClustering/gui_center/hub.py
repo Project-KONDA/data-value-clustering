@@ -171,7 +171,7 @@ class Hub:
         return data_name
 
     def configure_data(self):
-        self.label_data_progress.configure(text="Data configuration in progress ...", fg='DarkOrange1')
+        self.label_data_progress.configure(text="Data configuration in progress ...", fg='magenta2')
         self.root.update()
         self.disable()
         previous_data_path = self.configuration.get_data_configuration()[0]
@@ -208,7 +208,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_abstraction(self):
-        self.label_abstraction_progress.configure(text="Abstraction configuration in progress ...", fg='DarkOrange1')
+        self.label_abstraction_progress.configure(text="Abstraction configuration in progress ...", fg='magenta2')
         self.root.update()
         # 1. get data from config
         self.disable()
@@ -241,7 +241,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_distance(self):
-        self.label_distance_progress.configure(text="Distance configuration in progress ...", fg='DarkOrange1')
+        self.label_distance_progress.configure(text="Distance configuration in progress ...", fg='magenta2')
         self.root.update()
         self.disable()
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
@@ -299,7 +299,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_clustering(self):
-        self.label_clustering_progress.configure(text="Clustering configuration in progress ...", fg='DarkOrange1' )
+        self.label_clustering_progress.configure(text="Clustering configuration in progress ...", fg='magenta2' )
         self.root.update()
         self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
@@ -434,7 +434,7 @@ class Hub:
             self.label_clustering_progress.configure(fg='red')
 
             if self.configuration.distance_configuration_valid():
-                self.label_distance_progress.configure(text='Distance calculation ready', fg='orange')
+                self.label_distance_progress.configure(text='Distance configured but not calculated', fg='orange')
                 self.button_distance_play.configure(state="normal", bg='paleturquoise1')
             else:
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
@@ -450,7 +450,7 @@ class Hub:
             self.button_save_result.configure(state="disabled", bg=self.original_button_color)
             if self.configuration.clustering_execution_possible():
                 # self.clustering_progress['value'] = 100
-                self.label_clustering_progress.configure(text='Clustering ready', fg='orange')
+                self.label_clustering_progress.configure(text='Clustering configured but not calculated', fg='orange')
                 self.button_clustering_play.configure(state="normal", bg='paleturquoise1')
             else:
                 # self.clustering_progress['value'] = 0
