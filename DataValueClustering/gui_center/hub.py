@@ -179,7 +179,7 @@ class Hub:
 
         data_name = select_data(self.root, previous_data_name)
 
-        if data_name is None:
+        if data_name is None or previous_data_name == data_name:
             self.update()
             self.root.update()
             return
@@ -190,7 +190,6 @@ class Hub:
         self.update()
         self.root.update()
 
-        # TODO: execute only if configuration was changed
         self.label_data_progress.configure(text="Data extraction in progress ...", fg='RoyalBlue1')
         self.root.update()
 
@@ -198,7 +197,6 @@ class Hub:
 
         self.update()
 
-        # TODO: execute only if configuration was changed
         if self.configuration.abstraction_configuration_valid():
             self.label_abstraction_progress.configure(text="Abstraction in progress ...", fg='RoyalBlue1')
             self.root.update()
@@ -212,11 +210,11 @@ class Hub:
         self.root.update()
         # 1. get data from config
         self.disable()
-        config = self.configuration.get_abstraction_configuration()
+        previous_abstraction_answers = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
-        abstraction_answers = abstraction_configuration(self.root, self.configuration.data, config)[1]
-        if abstraction_answers is None:
+        abstraction_answers = abstraction_configuration(self.root, self.configuration.data, previous_abstraction_answers)[1]
+        if abstraction_answers is None or previous_abstraction_answers == abstraction_answers:
             self.update()
             self.root.update()
             return
@@ -230,7 +228,6 @@ class Hub:
         self.update()
         self.root.update()
 
-        # TODO: execute only if configuration was changed
         self.label_abstraction_progress.configure(text="Abstraction in progress ...", fg='RoyalBlue1')
         self.root.update()
 
@@ -244,39 +241,45 @@ class Hub:
         self.label_distance_progress.configure(text="Distance configuration in progress ...", fg='magenta2')
         self.root.update()
         self.disable()
-        cost_map, blob_configuration = self.configuration.get_distance_configuration()
+        previous_cost_map, previous_blob_configuration = self.configuration.get_distance_configuration()
         distance_choice = get_distance_choice(self.root)
         if distance_choice is None:
             self.update()
             self.root.update()
             return
 
+        cost_map = None
+        blob_configuration = None
+
         self.saved = False
         if distance_choice == DistanceView.SLIDER:
-            if cost_map is None:
+            if previous_cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
                 cost_map = slider_view(self.root, texts=list(blob_configuration[1:,1]))
             else:
-                cost_map = slider_view(self.root, costmap=cost_map)
+                cost_map = slider_view(self.root, costmap=previous_cost_map)
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
-            if blob_configuration is None:
-                if cost_map is None or messagebox.askokcancel("Potential Information Loss", "You previously configured the distance "
+            if previous_blob_configuration is None:
+                if previous_cost_map is None or messagebox.askokcancel("Potential Information Loss", "You previously configured the distance "
                                                                 "calculation via a different method. This configuration will be "
                                                                 "lost upon opening the Blob Configuration View. Do you want to proceed?", icon=WARNING):
                     blob_configuration = self.configuration.create_blob_configuration()
                 else:
                     self.configure_distance()
+            else:
+                blob_configuration = previous_blob_configuration
             cost_map, blob_configuration = input_blobs(self.root, blob_configuration)
         elif distance_choice == DistanceView.MATRIX:
-            if cost_map is None:
+            if previous_cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
                 cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:,1]))
             else:
-                cost_map = input_costmap(self.root, costmap=cost_map)
+                cost_map = input_costmap(self.root, costmap=previous_cost_map)
             blob_configuration = None
 
-        if cost_map is None:
+        if cost_map is None or previous_cost_map == cost_map:
+            self.configuration.blob_configuration = previous_blob_configuration
             self.update()
             self.root.update()
             return
@@ -287,7 +290,6 @@ class Hub:
         self.root.update()
 
     def execute_distance(self):
-        # TODO: execute only if configuration was changed
         self.label_distance_progress.configure(text="Distance calculation in progress ...", fg='RoyalBlue1')
         self.root.update()
 
@@ -313,7 +315,7 @@ class Hub:
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
         parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters)
-        if parameters is None:
+        if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
             self.root.update()
             return
@@ -326,7 +328,6 @@ class Hub:
         self.root.update()
 
     def execute_clustering(self):
-        # TODO: execute only if configuration was changed
         self.label_clustering_progress.configure(text="Clustering in progress ...", fg='RoyalBlue1')
         self.root.update()
 
