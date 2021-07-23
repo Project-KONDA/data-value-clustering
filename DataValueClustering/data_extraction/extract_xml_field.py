@@ -42,6 +42,16 @@ def execute_xquery(my_query, database):
         return result
 
 
+def get_fieldnames(database):
+    query = 'distinct-values(doc("' + database + '")//*/name())'
+    return execute_xquery(query, database)
+
+
+def get_attributenames(database):
+    query = 'distinct-values(doc("' + database + '")//@*/name())'
+    return execute_xquery(query, database)
+
+
 if __name__ == '__main__':
     file = 'F:\KONDA_GoogleDrive\KONDA AV\Daten\APS_Midas\\fme-private-seiten20200224.aps.xml.gz'
     field = 'a2864'

@@ -39,6 +39,11 @@ def getExcelSavePath():
         file_name = file_name + ".xlsx"
     return file_name
 
+def getOpenFilePath(title):
+    file_name = filedialog.askopenfilename(title=title)
+    return file_name
+
+
 
 if __name__ == '__main__':
     path = getJsonLoadPath()
