@@ -22,6 +22,8 @@ class ClusterConfigurationInput:
         self.root.grid_rowconfigure(1, weight=1)
         self.root.config(bg='white')
         self.canceled = False
+        self.root.focus_force()
+        self.root.grab_set()
 
         self.root.bind_all("<Return>", self.close)
 
@@ -146,5 +148,5 @@ if __name__ == "__main__":
         "Second Slider Parameter", explanation, 1.0, 10.0, 2.0, resolution=0.01, deactivatable=False)
 
     param_list = [bool_param1, bool_param2, enum_param1, enum_param2, slider_param1, slider_param2]
-    params = get_configuration_parameters("Test", param_list, list())
+    params = get_configuration_parameters(Tk(), "Test", param_list, list())
     print(params)

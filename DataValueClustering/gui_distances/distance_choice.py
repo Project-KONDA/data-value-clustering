@@ -22,6 +22,9 @@ class DistanceChoice:
         self.root = Toplevel(master)
         self.root.title("Distance Choice")
         self.root.config(bg="white")
+        self.root.focus_force()
+        self.root.grab_set()
+
         self.title = Label(self.root, text="Distance Choice", bg="white",
                            font=('Helvatical bold', 19))
 

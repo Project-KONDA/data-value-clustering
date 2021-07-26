@@ -108,7 +108,8 @@ class QuestionnaireResultInput(ABC):
         midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
         self.root.geometry(f"+%s+%s" % (midx, midy))
 
-        self.root.after(1, lambda: self.root.focus_force())
+        self.root.focus_force()
+        self.root.grab_set()
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
 

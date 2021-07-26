@@ -39,6 +39,9 @@ class SliderInput:
         self.root = Toplevel(self.master)
         self.root.title("Slider Input")
         self.root.config(bg="white")
+        self.root.focus_force()
+        self.root.grab_set()
+
         self.title = Label(self.root, text="Slider View", bg="white",
                            font=('bold 12', 19))
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)

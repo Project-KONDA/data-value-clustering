@@ -16,6 +16,8 @@ class AddData:
         self.root = Toplevel(master)
         self.root.title("Add Data")
         self.root.configure(bg="white")
+        self.root.grab_set()
+        self.root.focus_force()
 
         self.datalist = list()
         self.canceled = False

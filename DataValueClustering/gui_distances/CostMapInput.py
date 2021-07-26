@@ -30,6 +30,8 @@ class CostMapInput:
             else 7
 
         self.root = Toplevel(master)
+        self.root.focus_force()
+        self.root.grab_set()
 
         self.root.bind_all("<Return>", self.button_click_output_map)
 
