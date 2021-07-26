@@ -5,6 +5,7 @@ from tkinter.messagebox import WARNING
 import numpy as np
 
 from data_extraction import get_sources_in_experiment_data_directory
+from gui_data.add_data import add_data
 
 
 def get_list(path=""):
@@ -34,7 +35,7 @@ class SelectData:
         self.scrollbar = Scrollbar(self.root, command=self.listbox.yview)
         self.listbox.config(yscrollcommand=self.scrollbar.set)
 
-        self.button_add = Button(self.root, text="+", command=self.add, width=3, state="disabled")
+        self.button_add = Button(self.root, text="+", command=self.add, width=3)
         self.button_remove = Button(self.root, text="-", command=self.remove, width=3)
         self.button_ok = Button(self.root, text="OK", command=self.close, width=27)
 
@@ -59,7 +60,7 @@ class SelectData:
             self.listbox.select_set(index)
 
     def add(self):
-        # TODO load
+        add_data(self.root, self.path)
         self.load()
 
     def remove(self):

@@ -4,7 +4,7 @@ from BaseXClient import BaseXClient
 from data_extraction.write_file import write_data_values_to_file
 
 
-def write_fielddata_from_xml(xmlfile, field):
+def write_fielddata_from_xml(xmlfile, field, filename):
 
     query = "//*[name()=\"" + field + "\"]/text()"
     values = execute_xquery(query, xmlfile)
@@ -14,8 +14,8 @@ def write_fielddata_from_xml(xmlfile, field):
         dbname = xmlfile.split('\\')
         dbname = dbname[len(dbname)-1].split('.')
         dbname = dbname[0]
-        filename = field + "_" + dbname + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")+ ".txt"
-        filename = "../data/" + filename
+        # filename = field + "_" + dbname + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")+ ".txt"
+        # filename = "../data/" + filename
         write_data_values_to_file(filename, values)
 
 
