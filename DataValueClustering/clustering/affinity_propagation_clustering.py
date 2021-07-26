@@ -69,8 +69,7 @@ def affinity_convergence_iter_config():
     # int
     # increase for more clusters?
     name = CONVERGENCE_ITER
-    explanation = "Another termination condition is, when a specific amount of iterations there is no difference.\n"
-    explanation += "This parameter determines, how much iterations are needed to terminate the algorithm.\n"
+    explanation = "Terminate the algorithm if for the given amount of iterations there is no difference between the results.\n"
     explanation += "The default value is 15"
     mini = 2
     maxi = 100

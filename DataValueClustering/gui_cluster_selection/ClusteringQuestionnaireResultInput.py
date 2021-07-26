@@ -43,13 +43,6 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
                                        value=i, justify='left')
             self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
 
-    def close(self, event=None):
-        answers, algorithm, cluster_algo = self.get()
-        if algorithm is None:
-            self.result_caption_label.config(fg="red")
-        else:
-            super().close()
-
     def get(self):
         if self.canceled:
             return None, None, None
@@ -66,13 +59,28 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         answers = self.get()[0]
         suggested_algorithms = get_array_part(self.algorithms, clustering_question_array, answers)
         suggested_algorithms_names = self.get_suggested_algorithm_names(suggested_algorithms)
+        previous_choice = self.choice.get()
+        preferred_choice = -1
+        first_suggested = -1
         for i, button in enumerate(self.radio_buttons):
             if self.algorithms[i, 2] in suggested_algorithms_names:
                 button.config(state=NORMAL)
+                if i == 0:
+                    preferred_choice = 0  # hierarchical
+                elif preferred_choice == -1 and i == 3:
+                    preferred_choice = 3  # optics
+                if first_suggested == -1:
+                    first_suggested = i
             else:
                 button.config(state=DISABLED)
-                if self.choice.get() == i:
-                    self.choice.set(-1)
+                if previous_choice == i:
+                    previous_choice = -1
+        if previous_choice != -1:
+            self.choice.set(previous_choice)
+        elif preferred_choice != -1:
+            self.choice.set(preferred_choice)
+        else:
+            self.choice.set(first_suggested)
 
     def get_suggested_algorithm_names(self, suggested_algorithms):
         if len(suggested_algorithms.shape) == 2:
