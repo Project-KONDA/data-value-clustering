@@ -1,4 +1,6 @@
 from datetime import datetime
+from tkinter import messagebox
+
 from BaseXClient import BaseXClient
 
 from data_extraction.write_file import write_data_values_to_file
@@ -30,9 +32,10 @@ def execute_xquery(my_query, database=None):
     result = []
 
     print("Executing: " + input)
-    # create session
-    session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
+    session = None
     try:
+        # create session
+        session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
         query = session.query(input)
 
         result = list()
@@ -40,8 +43,10 @@ def execute_xquery(my_query, database=None):
             result.append(item)
 
         query.close()
-    except Exception:
-        print("Fail")
+    except ConnectionRefusedError:
+        messagebox.showwarning("BaseX Client not started", "The connection to the BaseX server could not be established. \nPlease start the local BaseX server!")
+    except Exception as error:
+        messagebox.showwarning("Error during Query Execution", error)
     finally:
         if session:
             session.close()
