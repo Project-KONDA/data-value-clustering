@@ -508,7 +508,13 @@ class Hub:
             self.label_distance_config.configure(text=NONE)
         else:
             costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
-            text = str(regex_np) + "\n" + str(costmap_weights)
+            text = "["
+            for i, v in enumerate(regex_np):
+                if i > 0:
+                    text += ", "
+                text += str(v[0])
+            text += "]"
+            text += "\n" + str(costmap_weights)
             self.label_distance_config.configure(text=text)
 
     def update_frame_clustering(self):
