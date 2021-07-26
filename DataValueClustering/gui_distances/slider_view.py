@@ -86,7 +86,6 @@ class SliderInput:
     def get(self):
         if self.canceled:
             return None
-        self.update()
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.texts[i])
@@ -148,7 +147,6 @@ class SliderInput:
             self.button_ok.grid(sticky='nswe', row=self.n + 5, column=3, columnspan=2)
             self.root.update()
 
-
     def update(self):
         self.texts = list()
         self.values = list()
@@ -160,12 +158,12 @@ class SliderInput:
 
     def cancel(self):
         self.canceled = True
-        self.root.quit()
-        self.root.destroy()
+        self.quit()
 
     def quit(self):
+        self.update()
         self.root.quit()
-        self.root.withdraw()
+        self.root.destroy()
 
 
 if __name__ == "__main__":
