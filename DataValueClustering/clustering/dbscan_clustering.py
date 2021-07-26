@@ -42,7 +42,7 @@ def dbscan_eps_config(distance_matrix, min_distance, no_values):
     explanation = "The maximum distance between two samples belonging to the same cluster." \
                   "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
                   "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
-                  "the same cluster "
+                  "the same cluster."
 
     # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
