@@ -4,9 +4,13 @@ from BaseXClient import BaseXClient
 from data_extraction.write_file import write_data_values_to_file
 
 
-def write_fielddata_from_xml(xmlfile, field, filename):
+def write_fielddata_from_xml(xmlfile, field, filename, attribute=None):
 
-    query = "//*[name()=\"" + field + "\"]/text()"
+    query = "//*[name()=\"" + field + "\"]"
+    if attribute is None or attribute == "":
+        query = query + '/text()'
+    else:
+        query = query + '/@*[name()="' + attribute + '"]/data()'
     values = execute_xquery(query, xmlfile)
     print(values)
 
@@ -19,8 +23,10 @@ def write_fielddata_from_xml(xmlfile, field, filename):
         write_data_values_to_file(filename, values)
 
 
-def execute_xquery(my_query, database):
-    input = 'doc("' + database + '")' + my_query
+def execute_xquery(my_query, database=None):
+    input = my_query
+    if database is not None:
+        input = 'doc("' + database + '")' + my_query
     result = []
 
     print("Executing: " + input)
@@ -44,12 +50,12 @@ def execute_xquery(my_query, database):
 
 def get_fieldnames(database):
     query = 'distinct-values(doc("' + database + '")//*/name())'
-    return execute_xquery(query, database)
+    return execute_xquery(query, None)
 
 
 def get_attributenames(database):
     query = 'distinct-values(doc("' + database + '")//@*/name())'
-    return execute_xquery(query, database)
+    return execute_xquery(query, None)
 
 
 if __name__ == '__main__':
