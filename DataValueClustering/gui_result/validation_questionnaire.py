@@ -3,11 +3,11 @@ from enum import Enum
 import numpy as np
 
 
-class ValidationAnswer(Enum):
-    HAPPY = 1
-    UNHAPPY = 2
-    MORE = 3
-    LESS = 4
+class ValidationAnswer(str, Enum):
+    HAPPY = 'HAPPY'
+    UNHAPPY = 'UNHAPPY'
+    MORE = 'MORE'
+    LESS = 'LESS'
 
 # TODO: complete answers
 question_1_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
