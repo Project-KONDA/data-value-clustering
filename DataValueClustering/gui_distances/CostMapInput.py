@@ -20,15 +20,15 @@ class CostMapInput:
     def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None):
         if costmap is not None:
             regexes = None
+        self.map = costmap
+        self.map_n = get_n_from_map(costmap) if costmap is not None else -1
         self.empty = empty
         self.abstraction = abstraction
-        print(abstraction)
 
         self.canceled = False
-
         self.n = n if n is not None \
             else len(regexes) if regexes is not None \
-            else get_n_from_map(costmap) if costmap is not None \
+            else self.map_n if costmap is not None \
             else 7
 
         self.root = Toplevel(master)
@@ -50,7 +50,6 @@ class CostMapInput:
         self.add_rest = regexes is None and costmap is None
 
         self.case_entry = Entry(self.root)
-        self.map = costmap
 
         self.root.title('Please enter Weight Matrix')
         self.root.configure(background='white')
@@ -60,8 +59,7 @@ class CostMapInput:
         menu.add_command(label='Help', command=lambda: menu_help_cost_map(self.root))
         self.root.config(menu=menu)
 
-        Label(self.root, text='Case Change:', anchor=W, justify=LEFT, background='white'
-              ).grid(row=9, column=1, sticky=W)
+        Label(self.root, text='Case Change:', background='white').grid(sticky=W, row=9, column=1, columnspan=2)
         self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
                                 validatecommand=(self.case_entry.register(validate_input_float), '%P'))
         if not self.empty and self.map is None:
@@ -69,16 +67,16 @@ class CostMapInput:
         elif not self.empty and self.map is not None:
             self.case_entry.insert(END, str(self.map[()]))
 
-        self.case_entry.grid(row=9, column=2, columnspan=2, sticky=W)
+        self.case_entry.grid(sticky=W, row=9, column=3)
 
         for i in range(self.n):
 
-            self.label[i] = Label(self.root, width=6, bg='lightgrey', anchor=W)
-            self.label[i].grid(row=9, column=i + 4)
+            self.label[i] = Label(self.root, bg='lightgrey', anchor=W)
+            self.label[i].grid(sticky=W, row=9, column=i + 4)
 
-            self.regex[i] = Entry(self.root, width=12, bg='ivory2', validate=ALL, validatecommand=(
+            self.regex[i] = Entry(self.root, width=20, bg='ivory2', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
-            self.regex_label[i] = Label(self.root)
+            self.regex_label[i] = Label(self.root, anchor=W)
             self.regex[i].grid(row=i + 10, column=1, columnspan=2)
             self.regex_label[i].grid(sticky="nswe", row=i + 10, column=3, columnspan=1)
 
@@ -108,7 +106,7 @@ class CostMapInput:
                 self.value_entries[i, j].grid(column=i + 4, row=j + 10)
 
                 if not self.empty:
-                    if self.map is None:
+                    if self.map is None or i >= self.map_n or j >= self.map_n:
                         self.value_entries[i, j].insert(END, int(i != j))
                     else:
                         self.value_entries[i, j].insert(END, self.map[(i, j)])
@@ -118,16 +116,15 @@ class CostMapInput:
                     self.value_entries[i, j].config(state='readonly')
 
         self.button_ok = Button(self.root, text='OK', command=self.button_click_output_map,
-                                justify=RIGHT, width=5 * self.n + 15, background='snow')
-        self.button_ok.grid(row=self.n + 12, column=1, columnspan=self.n + 3)
+                                justify=RIGHT, background='snow')
+        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=3, columnspan=self.n + 3, pady=2, padx=2)
 
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
-        self.button_minus.grid(sticky=W, row=self.n + 12, column=1)
+        self.button_minus.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
 
-        self.button_plus = Button(self.root, text='+', command=self.plus,
-                                  justify=RIGHT, width=3, background='snow')
-        self.button_plus.grid(sticky=E, row=self.n + 12, column=self.n + 3)
+        self.button_plus = Button(self.root, text='+', command=self.plus, justify=RIGHT, width=3, background='snow')
+        self.button_plus.grid(sticky=W, row=self.n + 12, column=2, pady=2, padx=2)
 
         # Center Window on Screen
         self.root.update_idletasks()
@@ -158,7 +155,7 @@ class CostMapInput:
                 other_chars = text.replace(chars, "")
         if text != "":
             label_text += "others" + separator
-        k = len(label_text)-len(separator)
+        k = len(label_text) - len(separator)
         label_text = label_text[0:k]
         return label_text
 
@@ -221,13 +218,13 @@ class CostMapInput:
         self.regex_label = regex_label
 
         self.label[self.n] = Label(self.root, width=6, bg='lightgrey', anchor=W)
-        self.label[self.n].grid(row=9, column=self.n + 4)
+        self.label[self.n].grid(sticky=W, row=9, column=self.n + 4)
 
-        self.regex[self.n] = Entry(self.root, width=12, bg='ivory2', validate=ALL)
+        self.regex[self.n] = Entry(self.root, width=20, bg='ivory2', validate=ALL)
         self.regex[self.n]['validatecommand'] = (
             self.regex[self.n].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')  # , '%d')
         self.regex[self.n].grid(row=self.n + 10, column=1, columnspan=2)
-        self.regex_label[self.n] = Label(self.root)
+        self.regex_label[self.n] = Label(self.root, anchor=W)
         self.regex_label[self.n].grid(sticky="nswe", row=self.n + 10, column=3, columnspan=1)
 
         # TODO:
@@ -248,12 +245,8 @@ class CostMapInput:
             self.value_entries[j, self.n].grid(column=j + 4, row=self.n + 10)
 
             if not self.empty:
-                if self.map is None:
-                    self.value_entries[self.n, j].insert(END, int(self.n != j))
-                    self.value_entries[j, self.n].insert(END, int(self.n != j))
-                else:
-                    self.value_entries[self.n, j].insert(END, self.map[(self.n, j)])
-
+                self.value_entries[self.n, j].insert(END, int(self.n != j))
+                self.value_entries[j, self.n].insert(END, int(self.n != j))
         self.value_entries[self.n, self.n] = Entry(self.root, validate='key', width=7, justify=RIGHT, bg='alice blue')
         self.value_entries[self.n, self.n].config(bg='floral white')
         self.value_entries[self.n, self.n]['validatecommand'] = (
@@ -264,16 +257,16 @@ class CostMapInput:
             self.value_entries[self.n, self.n].insert(END, int(i != j))
 
         self.n = self.n + 1
-        self.button_ok.grid(row=self.n + 12, column=1, columnspan=self.n + 3)
-        self.button_minus.grid(sticky=W, row=self.n + 12, column=1)
-        self.button_plus.grid(sticky=E, row=self.n + 12, column=self.n + 3)
+        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=3, columnspan=self.n + 3, pady=2, padx=2)
+        self.button_minus.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
+        self.button_plus.grid(sticky=W, row=self.n + 12, column=2, pady=2, padx=2)
 
     def minus(self):
         if self.n > 2:
             self.n = self.n - 1
-            self.button_ok.grid(row=self.n + 12, column=1, columnspan=self.n + 3)
-            self.button_minus.grid(sticky=W, row=self.n + 12, column=1)
-            self.button_plus.grid(sticky=E, row=self.n + 12, column=self.n + 3)
+            self.button_ok.grid(sticky="nswe", row=self.n + 12, column=3, columnspan=self.n + 3, pady=2, padx=2)
+            self.button_minus.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
+            self.button_plus.grid(sticky=W, row=self.n + 12, column=2, pady=2, padx=2)
 
             regex = np.full(self.n, Entry(self.root))
             regex_label = np.full(self.n, Label(self.root))
@@ -313,7 +306,7 @@ class CostMapInput:
         self.root.update()
         self.unbind_all()
         self.root.quit()
-        self.root.withdraw()
+        self.root.destroy()
 
     def get(self):
         if self.canceled:
