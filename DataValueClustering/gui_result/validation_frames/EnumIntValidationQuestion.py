@@ -48,13 +48,14 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
         self.validate_entry(var)
 
     def get_result(self):
-        return self.answers[self.choice.get(), 0], self.get_cluster_list(self.entries[self.choice.get()])
+        return self.answers[self.choice.get(), 0], self.get_cluster_list(self.vars[self.choice.get()])
 
-    def get_cluster_list(self, entry):
-        if entry is None:
+    def get_cluster_list(self, var):
+        value = var.get()
+        if value is None:
             return None
         else:
-            split = entry.split(",")
+            split = value.split(",")
             int_list = list()
             for val in split:
                 try:
