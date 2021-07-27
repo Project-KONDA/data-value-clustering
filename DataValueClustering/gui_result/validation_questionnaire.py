@@ -2,6 +2,8 @@ from enum import Enum
 
 import numpy as np
 
+from gui_cluster_selection.algorithm_selection import HIERARCHICAL, OPTICS, DBSCAN
+
 
 class ValidationAnswer(str, Enum):
     HAPPY = 'HAPPY'
@@ -24,3 +26,16 @@ question_3_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"
 question_4_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip", False],
                                [ValidationAnswer.UNHAPPY, "I'm unhappy, the following clusters are too heterogeneous:",
                                 "unhappy tip", True]], dtype=object)
+
+
+def get_suggested_algorithms(validation_answers):
+    suggested_algorithms = list()
+    if validation_answers[1] is not None and validation_answers[1] == ValidationAnswer.MORE:
+        suggested_algorithms.append(DBSCAN)
+        suggested_algorithms.append(OPTICS)
+    elif validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
+        suggested_algorithms.append(HIERARCHICAL)
+        suggested_algorithms.append(OPTICS)
+    return suggested_algorithms
+
+
