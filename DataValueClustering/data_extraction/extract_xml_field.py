@@ -14,7 +14,7 @@ def write_fielddata_from_xml(xmlfile, field, filename, attribute=None):
     else:
         query = query + '/@*[name()="' + attribute + '"]/data()'
     values = execute_xquery(query, xmlfile)
-    print(values)
+    print(query, values)
 
     if len(values) > 0:
         dbname = xmlfile.split('\\')
@@ -23,6 +23,7 @@ def write_fielddata_from_xml(xmlfile, field, filename, attribute=None):
         # filename = field + "_" + dbname + "_" + datetime.now().strftime("%Y%m%d-%H%M%S")+ ".txt"
         # filename = "../data/" + filename
         write_data_values_to_file(filename, values)
+    return values
 
 
 def execute_xquery(my_query, database=None):

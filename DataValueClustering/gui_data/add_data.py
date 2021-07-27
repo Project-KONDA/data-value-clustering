@@ -90,11 +90,14 @@ class AddData:
         self.entry_path.insert(0, newpath)
         self.entry_path.configure(state="readonly")
 
-        self.combobox_field.configure(state="normal")
         self.fieldnames = get_fieldnames(newpath)
-        self.combobox_field.configure(values=self.fieldnames)
-
-        self.check_attribute.configure(state="normal")
+        if self.fieldnames:
+            self.combobox_field.configure(state="normal")
+            self.combobox_field.configure(values=self.fieldnames)
+            self.check_attribute.configure(state="normal")
+        else:
+            self.combobox_field.configure(state="disabled")
+            self.check_attribute.configure(state="disabled")
 
     def combobox_validation(self, values, selection, combobox):
         newlist = list()
@@ -115,19 +118,31 @@ class AddData:
             self.combobox_attribute.configure(state="disabled")
 
     def execute(self):
+        filename = self.entry_name.get() + ".txt"
         xmlfile = self.entry_path.get()
         field = self.combobox_field.get()
-        path = self.entry_name.get() + ".txt"
-        if xmlfile != "" and field != "" and path != ".txt":
-            if self.path != "":
-                if self.path.endswith("/"):
-                    path = self.path + path
-                else:
-                    path = self.path + "/" + path
-            attribute = None
-            if self.state_attribute.get() == 1:
-                attribute = self.combobox_attribute.get()
-            write_fielddata_from_xml(xmlfile, field, path, attribute)
+
+        if filename == ".txt":
+            messagebox.showwarning("Wrong Configuration", "Please enter an identifiable name for your data.")
+            return
+        if xmlfile == "" or not self.fieldnames:
+            messagebox.showwarning("Wrong Configuration", "The XML file is not valid.")
+            return
+        if field not in self.fieldnames:
+            messagebox.showwarning("Wrong Configuration", "The input for field name is not valid.")
+            return
+        if self.state_attribute.get() == 1 and self.combobox_attribute.get() not in self.attributenames:
+            messagebox.showwarning("Wrong Configuration", "The input for attribute name is not valid.")
+            return
+
+        if self.path != "":
+            filename = self.path + "/" + filename
+
+        attribute = None if self.state_attribute.get() == 0 else self.combobox_attribute.get()
+        values = write_fielddata_from_xml(xmlfile, field, filename, attribute)
+        if not values:
+            messagebox.showwarning("No data", "Your configuration did result in no results.")
+        else:
             self.close()
 
     def close(self):
