@@ -9,13 +9,13 @@ from util.question_result_array_util import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
 
-def cluster_suggest(master, answers=None, clustering_algorithm=None):
-    answers, cluster_f, cluster_algo = input_questionnaire_clustering(master, clustering_question_array, answers, clustering_algorithm)
+def cluster_suggest(master, answers=None, clustering_algorithm=None, suggested_algorithms=None):
+    answers, cluster_f, cluster_algo = input_questionnaire_clustering(master, clustering_question_array, answers, clustering_algorithm, suggested_algorithms)
     return answers, cluster_f, cluster_algo
 
 
-def input_questionnaire_clustering(master, config, predefined_answers=None, predefined_algorithm=None):
-    questionnaire = ClusteringQuestionnaireResultInput(master, config, predefined_answers, predefined_algorithm)
+def input_questionnaire_clustering(master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
+    questionnaire = ClusteringQuestionnaireResultInput(master, config, predefined_answers, predefined_algorithm, suggested_algorithms)
     questionnaire.run()
     answers, cluster_f, cluster_algo = questionnaire.get()
     return answers, cluster_f, cluster_algo
@@ -24,9 +24,10 @@ def input_questionnaire_clustering(master, config, predefined_answers=None, pred
 class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     """Binary questionnaire view to support the selection of the clustering algorithm"""
 
-    def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None):
+    def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
         super().__init__(master, "Clustering Configuration", config, predefined_answers)
+        self.suggested_algorithms = suggested_algorithms
         self.algorithms = np.array(algorithm_array, dtype=object)
         self.choice = IntVar()
         if predefined_algorithm is None:
@@ -42,6 +43,8 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
             self.radio_buttons[i] = Radiobutton(self.scrollable_result_frame, text=algorithm[2], padx=20, variable=self.choice,
                                        value=i, justify='left')
             self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
+            if algorithm[2] in self.suggested_algorithms:
+                self.radio_buttons[i].configure(bg='SeaGreen1')
 
     def get(self):
         if self.canceled:

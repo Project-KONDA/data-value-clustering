@@ -16,6 +16,7 @@ from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_result.ResultView import result_view
+from gui_result.validation_questionnaire import get_suggested_algorithms
 
 CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
 DISTANCE_NOT_CONFIGURED = "Distance not configured"
@@ -314,7 +315,7 @@ class Hub:
         self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm)
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm, get_suggested_algorithms(self.get_validation_answers()))
         if clustering_algorithm is None:
             self.update()
             self.root.update()
@@ -334,6 +335,9 @@ class Hub:
 
         self.update()
         self.root.update()
+
+    def get_validation_answers(self):
+        return self.configuration.get_validation_answer_1(), self.configuration.get_validation_answer_2(), self.configuration.get_validation_answer_3(), self.configuration.get_validation_answer_4(),
 
     def execute_clustering(self):
         self.label_clustering_progress.configure(text="Clustering in progress ...", fg='RoyalBlue1')
