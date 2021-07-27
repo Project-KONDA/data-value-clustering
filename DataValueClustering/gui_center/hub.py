@@ -52,6 +52,7 @@ class Hub:
         self.menu.add_command(label="Save As ..", command=self.menu_saveas)
         self.menu.add_command(label="Load", command=self.menu_load)
         self.root.config(menu=self.menu)
+        self.root.resizable(False, False)
 
         "buttons"
         self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data,
@@ -254,13 +255,15 @@ class Hub:
         self.saved = False
         if distance_choice == DistanceView.SLIDER:
             blob_configuration = self.configuration.create_blob_configuration()
-            cost_map = slider_view(self.root, abstraction_chars_and_names=blob_configuration[1:,0:2], costmap=previous_cost_map)
+            cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:2], costmap=previous_cost_map)
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if previous_blob_configuration is None:
-                if previous_cost_map is None or messagebox.askokcancel("Potential Information Loss", "You previously configured the distance "
-                                                                "calculation via a different method. This configuration will be "
-                                                                "lost upon opening the Blob Configuration View. Do you want to proceed?", icon=WARNING):
+                if previous_cost_map is None or messagebox.askokcancel("Potential Information Loss",
+                                                                       "You previously configured the distance "
+                                                                       "calculation via a different method. This configuration will be "
+                                                                       "lost upon opening the Blob Configuration View. Do you want to proceed?",
+                                                                       icon=WARNING):
                     blob_configuration = self.configuration.create_blob_configuration()
                 else:
                     self.configure_distance()
@@ -270,9 +273,12 @@ class Hub:
         elif distance_choice == DistanceView.MATRIX:
             if previous_cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
-                cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:,1]))
+                cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:, 1]),
+                                         abstraction=blob_configuration[1:, 0:2])
             else:
-                cost_map = input_costmap(self.root, costmap=previous_cost_map)
+                blob_configuration = self.configuration.create_blob_configuration()
+                cost_map = input_costmap(self.root, costmap=previous_cost_map,
+                                         abstraction=blob_configuration[1:, 0:2])
             blob_configuration = None
 
         if cost_map is None or previous_cost_map == cost_map:
@@ -298,7 +304,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_clustering(self):
-        self.label_clustering_progress.configure(text="Clustering configuration in progress ...", fg='magenta2' )
+        self.label_clustering_progress.configure(text="Clustering configuration in progress ...", fg='magenta2')
         self.root.update()
         self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
@@ -361,7 +367,11 @@ class Hub:
         load_path = getJsonLoadPath(self.configuration.json_save_path)
         if not load_path:
             self.update()
-            return
+        else:
+            self.load(load_path)
+
+    def load(self, load_path):
+        self.disable()
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.root.title(self.configuration.json_save_path)
@@ -492,7 +502,7 @@ class Hub:
             abbreviations = np.array(abstraction_question_array, dtype=object)[:, 2]
             text = ""
             for i, abb in enumerate(abbreviations):
-                if i>0:
+                if i > 0:
                     text += ", "
                     if i % 3 == 0:
                         text += "\n"
@@ -526,13 +536,12 @@ class Hub:
             else:
                 text += "\nParameters: "
                 for i, key in enumerate(clustering_parameters.keys()):
-                    if i>0:
+                    if i > 0:
                         text += ", "
                         if i % 3 == 0:
                             text += "\n\t"
                     text += key + "=" + str(clustering_parameters[key])
                 self.label_clustering_config.configure(text=text)
-
 
 
 if __name__ == "__main__":
