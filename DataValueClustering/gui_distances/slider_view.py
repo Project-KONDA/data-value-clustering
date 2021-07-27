@@ -6,24 +6,24 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
     example_costmap, groups_to_enumerations
 
 
-def slider_view(master, n=None, costmap=None, abstraction_chars_and_names=None, values=None, fixed=False):
-    view = SliderInput(master, n, costmap, abstraction_chars_and_names, values, fixed)
+def slider_view(master, n=None, costmap=None, abstraction=None, values=None, fixed=False):
+    view = SliderInput(master, n, costmap, abstraction, values, fixed)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction_chars_and_names=None, value=None, fixed=False):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, value=None, fixed=False):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
-        assert (n or costmap or abstraction_chars_and_names is not None)
+        assert (n or costmap or abstraction is not None)
 
-        self.n = n if n or costmap else len(abstraction_chars_and_names[:,0])
-        self.texts = abstraction_chars_and_names[:,1].tolist()
+        self.master = master
+        self.n = n if n or costmap else len(abstraction[:, 0])
+        self.abstraction = abstraction
+        self.texts = abstraction[:, 1].tolist()
         self.values = value
         self.fixed = fixed
-        self.master = master
 
-        self.abstraction_chars_and_names = abstraction_chars_and_names
 
         self.canceled = False
 
@@ -41,6 +41,7 @@ class SliderInput:
         self.root = Toplevel(self.master)
         self.root.title("Slider Input")
         self.root.config(bg="white")
+        self.root.resizable(False, True)
         self.root.focus_force()
         self.root.grab_set()
 
@@ -95,9 +96,9 @@ class SliderInput:
         label_text = ""
         separator = " & "
         other_chars = entry_value.get()
-        for i, chars in enumerate(self.abstraction_chars_and_names[:, 1]):
+        for i, chars in enumerate(self.abstraction[:, 1]):
             if chars in entry_value.get():
-                label_text += self.abstraction_chars_and_names[i, 0] + separator
+                label_text += self.abstraction[i, 0] + separator
                 other_chars = other_chars.replace(chars, "")
         if other_chars != "":
             label_text += "others" + separator
