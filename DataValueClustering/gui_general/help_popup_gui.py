@@ -2,7 +2,7 @@
 from tkinter import *
 
 
-def menu_help_cost_map():
+def menu_help_cost_map(master):
     """help popup for matrix view"""
     text = [
         "This view is designed to give full control over the configuration of distances between",
@@ -22,10 +22,10 @@ def menu_help_cost_map():
         "Because the distance between two text values shall be symmetrical, the matrix is",
         "mirrored on the diagonal. The entry fields above the diagonal are read only."
     ]
-    menu_information_display("Costmatrix Helper", text)
+    menu_information_display(master, "Costmatrix Helper", text)
 
 
-def menu_help_blob_input():
+def menu_help_blob_input(master):
     """help popup for Blob view"""
     text = [
         "This view is used to simplify the configuration of distances between text values.",
@@ -56,10 +56,10 @@ def menu_help_blob_input():
         "The size of not fixed blobs can be changed via the scroll wheel while the mouse is ",
         "over it. The default size can be restored by pressing N on mouse over."
     ]
-    menu_information_display("Distance Specification Helper", text)
+    menu_information_display(master, "Distance Specification Helper", text)
 
 
-def menu_information_display(title, content):
+def menu_information_display(master, title, content):
     """
     Show window with text
     as help feature for context menu
@@ -72,10 +72,11 @@ def menu_information_display(title, content):
     :return:
     """
 
-    root = Tk()
+    root = Toplevel(master)
     # root.geometry("500x200")
     root.title("Help")
     root.configure(bg='white')
+    root.resizable(False, False)
     Label(root, text=title, font='Arial 14 bold underline',
           anchor=W, justify=LEFT, fg="green", background='white'
           ).grid(row=1, column=1, sticky=W)
