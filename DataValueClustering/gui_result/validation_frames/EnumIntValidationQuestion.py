@@ -51,16 +51,15 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
         return self.answers[self.choice.get(), 0], self.get_cluster_list(self.vars[self.choice.get()])
 
     def get_cluster_list(self, var):
-        value = var.get()
-        if value is None:
+        if var is None:
             return None
-        else:
-            split = value.split(",")
-            int_list = list()
-            for val in split:
-                try:
-                    int_val = int(val)
-                    int_list.append(int_val)
-                except ValueError:
-                    pass
-            return int_list
+        value = var.get()
+        split = value.split(",")
+        int_list = list()
+        for val in split:
+            try:
+                int_val = int(val)
+                int_list.append(int_val)
+            except ValueError:
+                pass
+        return int_list
