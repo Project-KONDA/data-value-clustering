@@ -57,7 +57,7 @@ class CostMapInput:
         # self.root.resizable(False, False)
 
         menu = Menu(self.root)
-        menu.add_command(label='Help', command=menu_help_cost_map)
+        menu.add_command(label='Help', command=lambda: menu_help_cost_map(self.root))
         self.root.config(menu=menu)
 
         Label(self.root, text='Case Change:', anchor=W, justify=LEFT, background='white'

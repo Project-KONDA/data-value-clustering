@@ -283,11 +283,8 @@ class Hub:
 
         if cost_map is None or previous_cost_map == cost_map:
             self.configuration.blob_configuration = previous_blob_configuration
-            self.update()
-            self.root.update()
-            return
-
-        self.configuration.set_distance_configuration(cost_map, blob_configuration)
+        else:
+            self.configuration.set_distance_configuration(cost_map, blob_configuration)
 
         self.update()
         self.root.update()

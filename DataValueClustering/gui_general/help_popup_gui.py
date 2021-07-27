@@ -92,6 +92,7 @@ def menu_information_display(master, title, content):
                   ).grid(row=i + 2, column=1, sticky=W)
 
     def button_quit():
+        root.quit()
         root.destroy()
 
     Button(root, text='OK', command=button_quit,
@@ -100,7 +101,7 @@ def menu_information_display(master, title, content):
 
     root.update()
     # root.geometry("500x" + str(root.winfo_height() + 10))
-
+    root.protocol("WM_DELETE_WINDOW", button_quit)
     root.mainloop()
 
 
