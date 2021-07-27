@@ -6,21 +6,23 @@ from gui_distances.costmapinput_helper import validate_input_float, print_cost_m
     preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
 
 
-def input_costmap(root, size=None, empty=False, regexes=None, costmap=None):
+def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None):
     if size is not None:
         size += 2
     assert (size is None or size in range(2, 21))
-    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty)
+    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction)
     return myMap.get()
 
 
 class CostMapInput:
     """ GUI for direct input of the weight matrix for configuring the weighted levenstein distance function """
 
-    def __init__(self, master, n=None, regexes=None, costmap=None, empty=False):
+    def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None):
         if costmap is not None:
             regexes = None
         self.empty = empty
+        self.abstraction = abstraction
+        print(abstraction)
 
         self.canceled = False
 
@@ -35,11 +37,11 @@ class CostMapInput:
 
         self.root.bind_all("<Return>", self.button_click_output_map)
 
-        self.regex = np.full(self.n, None)
-        self.label = np.full(self.n, None)
+        self.regex = np.full(self.n, Entry(self.root))
+        self.regex_label = np.full(self.n, Label(self.root))
+        self.label = np.full(self.n, Label(self.root))
         self.value_entries = np.full((self.n, self.n), Entry(self.root))
 
-        self.label_text = np.full(self.n, "", dtype=object)
         self.predefined_labels = \
             preprocess_regexes(regexes) if regexes is not None \
                 else preprocess_regexes(get_regexes_from_map(costmap)) if costmap is not None \
@@ -52,37 +54,33 @@ class CostMapInput:
 
         self.root.title('Please enter Weight Matrix')
         self.root.configure(background='white')
-        self.root.resizable(False, False)
-        # width = 220 + 48 * self.n  # 300 #270 # 240
-        # # width = max(470, 220 + 48 * self.n)  # 300 #270 # 240
-        # height = 55 + 19 * self.n  # 130 # 110 # 90
-        # width_text = f"{width}x{height}"
-        # self.root.geometry(width_text)
+        # self.root.resizable(False, False)
 
         menu = Menu(self.root)
         menu.add_command(label='Help', command=menu_help_cost_map)
         self.root.config(menu=menu)
 
         Label(self.root, text='Case Change:', anchor=W, justify=LEFT, background='white'
-              ).grid(row=9, column=2, sticky=W)
-        self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT)
+              ).grid(row=9, column=1, sticky=W)
+        self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
+                                validatecommand=(self.case_entry.register(validate_input_float), '%P'))
         if not self.empty and self.map is None:
             self.case_entry.insert(END, '.5')
         elif not self.empty and self.map is not None:
             self.case_entry.insert(END, str(self.map[()]))
-        self.case_entry['validatecommand'] = (self.case_entry.register(validate_input_float), '%P')  # , '%d')
 
-        self.case_entry.grid(row=9, column=3, columnspan=2, sticky=W)
+        self.case_entry.grid(row=9, column=2, columnspan=2, sticky=W)
 
         for i in range(self.n):
 
-            self.label[i] = Label(self.root, textvariable=self.label_text[i],
-                                  width=6, bg='lightgrey', anchor=W)
+            self.label[i] = Label(self.root, width=6, bg='lightgrey', anchor=W)
             self.label[i].grid(row=9, column=i + 4)
 
-            self.regex[i] = Entry(self.root, width=35, bg='ivory2', validate=ALL)
-            self.regex[i]['validatecommand'] = (
-                self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P')  # , '%d')
+            self.regex[i] = Entry(self.root, width=12, bg='ivory2', validate=ALL, validatecommand=(
+                self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
+            self.regex_label[i] = Label(self.root)
+            self.regex[i].grid(row=i + 10, column=1, columnspan=2)
+            self.regex_label[i].grid(row=i + 10, column=3, columnspan=1)
 
             if i == 0:
                 self.regex[i].insert(END, 'add')
@@ -97,10 +95,7 @@ class CostMapInput:
             else:
                 if not self.empty and i < len(self.predefined_labels):
                     self.regex[i].insert(END, self.predefined_labels[i])
-                    self.label_text[i] = self.predefined_labels[i]
                     self.label[i].configure(text=self.predefined_labels[i])
-
-            self.regex[i].grid(row=i + 10, column=2, columnspan=2)
 
             for j in range(self.n):
                 if j == 0 and i == 0:
@@ -124,11 +119,11 @@ class CostMapInput:
 
         self.button_ok = Button(self.root, text='OK', command=self.button_click_output_map,
                                 justify=RIGHT, width=5 * self.n + 15, background='snow')
-        self.button_ok.grid(row=self.n + 12, column=2, columnspan=self.n + 2)
+        self.button_ok.grid(row=self.n + 12, column=1, columnspan=self.n + 3)
 
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
-        self.button_minus.grid(sticky=W, row=self.n + 12, column=2)
+        self.button_minus.grid(sticky=W, row=self.n + 12, column=1)
 
         self.button_plus = Button(self.root, text='+', command=self.plus,
                                   justify=RIGHT, width=3, background='snow')
@@ -145,11 +140,27 @@ class CostMapInput:
         self.root.mainloop()
 
     def copy_to_column(self, i, text):
-        if type(self.regex[i]) is Entry and type(self.label[i]) is Label:
-            # text = self.regex[i].get()
-            self.label_text[i] = text
+        if type(self.regex[i]) is Entry and \
+                type(self.label[i]) is Label and \
+                type(self.regex_label[i] is Label):
             self.label[i].configure(text=text)
+            self.regex_label[i].configure(text=self.text_map(text))
         return True
+
+    def text_map(self, text):
+        if self.abstraction is None:
+            return ""
+        label_text = ""
+        separator = " & "
+        for i, chars in enumerate(self.abstraction[:, 1]):
+            if chars in text:
+                label_text += self.abstraction[i, 0] + separator
+                other_chars = text.replace(chars, "")
+        if text != "":
+            label_text += "others" + separator
+        k = len(label_text)-len(separator)
+        label_text = label_text[0:k]
+        return label_text
 
     def validate_input_float_copy(self, text, i2, j2):
         if not validate_input_float(text):
@@ -174,8 +185,7 @@ class CostMapInput:
         # single character regex
         self.map[0] = ''
         for i in range(1, self.n):
-            self.map[i] = groups_to_enumerations(self.label_text[i])
-        # self.map[self.n - 1] = ''
+            self.map[i] = groups_to_enumerations(self.label[i].cget("text"))
 
         # weights
         for i in range(self.n):
@@ -194,28 +204,34 @@ class CostMapInput:
     def plus(self):
         regex = np.full(self.n + 1, None)
         label = np.full(self.n + 1, None)
-        value_entries = np.full((self.n + 1, self.n + 1), Entry(self.root))
+        regex_label = np.full(self.n + 1, None)
         label_text = np.full(self.n + 1, "", dtype=object)
+        value_entries = np.full((self.n + 1, self.n + 1), Entry(self.root))
 
         for i in range(self.n):
             regex[i] = self.regex[i]
             label[i] = self.label[i]
-            label_text[i] = self.label_text[i]
+            regex_label[i] = self.regex_label[i]
             for j in range(self.n):
                 value_entries[i, j] = self.value_entries[i, j]
 
         self.regex = regex
         self.label = label
         self.value_entries = value_entries
-        self.label_text = label_text
+        self.regex_label = regex_label
 
-        self.label[self.n] = Label(self.root, textvariable=self.label_text[self.n], width=6, bg='lightgrey', anchor=W)
+        self.label[self.n] = Label(self.root, width=6, bg='lightgrey', anchor=W)
         self.label[self.n].grid(row=9, column=self.n + 4)
 
-        self.regex[self.n] = Entry(self.root, width=35, bg='ivory2', validate=ALL)
+        self.regex[self.n] = Entry(self.root, width=12, bg='ivory2', validate=ALL)
         self.regex[self.n]['validatecommand'] = (
-        self.regex[self.n].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')  # , '%d')
-        self.regex[self.n].grid(row=self.n + 10, column=2, columnspan=2)
+            self.regex[self.n].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')  # , '%d')
+        self.regex[self.n].grid(row=self.n + 10, column=1, columnspan=2)
+        self.regex_label[self.n] = Label(self.root)
+        self.regex_label[self.n].grid(row=self.n + 10, column=3, columnspan=1)
+
+        # TODO:
+        # self.regex_label[self.n]
 
         for j in range(self.n):
             self.value_entries[self.n, j] = Entry(self.root, validate='key', width=7, justify=RIGHT, bg='alice blue')
@@ -248,19 +264,20 @@ class CostMapInput:
             self.value_entries[self.n, self.n].insert(END, int(i != j))
 
         self.n = self.n + 1
-        self.button_ok.grid(row=self.n + 12, column=2, columnspan=self.n + 2)
-        self.button_minus.grid(sticky=W, row=self.n + 12, column=2)
+        self.button_ok.grid(row=self.n + 12, column=1, columnspan=self.n + 3)
+        self.button_minus.grid(sticky=W, row=self.n + 12, column=1)
         self.button_plus.grid(sticky=E, row=self.n + 12, column=self.n + 3)
 
     def minus(self):
         if self.n > 2:
             self.n = self.n - 1
-            self.button_ok.grid(row=self.n + 12, column=2, columnspan=self.n + 2)
-            self.button_minus.grid(sticky=W, row=self.n + 12, column=2)
+            self.button_ok.grid(row=self.n + 12, column=1, columnspan=self.n + 3)
+            self.button_minus.grid(sticky=W, row=self.n + 12, column=1)
             self.button_plus.grid(sticky=E, row=self.n + 12, column=self.n + 3)
 
-            regex = np.full(self.n, None)
-            label = np.full(self.n, None)
+            regex = np.full(self.n, Entry(self.root))
+            regex_label = np.full(self.n, Label(self.root))
+            label = np.full(self.n, Label(self.root))
             value_entries = np.full((self.n, self.n), Entry(self.root))
 
             self.regex[self.n].destroy()
@@ -269,15 +286,21 @@ class CostMapInput:
                 self.value_entries[i, self.n].destroy()
                 self.value_entries[self.n, i].destroy()
             self.value_entries[self.n, self.n].destroy()
+            self.regex_label[self.n].destroy()
 
             for i in range(self.n):
                 regex[i] = self.regex[i]
                 label[i] = self.label[i]
+                regex_label[i] = self.regex_label[i]
                 for j in range(self.n):
                     value_entries[i, j] = self.value_entries[i, j]
             self.regex = regex
             self.label = label
             self.value_entries = value_entries
+            self.regex_label = regex_label
+
+    def update_regex_label(self):
+        pass
 
     def unbind_all(self):
         self.root.unbind_all("<Return>")
@@ -301,7 +324,7 @@ class CostMapInput:
 
 if __name__ == '__main__':
     test_regexes = ["^$", "^a$", "^b$", "^c$", "^d$"]
-    test_regexes = ["", "0-9", "a-zA-Z$", ""]
+    test_regexes = ["", "0-9", "a-z", "A-Z", "$"]
     test_costmap = example_costmap()
 
     # print_cost_map(input_costmap(costmap=test_costmap))
