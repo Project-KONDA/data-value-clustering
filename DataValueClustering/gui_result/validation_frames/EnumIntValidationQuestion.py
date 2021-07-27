@@ -55,7 +55,11 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
             return None
         else:
             split = entry.split(",")
+            int_list = list()
             for val in split:
-                if not type(val) == int:
-                    return None
-        return split
+                try:
+                    int_val = int(val)
+                    int_list.append(int_val)
+                except ValueError:
+                    pass
+            return int_list
