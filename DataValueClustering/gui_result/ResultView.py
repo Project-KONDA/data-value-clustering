@@ -1,19 +1,27 @@
 import os
 import subprocess
+from enum import Enum
 from tkinter import Tk, StringVar, Label, font, Frame, Button, Toplevel
 import numpy as np
 
 from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration
 from gui_result.result_gui import show_mds_scatter_plot_integrated
+from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
+from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
 
+
+class ValidationAnswer(Enum):
+    HAPPY = 1
+    UNHAPPY = 2
+    MORE = 3
+    LESS = 4
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
 def result_view(master, configuration):
     res = ResultView(master, configuration)
     return res.get()
-
 
 class ResultView:
 
@@ -41,7 +49,7 @@ class ResultView:
         # self.clusters_abstracted = clusters_abstracted
 
         # summary:
-        self.summary_frame = Frame(self.root, padx=10, bg="white", pady=10)
+        self.summary_frame = Frame(self.root, bg="white", padx=10, pady=10)
         self.summary_frame.grid(row=1, column=0, sticky='nwse', columnspan=1)
 
         # caption left side:
@@ -71,7 +79,7 @@ class ResultView:
 
 
         # questionnaire:
-        self.questionnaire_frame = Frame(self.root, bg="white")
+        self.questionnaire_frame = Frame(self.root, bg="white", padx=10, pady=10)
         self.questionnaire_frame.grid(row=1, column=1, sticky='nwse')
 
         # caption right side:
@@ -80,14 +88,40 @@ class ResultView:
         self.questionnaire_caption_label = Label(self.questionnaire_frame, anchor='w', textvariable=self.questionnaire_caption, text="test",
                                           bg='white',
                                           font=('TkDefaultFont', 14, 'bold'), padx=5)
-        self.questionnaire_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
+        self.questionnaire_caption_label.grid(row=0, column=0, sticky='we', columnspan=2)
 
         self.questions_frame = Frame(self.questionnaire_frame, bg="white")
-        self.questions_frame.grid(row=1, column=0, sticky='nw')
+        self.questions_frame.grid(row=1, column=0, sticky='nsew')
 
-        # ...
-        # cluster_no: more/less/ok
-        # ...
+        a1 = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
+                        [ValidationAnswer.UNHAPPY,"I’m not happy, a lot of values that seem pretty similar are in "
+                                                  "different clusters and a lot of values that seem pretty "
+                                                  "dissimilar are in the same cluster", "unhappy tip"]], dtype=object)
+        q1 = create_enum_validation_question(self.questions_frame, "How do you feel about the meaningfulness of the "
+                                                                     "clustering concerning the grouping of similar "
+                                                                     "values in the same cluster?",
+                                               "explanation", a1)
+        q1.frame.grid(row=0, column=0, sticky='nsew')
+
+        a2 = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
+                       [ValidationAnswer.MORE, "More noise please", "more tip"],
+                       [ValidationAnswer.LESS, "Less noise please", "less tip"]], dtype=object)
+        q2 = create_enum_validation_question(self.questions_frame, "How do you feel about the number of noisy values?", "explanation", a2)
+        q2.frame.grid(row=1, column=0, sticky='nsew')
+
+        a3 = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
+                       [ValidationAnswer.MORE, "More clusters please", "more tip"],
+                       [ValidationAnswer.LESS, "Less clusters please", "less tip"]], dtype=object)
+        q3 = create_enum_validation_question(self.questions_frame, "How do you feel about the overall level of detail of the clustering?", "explanation", a3)
+        q3.frame.grid(row=2, column=0, sticky='nsew')
+
+        a4 = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip", False],
+                        [ValidationAnswer.UNHAPPY, "I'm unhappy, the following clusters are too heterogeneous:", "unhappy tip", True]], dtype=object)
+        q4 = create_enum_int_validation_question(self.questions_frame, "Do you consider individual clusters too "
+                                                                         "heterogeneous (i.e., level of detail too "
+                                                                         "low) while the others are fine?",
+                                                   "explanation", a4)
+        q4.frame.grid(row=3, column=0, sticky='nsew')
 
         self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
         self.suggestion_frame.grid(row=1, column=1, sticky='nw')
