@@ -8,10 +8,7 @@ from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
 from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
-    question_4_answers
-
-
-
+    question_4_answers, ValidationAnswer
 
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
@@ -163,14 +160,25 @@ class ResultView:
         return s
 
     def close(self):
-        self.root.quit()
-        self.root.destroy()
+        if self.answers_valid():
+            self.root.quit()
+            self.root.destroy()
+        else:
+            self.canceled = False
+
+    def answers_valid(self):
+        q4_result = self.q4.get_result()
+        if q4_result[0] == ValidationAnswer.UNHAPPY:
+            return q4_result[1] is not None and len(q4_result[1]) > 0
+        return True
 
     def cancel(self):
         self.canceled = True
         self.close()
 
     def get(self):
+        if self.canceled:
+            return
         self.configuration.set_validation_answer_1(self.q1.get_result())
         self.configuration.set_validation_answer_2(self.q2.get_result())
         self.configuration.set_validation_answer_3(self.q3.get_result())
