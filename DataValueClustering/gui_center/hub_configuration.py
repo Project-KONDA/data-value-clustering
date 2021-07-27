@@ -19,7 +19,7 @@ from gui_center.cluster_representation import fancy_cluster_representation
 from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_distances.blobinput_helper import get_blob_configuration
 from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
-    question_4_answers
+    question_4_answers, ValidationAnswer
 from validation.intra_inter_cluster_distance import max_intra_cluster_distances, \
     average_intra_cluster_distances_per_cluster_per_value
 
@@ -330,19 +330,19 @@ class HubConfiguration():
             self.reset_clustering()
 
     def set_validation_answer_1(self, answer):
-        assert (answer in question_1_answers[:, 0])
+        assert (answer in question_1_answers[:, 0].tolist())
         self.validation_answer_1 = answer
 
     def set_validation_answer_2(self, answer):
-        assert (answer in question_2_answers[:, 0])
+        assert (answer in question_2_answers[:, 0].tolist())
         self.validation_answer_2 = answer
 
     def set_validation_answer_3(self, answer):
-        assert (answer in question_3_answers[:, 0])
+        assert (answer in question_3_answers[:, 0].tolist())
         self.validation_answer_3 = answer
 
     def set_validation_answer_4(self, answer):
-        assert (answer[0] in question_4_answers[:, 0])
+        assert (answer[0] in question_4_answers[:, 0].tolist())
         assert (answer[1] is None or len(answer[1]) > 0)
         if answer[1] is not None:
             for i, v in enumerate(answer[1]):
