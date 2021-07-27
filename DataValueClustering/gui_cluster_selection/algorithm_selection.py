@@ -8,15 +8,22 @@ from clustering.kmedoids_clustering import kmedoids_args
 from clustering.optics_clustering import optics_args
 from clustering.spectral_clustering import spectral_args
 
+SPECTRAL_CLUSTERING = "Spectral Clustering"
+AFFINITY_PROPAGATION = "Affinity Propagation"
+OPTICS = "Optics"
+DBSCAN = "DBSCAN"
+K_MEDOIDS = "KMedoids"
+HIERARCHICAL = "Hierarchical"
+
 algorithm_array = [
     # dependencies, not-dependencies, name, configuration view function, clustering function accepting parameters as arguments
     # suggest value if none of the 'not-dependencies' questions were answered with True
 
-    [[], [2],           "Hierarchical",            cluster_hierarchical,    hierarchical_args],
-    [[], [2, 4],        "KMedoids",                cluster_kmedoids,        kmedoids_args],
-    [[], [1,3],         "DBSCAN",                  cluster_dbscan,          dbscan_args],
-    [[], [1],           "Optics",                  cluster_optics,          optics_args],
-    [[], [0,1,2,4],     "Affinity Propagation",    cluster_affinity,        affinity_args],
-    [[], [0,1,2,5],     "Spectral Clustering",     cluster_spectral,        spectral_args],
+    [[], [2],       HIERARCHICAL,           cluster_hierarchical,   hierarchical_args],
+    [[], [2, 4],    K_MEDOIDS,              cluster_kmedoids,       kmedoids_args],
+    [[], [1,3],     DBSCAN,                 cluster_dbscan,         dbscan_args],
+    [[], [1],       OPTICS,                 cluster_optics,         optics_args],
+    [[], [0,1,2,4], AFFINITY_PROPAGATION,   cluster_affinity,       affinity_args],
+    [[], [0,1,2,5], SPECTRAL_CLUSTERING,    cluster_spectral,       spectral_args],
 
 ]
