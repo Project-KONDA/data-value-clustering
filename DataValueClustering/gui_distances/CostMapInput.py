@@ -80,7 +80,7 @@ class CostMapInput:
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
             self.regex_label[i] = Label(self.root)
             self.regex[i].grid(row=i + 10, column=1, columnspan=2)
-            self.regex_label[i].grid(row=i + 10, column=3, columnspan=1)
+            self.regex_label[i].grid(sticky="nswe", row=i + 10, column=3, columnspan=1)
 
             if i == 0:
                 self.regex[i].insert(END, 'add')
@@ -228,7 +228,7 @@ class CostMapInput:
             self.regex[self.n].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')  # , '%d')
         self.regex[self.n].grid(row=self.n + 10, column=1, columnspan=2)
         self.regex_label[self.n] = Label(self.root)
-        self.regex_label[self.n].grid(row=self.n + 10, column=3, columnspan=1)
+        self.regex_label[self.n].grid(sticky="nswe", row=self.n + 10, column=3, columnspan=1)
 
         # TODO:
         # self.regex_label[self.n]
