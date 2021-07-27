@@ -1,6 +1,8 @@
 import datetime as dt
+import os
 from datetime import datetime
 import json
+from pathlib import Path
 
 import jsbeautifier
 import numpy
@@ -10,11 +12,14 @@ from abstraction.abstraction import get_abstraction_method
 from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel
+from data_extraction.write_file import write_data_values_to_file
 from distance import calculate_distance_matrix_map
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance, split_cost_map, get_cost_map
 from gui_center.cluster_representation import fancy_cluster_representation
 from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_distances.blobinput_helper import get_blob_configuration
+from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
+    question_4_answers
 from validation.intra_inter_cluster_distance import max_intra_cluster_distances, \
     average_intra_cluster_distances_per_cluster_per_value
 
@@ -106,6 +111,11 @@ class HubConfiguration():
         self.excel_save_path = None
 
         self.timedelta_total = None
+
+        self.validation_answer_1 = None  # binary: ValidationAnswer.HAPPY or UNHAPPY
+        self.validation_answer_2 = None  # ternary: ValidationAnswer.HAPPY or MORE or LESS
+        self.validation_answer_3 = None  # ternary: ValidationAnswer.HAPPY or MORE or LESS
+        self.validation_answer_4 = None  # binary & list(int): ValidationAnswer.HAPPY or UNHAPPY & and if UNHAPPY list(int)
 
     def execute_data(self):
         self.data = read_data_values_from_file(self.data_path)[self.data_lower_limit:self.data_upper_limit]
@@ -318,6 +328,53 @@ class HubConfiguration():
         if not self.clustering_parameters == clustering_parameters:
             self.clustering_parameters = clustering_parameters
             self.reset_clustering()
+
+    def set_validation_answer_1(self, answer):
+        assert (answer in question_1_answers[:, 0])
+        self.validation_answer_1 = answer
+
+    def set_validation_answer_2(self, answer):
+        assert (answer in question_2_answers[:, 0])
+        self.validation_answer_2 = answer
+
+    def set_validation_answer_3(self, answer):
+        assert (answer in question_3_answers[:, 0])
+        self.validation_answer_3 = answer
+
+    def set_validation_answer_4(self, answer):
+        assert (answer[0] in question_4_answers[:, 0])
+        assert (answer[1] is None or len(answer[1]) > 0)
+        if answer[1] is not None:
+            for i, v in enumerate(answer[1]):
+                assert (type(v) == int)
+                assert (v < self.no_clusters)
+        data_names = None
+        if answer[1] is not None:
+            data_names = list()
+            for i, v in enumerate(answer[1]):
+                data_name = self.export_cluster_as_txt(v)
+                data_names.append(data_name)
+        self.validation_answer_4 = answer[0], data_names
+
+    def export_cluster_as_txt(self, v):
+        now = str(datetime.now())
+        now = now.replace(":", "-").replace(" ", "_").replace(".", "-")
+        data_name = "cluster_" + str(v) + "_" + str(now) + ".txt"
+        path = str(Path(__file__).parent.parent) + "/data/" + data_name
+        write_data_values_to_file(path, self.fancy_cluster_list[v])
+        return data_name
+
+    def get_validation_answer_1(self):
+        return self.validation_answer_1
+
+    def get_validation_answer_2(self):
+        return self.validation_answer_2
+
+    def get_validation_answer_3(self):
+        return self.validation_answer_3
+
+    def get_validation_answer_4(self):
+        return self.validation_answer_4
 
     def reset_data(self):
         self.data = None
