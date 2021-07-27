@@ -12,14 +12,15 @@ def get_list(path=""):
     return get_sources_in_experiment_data_directory()[:, 0]
 
 
-def select_data(master, previous=None):
-    return SelectData(master, "", previous).get()
+def select_data(master, previous=None, single_cluster_data=None):
+    return SelectData(master, "", previous, single_cluster_data).get()
 
 
 class SelectData:
-    def __init__(self, master, path, previous=None):
+    def __init__(self, master, path, previous=None, single_cluster_data=None):
         self.path = path
         self.previous = previous
+        self.single_cluster_data = single_cluster_data
 
         self.root = Toplevel(master)
         # self.root.title("Select Data")
@@ -31,6 +32,9 @@ class SelectData:
         self.label_title = Label(self.root, text="Select Data Set", bg="white",
                                  font=('Helvatical bold', 19))
 
+        if self.single_cluster_data is not None:
+            self.label_hint = Label(self.root, text="Data generated from a previously calculated\ncluster are highlighted in green", bg="white", fg='blue')
+
         self.listbox = Listbox(self.root, selectmode="single", width=40, height=20)
         self.scrollbar = Scrollbar(self.root, command=self.listbox.yview)
         self.listbox.config(yscrollcommand=self.scrollbar.set)
@@ -40,6 +44,8 @@ class SelectData:
         self.button_ok = Button(self.root, text="OK", command=self.close, width=27)
 
         self.label_title.grid(sticky='nswe', row=1, column=1, columnspan=4)
+        if self.single_cluster_data is not None:
+            self.label_hint.grid(sticky='nswe', row=2, column=1, columnspan=4)
         self.listbox.grid(sticky='nswe', row=3, column=1, columnspan=3)
         self.scrollbar.grid(sticky='nse', row=3, column=4)
         self.button_add.grid(sticky='nswe', row=5, column=1, columnspan=1)
@@ -53,8 +59,10 @@ class SelectData:
     def load(self):
         self.listbox.delete(0, END)
         self.datalist = get_list(self.path)
-        for i in self.datalist:
-            self.listbox.insert(END, i)
+        for i, data_name in enumerate(self.datalist):
+            self.listbox.insert(END, data_name)
+            if self.single_cluster_data is not None and data_name in self.single_cluster_data:
+                self.listbox.itemconfig(i, bg='SeaGreen1')
         if self.previous is not None:
             index = np.where(self.datalist == self.previous)[0][0]
             self.listbox.select_set(index)

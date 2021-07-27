@@ -178,7 +178,15 @@ class Hub:
         previous_data_path = self.configuration.get_data_configuration()[0]
         previous_data_name = self.data_name_from_path(previous_data_path)
 
-        data_name = select_data(self.root, previous_data_name)
+        data_names = None
+        if self.configuration.validation_answer_4 is not None:
+            data_paths = self.configuration.validation_answer_4[1]
+            if data_paths is not None:
+                data_names = list()
+                for i, path in enumerate(data_paths):
+                    data_names.append(self.data_name_from_path(path))
+
+        data_name = select_data(self.root, previous_data_name, data_names)
 
         if data_name is None or previous_data_name == data_name:
             self.update()
