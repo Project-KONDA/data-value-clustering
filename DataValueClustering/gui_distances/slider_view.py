@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar
+from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT
 
 import numpy as np
 
@@ -71,9 +71,9 @@ class SliderInput:
         self.label_heading1.grid(sticky='nsw', row=1, column=1)
         self.label_heading2.grid(sticky='nsw', row=1, column=3)
         self.label_heading3.grid(sticky='nsw', row=1, column=5)
-        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
-        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2)
+        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
+        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
 
         self.entrylist = np.full(self.n, Entry(self.root))
         self.entry_var_list = np.full(self.n, StringVar())
@@ -89,7 +89,7 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.root, bg="white")
+            self.label_list[i] = Label(self.root, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.root, v)
             self.entry_var_list[i] = StringVar(self.root, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
@@ -124,7 +124,7 @@ class SliderInput:
                     string = string_to[i].cget("text")
                     if string != "":
                         string += "\n"
-                    string += mapping[1] + " = " + mapping[0]
+                    string += "'" + mapping[1] + "' - " + mapping[0]
                     string_to[i].config(text=string)
                     break
         self.updating_labels = False
