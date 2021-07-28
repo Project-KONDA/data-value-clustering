@@ -4,6 +4,7 @@ import numpy as np
 
 from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
     example_costmap, groups_to_enumerations
+from gui_general import CreateToolTip
 
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False):
@@ -49,6 +50,16 @@ class SliderInput:
 
         self.title = Label(self.root, text="Slider View", bg="white",
                            font=('bold 12', 19))
+        self.label_heading1 = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_heading1, "Enumerate all characters of this group. Only the first occurrence of a "
+                                           "character in one of the groups is relevant. Note that some characters may "
+                                           "represent abstracted details. This mapping is provided in the column "
+                                           "'Abstraction Mapping'.")
+        self.label_heading2 = Label(self.root, text="Abstraction Mapping", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_heading2, "Mapping between characters of the column 'Characters' and the abstracted "
+                                           "aspects they represent.")
+        self.label_heading3 = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_heading3, "Weights for the given character groups.")
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
         self.button_ok = Button(self.root, text='OK', command=self.quit)
@@ -57,6 +68,9 @@ class SliderInput:
             self.button_plus.configure(state="disabled")
 
         self.title.grid(sticky='nswe', row=0, column=1, columnspan=4)
+        self.label_heading1.grid(sticky='nsw', row=1, column=1)
+        self.label_heading2.grid(sticky='nsw', row=1, column=3)
+        self.label_heading3.grid(sticky='nsw', row=1, column=5)
         self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
         self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
         self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2)
