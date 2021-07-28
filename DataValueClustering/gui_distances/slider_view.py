@@ -142,87 +142,112 @@ class SliderInput:
         return map
 
     def plus(self):
-        entrylist = np.full(self.n + 1, Entry(self.root))
-        entry_value_list = np.full(self.n + 1, StringVar())
-        label_list = np.full(self.n + 1, Label(self.root, bg="white"))
-        sliderlist = np.full(self.n + 1, Scale(self.root))
-        valuelist = np.full(self.n + 1, IntVar())
+        # 1. create arrays
+        entrylist = np.full(self.n+1, Entry(self.root))
+        entry_var_list = np.full(self.n+1, StringVar())
+        label_list = np.full(self.n+1, Label(self.root))
+        sliderlist = np.full(self.n+1, Scale(self.root))
+        valuelist = np.full(self.n+1, IntVar())
 
-        for i in range(self.n):
+        # 2. copy elements
+        for i in range(self.n-1):
+            entrylist[i] = self.entrylist[i]
+            entry_var_list[i] = self.entry_var_list[i]
+            label_list[i] = self.label_list[i]
+            sliderlist[i] = self.sliderlist[i]
+            valuelist[i] = self.valuelist[i]
+
+        # 3. add element n-1 TODO TODO TODO
+
+        entry_var_list[self.n-1].set("")
+        valuelist[self.n-1].set(1)
+
+        entrylist[self.n-1] = Entry(self.root, font="12", textvariable=entry_var_list[self.n-1],
+                                    state=("disabled" if self.fixed else "normal"))
+        label_list[self.n-1] = Label(self.root, bg="white", anchor=W, justify=LEFT)
+        sliderlist[self.n-1] = Scale(self.root, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
+                                        length=400, bg='white', highlightthickness=0, resolution=1)
+
+        label_list[self.n-1].grid(sticky='new', row=self.n+1, column=3, columnspan=2, pady=(15,0), padx=1)
+        entrylist[self.n-1].grid(sticky='new', row=self.n+1, column=1, columnspan=2, pady=(15,0), padx=1)
+        sliderlist[self.n-1].grid(sticky='new', row=self.n+1, column=5, columnspan=2, pady=(0, 0))
+
+        entry_var_list[self.n-1].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n-1], j=self.n: self.update_labels())
+
+        # 4. move element n
+        entrylist[self.n] = self.entrylist[self.n-1]
+        entry_var_list[self.n] = self.entry_var_list[self.n-1]
+        label_list[self.n] = self.label_list[self.n-1]
+        sliderlist[self.n] = self.sliderlist[self.n-1]
+        valuelist[self.n] = self.valuelist[self.n-1]
+
+        entrylist[self.n].grid(sticky='new', row=self.n+2, column=1, columnspan=2, pady=(15,0), padx=1)
+        label_list[self.n].grid(sticky='new', row=self.n+2, column=3, columnspan=2, pady=(15,0), padx=1)
+        sliderlist[self.n].grid(sticky='new', row=self.n+2, column=5, columnspan=2, pady=(0, 0))
+
+        # 5. complete
+        self.n = self.n+1
+        self.entrylist = entrylist
+        self.entry_var_list = entry_var_list
+        self.label_list = label_list
+        self.sliderlist = sliderlist
+        self.valuelist = valuelist
+
+        # 6. finish
+        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
+        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+        self.update_labels()
+        self.root.update()
+
+    def minus(self):
+        if self.n < 3:
+            return
+
+        # 1. create arrays
+        self.n = self.n - 1
+        entrylist = np.full(self.n, Entry(self.root))
+        entry_value_list = np.full(self.n, StringVar())
+        label_list = np.full(self.n, Label(self.root))
+        sliderlist = np.full(self.n, Scale(self.root))
+        valuelist = np.full(self.n, IntVar())
+
+        # 2. copy elements
+        for i in range(self.n-1):
             entrylist[i] = self.entrylist[i]
             entry_value_list[i] = self.entry_var_list[i]
             label_list[i] = self.label_list[i]
             sliderlist[i] = self.sliderlist[i]
             valuelist[i] = self.valuelist[i]
 
+        # 3. delete element n-1
+        self.entrylist[self.n - 1].destroy()
+        self.label_list[self.n - 1].destroy()
+        self.sliderlist[self.n - 1].destroy()
+
+        # 4. move element n
+        entrylist[self.n-1] = self.entrylist[self.n]
+        entry_value_list[self.n-1] = self.entry_var_list[self.n]
+        label_list[self.n-1] = self.label_list[self.n]
+        sliderlist[self.n-1] = self.sliderlist[self.n]
+        valuelist[self.n-1] = self.valuelist[self.n]
+
+        entrylist[self.n-1].grid(sticky='new', row=self.n+1, column=1, columnspan=2, pady=(15,0), padx=1)
+        label_list[self.n-1].grid(sticky='new', row=self.n+1, column=3, columnspan=2, pady=(15,0), padx=1)
+        sliderlist[self.n-1].grid(sticky='new', row=self.n+1, column=5, columnspan=2, pady=(0, 0))
+
+        # 5. complete
         self.entrylist = entrylist
         self.entry_var_list = entry_value_list
         self.label_list = label_list
         self.sliderlist = sliderlist
         self.valuelist = valuelist
 
-        self.entry_var_list[self.n-1].set("")
-        rest_val = self.valuelist[self.n-1].get()
-        self.valuelist[self.n-1].set(1)
-        self.entry_var_list[self.n].set("<rest>")
-        self.entry_var_list[self.n].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n], j=self.n: self.update_labels())
-        self.valuelist[self.n].set(rest_val)
-        self.update_labels()
-
-        self.entrylist[self.n] = Entry(self.root, font="12", textvariable=self.entry_var_list[self.n], state="disabled")
-        if not self.fixed:
-            self.entrylist[self.n-1].configure(state="normal")
-        self.entrylist[self.n].grid(row=self.n + 2, column=1, sticky='sew', columnspan=2)
-
-        self.label_list[self.n].grid(row=self.n + 2, column=3, sticky='sew', columnspan=2)
-
-        self.sliderlist[self.n] = Scale(self.root, from_=0, to_=10, orient='horizontal',
-                                        variable=self.valuelist[self.n],
-                                        length=400, bg='white', highlightthickness=0, resolution=1)
-        self.sliderlist[self.n].grid(row=self.n + 2, column=5, sticky='sew', columnspan=2)
-
-        self.n = self.n + 1
-        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
-        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2)
-
-    def minus(self):
-        if self.n > 1:
-            self.n = self.n - 1
-            entrylist = np.full(self.n + 1, Entry(self.root))
-            entry_value_list = np.full(self.n + 1, StringVar())
-            label_list = np.full(self.n + 1, Label(self.root))
-            sliderlist = np.full(self.n + 1, Scale(self.root))
-            valuelist = np.full(self.n + 1, IntVar())
-
-            for i in range(self.n):
-                entrylist[i] = self.entrylist[i]
-                entry_value_list[i] = self.entry_var_list[i]
-                label_list[i] = self.label_list[i]
-                sliderlist[i] = self.sliderlist[i]
-                valuelist[i] = self.valuelist[i]
-
-            self.entrylist[self.n].destroy()
-            self.label_list[self.n].destroy()
-            self.sliderlist[self.n].destroy()
-
-            rest_value = self.valuelist[self.n].get()
-            self.valuelist[self.n - 1].set(rest_value)
-
-            self.entrylist = entrylist
-            self.entry_var_list = entry_value_list
-            self.label_list = label_list
-            self.sliderlist = sliderlist
-            self.valuelist = valuelist
-
-            self.entrylist[self.n - 1].configure(state="normal")
-            self.entry_var_list[self.n - 1].set("<rest>")
-            self.entrylist[self.n-1].configure(state="disabled")
-
-            self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
-            self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
-            self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2)
-            self.root.update()
+        # 6. finish
+        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, ppady=(10,0))
+        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+        self.root.update()
 
     def cancel(self):
         self.canceled = True
