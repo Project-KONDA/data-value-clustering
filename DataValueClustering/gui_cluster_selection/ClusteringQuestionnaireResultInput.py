@@ -1,4 +1,4 @@
-from tkinter import Radiobutton, IntVar, NORMAL, DISABLED, Tk
+from tkinter import Radiobutton, IntVar, NORMAL, DISABLED, Tk, Label
 
 import numpy as np
 
@@ -27,6 +27,11 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
         super().__init__(master, "Clustering Configuration", config, predefined_answers)
+
+        if len(suggested_algorithms) > 0:
+            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering validation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10)
+            self.label_suggested.grid(row=0, column=0, sticky='senw')
+
         self.suggested_algorithms = suggested_algorithms
         self.algorithms = np.array(algorithm_array, dtype=object)
         self.choice = IntVar()
