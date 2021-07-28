@@ -19,11 +19,12 @@ class SliderInput:
 
         self.master = master
         self.n = n if n or costmap else len(abstraction[:, 0])
-        self.abstraction = abstraction
-        self.texts = abstraction[:, 1].tolist()
+        self.abstraction = np.array((2, 0)) if abstraction is None else abstraction
+        self.texts = list() if abstraction is None else abstraction[:, 1].tolist()
+        self.abstraction_keys = self.texts
+        self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
         self.values = value
         self.fixed = fixed
-
 
         self.canceled = False
 
@@ -96,9 +97,9 @@ class SliderInput:
         label_text = ""
         separator = " & "
         other_chars = entry_value.get()
-        for i, chars in enumerate(self.abstraction[:, 1]):
+        for i, chars in enumerate(self.abstraction_keys):
             if chars in entry_value.get():
-                label_text += self.abstraction[i, 0] + separator
+                label_text += self.abstraction_values[i] + separator
                 other_chars = other_chars.replace(chars, "")
         if other_chars != "":
             label_text += "others" + separator
