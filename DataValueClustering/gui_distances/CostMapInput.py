@@ -47,8 +47,6 @@ class CostMapInput:
                 else preprocess_regexes(get_regexes_from_map(costmap)) if costmap is not None \
                 else ['delete', 'a-z', 'A-Z', '0-9', '.,:;?!', '+-*/%=<>&|', '()[]{}', '"\'`´', '_\\#~§^°µ@²³']
 
-        self.add_rest = regexes is None and costmap is None
-
         self.case_entry = Entry(self.root)
 
         self.root.title('Please enter Weight Matrix')
@@ -70,10 +68,8 @@ class CostMapInput:
         self.case_entry.grid(sticky=W, row=9, column=3)
 
         for i in range(self.n):
-
-            self.label[i] = Label(self.root, bg='lightgrey', anchor=W)
+            self.label[i] = Label(self.root, width=7, bg='lightgrey', anchor=W)
             self.label[i].grid(sticky=W, row=9, column=i + 4)
-
             self.regex[i] = Entry(self.root, width=20, bg='ivory2', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
             self.regex_label[i] = Label(self.root, anchor=W)
@@ -83,12 +79,10 @@ class CostMapInput:
             if i == 0:
                 self.regex[i].insert(END, 'add')
                 self.label[i].configure(text='delete', state='disabled')
-
-            if i == self.n - 1 and self.add_rest:
+                self.regex[i].config(state='disabled')
+            elif i == self.n - 1:
                 self.regex[i].insert(END, '<rest>')
                 self.label[i].configure(text='<rest>', state='disabled')
-
-            if i == 0 or i == self.n - 1 and self.add_rest:
                 self.regex[i].config(state='disabled')
             else:
                 if not self.empty and i < len(self.predefined_labels):
@@ -217,10 +211,16 @@ class CostMapInput:
         self.value_entries = value_entries
         self.regex_label = regex_label
 
-        self.label[self.n] = Label(self.root, width=6, bg='lightgrey', anchor=W)
+        self.regex[self.n-1].config(state='normal')
+        self.regex[self.n - 1].delete(0, END)
+
+        self.label[self.n] = Label(self.root, width=7, bg='lightgrey', anchor=W)
         self.label[self.n].grid(sticky=W, row=9, column=self.n + 4)
 
         self.regex[self.n] = Entry(self.root, width=20, bg='ivory2', validate=ALL)
+        self.regex[self.n].insert(0, '<rest>')
+        self.regex[self.n].config(state='disabled')
+
         self.regex[self.n]['validatecommand'] = (
             self.regex[self.n].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')  # , '%d')
         self.regex[self.n].grid(row=self.n + 10, column=1, columnspan=2)
@@ -291,6 +291,9 @@ class CostMapInput:
             self.label = label
             self.value_entries = value_entries
             self.regex_label = regex_label
+
+            self.regex[self.n - 1].insert(0, "<rest>")
+            self.regex[self.n - 1].config(state='disabled')
 
     def update_regex_label(self):
         pass
