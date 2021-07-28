@@ -6,25 +6,26 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
     example_costmap, groups_to_enumerations
 
 
-def slider_view(master, n=None, costmap=None, abstraction=None, values=None, fixed=False):
-    view = SliderInput(master, n, costmap, abstraction, values, fixed)
+def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False):
+    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction=None, value=None, fixed=False):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
         assert (n or costmap or abstraction is not None)
 
         self.master = master
-        self.n = n if n or costmap else len(abstraction[:, 0])
+        self.n = n if n or costmap else len(texts)+1
         self.abstraction = np.array((2, 0)) if abstraction is None else abstraction
-        self.texts = list() if abstraction is None else abstraction[:, 1].tolist()
+        self.texts = texts
         self.abstraction_keys = self.texts
         self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
         self.values = value
         self.fixed = fixed
+        self.updating_labels = False
 
         self.canceled = False
 
@@ -74,10 +75,10 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.root)
+            self.label_list[i] = Label(self.root, bg="white")
             self.valuelist[i] = IntVar(self.root, v)
             self.entry_var_list[i] = StringVar(self.root, t)
-            self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_label(sv, j))
+            self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
             self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
             self.entrylist[i] = Entry(self.root, font="12", textvariable=self.entry_var_list[i])
             if i == self.n-1 or self.fixed:
@@ -86,26 +87,33 @@ class SliderInput:
             self.sliderlist[i] = Scale(self.root, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
-            self.entrylist[i].grid(row=i + 2, column=1, sticky='sew', columnspan=2)
-            self.label_list[i].grid(row=i + 2, column=3, sticky='sew', columnspan=2)
-            self.sliderlist[i].grid(row=i + 2, column=5, sticky='sew', columnspan=2)
+            self.entrylist[i].grid(sticky='new', row=i + 2, column=1, columnspan=2, pady=(15,0), padx=1)
+            self.label_list[i].grid(sticky='new', row=i + 2, column=3, columnspan=2, pady=(15,0), padx=1)
+            self.sliderlist[i].grid(sticky='new', row=i + 2, column=5, columnspan=2, pady=(0, 0))
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
-    def update_label(self, entry_value, j):
-        label_text = ""
-        separator = " & "
-        other_chars = entry_value.get()
-        for i, chars in enumerate(self.abstraction_keys):
-            if chars in entry_value.get():
-                label_text += self.abstraction_values[i] + separator
-                other_chars = other_chars.replace(chars, "")
-        if other_chars != "":
-            label_text += "others" + separator
-        k = len(label_text)-len(separator)
-        label_text = label_text[0:k]
-        self.label_list[j]['text'] = label_text
+    def update_labels(self):
+        if self.updating_labels:
+            return
+        self.updating_labels = True
+        abstraction = self.abstraction.tolist()
+        entry_from = self.entrylist
+        string_to = self.label_list
+        for st in string_to:
+            st.config(text="")
+        for mapping in abstraction:
+            for i, entry in enumerate(entry_from):
+                value = entry.get()
+                if len(mapping[1]) == 1 and mapping[1] in value:
+                    string = string_to[i].cget("text")
+                    if string != "":
+                        string += "\n"
+                    string += mapping[0]
+                    string_to[i].config(text=string)
+                    break
+        self.updating_labels = False
 
     def get(self):
         if self.canceled:
@@ -122,7 +130,7 @@ class SliderInput:
     def plus(self):
         entrylist = np.full(self.n + 1, Entry(self.root))
         entry_value_list = np.full(self.n + 1, StringVar())
-        label_list = np.full(self.n + 1, Label(self.root))
+        label_list = np.full(self.n + 1, Label(self.root, bg="white"))
         sliderlist = np.full(self.n + 1, Scale(self.root))
         valuelist = np.full(self.n + 1, IntVar())
 
@@ -141,8 +149,8 @@ class SliderInput:
 
         self.entry_var_list[self.n-1].set("")
         self.entry_var_list[self.n].set("<rest>")
-        self.entry_var_list[self.n].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n], j=self.n: self.update_label(sv, j))
-        self.update_label(self.entry_var_list[self.n], self.n)
+        self.entry_var_list[self.n].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n], j=self.n: self.update_labels())
+        self.update_labels()
 
         self.entrylist[self.n] = Entry(self.root, font="12", textvariable=self.entry_var_list[self.n], state="disabled")
         if not self.fixed:
@@ -164,7 +172,6 @@ class SliderInput:
 
     def minus(self):
         if self.n > 1:
-
             self.n = self.n - 1
             entrylist = np.full(self.n + 1, Entry(self.root))
             entry_value_list = np.full(self.n + 1, StringVar())
