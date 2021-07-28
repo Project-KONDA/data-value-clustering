@@ -16,7 +16,7 @@ from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_result.ResultView import result_view
-from gui_result.validation_questionnaire import get_suggested_algorithms
+from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data
 
 CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
 DISTANCE_NOT_CONFIGURED = "Distance not configured"
@@ -180,15 +180,7 @@ class Hub:
         previous_data_path = self.configuration.get_data_configuration()[0]
         previous_data_name = data_name_from_path(previous_data_path)
 
-        data_names = None
-        if self.configuration.validation_answer_4 is not None:
-            data_paths = self.configuration.validation_answer_4[1]
-            if data_paths is not None:
-                data_names = list()
-                for i, path in enumerate(data_paths):
-                    data_names.append(data_name_from_path(path))
-
-        data_name = select_data(self.root, previous_data_name, data_names)
+        data_name = select_data(self.root, previous_data_name, get_suggested_data(self.get_validation_answers()))
 
         if data_name is None or previous_data_name == data_name:
             self.update()

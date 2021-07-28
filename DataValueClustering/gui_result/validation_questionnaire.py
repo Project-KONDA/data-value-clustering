@@ -27,6 +27,13 @@ question_4_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"
                                [ValidationAnswer.UNHAPPY, "I'm unhappy, the following clusters are too heterogeneous:",
                                 "unhappy tip", True]], dtype=object)
 
+def get_suggested_data(validation_answers):
+    suggested_data_names = None
+    print(validation_answers[3])
+    if validation_answers[3] is not None and validation_answers[3][1] is not None:
+        print(validation_answers)
+        suggested_data_names = validation_answers[3][1]
+    return suggested_data_names if len(suggested_data_names) > 0 else None
 
 def get_suggested_algorithms(validation_answers):
     suggested_algorithms = list()

@@ -359,8 +359,9 @@ class HubConfiguration():
     def export_cluster_as_txt(self, v):
         now = str(datetime.now())
         now = now.replace(":", "-").replace(" ", "_").replace(".", "-")
-        data_name = "cluster_" + str(v) + "_" + str(now) + ".txt"
-        path = str(Path(__file__).parent.parent) + "/data/" + data_name
+        data_name = "cluster_" + str(v) + "_" + str(now)
+        data_file = data_name + ".txt"
+        path = str(Path(__file__).parent.parent) + "/data/" + data_file
         write_data_values_to_file(path, self.fancy_cluster_list[v])
         return data_name
 
