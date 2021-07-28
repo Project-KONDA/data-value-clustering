@@ -162,8 +162,11 @@ class SliderInput:
         self.valuelist = valuelist
 
         self.entry_var_list[self.n-1].set("")
+        rest_val = self.valuelist[self.n-1].get()
+        self.valuelist[self.n-1].set(1)
         self.entry_var_list[self.n].set("<rest>")
         self.entry_var_list[self.n].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n], j=self.n: self.update_labels())
+        self.valuelist[self.n].set(rest_val)
         self.update_labels()
 
         self.entrylist[self.n] = Entry(self.root, font="12", textvariable=self.entry_var_list[self.n], state="disabled")
@@ -171,7 +174,6 @@ class SliderInput:
             self.entrylist[self.n-1].configure(state="normal")
         self.entrylist[self.n].grid(row=self.n + 2, column=1, sticky='sew', columnspan=2)
 
-        self.valuelist[self.n].set(1)
         self.label_list[self.n].grid(row=self.n + 2, column=3, sticky='sew', columnspan=2)
 
         self.sliderlist[self.n] = Scale(self.root, from_=0, to_=10, orient='horizontal',
@@ -203,6 +205,9 @@ class SliderInput:
             self.entrylist[self.n].destroy()
             self.label_list[self.n].destroy()
             self.sliderlist[self.n].destroy()
+
+            rest_value = self.valuelist[self.n].get()
+            self.valuelist[self.n - 1].set(rest_value)
 
             self.entrylist = entrylist
             self.entry_var_list = entry_value_list
