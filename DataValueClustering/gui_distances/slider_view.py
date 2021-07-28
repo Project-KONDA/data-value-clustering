@@ -124,7 +124,7 @@ class SliderInput:
                     string = string_to[i].cget("text")
                     if string != "":
                         string += "\n"
-                    string += mapping[0]
+                    string += mapping[1] + " = " + mapping[0]
                     string_to[i].config(text=string)
                     break
         self.updating_labels = False
