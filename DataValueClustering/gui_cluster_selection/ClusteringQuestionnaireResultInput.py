@@ -29,7 +29,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         super().__init__(master, "Clustering Configuration", config, predefined_answers)
 
         if len(suggested_algorithms) > 0:
-            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering validation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10)
+            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering validation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10, fg='blue')
             self.label_suggested.grid(row=0, column=0, sticky='senw')
 
         self.suggested_algorithms = suggested_algorithms
