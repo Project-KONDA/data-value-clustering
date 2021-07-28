@@ -26,6 +26,16 @@ PATH_NOT_CONFIGURED = "Save path not configured"
 NONE = "None"
 
 
+def data_name_from_path(data_path):
+    if data_path is None:
+        return None
+    data_path_split = data_path.split("\\")
+    last = data_path_split[len(data_path_split)-1]
+    last_split = last.split(".")
+    data_name = last_split[0]
+    return data_name
+
+
 class Hub:
 
     def __init__(self):
@@ -163,21 +173,12 @@ class Hub:
             return None
         return str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt"
 
-    def data_name_from_path(self, data_path):
-        if data_path is None:
-            return None
-        data_path_split = data_path.split("\\")
-        last = data_path_split[len(data_path_split)-1]
-        last_split = last.split(".")
-        data_name = last_split[0]
-        return data_name
-
     def configure_data(self):
         self.label_data_progress.configure(text="Data configuration in progress ...", fg='magenta2')
         self.root.update()
         self.disable()
         previous_data_path = self.configuration.get_data_configuration()[0]
-        previous_data_name = self.data_name_from_path(previous_data_path)
+        previous_data_name = data_name_from_path(previous_data_path)
 
         data_names = None
         if self.configuration.validation_answer_4 is not None:
@@ -185,7 +186,7 @@ class Hub:
             if data_paths is not None:
                 data_names = list()
                 for i, path in enumerate(data_paths):
-                    data_names.append(self.data_name_from_path(path))
+                    data_names.append(data_name_from_path(path))
 
         data_name = select_data(self.root, previous_data_name, data_names)
 
@@ -496,7 +497,7 @@ class Hub:
         if data_path is None:
             self.label_data_config.configure(text=NONE)
         else:
-            text = self.data_name_from_path(data_path)
+            text = data_name_from_path(data_path)
             if data_lower_limit is not None:
                 text += "[" + str(data_lower_limit) + ".."
             if data_upper_limit is not None:
