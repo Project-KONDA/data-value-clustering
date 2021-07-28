@@ -78,9 +78,9 @@ class SliderInput:
             self.valuelist[i] = IntVar(self.root, v)
             self.entry_var_list[i] = StringVar(self.root, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_label(sv, j))
-            self.entry_var_list[i].set(t)
+            self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
             self.entrylist[i] = Entry(self.root, font="12", textvariable=self.entry_var_list[i])
-            if self.fixed:
+            if i == self.n-1 or self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
             self.sliderlist[i] = Scale(self.root, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
@@ -139,11 +139,17 @@ class SliderInput:
         self.sliderlist = sliderlist
         self.valuelist = valuelist
 
+        self.entry_var_list[self.n-1].set("")
+        self.entry_var_list[self.n].set("<rest>")
         self.entry_var_list[self.n].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n], j=self.n: self.update_label(sv, j))
-        self.entrylist[self.n]['textvariable'] = self.entry_var_list[self.n]
+        self.update_label(self.entry_var_list[self.n], self.n)
+
+        self.entrylist[self.n] = Entry(self.root, font="12", textvariable=self.entry_var_list[self.n], state="disabled")
+        if not self.fixed:
+            self.entrylist[self.n-1].configure(state="normal")
+        self.entrylist[self.n].grid(row=self.n + 2, column=1, sticky='sew', columnspan=2)
 
         self.valuelist[self.n].set(1)
-        self.entrylist[self.n].grid(row=self.n + 2, column=1, sticky='sew', columnspan=2)
         self.label_list[self.n].grid(row=self.n + 2, column=3, sticky='sew', columnspan=2)
 
         self.sliderlist[self.n] = Scale(self.root, from_=0, to_=10, orient='horizontal',
@@ -152,7 +158,6 @@ class SliderInput:
         self.sliderlist[self.n].grid(row=self.n + 2, column=5, sticky='sew', columnspan=2)
 
         self.n = self.n + 1
-
         self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
         self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
         self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2)
@@ -184,6 +189,10 @@ class SliderInput:
             self.sliderlist = sliderlist
             self.valuelist = valuelist
 
+            self.entrylist[self.n - 1].configure(state="normal")
+            self.entry_var_list[self.n - 1].set("<rest>")
+            self.entrylist[self.n-1].configure(state="disabled")
+
             self.button_minus.grid(sticky='ns', row=self.n + 5, column=1)
             self.button_plus.grid(sticky='ns', row=self.n + 5, column=2)
             self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2)
@@ -201,5 +210,7 @@ class SliderInput:
 if __name__ == "__main__":
     # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
     result = slider_view(None, costmap=example_costmap())
-    print("Costmap result is valid: ", costmap_is_valid(result))
-    print_cost_map(result)
+    valid = costmap_is_valid(result)
+    print("Costmap result is valid: ", valid)
+    if valid:
+        print_cost_map(result)
