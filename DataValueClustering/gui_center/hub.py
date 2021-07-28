@@ -59,6 +59,7 @@ class Hub:
         "menu"
 
         self.menu = Menu(self.root)
+        self.menu.add_command(label="New", command=self.menu_new)
         self.menu.add_command(label="Save", command=self.menu_save)
         self.menu.add_command(label="Save As ..", command=self.menu_saveas)
         self.menu.add_command(label="Load", command=self.menu_load)
@@ -165,7 +166,11 @@ class Hub:
         self.root.mainloop()
 
     def on_closing(self):
-        if self.saved or messagebox.askokcancel("Quit", "Closing the window without prior saving the configuration will delete the configuration. Do you want to quit?", icon=WARNING):
+        if self.saved or \
+                messagebox.askokcancel("Quit",
+                                       "Closing the window without prior saving the configuration will delete the configuration."
+                                       "\nDo you want to quit?",
+                                       icon=WARNING):
             self.root.destroy()
 
     def data_path_from_name(self, data_name):
@@ -263,11 +268,12 @@ class Hub:
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if previous_blob_configuration is None:
-                if previous_cost_map is None or messagebox.askokcancel("Potential Information Loss",
-                                                                       "You previously configured the distance "
-                                                                       "calculation via a different method. This configuration will be "
-                                                                       "lost upon opening the Blob Configuration View. Do you want to proceed?",
-                                                                       icon=WARNING):
+                if previous_cost_map is None or \
+                    messagebox.askokcancel("Potential Information Loss",
+                                           "You previously configured the distance "
+                                           "calculation via a different method. This configuration will be "
+                                           "lost upon opening the Blob Configuration View. Do you want to proceed?",
+                                           icon=WARNING):
                     blob_configuration = self.configuration.create_blob_configuration()
                 else:
                     self.configure_distance()
@@ -381,6 +387,16 @@ class Hub:
         self.root.title(self.configuration.json_save_path)
         self.saved = True
         self.update()
+
+    def menu_new(self):
+        if self.saved or \
+            messagebox.askokcancel("New Configuration",
+                                   "Creating a new configuration without prior saving the configuration will delete the configuration."
+                                   "\nDo you want to restart?",
+                                   icon=WARNING):
+            self.configuration = HubConfiguration()
+            self.update()
+
 
     def menu_save(self):
         self.disable()
