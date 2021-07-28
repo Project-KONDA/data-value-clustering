@@ -76,6 +76,7 @@ class HubConfiguration():
         self.abstraction_answers = None
         # self.abstraction_f = None
         self.values_abstracted = None
+        self.no_values_abstracted = None
         self.abstraction_dict = None
         self.num_abstracted_data = None
         self.abstraction_rate = None
@@ -125,6 +126,7 @@ class HubConfiguration():
         time_abstraction_start = datetime.now()
         abstraction_f = self.get_abstraction_function()
         self.values_abstracted, self.abstraction_dict = abstraction_f(self.data)
+        self.no_values_abstracted = len(self.values_abstracted)
         time_abstraction_end = datetime.now()
         self.timedelta_abstraction = time_abstraction_end - time_abstraction_start
         self.num_abstracted_data = len(self.values_abstracted)
