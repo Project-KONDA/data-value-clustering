@@ -93,6 +93,8 @@ class SliderInput:
         self.label_heading2.grid(sticky='nswe', row=2, column=3, columnspan=2)
         self.label_heading3.grid(sticky='nswe', row=2, column=5, columnspan=2)
 
+        self.row_offset = 3
+
         self.entrylist = np.full(self.n, Entry(self.scrollable_frame))
         self.entry_var_list = np.full(self.n, StringVar())
         self.label_list = np.full(self.n, Label(self.scrollable_frame))
@@ -119,9 +121,9 @@ class SliderInput:
             self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
-            self.entrylist[i].grid(sticky='new', row=i + 3, column=1, columnspan=2, pady=(15,0), padx=1)
-            self.label_list[i].grid(sticky='new', row=i + 3, column=3, columnspan=2, pady=(15,0), padx=1)
-            self.sliderlist[i].grid(sticky='new', row=i + 3, column=5, columnspan=2, pady=(0, 0))
+            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
+            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
+            self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
@@ -182,7 +184,7 @@ class SliderInput:
             sliderlist[i] = self.sliderlist[i]
             valuelist[i] = self.valuelist[i]
 
-        # 3. add element n-1 TODO TODO TODO
+        # 3. add element n-1
 
         entry_var_list[self.n-1].set("")
         valuelist[self.n-1].set(1)
@@ -193,11 +195,11 @@ class SliderInput:
         sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
                                         length=400, bg='white', highlightthickness=0, resolution=1)
 
-        label_list[self.n-1].grid(sticky='new', row=self.n+1, column=3, columnspan=2, pady=(15,0), padx=1)
-        entrylist[self.n-1].grid(sticky='new', row=self.n+1, column=1, columnspan=2, pady=(15,0), padx=1)
-        sliderlist[self.n-1].grid(sticky='new', row=self.n+1, column=5, columnspan=2, pady=(0, 0))
+        label_list[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
+        entrylist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
+        sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
-        entry_var_list[self.n-1].trace("w", lambda name, index, mode, sv=self.entry_var_list[self.n-1], j=self.n: self.update_labels())
+        entry_var_list[self.n-1].trace("w", lambda name, index, mode, sv=entry_var_list[self.n-1], j=self.n: self.update_labels())
 
         # 4. move element n
         entrylist[self.n] = self.entrylist[self.n-1]
@@ -206,9 +208,9 @@ class SliderInput:
         sliderlist[self.n] = self.sliderlist[self.n-1]
         valuelist[self.n] = self.valuelist[self.n-1]
 
-        entrylist[self.n].grid(sticky='new', row=self.n+2, column=1, columnspan=2, pady=(15,0), padx=1)
-        label_list[self.n].grid(sticky='new', row=self.n+2, column=3, columnspan=2, pady=(15,0), padx=1)
-        sliderlist[self.n].grid(sticky='new', row=self.n+2, column=5, columnspan=2, pady=(0, 0))
+        entrylist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
+        label_list[self.n].grid(sticky='new', row=self.n + self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
+        sliderlist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         # 5. complete
         self.n = self.n+1
@@ -219,9 +221,9 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+        self.button_minus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=1, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=2, pady=(10,0))
+        self.button_ok.grid(sticky='nswe', row=self.n + 1 + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.update_labels()
         self.root.update()
 
@@ -257,9 +259,9 @@ class SliderInput:
         sliderlist[self.n-1] = self.sliderlist[self.n]
         valuelist[self.n-1] = self.valuelist[self.n]
 
-        entrylist[self.n-1].grid(sticky='new', row=self.n+1, column=1, columnspan=2, pady=(15,0), padx=1)
-        label_list[self.n-1].grid(sticky='new', row=self.n+1, column=3, columnspan=2, pady=(15,0), padx=1)
-        sliderlist[self.n-1].grid(sticky='new', row=self.n+1, column=5, columnspan=2, pady=(0, 0))
+        entrylist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
+        label_list[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
+        sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         # 5. complete
         self.entrylist = entrylist
@@ -269,9 +271,9 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+        self.button_minus.grid(sticky='ns', row=self.n + self.row_offset, column=1, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + self.row_offset, column=2, pady=(10,0))
+        self.button_ok.grid(sticky='nswe', row=self.n + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.root.update()
 
     def cancel(self):
