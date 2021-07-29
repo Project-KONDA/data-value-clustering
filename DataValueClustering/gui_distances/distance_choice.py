@@ -1,5 +1,7 @@
 from enum import Enum
-from tkinter import Tk, Button, Label, LEFT, W, Toplevel
+from tkinter import Tk, Button, Label, LEFT, W, Toplevel, Menu
+
+from gui_general.help_popup_gui import menu_help_distance_choice
 
 
 class DistanceView(Enum):
@@ -24,6 +26,11 @@ class DistanceChoice:
         self.root.config(bg="white")
         self.root.focus_force()
         self.root.grab_set()
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_distance_choice(self.root))
+        self.root.config(menu=self.menu)
+        self.root.resizable(False, False)
 
         self.title = Label(self.root, text="Distance Choice", bg="white",
                            font=('Helvatical bold', 19))

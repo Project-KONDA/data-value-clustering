@@ -1,8 +1,20 @@
 '''text popup for context menu, used as help'''
 from tkinter import *
 
+
+def menu_help_distance_choice(master):
+    """help popup for Distance Choice view"""
+    text = [
+        "The Distance Choice view allows you to select a method for configuring the distance calculation.",
+        "Currently only the weighted Levenshtein distance is supported and can be configured via 3 different methods.",
+        "Note that the easier methods allow less flexibility.",
+        "Further note that once you use the Slider or Matrix View, you cannot open your configuration via the Blob View."
+    ]
+    menu_information_display(master, "Abstraction Configuration - Help", text)
+
+
 def menu_help_abstraction(master):
-    """help popup for Add Data view"""
+    """help popup for Abstraction Configuration view"""
     text = [
         "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data values.",
         "For this, you should answer the questions on the left-hand side.",
