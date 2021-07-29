@@ -314,6 +314,7 @@ class CostMapInput:
             self.value_entries = value_entries
             self.regex_label = regex_label
 
+            self.regex[self.n - 1].delete(0, END)
             self.regex[self.n - 1].insert(0, "<rest>")
             self.regex[self.n - 1].config(state='disabled')
 
