@@ -245,7 +245,7 @@ class SliderInput:
 
         # 6. finish
         self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, ppady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
         self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
         self.root.update()
 
