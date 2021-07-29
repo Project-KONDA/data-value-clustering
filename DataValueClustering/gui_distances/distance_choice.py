@@ -1,6 +1,7 @@
 from enum import Enum
 from tkinter import Tk, Button, Label, LEFT, W, Toplevel, Menu
 
+from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_choice
 
 
@@ -30,7 +31,6 @@ class DistanceChoice:
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_choice(self.root))
         self.root.config(menu=self.menu)
-        self.root.resizable(False, False)
 
         self.title = Label(self.root, text="Distance Choice", bg="white",
                            font=('Helvatical bold', 19))
@@ -42,6 +42,10 @@ class DistanceChoice:
                                         command=lambda: self.close(DistanceView.BLOB))
         self.button_wld_matrix = Button(self.root, text="Matrix View (Hard)", width=30,
                                         command=lambda: self.close(DistanceView.MATRIX))
+
+        CreateToolTip(self.button_wld_slider,"Specify the similarity between character groups via a few sliders. Simple method with very limited flexibility.")
+        CreateToolTip(self.button_wld_blob, "Specify the similarity between character groups by moving and scaling graphical objects on a 2D canvas. Method with medium complexity and flexibility.")
+        CreateToolTip(self.button_wld_matrix, "Specify the similarity between all character groups by filling a matrix. Complex but completely flexibel method.")
 
         # self.label_other = Label(self.root, text="Other", width=40, bg="white", justify=LEFT, anchor=W)
         # self.button_lcss = Button(self.root, text="Longest Common Subsequence", width=30,
