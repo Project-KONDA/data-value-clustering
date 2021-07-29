@@ -16,7 +16,8 @@ from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_result.ResultView import result_view
-from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data
+from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
+    get_suggested_abstraction_modifications
 
 CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
 DISTANCE_NOT_CONFIGURED = "Distance not configured"
@@ -218,7 +219,7 @@ class Hub:
         previous_abstraction_answers = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
-        abstraction_answers = abstraction_configuration(self.root, self.configuration.data, previous_abstraction_answers)[1]
+        abstraction_answers = abstraction_configuration(self.root, self.configuration.data, previous_abstraction_answers, get_suggested_abstraction_modifications(self.get_validation_answers(), self.configuration))[1]
         if abstraction_answers is None or previous_abstraction_answers == abstraction_answers:
             self.update()
             self.root.update()

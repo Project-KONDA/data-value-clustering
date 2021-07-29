@@ -32,6 +32,7 @@ question_4_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"
                                [ValidationAnswer.UNHAPPY, "I'm unhappy, the following clusters are too heterogeneous:",
                                 "unhappy tip", True]], dtype=object)
 
+
 def get_suggested_data(validation_answers):
     suggested_data_names = None
     if validation_answers[3] is not None and validation_answers[3][1] is not None:
@@ -43,17 +44,17 @@ def get_suggested_data(validation_answers):
 def get_suggested_abstraction_modifications(validation_answers, configuration):
     abstraction_advice = ""
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
-        abstraction_advice += "First, check your configuration concerning an erroneous abstraction of aspects that actually cause significant dissimilarity of data values." \
+        abstraction_advice += "\nFirst, check your configuration concerning an erroneous abstraction of aspects that actually cause significant dissimilarity of data values. " \
                               "For this, please reconsider the checked questions." \
-                              "Further, check that all details that do not cause significant dissimilarity of data values are abstracted from." \
+                              "\nFurther, check that all details that do not cause significant dissimilarity of data values are abstracted from. " \
                               "For this, please reconsider the unchecked questions."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
         if configuration.get_clustering_selection[0] == HIERARCHICAL or configuration.get_clustering_selection[0] == K_MEDOIDS and configuration.cluster_no == configuration.no_values_abstracted:
-            abstraction_advice += "Use a lower-level abstraction, i.e. uncheck some checked answers."
+            abstraction_advice += "\nUse a lower-level abstraction, i.e. uncheck some checked answers."
         else:
-            abstraction_advice += "You might want to consider using a lower-level abstraction, i.e. unchecking some checked answers."
+            abstraction_advice += "\nYou might want to consider using a lower-level abstraction, i.e. unchecking some checked answers."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.LESS:
-        abstraction_advice += "You might want to consider using a higher abstraction level, i.e. checking some unchecked answers."
+        abstraction_advice += "\nYou might want to consider using a higher abstraction level, i.e. checking some unchecked answers."
     return abstraction_advice if abstraction_advice != "" else None
 
 

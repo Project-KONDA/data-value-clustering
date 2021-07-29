@@ -7,15 +7,15 @@ from abstraction.abstraction import *
 DEFAULT_CONFIG = "Default Configuration"
 MANUAL_CONFIG = "Manual Configuration"
 
-def abstraction_configuration(master, data, predefined_answers=None):
-    answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers)
+def abstraction_configuration(master, data, predefined_answers=None, suggestion=None):
+    answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers, suggestion)
     if answers is None:
         return None, None
     return get_abstraction_method(answers), answers
 
 
-def input_questionnaire_abstraction(master, config, data, predefined_answers=None):
-    questionnaire = AbstractionQuestionnaireResultInput(master, config, data, predefined_answers)
+def input_questionnaire_abstraction(master, config, data, predefined_answers=None, suggestion=None):
+    questionnaire = AbstractionQuestionnaireResultInput(master, config, data, predefined_answers, suggestion)
     questionnaire.run()
     answers = questionnaire.get()
     return answers
@@ -24,9 +24,13 @@ def input_questionnaire_abstraction(master, config, data, predefined_answers=Non
 class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     """ binary questionaire GUI for configuring the abstraction function """
 
-    def __init__(self, master, config, data, predefined_answers=None):
+    def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
         self.help_text = "Abstraction of the first 100 data values:\n"
         super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10)
+
+        if suggestion is not None:
+            self.label_suggested = Label(self.question_frame, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested.grid(row=1, column=0, sticky='senw', columnspan=2)
 
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
@@ -47,7 +51,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             # ["Custom Full", lambda data: custom_full()]
         ], dtype=object)
 
-        self.label = Label(self.question_frame, text="You can start with one of the following predefined configurations:")
+        self.label = Label(self.question_frame, text="You can start with one of the following predefined configurations:", bg="white")
         self.label.grid(row=2, column=0, sticky='we')
 
         self.predefined_options = list(self.predefined_abstractions[:, 0])
