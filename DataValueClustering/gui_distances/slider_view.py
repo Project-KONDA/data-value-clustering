@@ -19,7 +19,7 @@ class SliderInput:
         assert (n or costmap or abstraction is not None)
 
         self.master = master
-        self.n = n if n or costmap else len(texts)+1
+        self.n = n if n or costmap else len(texts)
         self.abstraction = np.array((2, 0)) if abstraction is None else abstraction
         self.texts = texts
         self.abstraction_keys = self.texts
