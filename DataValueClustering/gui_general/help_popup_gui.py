@@ -1,6 +1,30 @@
 '''text popup for context menu, used as help'''
 from tkinter import *
 
+def menu_help_hub(master):
+    """help popup for hub view"""
+    text = [
+        "The hub view is the central view of this program for data value clustering.",
+        "The data value clustering requires you to perform 4 configuration steps: data, abstraction, distance and clustering configuration.",
+        "The hub view allows you to navigate through the 4 configuration steps and access the calculated clustering subsequently.",
+        "",
+        "The configuration steps are performed in separate views which are opened upon clicking the corresponding button in the hub view.",
+        "The configuration step required to be performed next is highlighted in blue.",
+        "We advice you to perform the configuration steps in the given order.",
+        "",
+        "Once configured, the data extraction and abstraction are performed automatically.",
+        "This typically takes only a few seconds.",
+        "But since distance calculation and clustering may take up to multiple hours, they are startet manually by pressing the corresponding play button.",
+        "",
+        "Note that below each configuration button there is a small label indicating the status, "
+        "i.e. whether no configuration is present, the configuration is in progress, ",
+        "the calculation is in progress or the calculation is done.",
+        "On the right hand side you see previews of the 4 configurations.",
+        "You can save, load and reset your configuration via the menu.",
+        "",
+        "Once the clustering is ready, you can open the result view to see further information and perform the validation or save the clustering in an Excel file.",
+    ]
+    menu_information_display(master, "Hub Helper", text)
 
 def menu_help_cost_map(master):
     """help popup for matrix view"""

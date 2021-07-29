@@ -16,6 +16,7 @@ from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
+from gui_general.help_popup_gui import menu_help_hub
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, get_suggested_parameter_modifications
@@ -65,6 +66,7 @@ class Hub:
         self.menu.add_command(label="Save", command=self.menu_save)
         self.menu.add_command(label="Save As...", command=self.menu_saveas)
         self.menu.add_command(label="Load", command=self.menu_load)
+        self.menu.add_command(label="Help", command=lambda: menu_help_hub(self.root))
         self.root.config(menu=self.menu)
         self.root.resizable(False, False)
 
