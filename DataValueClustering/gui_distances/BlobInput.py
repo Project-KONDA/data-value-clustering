@@ -10,8 +10,8 @@ from gui_distances.blobinput_helper import get_blob_configuration, \
 from gui_distances.costmapinput_helper import print_cost_map
 
 
-def input_blobs(root, config):
-    blobs = BlobInput(root, config)
+def input_blobs(root, config, suggestion=None):
+    blobs = BlobInput(root, config, suggestion)
     cost_map, new_config = blobs.get()
     return cost_map, new_config
 
@@ -22,7 +22,7 @@ class BlobInput:
     by moving and resizing objects on a canvas
     """
 
-    def __init__(self, master, config):
+    def __init__(self, master, config, suggestion=None):
         """
         :param config: array
             config is array of form [label, regex, resizable, info, x, y, size]
@@ -106,6 +106,10 @@ class BlobInput:
         """Info"""
         self.canvas.bind("<Motion>", self.canvas_blob_info)
         self.canvas.text = self.canvas.create_text(10, 10, text="", anchor="nw")
+
+        if suggestion is not None:
+            self.canvas.advice= self.canvas.create_text(500, 10, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, anchor="nw")
+
 
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)
