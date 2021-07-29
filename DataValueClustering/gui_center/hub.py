@@ -48,9 +48,6 @@ class Hub:
         self.configuration = HubConfiguration()
         self.saved = False
 
-        "keys"
-        self.root.bind_all("<Return>", self.show_result)
-
         "labels"
         self.label_title = Label(self.root, text="Clustering Configuration Hub", bg="white",
                                  font=('Helvatical bold', 19))
