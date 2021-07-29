@@ -281,9 +281,8 @@ class Hub:
         self.saved = False
         if distance_choice == DistanceView.SLIDER:
             blob_configuration = self.configuration.create_blob_configuration()
-            print(list(blob_configuration[1:, 1]))
             cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:2],
-                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
+                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if previous_blob_configuration is None:

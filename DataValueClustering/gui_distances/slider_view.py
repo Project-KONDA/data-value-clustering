@@ -7,16 +7,26 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
 from gui_general import CreateToolTip
 
 
-def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None):
-    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion)
+def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
+    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
         assert (n or costmap or abstraction is not None)
+
+        self.costmap = costmap
+        self.abstraction = abstraction
+        self.texts = texts
+        self.value = value
+        self.fixed = fixed
+        self.suggestion = suggestion
+        self.configuration = configuration
+
+        self.next_slider_view = None
 
         self.master = master
         self.n = n if n or costmap else len(texts)
@@ -50,6 +60,7 @@ class SliderInput:
 
         self.title = Label(self.root, text="Slider Input", bg="white",
                            font=('bold 12', 19))
+        self.button_reset = Button(self.root, text='Reset', command=self.reset_groups)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
         self.button_ok = Button(self.root, text='OK', command=self.quit)
@@ -58,9 +69,15 @@ class SliderInput:
             self.button_plus.configure(state="disabled")
 
         self.title.grid(sticky='nswe', row=0, column=1, columnspan=8)
-        self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
+        self.button_reset.grid(sticky='ns', row=self.n + 5, column=1, pady=(10, 0))
+        self.button_minus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 5, column=3, pady=(10,0))
         self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+
+        CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
+        CreateToolTip(self.button_minus, "Remove the second to last line.")
+        CreateToolTip(self.button_plus, "Add line.")
+
 
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
@@ -159,6 +176,8 @@ class SliderInput:
     def get(self):
         if self.canceled:
             return None
+        if self.next_slider_view is not None:
+            return self.next_slider_view
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
@@ -167,6 +186,14 @@ class SliderInput:
             for j in range(self.n):
                 map[(i + 1, j + 1)] = max(self.valuelist[i].get(), self.valuelist[j].get())
         return map
+
+    def reset_groups(self):
+        blob_configuration = self.configuration.create_blob_configuration()
+        self.root.withdraw()
+        self.next_slider_view = slider_view(self.master, abstraction=blob_configuration[1:, 0:2],
+                               texts=list(blob_configuration[1:, 1]), costmap=self.costmap,
+                               suggestion=self.suggestion, configuration=self.configuration)
+        self.quit()
 
     def plus(self):
         # 1. create arrays
@@ -221,8 +248,9 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_minus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=1, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=2, pady=(10,0))
+        self.button_reset.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=1, pady=(10, 0))
+        self.button_minus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=2, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=3, pady=(10,0))
         self.button_ok.grid(sticky='nswe', row=self.n + 1 + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.update_labels()
         self.root.update()
@@ -271,8 +299,9 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_minus.grid(sticky='ns', row=self.n + self.row_offset, column=1, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + self.row_offset, column=2, pady=(10,0))
+        self.button_reset.grid(sticky='ns', row=self.n + self.row_offset, column=1, pady=(10, 0))
+        self.button_minus.grid(sticky='ns', row=self.n + self.row_offset, column=2, pady=(10,0))
+        self.button_plus.grid(sticky='ns', row=self.n + self.row_offset, column=3, pady=(10,0))
         self.button_ok.grid(sticky='nswe', row=self.n + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.root.update()
 
