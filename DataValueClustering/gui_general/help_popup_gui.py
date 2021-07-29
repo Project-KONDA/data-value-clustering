@@ -2,15 +2,42 @@
 from tkinter import *
 
 
+def menu_help_distance_slider(master):
+    """help popup for Slider Input view"""
+    text = [
+        "The Slider Input view allows you to configure the weights used in the distance calculation via sliders."
+        "",
+        "On the left-hand side the character groups are specified via enumerations of characters.",
+        "Only the first occurrence of a character in one of the groups is relevant.",
+        "The last line represents all characters not mentioned in the previous lines.",
+        "",
+        "Note that some characters actually represent features that were removed by the abstraction.",
+        "For example, depending on the abstraction configuration, '1' may represent any integer.",
+        "This mapping between characters and the represented features that were abstracted is provided in the column 'Abstraction Mapping'.",
+        "",
+        "You are free to modify the character groups.",
+        "You can add and remove groups, i.e. lines via the '+' and '-' buttons.",
+        "The default groups are automatically derived from the abstraction configuration.",
+        "To reset the groups correspongingly, press the 'Reset' button.",
+        "",
+        "Per character group you specify the weight via the slider given on the right-hand side.",
+        "This input method is limited, such that you only specify the relative importance of certain character groups concerning the dissimilarity between data values.",
+        "Thus, heigher weights for a character group mean more dissimilarity caused by the presence of these characters in data values.",
+        "You should choose heigher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values."
+    ]
+    menu_information_display(master, "Slider Input - Help", text)
+
+
+
 def menu_help_distance_choice(master):
     """help popup for Distance Choice view"""
     text = [
-        "The Distance Choice view allows you to select a method for configuring the distance calculation.",
+        "The Distance Choice view allows you to select a method for configuring the distance calculation, i.e. for specifying the similarity between character groups.",
         "Currently only the weighted Levenshtein distance is supported and can be configured via 3 different methods.",
         "Note that the easier methods allow less flexibility.",
         "Further note that once you use the Slider or Matrix View, you cannot open your configuration via the Blob View."
     ]
-    menu_information_display(master, "Abstraction Configuration - Help", text)
+    menu_information_display(master, "Distance Choice - Help", text)
 
 
 def menu_help_abstraction(master):

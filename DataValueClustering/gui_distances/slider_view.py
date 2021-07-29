@@ -1,10 +1,12 @@
-from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT, Frame, Canvas, Scrollbar
+from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT, Frame, Canvas, Scrollbar, \
+    Menu
 
 import numpy as np
 
 from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
     example_costmap, groups_to_enumerations
 from gui_general import CreateToolTip
+from gui_general.help_popup_gui import menu_help_distance_slider
 
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
@@ -57,6 +59,10 @@ class SliderInput:
         self.root.resizable(False, True)
         self.root.focus_force()
         self.root.grab_set()
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root))
+        self.root.config(menu=self.menu)
 
         self.title = Label(self.root, text="Slider Input", bg="white",
                            font=('bold 12', 19))
