@@ -282,11 +282,11 @@ class Hub:
             if previous_cost_map is None:
                 blob_configuration = self.configuration.create_blob_configuration()
                 cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:, 1]),
-                                         abstraction=blob_configuration[1:, 0:2])
+                                         abstraction=blob_configuration[1:, 0:2], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
             else:
                 blob_configuration = self.configuration.create_blob_configuration()
                 cost_map = input_costmap(self.root, costmap=previous_cost_map,
-                                         abstraction=blob_configuration[1:, 0:2])
+                                         abstraction=blob_configuration[1:, 0:2], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
             blob_configuration = None
 
         if cost_map is None or previous_cost_map == cost_map:

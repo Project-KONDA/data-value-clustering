@@ -6,18 +6,18 @@ from gui_distances.costmapinput_helper import validate_input_float, print_cost_m
     preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
 
 
-def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None):
+def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None, suggestion=None):
     if size is not None:
         size += 2
     assert (size is None or size in range(2, 21))
-    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction)
+    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction, suggestion=suggestion)
     return myMap.get()
 
 
 class CostMapInput:
     """ GUI for direct input of the weight matrix for configuring the weighted levenstein distance function """
 
-    def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None):
+    def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None, suggestion=None):
         if costmap is not None:
             regexes = None
         self.map = costmap
@@ -56,6 +56,10 @@ class CostMapInput:
         menu = Menu(self.root)
         menu.add_command(label='Help', command=lambda: menu_help_cost_map(self.root))
         self.root.config(menu=menu)
+
+        if suggestion is not None:
+            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=self.n+4)
 
         Label(self.root, text='Case Change:', background='white').grid(sticky=W, row=9, column=1, columnspan=2)
         self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
