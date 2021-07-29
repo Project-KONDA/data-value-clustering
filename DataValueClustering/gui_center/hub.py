@@ -17,7 +17,7 @@ from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
-    get_suggested_abstraction_modifications
+    get_suggested_abstraction_modifications, get_suggested_distance_modifications
 
 CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
 DISTANCE_NOT_CONFIGURED = "Distance not configured"
@@ -262,7 +262,7 @@ class Hub:
             blob_configuration = self.configuration.create_blob_configuration()
             print(list(blob_configuration[1:, 1]))
             cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:2],
-                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map)
+                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
             blob_configuration = None
         elif distance_choice == DistanceView.BLOB:
             if previous_blob_configuration is None:

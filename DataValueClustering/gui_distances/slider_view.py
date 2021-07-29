@@ -7,14 +7,14 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
 from gui_general import CreateToolTip
 
 
-def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False):
-    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed)
+def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None):
+    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
         assert (n or costmap or abstraction is not None)
 
@@ -68,12 +68,16 @@ class SliderInput:
             self.button_plus.configure(state="disabled")
 
         self.title.grid(sticky='nswe', row=0, column=1, columnspan=4)
-        self.label_heading1.grid(sticky='nsw', row=1, column=1)
-        self.label_heading2.grid(sticky='nsw', row=1, column=3)
-        self.label_heading3.grid(sticky='nsw', row=1, column=5)
+        self.label_heading1.grid(sticky='nsw', row=2, column=1)
+        self.label_heading2.grid(sticky='nsw', row=2, column=3)
+        self.label_heading3.grid(sticky='nsw', row=2, column=5)
         self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
         self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
         self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+
+        if suggestion is not None:
+            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
 
         self.entrylist = np.full(self.n, Entry(self.root))
         self.entry_var_list = np.full(self.n, StringVar())
@@ -101,9 +105,9 @@ class SliderInput:
             self.sliderlist[i] = Scale(self.root, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
-            self.entrylist[i].grid(sticky='new', row=i + 2, column=1, columnspan=2, pady=(15,0), padx=1)
-            self.label_list[i].grid(sticky='new', row=i + 2, column=3, columnspan=2, pady=(15,0), padx=1)
-            self.sliderlist[i].grid(sticky='new', row=i + 2, column=5, columnspan=2, pady=(0, 0))
+            self.entrylist[i].grid(sticky='new', row=i + 3, column=1, columnspan=2, pady=(15,0), padx=1)
+            self.label_list[i].grid(sticky='new', row=i + 3, column=3, columnspan=2, pady=(15,0), padx=1)
+            self.sliderlist[i].grid(sticky='new', row=i + 3, column=5, columnspan=2, pady=(0, 0))
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
