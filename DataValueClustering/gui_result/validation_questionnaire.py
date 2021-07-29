@@ -34,11 +34,10 @@ question_4_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"
 
 def get_suggested_data(validation_answers):
     suggested_data_names = None
-    print(validation_answers[3])
     if validation_answers[3] is not None and validation_answers[3][1] is not None:
         print(validation_answers)
         suggested_data_names = validation_answers[3][1]
-    return suggested_data_names if len(suggested_data_names) > 0 else None
+    return suggested_data_names if suggested_data_names is None or len(suggested_data_names) > 0 else None
 
 
 def get_suggested_abstraction_modifications(validation_answers, configuration):
