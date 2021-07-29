@@ -163,12 +163,14 @@ class CostMapInput:
             return ""
         label_text = ""
         separator = " & "
+        other_chars = text
         for i, chars in enumerate(self.abstraction[:, 1]):
             if chars in text:
                 label_text += self.abstraction[i, 0] + separator
-                other_chars = text.replace(chars, "")
-        if text != "":
-            label_text += "others" + separator
+                other_chars = other_chars.replace(chars, "")
+        if other_chars != "":
+            print(other_chars)
+            label_text += "individual" + separator
         k = len(label_text) - len(separator)
         label_text = label_text[0:k]
         return label_text
