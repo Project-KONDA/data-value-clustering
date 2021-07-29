@@ -32,7 +32,6 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root))
         self.root.config(menu=self.menu)
-        self.root.resizable(False, False)
 
         if suggestion is not None:
             self.label_suggested = Label(self.question_frame, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')

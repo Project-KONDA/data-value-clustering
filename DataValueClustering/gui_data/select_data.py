@@ -30,7 +30,6 @@ class SelectData:
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
         self.root.config(menu=self.menu)
-        self.root.resizable(False, False)
 
         self.result = None
         self.datalist = list()
