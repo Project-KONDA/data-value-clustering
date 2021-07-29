@@ -539,7 +539,10 @@ class Hub:
             for i, v in enumerate(regex_np):
                 if i > 0:
                     text += ", "
-                text += str(v[0])
+                s = ""
+                for j, c in enumerate(v):
+                    s += c
+                text += str(s)
             text += "]"
             text += "\n" + str(costmap_weights)
             self.label_distance_config.configure(text=text)
