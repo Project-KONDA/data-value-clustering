@@ -15,6 +15,7 @@ from gui_distances import input_blobs, input_costmap
 from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
+from gui_general import CreateToolTip
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, get_suggested_parameter_modifications
@@ -51,15 +52,18 @@ class Hub:
 
         "labels"
         self.label_title = Label(self.root, text="Clustering Configuration Hub", bg="white",
-                                 font=('Helvatical bold', 19))
-        self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=3)
+                                 font=('Helvatical bold', 19), anchor="c", justify="center")
+        self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4)
+
+        self.label_explanation = Label(self.root, text="Please perform the following steps to obtain a clustering of your data.", bg="white")
+        self.label_explanation.grid(sticky='nswe', row=1, column=1, columnspan=4)
 
         "menu"
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="New", command=self.menu_new)
         self.menu.add_command(label="Save", command=self.menu_save)
-        self.menu.add_command(label="Save As ..", command=self.menu_saveas)
+        self.menu.add_command(label="Save As...", command=self.menu_saveas)
         self.menu.add_command(label="Load", command=self.menu_load)
         self.root.config(menu=self.menu)
         self.root.resizable(False, False)
@@ -79,6 +83,11 @@ class Hub:
         self.button_distance.grid(sticky='nwe', row=9, column=1, columnspan=2, padx=10, pady=10)
         self.button_clustering.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
 
+        CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
+        CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
+        CreateToolTip(self.button_distance, "Specify how similarities between data values should be calculated.")
+        CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
+
         self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
                                            width=4, height=2, state="disabled")
         self.button_distance_play.grid(sticky='ne', row=10, column=2, padx=10, pady=10)
@@ -93,6 +102,11 @@ class Hub:
         self.button_save_result = Button(self.root, text='Save Excel', command=self.save_excel, state="disabled",
                                          font=('Sans', '10', 'bold'), height=2)
         self.button_save_result.grid(sticky='nswe', row=14, column=4, padx=10, pady=10)
+
+        CreateToolTip(self.button_distance_play, "Execute distance calulcation.")
+        CreateToolTip(self.button_clustering_play, "Execute clustering.")
+        CreateToolTip(self.button_show_result, "Show calculated clustering and meta-information.")
+        CreateToolTip(self.button_save_result, "Save calculated clustering in an Excel file.")
 
         # "progress bars"
         # self.path_progress = Progressbar(self.root, orient=HORIZONTAL, length=100, mode='determinate')
