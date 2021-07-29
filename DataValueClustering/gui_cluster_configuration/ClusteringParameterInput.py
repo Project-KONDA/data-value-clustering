@@ -4,8 +4,8 @@ import numpy as np
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
-def get_configuration_parameters(master, title, parameter_frame_inits, dependencies):
-    input = ClusterConfigurationInput(master, title, parameter_frame_inits, dependencies)
+def get_configuration_parameters(master, title, parameter_frame_inits, dependencies, suggestion=None):
+    input = ClusterConfigurationInput(master, title, parameter_frame_inits, dependencies, suggestion)
     return input.get()
 
 
@@ -14,7 +14,7 @@ class ClusterConfigurationInput:
     A view that contains widgets for specifying the parameters of the clustering algorithm.
     '''
 
-    def __init__(self, master, title, parameter_frame_inits, dependencies):
+    def __init__(self, master, title, parameter_frame_inits, dependencies, suggestion=None):
         self.root = Toplevel(master)
         self.root.title(title)
         self.root.resizable(False, True)
@@ -51,6 +51,10 @@ class ClusterConfigurationInput:
         self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='white',
                            font=font.Font(size=14))
 
+        self.label_suggested = None
+        if suggestion is not None:
+            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire is given in blue next to sliders and highlighted in green\nfor enumerations.", bg="white", anchor='w', pady=10, fg='blue', justify='left')
+
         # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
 
@@ -85,14 +89,16 @@ class ClusterConfigurationInput:
     def record_parameters(self):
 
         self.label.grid(row=0, column=0, sticky='w', pady=5, padx=5)
-        self.canvas_border.grid(row=1, column=0, sticky='nsew')
+        if self.label_suggested is not None:
+            self.label_suggested.grid(row=1, column=0, sticky='senw')
+        self.canvas_border.grid(row=2, column=0, sticky='nsew')
         self.canvas.grid(row=0, column=0, sticky='nsew')
         self.scrollbar.grid(row=0, column=1, sticky='nsew')
 
         for i, param in enumerate(self.parameters):
             param.frame.grid(row=i + 1, column=0, sticky='nsew', pady=5, padx=5)
 
-        self.button.grid(row=2, column=0, sticky='nsew')
+        self.button.grid(row=3, column=0, sticky='nsew')
 
         # Center Window on Screen
         self.root.update_idletasks()

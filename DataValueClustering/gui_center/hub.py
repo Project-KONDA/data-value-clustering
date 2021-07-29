@@ -17,7 +17,7 @@ from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
-    get_suggested_abstraction_modifications, get_suggested_distance_modifications
+    get_suggested_abstraction_modifications, get_suggested_distance_modifications, get_suggested_parameter_modifications
 
 CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
 DISTANCE_NOT_CONFIGURED = "Distance not configured"
@@ -322,7 +322,7 @@ class Hub:
 
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
-        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters)
+        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration))
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
             self.root.update()

@@ -1,12 +1,12 @@
-from tkinter import IntVar, Checkbutton
+from tkinter import IntVar, Checkbutton, Label
 
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 
 
 def create_boolean_frame(name, explanation, default, deactivatable=False, default_active=False,
-                         plot_function=None, previous_value=None):
+                         plot_function=None, previous_value=None, suggestion=None):
     return lambda parent: BooleanClusteringParameter(parent, name, explanation, default, previous_value=previous_value, deactivatable=deactivatable,
-                                                     default_active=default_active, plot_function=plot_function)
+                                                     default_active=default_active, plot_function=plot_function, suggestion=suggestion)
 
 
 class BooleanClusteringParameter(ClusteringParameter):
@@ -15,7 +15,7 @@ class BooleanClusteringParameter(ClusteringParameter):
     '''
 
     def __init__(self, parent, name, explanation, default, previous_value=None, deactivatable=False,
-                 default_active=False, plot_function=None):
+                 default_active=False, plot_function=None, suggestion=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
         self.default = default
         self.previous = previous_value
@@ -30,16 +30,29 @@ class BooleanClusteringParameter(ClusteringParameter):
         # self.check_boolean.grid(row=0, column=1, sticky='se')
         self.check_boolean.grid(row=2, column=1, sticky='nw')
 
+        self.validation_suggestion = None
+        self.label_suggested = None
+        if suggestion is not None and self.name in suggestion:
+            self.validation_suggestion = suggestion[self.name]
+            self.label_suggested = Label(self.frame,
+                                         text="Advice: " + self.validation_suggestion,
+                                         anchor='nw', pady=10, fg='blue', bg='white')
+            self.label_suggested.grid(row=2, column=2, sticky='w')
+
 
         self.update_active()
 
     def activate(self):
         super().activate()
         self.check_boolean.config(state='normal', bg='white')
+        if self.label_suggested is not None:
+            self.label_suggested.config(state='normal', fg="blue", bg='white')
 
     def deactivate(self):
         super().deactivate()
         self.check_boolean.config(state='disabled', bg='grey90')
+        if self.label_suggested is not None:
+            self.label_suggested.config(state='disabled', bg='grey90')
 
     def reset(self):
         self.value_var.set(int(self.default))

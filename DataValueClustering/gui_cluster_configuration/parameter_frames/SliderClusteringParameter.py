@@ -1,14 +1,14 @@
-from tkinter import Scale, IntVar, DoubleVar
+from tkinter import Scale, IntVar, DoubleVar, Label
 
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter, \
     DEPENDENCY_VALUE_SLIDER_MAX
 
 
 def create_slider_frame(name, explanation, mini, maxi, default, resolution=1, deactivatable=False,
-                        default_active=False, plot_function=None, previous_value=None):
+                        default_active=False, plot_function=None, previous_value=None, suggestion=None):
     return lambda parent: SliderClusteringParameter(parent, name, explanation, mini, maxi, default, previous_value=previous_value,
                                                     resolution=resolution, deactivatable=deactivatable,
-                                                    default_active=default_active, plot_function=plot_function)
+                                                    default_active=default_active, plot_function=plot_function, suggestion=suggestion)
 
 
 class SliderClusteringParameter(ClusteringParameter):
@@ -17,7 +17,7 @@ class SliderClusteringParameter(ClusteringParameter):
     '''
 
     def __init__(self, parent, name, explanation, mini, maxi, default, previous_value=None, resolution=1,
-                 deactivatable=False, default_active=False, plot_function=None):
+                 deactivatable=False, default_active=False, plot_function=None, suggestion=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
         assert type(mini) == type(maxi) == type(default) == type(resolution), str(name) + str(type(mini)) + str(type(maxi)) + str(type(default)) + str(type(resolution))
@@ -44,6 +44,15 @@ class SliderClusteringParameter(ClusteringParameter):
                             bg='white', highlightthickness=0, resolution=self.resolution, tickinterval=maxi-mini)
         self.slider.grid(row=2, column=1, sticky='w')
 
+        self.validation_suggestion = None
+        self.label_suggested = None
+        if suggestion is not None and self.name in suggestion:
+            self.validation_suggestion = suggestion[self.name]
+            self.label_suggested = Label(self.frame,
+                                         text="Advice: " + self.validation_suggestion,
+                                        anchor='nw', pady=10, fg='blue', bg='white')
+            self.label_suggested.grid(row=2, column=2, sticky='w')
+
         # self.update_active()
 
     def update_active(self):
@@ -68,10 +77,14 @@ class SliderClusteringParameter(ClusteringParameter):
         super().activate()
         self.update_dependency(DEPENDENCY_VALUE_SLIDER_MAX)
         self.slider.config(state='normal', fg='black', troughcolor='SystemScrollbar', bg='white')
+        if self.label_suggested is not None:
+            self.label_suggested.config(state='normal', fg="blue", bg='white')
 
     def deactivate(self):
         super().deactivate()
         self.slider.config(state='disabled', fg='grey', troughcolor='grey70', bg='grey90')
+        if self.label_suggested is not None:
+            self.label_suggested.config(state='disabled', bg='grey90')
 
     def reset(self):
         self.value_var.set(self.default)

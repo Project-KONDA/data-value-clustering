@@ -17,7 +17,7 @@ class ClusteringParameter(ABC):
     def __init__(self, parent, name, explanation, deactivatable=False, reverse_default_active=False, plot_function=None):
         self.frame = Frame(parent, highlightthickness=1, highlightbackground='grey', bg='white')
         self.frame.grid_columnconfigure(0, minsize=self.frame.winfo_screenwidth() // 25)
-        self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() // 3)
+        self.frame.grid_columnconfigure(1, minsize=self.frame.winfo_screenwidth() // 3.5)
 
         self.root = parent
         self.name = name
@@ -35,7 +35,7 @@ class ClusteringParameter(ABC):
         # check box:
         if self.deactivatable:
             self.check_active = Checkbutton(self.frame, variable=self.is_activated, command=self.update_active,
-                                            bg='white', anchor='nw', padx=20)
+                                            bg='white', anchor='w', padx=20)
             self.check_active.grid(row=0, column=0, sticky='w')
 
         # name label:
@@ -49,17 +49,17 @@ class ClusteringParameter(ABC):
         self.explanation_text = StringVar()
         self.explanation_text.set(self.explanation)
         self.label_explanation = Label(self.frame, anchor='nw', textvariable=self.explanation_text, bg='white', padx=5,
-                                       wraplength=500, justify='left')
+                                       wraplength=400, justify='left')
         self.label_explanation.grid(row=1, column=1, sticky='w')
 
         # reset button:
         self.reset_button = Button(self.frame, anchor='nw', text="Reset", command=self.reset)
-        self.reset_button.grid(row=1, column=1, sticky='ne', padx=5, pady=5)
+        self.reset_button.grid(row=1, column=2, sticky='ne', padx=5, pady=5)
 
         # plot
         if plot_function:
             self.plot_button = Button(self.frame, anchor='nw', text="Show plot", command=self.plot_button_pressed)
-            self.plot_button.grid(row=0, column=1, sticky='ne', padx=5, pady=5)
+            self.plot_button.grid(row=0, column=2, sticky='ne', padx=5, pady=5)
 
     def reset(self):
         self.update_dependency(DEPENDENCY_ACTIVATION_ACTIVATION)
