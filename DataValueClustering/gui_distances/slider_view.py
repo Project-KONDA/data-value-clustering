@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT
+from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT, Frame, Canvas, Scrollbar
 
 import numpy as np
 
@@ -48,18 +48,8 @@ class SliderInput:
         self.root.focus_force()
         self.root.grab_set()
 
-        self.title = Label(self.root, text="Slider View", bg="white",
+        self.title = Label(self.root, text="Slider Input", bg="white",
                            font=('bold 12', 19))
-        self.label_heading1 = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
-        CreateToolTip(self.label_heading1, "Enumerate all characters of this group. Only the first occurrence of a "
-                                           "character in one of the groups is relevant. Note that some characters may "
-                                           "represent abstracted details. This mapping is provided in the column "
-                                           "'Abstraction Mapping'.")
-        self.label_heading2 = Label(self.root, text="Abstraction Mapping", bg="white", font=('Sans', '10', 'bold'))
-        CreateToolTip(self.label_heading2, "Mapping between characters of the column 'Characters' and the abstracted "
-                                           "aspects they represent.")
-        self.label_heading3 = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
-        CreateToolTip(self.label_heading3, "Weights for the given character groups.")
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
         self.button_ok = Button(self.root, text='OK', command=self.quit)
@@ -67,10 +57,7 @@ class SliderInput:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
-        self.title.grid(sticky='nswe', row=0, column=1, columnspan=4)
-        self.label_heading1.grid(sticky='nsw', row=2, column=1)
-        self.label_heading2.grid(sticky='nsw', row=2, column=3)
-        self.label_heading3.grid(sticky='nsw', row=2, column=5)
+        self.title.grid(sticky='nswe', row=0, column=1, columnspan=8)
         self.button_minus.grid(sticky='ns', row=self.n + 5, column=1, pady=(10,0))
         self.button_plus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
         self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
@@ -79,10 +66,37 @@ class SliderInput:
             self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
             self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
 
-        self.entrylist = np.full(self.n, Entry(self.root))
+        # scrollable canvas:
+        self.canvas = Canvas(self.root, bg='white', highlightthickness=0, width=800)  # TODO: set width relative
+        self.scrollbar = Scrollbar(self.root, orient='vertical', command=self.canvas.yview)
+        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
+        self.scrollable_frame = Frame(self.canvas, bg='white')
+        self.scrollable_frame.bind('<Configure>',
+                                   lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
+        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw')
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.grid(row=3, column=1, sticky='nswe', columnspan=6)
+        self.scrollbar.grid(row=3, column=7, sticky='nswe')
+
+        # headings:
+        self.label_heading1 = Label(self.scrollable_frame, text="Characters", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_heading1, "Enumerate all characters of this group. Only the first occurrence of a "
+                                           "character in one of the groups is relevant. Note that some characters may "
+                                           "represent abstracted details. This mapping is provided in the column "
+                                           "'Abstraction Mapping'.")
+        self.label_heading2 = Label(self.scrollable_frame, text="Abstraction Mapping", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_heading2, "Mapping between characters of the column 'Characters' and the abstracted "
+                                           "aspects they represent.")
+        self.label_heading3 = Label(self.scrollable_frame, text="Weights", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_heading3, "Weights for the given character groups.")
+        self.label_heading1.grid(sticky='nswe', row=2, column=1, columnspan=2)
+        self.label_heading2.grid(sticky='nswe', row=2, column=3, columnspan=2)
+        self.label_heading3.grid(sticky='nswe', row=2, column=5, columnspan=2)
+
+        self.entrylist = np.full(self.n, Entry(self.scrollable_frame))
         self.entry_var_list = np.full(self.n, StringVar())
-        self.label_list = np.full(self.n, Label(self.root))
-        self.sliderlist = np.full(self.n, Scale(self.root))
+        self.label_list = np.full(self.n, Label(self.scrollable_frame))
+        self.sliderlist = np.full(self.n, Scale(self.scrollable_frame))
         self.valuelist = np.full(self.n, IntVar())
 
         for i in range(0, self.n):
@@ -93,16 +107,16 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.root, bg="white", anchor=W, justify=LEFT)
-            self.valuelist[i] = IntVar(self.root, v)
-            self.entry_var_list[i] = StringVar(self.root, t)
+            self.label_list[i] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT)
+            self.valuelist[i] = IntVar(self.scrollable_frame, v)
+            self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
             self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
-            self.entrylist[i] = Entry(self.root, font="12", textvariable=self.entry_var_list[i])
+            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i])
             if i == self.n-1 or self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
-            self.sliderlist[i] = Scale(self.root, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
+            self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
             self.entrylist[i].grid(sticky='new', row=i + 3, column=1, columnspan=2, pady=(15,0), padx=1)
@@ -111,6 +125,13 @@ class SliderInput:
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
+
+    def on_mousewheel(self, event):
+        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
+            self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
+
+    def unbind_all(self):
+        self.root.unbind_all("<MouseWheel>")
 
     def update_labels(self):
         if self.updating_labels:
@@ -147,10 +168,10 @@ class SliderInput:
 
     def plus(self):
         # 1. create arrays
-        entrylist = np.full(self.n+1, Entry(self.root))
+        entrylist = np.full(self.n+1, Entry(self.scrollable_frame))
         entry_var_list = np.full(self.n+1, StringVar())
-        label_list = np.full(self.n+1, Label(self.root))
-        sliderlist = np.full(self.n+1, Scale(self.root))
+        label_list = np.full(self.n+1, Label(self.scrollable_frame))
+        sliderlist = np.full(self.n+1, Scale(self.scrollable_frame))
         valuelist = np.full(self.n+1, IntVar())
 
         # 2. copy elements
@@ -166,10 +187,10 @@ class SliderInput:
         entry_var_list[self.n-1].set("")
         valuelist[self.n-1].set(1)
 
-        entrylist[self.n-1] = Entry(self.root, font="12", textvariable=entry_var_list[self.n-1],
+        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1],
                                     state=("disabled" if self.fixed else "normal"))
-        label_list[self.n-1] = Label(self.root, bg="white", anchor=W, justify=LEFT)
-        sliderlist[self.n-1] = Scale(self.root, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
+        label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT)
+        sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
                                         length=400, bg='white', highlightthickness=0, resolution=1)
 
         label_list[self.n-1].grid(sticky='new', row=self.n+1, column=3, columnspan=2, pady=(15,0), padx=1)
@@ -210,10 +231,10 @@ class SliderInput:
 
         # 1. create arrays
         self.n = self.n - 1
-        entrylist = np.full(self.n, Entry(self.root))
+        entrylist = np.full(self.n, Entry(self.scrollable_frame))
         entry_value_list = np.full(self.n, StringVar())
-        label_list = np.full(self.n, Label(self.root))
-        sliderlist = np.full(self.n, Scale(self.root))
+        label_list = np.full(self.n, Label(self.scrollable_frame))
+        sliderlist = np.full(self.n, Scale(self.scrollable_frame))
         valuelist = np.full(self.n, IntVar())
 
         # 2. copy elements
@@ -258,6 +279,7 @@ class SliderInput:
         self.quit()
 
     def quit(self):
+        self.unbind_all()
         self.root.quit()
         self.root.destroy()
 
