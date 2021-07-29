@@ -55,7 +55,7 @@ class Hub:
                                  font=('Helvatical bold', 19), anchor="c", justify="center")
         self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4)
 
-        self.label_explanation = Label(self.root, text="Please perform the following steps to obtain a clustering of your data.", bg="white")
+        self.label_explanation = Label(self.root, text="Perform the following steps to obtain a clustering of your data.\nThe next required steps are highlighted in blue.", bg="white")
         self.label_explanation.grid(sticky='nswe', row=1, column=1, columnspan=4)
 
         "menu"
@@ -171,6 +171,11 @@ class Hub:
         self.label_abstraction_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
         self.label_distance_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
         self.label_clustering_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
+
+        CreateToolTip(self.label_data_config, "Name of the selected data set.")
+        CreateToolTip(self.label_abstraction_config, "Abstracted details marked by 'True'.")
+        CreateToolTip(self.label_distance_config, "The first line shows the characters groups. Below corresponding distance weights.")
+        CreateToolTip(self.label_clustering_config, "Selected clustering algorithm and specified parameters.")
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 

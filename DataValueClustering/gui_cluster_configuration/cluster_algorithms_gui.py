@@ -78,7 +78,7 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
         # [hierarchical.CRITERION, hierarchical.MONOCRIT, 'enum_value_activation', {'inconsistent': False, 'maxclust': False, 'maxclust_monocrit': True, 'distance': False, 'monocrit': True}]
     ]
     n_clusters, distance_threshold, criterion, depth = \
-        get_configuration_parameters(master, "", frames, dependencies2, suggestion)
+        get_configuration_parameters(master, "Hierarchical Clustering Configuration Part 2/2", frames, dependencies2, suggestion)
 
     if n_clusters is None:
         return None
@@ -109,7 +109,7 @@ def cluster_kmedoids(master, cluster_answers, distance_matrix_map, values, previ
     frames = [n_clusters_frame, init_frame, max_iter_frame]
 
     n_clusters, init, max_iter = \
-        get_configuration_parameters(master, "", frames, [], suggestion)
+        get_configuration_parameters(master, "KMedoids Configuration", frames, [], suggestion)
 
     if n_clusters is None:
         return None
@@ -139,7 +139,7 @@ def cluster_dbscan(master, cluster_answers, distance_matrix_map, values, previou
         [dbscan_clustering.MIN_SAMPLES, dbscan_clustering.EPS, DEPENDENCY_VALUE_SLIDER_MAX,
          lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
     ]
-    min_samples, eps, n_jobs = get_configuration_parameters(master, "", frames, dependencies, suggestion)
+    min_samples, eps, n_jobs = get_configuration_parameters(master, "DBSCAN Configuration", frames, dependencies, suggestion)
 
     if min_samples is None:
         return None
@@ -193,7 +193,7 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     ]
     min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
     n_jobs \
-        = get_configuration_parameters(master, "", frames, dependencies, suggestion)
+        = get_configuration_parameters(master, "OPTICS Configuration", frames, dependencies, suggestion)
 
     if not max_eps:
         max_eps = np.inf
@@ -228,7 +228,7 @@ def cluster_affinity(master, cluster_answers, distance_matrix_map, values, previ
     dependencies = [
         [affinity_propagation_clustering.MAX_ITER, affinity_propagation_clustering.CONVERGENCE_ITER, DEPENDENCY_VALUE_SLIDER_MAX, lambda new_max_iter: new_max_iter],
     ]
-    damping, max_iter, convergence_iter, preference = get_configuration_parameters(master, "", frames, dependencies, suggestion)
+    damping, max_iter, convergence_iter, preference = get_configuration_parameters(master, "Affinity Propagation Configuration", frames, dependencies, suggestion)
 
     if damping is None:
         return None
@@ -269,7 +269,7 @@ def cluster_spectral(master, cluster_answers, distance_matrix_map, values, previ
         [spectral_clustering.EIGEN_SOLVER, spectral_clustering.EIGEN_TOL, DEPENDENCY_ENUM_ACTIVATION, {'lobpcg': False, 'amg': False, 'arpack': True}],
     ]
     n_clusters, eigen_solver, n_components, n_init, eigen_tol, assign_labels \
-        = get_configuration_parameters(master, "", frames, dependencies, suggestion)
+        = get_configuration_parameters(master, "Spectral Clustering Configuration", frames, dependencies, suggestion)
 
     if not n_components:
         n_components = n_clusters

@@ -6,6 +6,7 @@ import numpy as np
 
 from data_extraction import get_sources_in_experiment_data_directory
 from gui_data.add_data import add_data
+from gui_general import CreateToolTip
 
 
 def get_list(path=""):
@@ -23,7 +24,7 @@ class SelectData:
         self.single_cluster_data = single_cluster_data
 
         self.root = Toplevel(master)
-        # self.root.title("Select Data")
+        self.root.title("Select Data")
 
         self.result = None
         self.datalist = list()
@@ -51,6 +52,9 @@ class SelectData:
         self.button_add.grid(sticky='nswe', row=5, column=1, columnspan=1)
         self.button_remove.grid(sticky='nswe', row=5, column=2, columnspan=1)
         self.button_ok.grid(sticky='nswe', row=5, column=3, columnspan=2)
+
+        CreateToolTip(self.button_add, "Add a data set.")
+        CreateToolTip(self.button_remove, "Remove selected data set.")
 
         self.load()
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)

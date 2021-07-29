@@ -57,6 +57,7 @@ class ClusteringParameter(ABC):
         self.reset_button.grid(row=1, column=2, sticky='ne', padx=5, pady=5)
 
         # plot
+        self.plot_button = None
         if plot_function:
             self.plot_button = Button(self.frame, anchor='nw', text="Show plot", command=self.plot_button_pressed)
             self.plot_button.grid(row=0, column=2, sticky='ne', padx=5, pady=5)
@@ -108,6 +109,8 @@ class ClusteringParameter(ABC):
         self.is_activated.set(int(False))
         self.label.config(state='disabled', bg='grey90')
         self.label_explanation.config(state='disabled', bg='grey90')
+        if self.plot_button is not None:
+            self.plot_button.config(state='disabled', bg='grey90')
         self.reset_button.config(state='disabled', bg='grey90')
         self.frame.config(bg='grey90')
         if self.deactivatable:
@@ -117,6 +120,8 @@ class ClusteringParameter(ABC):
         self.is_activated.set(int(True))
         self.label.config(state='normal', bg='white')
         self.label_explanation.config(state='normal', bg='white')
+        if self.plot_button is not None:
+            self.plot_button.config(state='normal', bg='white')
         self.reset_button.config(state='normal', bg='white')
         self.frame.config(bg='white')
         if self.deactivatable:
