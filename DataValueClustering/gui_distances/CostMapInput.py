@@ -6,24 +6,30 @@ from gui_distances.costmapinput_helper import validate_input_float, print_cost_m
     preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
 
 
-def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None, suggestion=None):
+def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None, suggestion=None, configuration=None):
     if size is not None:
         size += 2
     assert (size is None or size in range(2, 21))
-    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction, suggestion=suggestion)
+    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction, suggestion=suggestion, configuration=configuration)
     return myMap.get()
 
 
 class CostMapInput:
     """ GUI for direct input of the weight matrix for configuring the weighted levenstein distance function """
 
-    def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None, suggestion=None):
+    def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None, suggestion=None, configuration=None):
         if costmap is not None:
             regexes = None
-        self.map = costmap
+        self.master = master
+        self.regexes = regexes
+        self.costmap = costmap
         self.map_n = get_n_from_map(costmap) if costmap is not None else -1
         self.empty = empty
         self.abstraction = abstraction
+        self.suggestion = suggestion
+        self.configuration = configuration
+
+        self.next_matrix_view = None
 
         self.canceled = False
         self.n = n if n is not None \
@@ -64,21 +70,21 @@ class CostMapInput:
         Label(self.root, text='Case Change:', background='white').grid(sticky=W, row=9, column=1, columnspan=2)
         self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
                                 validatecommand=(self.case_entry.register(validate_input_float), '%P'))
-        if not self.empty and self.map is None:
+        if not self.empty and self.costmap is None:
             self.case_entry.insert(END, '.5')
-        elif not self.empty and self.map is not None:
-            self.case_entry.insert(END, str(self.map[()]))
+        elif not self.empty and self.costmap is not None:
+            self.case_entry.insert(END, str(self.costmap[()]))
 
-        self.case_entry.grid(sticky=W, row=9, column=3)
+        self.case_entry.grid(sticky=W, row=9, column=4)
 
         for i in range(self.n):
             self.label[i] = Label(self.root, width=7, bg='lightgrey', anchor=W)
-            self.label[i].grid(sticky=W, row=9, column=i + 4)
+            self.label[i].grid(sticky=W, row=9, column=i + 5)
             self.regex[i] = Entry(self.root, width=20, bg='ivory2', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
             self.regex_label[i] = Label(self.root, anchor=W)
-            self.regex[i].grid(row=i + 10, column=1, columnspan=2)
-            self.regex_label[i].grid(sticky="nswe", row=i + 10, column=3, columnspan=1)
+            self.regex[i].grid(row=i + 10, column=1, columnspan=3)
+            self.regex_label[i].grid(sticky="nswe", row=i + 10, column=4, columnspan=1)
 
             if i == 0:
                 self.regex[i].insert(END, 'add')
@@ -101,13 +107,13 @@ class CostMapInput:
                 self.value_entries[i, j]['validatecommand'] = (
                     self.value_entries[i, j].register(
                         lambda s, i2=i, j2=j: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')  # , '%d')
-                self.value_entries[i, j].grid(column=i + 4, row=j + 10)
+                self.value_entries[i, j].grid(column=i + 5, row=j + 10)
 
                 if not self.empty:
-                    if self.map is None or i >= self.map_n or j >= self.map_n:
+                    if self.costmap is None or i >= self.map_n or j >= self.map_n:
                         self.value_entries[i, j].insert(END, int(i != j))
                     else:
-                        self.value_entries[i, j].insert(END, self.map[(i, j)])
+                        self.value_entries[i, j].insert(END, self.costmap[(i, j)])
                 if i == j:
                     self.value_entries[i, i].config(bg='floral white')
                 if i > j:
@@ -115,14 +121,17 @@ class CostMapInput:
 
         self.button_ok = Button(self.root, text='OK', command=self.button_click_output_map,
                                 justify=RIGHT, background='snow')
-        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=3, columnspan=self.n + 3, pady=2, padx=2)
+        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
 
+        self.button_reset = Button(self.root, text='Reset', command=self.reset_groups,
+                                   justify=LEFT, width=3, background='snow')
+        self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
-        self.button_minus.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
+        self.button_minus.grid(sticky=E, row=self.n + 12, column=2, pady=2, padx=2)
 
         self.button_plus = Button(self.root, text='+', command=self.plus, justify=RIGHT, width=3, background='snow')
-        self.button_plus.grid(sticky=W, row=self.n + 12, column=2, pady=2, padx=2)
+        self.button_plus.grid(sticky=W, row=self.n + 12, column=3, pady=2, padx=2)
 
         # Center Window on Screen
         self.root.update_idletasks()
@@ -133,6 +142,13 @@ class CostMapInput:
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
+
+    def reset_groups(self):
+        blob_configuration = self.configuration.create_blob_configuration()
+        self.root.withdraw()
+        self.next_matrix_view = input_costmap(self.root, regexes=list(blob_configuration[1:, 1]), costmap=self.costmap,
+                                         abstraction=blob_configuration[1:, 0:2], suggestion=self.suggestion, configuration=self.configuration)
+        self.quit()
 
     def copy_to_column(self, i, text):
         if type(self.regex[i]) is Entry and \
@@ -169,27 +185,27 @@ class CostMapInput:
         return True
 
     def build_output_map(self):
-        self.map = {}
+        self.costmap = {}
         # set case-sensitive weight
         text = self.case_entry.get()
         if text != '':
-            self.map[()] = float(text)
+            self.costmap[()] = float(text)
         else:
-            self.map[()] = 1.
+            self.costmap[()] = 1.
 
         # single character regex
-        self.map[0] = ''
+        self.costmap[0] = ''
         for i in range(1, self.n):
-            self.map[i] = groups_to_enumerations(self.label[i].cget("text"))
+            self.costmap[i] = groups_to_enumerations(self.label[i].cget("text"))
 
         # weights
         for i in range(self.n):
             for j in range(self.n):
                 v = self.value_entries[i, j].get()
                 if v != '':
-                    self.map[(i, j)] = float(v)
+                    self.costmap[(i, j)] = float(v)
                 else:
-                    self.map[(i, j)] = 1. + (i != j)
+                    self.costmap[(i, j)] = 1. + (i != j)
 
     def button_click_output_map(self, event=None):
         self.build_output_map()
@@ -219,7 +235,7 @@ class CostMapInput:
         self.regex[self.n - 1].delete(0, END)
 
         self.label[self.n] = Label(self.root, width=7, bg='lightgrey', anchor=W)
-        self.label[self.n].grid(sticky=W, row=9, column=self.n + 4)
+        self.label[self.n].grid(sticky=W, row=9, column=self.n + 5)
 
         self.regex[self.n] = Entry(self.root, width=20, bg='ivory2', validate=ALL)
         self.regex[self.n].insert(0, '<rest>')
@@ -227,9 +243,9 @@ class CostMapInput:
 
         self.regex[self.n]['validatecommand'] = (
             self.regex[self.n].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')  # , '%d')
-        self.regex[self.n].grid(row=self.n + 10, column=1, columnspan=2)
+        self.regex[self.n].grid(row=self.n + 10, column=1, columnspan=3)
         self.regex_label[self.n] = Label(self.root, anchor=W)
-        self.regex_label[self.n].grid(sticky="nswe", row=self.n + 10, column=3, columnspan=1)
+        self.regex_label[self.n].grid(sticky="nswe", row=self.n + 10, column=4, columnspan=1)
 
         # TODO:
         # self.regex_label[self.n]
@@ -239,14 +255,14 @@ class CostMapInput:
             self.value_entries[self.n, j]['validatecommand'] = (
                 self.value_entries[self.n, j].register(
                     lambda s, i2=self.n, j2=j: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')  # , '%d')
-            self.value_entries[self.n, j].grid(column=self.n + 4, row=j + 10)
+            self.value_entries[self.n, j].grid(column=self.n + 5, row=j + 10)
             self.value_entries[self.n, j].config(state='readonly')
 
             self.value_entries[j, self.n] = Entry(self.root, validate='key', width=7, justify=RIGHT, bg='alice blue')
             self.value_entries[j, self.n]['validatecommand'] = (
                 self.value_entries[j, self.n].register(
                     lambda s, i2=j, j2=self.n: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')  # , '%d')
-            self.value_entries[j, self.n].grid(column=j + 4, row=self.n + 10)
+            self.value_entries[j, self.n].grid(column=j + 5, row=self.n + 10)
 
             if not self.empty:
                 self.value_entries[self.n, j].insert(END, int(self.n != j))
@@ -256,21 +272,23 @@ class CostMapInput:
         self.value_entries[self.n, self.n]['validatecommand'] = (
             self.value_entries[self.n, self.n].register(
                 lambda s, i2=self.n, j2=self.n: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')  # , '%d')
-        self.value_entries[self.n, self.n].grid(column=self.n + 4, row=self.n + 10)
+        self.value_entries[self.n, self.n].grid(column=self.n + 5, row=self.n + 10)
         if not self.empty:
             self.value_entries[self.n, self.n].insert(END, int(i != j))
 
         self.n = self.n + 1
-        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=3, columnspan=self.n + 3, pady=2, padx=2)
-        self.button_minus.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
-        self.button_plus.grid(sticky=W, row=self.n + 12, column=2, pady=2, padx=2)
+        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
+        self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
+        self.button_minus.grid(sticky=E, row=self.n + 12, column=2, pady=2, padx=2)
+        self.button_plus.grid(sticky=W, row=self.n + 12, column=3, pady=2, padx=2)
 
     def minus(self):
         if self.n > 2:
             self.n = self.n - 1
-            self.button_ok.grid(sticky="nswe", row=self.n + 12, column=3, columnspan=self.n + 3, pady=2, padx=2)
-            self.button_minus.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
-            self.button_plus.grid(sticky=W, row=self.n + 12, column=2, pady=2, padx=2)
+            self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
+            self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
+            self.button_minus.grid(sticky=E, row=self.n + 12, column=2, pady=2, padx=2)
+            self.button_plus.grid(sticky=W, row=self.n + 12, column=3, pady=2, padx=2)
 
             regex = np.full(self.n, Entry(self.root))
             regex_label = np.full(self.n, Label(self.root))
@@ -318,8 +336,9 @@ class CostMapInput:
     def get(self):
         if self.canceled:
             return None
-        else:
-            return self.map
+        if self.next_matrix_view is not None:
+            return self.next_matrix_view
+        return self.costmap
 
 
 if __name__ == '__main__':
