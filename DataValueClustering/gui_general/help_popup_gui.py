@@ -1,10 +1,49 @@
 '''text popup for context menu, used as help'''
 from tkinter import *
 
+def menu_help_abstraction(master):
+    """help popup for Add Data view"""
+    text = [
+        "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data values.",
+        "For this, you should answer the questions on the left-hand side.",
+        "You can start with one of the predefined configurations if you like.",
+        "When answering the questions, please use your domain knowledge about the selected data and data field to decide which feature of the data values are irrelevant for clustering.",
+        "Make sure that you do not abstract from features that you do not expect or that may alter the data values’ meaning significantly.",
+        "Note that each question is explained in detail in the corresponding tool tip shown when hovering over the question.",
+        "On the right hand side, the result of applying the abstraction to the first 100 data values is shown and updated dynamically.",
+    ]
+    menu_information_display(master, "Abstraction Configuration - Help", text)
+
+
+def menu_help_data_add(master):
+    """help popup for Add Data view"""
+    text = [
+        "The Add Data view allows you to add a data set to the list of supported data sets selectable in the Select Data view.",
+        "Currently only XML data is supported.",
+        "For this, you must specify a name for the data set, which will be displayed in the Select Data view.",
+        "Further, you must specify the XML file containing the data and specify the data field (i.e. XML element) of interest.",
+        "Per default the content of the corresponding XML elements will be extracted."
+        "Alternatively you can specify an attribute whose value will be extracted.",
+    ]
+    menu_information_display(master, "Add Data - Help", text)
+
+
+def menu_help_data_selection(master):
+    """help popup for Select Data view"""
+    text = [
+        "The Select Data view allows you to select the data set to be clustered.",
+        "Each data set consists of a set of data values extracted from a database.",
+        "When first starting the program, a few predefined data sets are available.",
+        "To add a data set, press the '+' button below.",
+        "To remove a data set, press the '-' button below, but be careful as once removed data sets cannot be recovered."
+    ]
+    menu_information_display(master, "Select Data - Help", text)
+
+
 def menu_help_hub(master):
     """help popup for hub view"""
     text = [
-        "The hub view is the central view of this program for data value clustering.",
+        "The Hub view is the central view of this program for data value clustering.",
         "The data value clustering requires you to perform 4 configuration steps: data, abstraction, distance and clustering configuration.",
         "The hub view allows you to navigate through the 4 configuration steps and access the calculated clustering subsequently.",
         "",
@@ -24,7 +63,7 @@ def menu_help_hub(master):
         "",
         "Once the clustering is ready, you can open the result view to see further information and perform the validation or save the clustering in an Excel file.",
     ]
-    menu_information_display(master, "Hub Helper", text)
+    menu_information_display(master, "Hub - Help", text)
 
 def menu_help_cost_map(master):
     """help popup for matrix view"""
@@ -46,7 +85,7 @@ def menu_help_cost_map(master):
         "Because the distance between two text values shall be symmetrical, the matrix is",
         "mirrored on the diagonal. The entry fields above the diagonal are read only."
     ]
-    menu_information_display(master, "Costmatrix Helper", text)
+    menu_information_display(master, "Costmatrix - Help", text)
 
 
 def menu_help_blob_input(master):
@@ -80,7 +119,7 @@ def menu_help_blob_input(master):
         "The size of not fixed blobs can be changed via the scroll wheel while the mouse is ",
         "over it. The default size can be restored by pressing N on mouse over."
     ]
-    menu_information_display(master, "Distance Specification Helper", text)
+    menu_information_display(master, "Distance Specification - Help", text)
 
 
 def menu_information_display(master, title, content):

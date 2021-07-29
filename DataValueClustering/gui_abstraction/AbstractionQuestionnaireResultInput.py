@@ -1,8 +1,9 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu, Tk
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu
 
 import gui_abstraction.abstraction_questions
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
+from gui_general.help_popup_gui import menu_help_abstraction
 
 DEFAULT_CONFIG = "Default Configuration"
 MANUAL_CONFIG = "Manual Configuration"
@@ -27,6 +28,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
         self.help_text = "Abstraction of the first 100 data values:\n"
         super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10)
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root))
+        self.root.config(menu=self.menu)
+        self.root.resizable(False, False)
 
         if suggestion is not None:
             self.label_suggested = Label(self.question_frame, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')

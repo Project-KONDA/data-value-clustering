@@ -1,11 +1,13 @@
 import os
-from tkinter import Button, Label, Toplevel, Tk, Entry, END, Checkbutton, IntVar, messagebox, OptionMenu, StringVar, ttk
+from tkinter import Button, Label, Toplevel, Tk, Entry, END, Checkbutton, IntVar, messagebox, OptionMenu, StringVar, \
+    ttk, Menu
 
 import tk
 
 from data_extraction.extract_xml_field import write_fielddata_from_xml, get_attributenames, get_fieldnames, \
     execute_xquery
 from export.path import getOpenFilePath
+from gui_general.help_popup_gui import menu_help_data_add
 
 
 def add_data(master, path=""):
@@ -23,6 +25,11 @@ class AddData:
         self.root.grab_set()
         self.root.focus_force()
         self.canceled = False
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_data_add(self.root))
+        self.root.config(menu=self.menu)
+        self.root.resizable(False, False)
 
         self.label_title = Label(self.root, text="Extrude New Data Set", font=('Helvatical bold', 19))
         self.label_title.grid(sticky='nswe', row=1, column=1, columnspan=4)

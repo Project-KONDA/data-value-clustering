@@ -1,5 +1,5 @@
 import os
-from tkinter import Tk, Listbox, Button, Label, END, Scrollbar, Toplevel, messagebox
+from tkinter import Tk, Listbox, Button, Label, END, Scrollbar, Toplevel, messagebox, Menu
 from tkinter.messagebox import WARNING
 
 import numpy as np
@@ -7,6 +7,7 @@ import numpy as np
 from data_extraction import get_sources_in_experiment_data_directory
 from gui_data.add_data import add_data
 from gui_general import CreateToolTip
+from gui_general.help_popup_gui import menu_help_data_selection
 
 
 def get_list(path=""):
@@ -25,6 +26,11 @@ class SelectData:
 
         self.root = Toplevel(master)
         self.root.title("Select Data")
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
+        self.root.config(menu=self.menu)
+        self.root.resizable(False, False)
 
         self.result = None
         self.datalist = list()
