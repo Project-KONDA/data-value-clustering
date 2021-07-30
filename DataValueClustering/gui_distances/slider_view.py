@@ -74,7 +74,7 @@ class SliderInput:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
-        self.title.grid(sticky='nswe', row=0, column=1, columnspan=4)
+        self.title.grid(sticky='nswe', row=0, column=1, columnspan=7)
         self.button_minus.grid(sticky='ns', row=5, column=1, pady=(10, 0))
         self.button_plus.grid(sticky='ns', row=5, column=2, pady=(10, 0))
         self.button_reset.grid(sticky='nse', row=5, column=3, columnspan=2, pady=(10, 0), padx=5)
