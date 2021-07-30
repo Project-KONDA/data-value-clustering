@@ -101,7 +101,7 @@ class Hub:
                                          font=('Sans', '10', 'bold'), width=45, height=2)
         self.button_show_result.grid(sticky='nswe', row=14, column=1, columnspan=3, padx=10, pady=10)
 
-        self.button_save_result = Button(self.root, text='Save Excel', command=self.save_excel, state="disabled",
+        self.button_save_result = Button(self.root, text='Save Excel...', command=self.save_excel, state="disabled",
                                          font=('Sans', '10', 'bold'), height=2)
         self.button_save_result.grid(sticky='nswe', row=14, column=4, padx=10, pady=10)
 
@@ -135,6 +135,11 @@ class Hub:
         self.label_abstraction_progress.grid(sticky='nw', row=8, column=1, columnspan=1, padx=20, pady=10)
         self.label_distance_progress.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=10)
         self.label_clustering_progress.grid(sticky='nw', row=12, column=1, columnspan=1, padx=20, pady=10)
+
+        CreateToolTip(self.label_data_progress, "Status of the data")
+        CreateToolTip(self.label_abstraction_progress, "Status of the abstraction")
+        CreateToolTip(self.label_distance_progress, "Status of the distances")
+        CreateToolTip(self.label_clustering_progress, "Status of the clustering")
 
         "frames"
         self.frame_data = Frame(self.root, bg="grey90", width=200, height=100)
