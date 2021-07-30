@@ -94,14 +94,15 @@ class Hub:
         self.root.resizable(False, False)
 
         "buttons"
+        button_width=47
         self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data,
-                                  width=42, height=2, bg='paleturquoise1')
+                                  width=button_width, height=2, bg='paleturquoise1')
         self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction,
-                                         width=42, height=2, bg='paleturquoise1')
+                                         width=button_width, height=2, bg='paleturquoise1')
         self.button_distance = Button(self.root, text='Configure Distance...', command=self.configure_distance,
-                                      width=42, height=2, state="disabled")
+                                      width=button_width, height=2, state="disabled")
         self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering,
-                                        width=42, height=2, state="disabled")
+                                        width=button_width, height=2, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=8, column=1, columnspan=2, padx=10, pady=10)
@@ -226,6 +227,7 @@ class Hub:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.root.after(1, lambda: self.root.focus_force())
+        self.load("../test_data/mysecondjson.json")
         self.root.mainloop()
 
     def set_saved(self, saved):
