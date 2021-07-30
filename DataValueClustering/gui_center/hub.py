@@ -21,6 +21,8 @@ from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, get_suggested_parameter_modifications
 
+TITLE = "Clustering Configuration Hub"
+
 CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
 DISTANCE_NOT_CONFIGURED = "Distance not configured"
 ABSTRACTION_NOT_CONFIGURED = "Abstraction not configured"
@@ -45,14 +47,14 @@ class Hub:
 
         "initialisation"
         self.root = Tk()
-        self.root.title("Clustering Configuration Hub")
+        self.root.title(TITLE)
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
-        self.saved = False
+        self.set_saved(False)
 
         "labels"
-        self.label_title = Label(self.root, text="Clustering Configuration Hub", bg="white",
+        self.label_title = Label(self.root, text=TITLE, bg="white",
                                  font=('Helvatical bold', 19), anchor="c", justify="center")
         self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4)
 
@@ -86,7 +88,7 @@ class Hub:
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
         CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
-        CreateToolTip(self.button_distance, "Specify how specific features influence the dissimilarity between data values.")
+        CreateToolTip(self.button_distance, "Specify how certain features influence the dissimilarity between data values.")
         CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
 
         self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
@@ -188,6 +190,11 @@ class Hub:
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
+    def set_saved(self, saved):
+        self.saved = saved
+        if not saved and self.root.title() != TITLE and not self.root.title().endswith("*"):
+            self.root.title(self.root.title() + "*")
+
     def on_closing(self):
         if self.saved or \
                 messagebox.askokcancel("Quit",
@@ -215,7 +222,7 @@ class Hub:
             self.root.update()
             return
 
-        self.saved = False
+        self.set_saved(False)
         self.configuration.set_data_configuration(self.data_path_from_name(data_name))
 
         self.update()
@@ -251,7 +258,7 @@ class Hub:
             return
 
         # 4. save abstraction into configuration
-        self.saved = False
+        self.set_saved(False)
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
         # 6. initiate execution of abstraction in config
@@ -282,7 +289,7 @@ class Hub:
         cost_map = None
         blob_configuration = None
 
-        self.saved = False
+        self.set_saved(False)
         if distance_choice == DistanceView.SLIDER:
             blob_configuration = self.configuration.create_blob_configuration()
             cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:2],
@@ -347,7 +354,7 @@ class Hub:
             self.root.update()
             return
 
-        self.saved = False
+        self.set_saved(False)
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         self.configuration.set_clustering_configuration(parameters)
 
@@ -402,7 +409,7 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.root.title(self.configuration.json_save_path)
-        self.saved = True
+        self.set_saved(True)
         self.update()
 
     def menu_new(self):
@@ -419,7 +426,7 @@ class Hub:
         self.disable()
         if self.configuration.json_save_path:
             self.configuration.save_as_json()
-            self.saved = True
+            self.set_saved(True)
         else:
             self.menu_saveas()
         self.update()
