@@ -14,6 +14,10 @@ from gui_result.validation_questionnaire import question_1_answers, question_2_a
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
+NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration.\nPay attention to the advice given in the configuration views in blue text."
+SATISFIED = "According to your answers above you are satisfied with the clustering.\nCongratulations, you are done!"
+
+
 def result_view(master, configuration):
     res = ResultView(master, configuration)
     return res.get()
@@ -100,26 +104,30 @@ class ResultView:
         self.q1 = create_enum_validation_question(self.questions_frame, "How do you feel about the meaningfulness of the "
                                                                    "clustering concerning the grouping of similar "
                                                                    "values in the same cluster?",
-                                             "explanation", question_1_answers)
+                                             "explanation", question_1_answers, self.update_suggestion)
         self.q1.frame.grid(row=0, column=0, sticky='nsew')
 
         self.q2 = create_enum_validation_question(self.questions_frame, "How do you feel about the number of noisy values?",
-                                             "explanation", question_2_answers)
+                                             "explanation", question_2_answers, self.update_suggestion)
         self.q2.frame.grid(row=1, column=0, sticky='nsew')
 
         self.q3 = create_enum_validation_question(self.questions_frame,
                                              "How do you feel about the overall level of detail of the clustering?",
-                                             "explanation", question_3_answers)
+                                             "explanation", question_3_answers, self.update_suggestion)
         self.q3.frame.grid(row=2, column=0, sticky='nsew')
 
         self.q4 = create_enum_int_validation_question(self.questions_frame, "Do you consider individual clusters too "
                                                                        "heterogeneous (i.e., level of detail too "
                                                                        "low) while the others are fine?",
-                                                 "explanation", question_4_answers)
+                                                 "explanation", question_4_answers, self.update_suggestion)
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
         self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
-        self.suggestion_frame.grid(row=1, column=1, sticky='nw')
+        self.suggestion_frame.grid(row=2, column=0, sticky='nw', columnspan=2)
+
+        self.advice_label = Label(self.suggestion_frame, text=SATISFIED, bg='white',
+                                  font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left')
+        self.advice_label.grid(row=0, column=0, sticky='nwes', columnspan=1)
 
         # ...
 
@@ -136,6 +144,13 @@ class ResultView:
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
 
         self.root.mainloop()
+
+    def update_suggestion(self):
+        if self.q1.get_result() == ValidationAnswer.HAPPY and self.q2.get_result() == ValidationAnswer.HAPPY and self.q3.get_result() == ValidationAnswer.HAPPY and self.q4.get_result()[0] == ValidationAnswer.HAPPY:
+            self.advice_label.config(text=SATISFIED)
+        else:
+            self.advice_label.config(text=NOT_SATISFIED)
+
 
     def open_excel(self):
         if self.configuration.excel_save_path is None:

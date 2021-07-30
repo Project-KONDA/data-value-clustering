@@ -3,11 +3,12 @@ from tkinter import Frame, StringVar, Label, font
 
 class ValidationQuestion:
 
-    def __init__(self, parent, question, explanation):
+    def __init__(self, parent, question, explanation, update_advice_function):
 
         self.root = parent
         self.question = question
         self.explanation = explanation
+        self.update_suggestion_function = update_advice_function
 
         # frame:
         self.frame = Frame(self.root, highlightthickness=1, highlightbackground='grey', bg='white')
@@ -30,4 +31,4 @@ class ValidationQuestion:
         pass
 
     def update_advice(self):
-        pass
+        self.update_suggestion_function()

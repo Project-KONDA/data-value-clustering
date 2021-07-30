@@ -3,18 +3,19 @@ import numpy as np
 
 from gui_general import CreateToolTip
 from gui_result.validation_frames.ValidationQuestion import ValidationQuestion
+from gui_result.validation_questionnaire import ValidationAnswer
 
 
-def create_enum_validation_question(parent, question, explanation, answers):
-    return EnumValidationQuestion(parent, question, explanation, answers)
+def create_enum_validation_question(parent, question, explanation, answers, advice_var):
+    return EnumValidationQuestion(parent, question, explanation, answers, advice_var)
 
 
 class EnumValidationQuestion(ValidationQuestion):
 
-    def __init__(self, parent, question, explanation, answers):
+    def __init__(self, parent, question, explanation, answers, result_view):
         # answers: value, text, tip, (int?)
         assert (len(answers[0, :]) >= 3)
-        super().__init__(parent, question, explanation)
+        super().__init__(parent, question, explanation, result_view)
 
         self.answers = answers
 
@@ -32,3 +33,5 @@ class EnumValidationQuestion(ValidationQuestion):
 
     def get_result(self):
         return self.answers[self.choice.get(), 0]
+
+
