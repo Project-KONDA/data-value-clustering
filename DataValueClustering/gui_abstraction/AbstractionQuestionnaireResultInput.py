@@ -80,6 +80,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def apply(self):
         if self.data is None:
+            self.result_caption_label.destroy()
+            self.scrollable_result_frame.destroy()
+            self.canvas.destroy()
+            self.scrollbar.destroy()
+            self.root.grid_columnconfigure((1), minsize=0)
             return
         answers = self.get()
         abstraction_f = get_abstraction_method(answers)
