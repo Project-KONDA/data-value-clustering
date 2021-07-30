@@ -235,9 +235,9 @@ def menu_help_distance_choice(master):
         "The Distance Choice view allows you to select a method for configuring the distance calculation, i.e. for ",
         "weighting the similarity between character groups based on your domain knowledge.",
         "Currently only the weighted Levenshtein distance is supported and can be configured via 3 different methods.",
-        "The simpler methods allow less flexibility.",
-        "But as in most cases, the simplest method is sufficient to achieve useful results, we advise you to start with "
-        "the simplest method, the Slider View.",
+        "The easier methods allow less flexibility.",
+        "But as in most cases, the easiest method is sufficient to achieve useful results, we advise you to start with "
+        "the easiest method, the Slider View.",
         "Further note that once you use the Slider or Matrix View, you cannot open your configuration via the Blob View.",
         "",
         "To confirm your selection, press the 'OK' button.",

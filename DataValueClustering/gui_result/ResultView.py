@@ -15,7 +15,7 @@ from gui_result.validation_questionnaire import question_1_answers, question_2_a
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
 NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration.\nPay attention to the advice given in the configuration views in blue text."
-SATISFIED = "According to your answers above you are satisfied with the clustering.\nCongratulations, you are done!"
+SATISFIED = "According to your answers above, you are satisfied with the clustering.\nCongratulations, you are done!"
 
 
 def result_view(master, configuration):
@@ -61,10 +61,10 @@ class ResultView:
         self.summary_caption.set("Result")
         self.summary_caption_label = Label(self.summary_frame, anchor='w', textvariable=self.summary_caption,
                                            text="test", bg='white',
-                                           font=('TkDefaultFont', 14, 'bold'), padx=5)
+                                           font=('TkDefaultFont', 14, 'bold'), pady=10)
         self.summary_caption_label.grid(row=0, column=0, sticky='wesn', columnspan=1)
 
-        self.info_frame = Frame(self.summary_frame, bg="white", borderwidth=2, relief="sunken")
+        self.info_frame = Frame(self.summary_frame, bg="white", borderwidth=2, relief="groove")
         self.info_frame.grid(row=1, column=0, sticky='nwse', columnspan=1)
 
         self.info_header_label = Label(self.info_frame, text="Meta-Information", bg='white',
@@ -95,7 +95,7 @@ class ResultView:
         self.questionnaire_caption_label = Label(self.questionnaire_frame, anchor='w',
                                                  textvariable=self.questionnaire_caption, text="test",
                                                  bg='white',
-                                                 font=('TkDefaultFont', 14, 'bold'), padx=5)
+                                                 font=('TkDefaultFont', 14, 'bold'), pady=10)
         self.questionnaire_caption_label.grid(row=0, column=0, sticky='we', columnspan=2)
 
         self.questions_frame = Frame(self.questionnaire_frame, bg="white")

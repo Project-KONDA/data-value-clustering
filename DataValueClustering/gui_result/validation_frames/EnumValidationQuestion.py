@@ -27,7 +27,7 @@ class EnumValidationQuestion(ValidationQuestion):
         for i, answer in enumerate(answers):
             self.radio_buttons[i] = Radiobutton(self.frame, text=answer[1], variable=self.choice, value=i,
                                                 command=self.update_advice, justify='left', anchor='w',
-                                                bg='white')
+                                                bg='white', padx=20)
             CreateToolTip(self.radio_buttons[i], answer[2])
             self.radio_buttons[i].grid(row=i + 10, column=1, sticky='nsw')
 

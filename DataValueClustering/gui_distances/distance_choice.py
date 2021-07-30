@@ -40,12 +40,12 @@ class DistanceChoice:
                                         command=lambda: self.close(DistanceView.SLIDER))
         self.button_wld_blob = Button(self.root, text="Blob View (Medium)", width=30,
                                         command=lambda: self.close(DistanceView.BLOB))
-        self.button_wld_matrix = Button(self.root, text="Matrix View (Hard)", width=30,
+        self.button_wld_matrix = Button(self.root, text="Matrix View (Difficult)", width=30,
                                         command=lambda: self.close(DistanceView.MATRIX))
 
-        CreateToolTip(self.button_wld_slider,"Specify the similarity between character groups via a few sliders. Simple method with very limited flexibility.")
-        CreateToolTip(self.button_wld_blob, "Specify the similarity between character groups by moving and scaling graphical objects on a 2D canvas. Method with medium complexity and flexibility.")
-        CreateToolTip(self.button_wld_matrix, "Specify the similarity between all character groups by filling a matrix. Complex but completely flexibel method.")
+        CreateToolTip(self.button_wld_slider,"Specify the similarity between character groups via a few sliders. Easy method with very limited flexibility.")
+        CreateToolTip(self.button_wld_blob, "Specify the similarity between character groups by moving and scaling graphical objects on a 2D canvas. Method with medium difficulty and flexibility.")
+        CreateToolTip(self.button_wld_matrix, "Specify the similarity between all character groups by filling a matrix. Difficult but completely flexibel method.")
 
         # self.label_other = Label(self.root, text="Other", width=40, bg="white", justify=LEFT, anchor=W)
         # self.button_lcss = Button(self.root, text="Longest Common Subsequence", width=30,

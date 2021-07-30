@@ -63,7 +63,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.selected_predefined_option = StringVar()
         self.selected_predefined_option.set(DEFAULT_CONFIG)
         self.predefined_option_menu = OptionMenu(self.question_frame, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
-        self.predefined_option_menu.grid(row=2, column=1, sticky='w')
+        self.predefined_option_menu.grid(row=2, column=1, sticky='w', padx=10)
 
         self.data = data
         self.labels = []

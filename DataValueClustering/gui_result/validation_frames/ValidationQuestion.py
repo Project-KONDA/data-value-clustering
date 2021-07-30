@@ -17,7 +17,7 @@ class ValidationQuestion:
         self.label_text = StringVar()
         self.label_text.set(self.question)
         self.label = Label(self.frame, anchor='w', textvariable=self.label_text, bg='white', padx=5,
-                           font=font.Font(size=14))
+                           font=('TkDefaultFont', 12, 'bold'))
         self.label.grid(row=0, column=1, sticky='w', columnspan=2)
 
         # explanation label:
