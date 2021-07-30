@@ -32,7 +32,7 @@ class SliderInput:
 
         self.master = master
         self.n = n if n or costmap else len(texts)
-        self.abstraction = np.array((2, 0)) if abstraction is None else abstraction
+        self.abstraction = abstraction
         self.texts = texts
         self.abstraction_keys = self.texts
         self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
@@ -160,7 +160,7 @@ class SliderInput:
         self.root.unbind_all("<MouseWheel>")
 
     def update_labels(self):
-        if self.updating_labels:
+        if self.updating_labels or self.abstraction is None:
             return
         self.updating_labels = True
         abstraction = self.abstraction.tolist()
@@ -255,10 +255,6 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_reset.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=1, pady=(10, 0))
-        self.button_minus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=2, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=3, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + 1 + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.update_labels()
         self.root.update()
 
@@ -306,10 +302,6 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_reset.grid(sticky='ns', row=self.n + self.row_offset, column=1, pady=(10, 0))
-        self.button_minus.grid(sticky='ns', row=self.n + self.row_offset, column=2, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + self.row_offset, column=3, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.root.update()
 
     def cancel(self):
