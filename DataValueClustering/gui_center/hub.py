@@ -56,11 +56,10 @@ class Hub:
                                  font=('Helvatical bold', 19), anchor="c", justify="center")
         self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4)
 
-        self.label_explanation = Label(self.root, text="Perform the following steps to obtain a clustering of your data.\nThe next required steps are highlighted in blue.", bg="white")
+        self.label_explanation = Label(self.root, text="Perform the following steps to obtain a clustering of your data.\nThe steps required next are highlighted in blue.", bg="white")
         self.label_explanation.grid(sticky='nswe', row=1, column=1, columnspan=4)
 
         "menu"
-
         self.menu = Menu(self.root)
         self.menu.add_command(label="New", command=self.menu_new)
         self.menu.add_command(label="Save", command=self.menu_save)
@@ -87,7 +86,7 @@ class Hub:
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
         CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
-        CreateToolTip(self.button_distance, "Specify how similarities between data values should be calculated.")
+        CreateToolTip(self.button_distance, "Specify how specific features influence the dissimilarity between data values.")
         CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
 
         self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
