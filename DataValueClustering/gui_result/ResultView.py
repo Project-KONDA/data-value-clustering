@@ -1,9 +1,10 @@
 import os
-from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel
+from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu
 import numpy as np
 
 from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration
+from gui_general.help_popup_gui import menu_help_result
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
@@ -24,6 +25,10 @@ class ResultView:
     def __init__(self, master, configuration):
         self.root = Toplevel(master)
         self.root.title("Result")
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root))
+        self.root.config(menu=self.menu)
 
         self.canceled = False
 

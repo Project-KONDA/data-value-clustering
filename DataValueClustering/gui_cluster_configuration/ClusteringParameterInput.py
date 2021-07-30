@@ -1,7 +1,8 @@
-from tkinter import Label, Button, Tk, StringVar, Frame, font, Canvas, Scrollbar, Toplevel
+from tkinter import Label, Button, Tk, StringVar, Frame, font, Canvas, Scrollbar, Toplevel, Menu
 import numpy as np
 
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
+from gui_general.help_popup_gui import menu_help_clustering_configuration
 
 
 def get_configuration_parameters(master, title, parameter_frame_inits, dependencies, suggestion=None):
@@ -24,6 +25,10 @@ class ClusterConfigurationInput:
         self.canceled = False
         self.root.focus_force()
         self.root.grab_set()
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_clustering_configuration(self.root))
+        self.root.config(menu=self.menu)
 
         self.root.bind_all("<Return>", self.close)
 

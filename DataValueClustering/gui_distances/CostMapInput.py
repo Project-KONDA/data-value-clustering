@@ -87,7 +87,7 @@ class CostMapInput:
             self.regex_label[i].grid(sticky="nswe", row=i + 10, column=4, columnspan=1)
 
             if i == 0:
-                self.regex[i].insert(END, 'add')
+                self.regex[i].insert(END, 'insert')
                 self.label[i].configure(text='delete', state='disabled')
                 self.regex[i].config(state='disabled')
             elif i == self.n - 1:

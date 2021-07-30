@@ -1,10 +1,11 @@
-from tkinter import Radiobutton, IntVar, NORMAL, DISABLED, Tk, Label
+from tkinter import Radiobutton, IntVar, NORMAL, DISABLED, Tk, Label, Menu
 
 import numpy as np
 
 import gui_cluster_selection
 from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_cluster_selection.clustering_questions import clustering_question_array
+from gui_general.help_popup_gui import menu_help_clustering_selection
 from util.question_result_array_util import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 
@@ -27,6 +28,10 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
         self.help_text = "Please choose one of the suggested algorithms:\n"
         super().__init__(master, "Clustering Configuration", config, predefined_answers)
+
+        self.menu = Menu(self.root)
+        self.menu.add_command(label="Help", command=lambda: menu_help_clustering_selection(self.root))
+        self.root.config(menu=self.menu)
 
         if len(suggested_algorithms) > 0:
             self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering validation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10, fg='blue')
