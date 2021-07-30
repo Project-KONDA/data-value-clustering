@@ -5,14 +5,14 @@ import re
 from gui_result.validation_frames.EnumValidationQuestion import EnumValidationQuestion
 
 
-def create_enum_int_validation_question(parent, question, explanation, answers, result_view):
-    return EnumIntValidationQuestion(parent, question, explanation, answers, result_view)
+def create_enum_int_validation_question(parent, question_and_explanation, answers, result_view):
+    return EnumIntValidationQuestion(parent, question_and_explanation, answers, result_view)
 
 
 class EnumIntValidationQuestion(EnumValidationQuestion):
-    def __init__(self, parent, question, explanation, answers, result_view):
+    def __init__(self, parent, question_and_explanation, answers, result_view):
         assert (len(answers[0]) == 4)
-        super().__init__(parent, question, explanation, answers, result_view)
+        super().__init__(parent, question_and_explanation, answers, result_view)
 
         self.entries = np.full(self.n, Entry)
         self.vars = np.empty(self.n, StringVar)

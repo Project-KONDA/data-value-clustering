@@ -9,8 +9,7 @@ from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
 from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
-    question_4_answers, ValidationAnswer
-
+    question_4_answers, ValidationAnswer, question_2, question_3, question_4, question_1
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
@@ -94,36 +93,30 @@ class ResultView:
         self.questionnaire_caption.set("Validation")
         self.questionnaire_caption_label = Label(self.questionnaire_frame, anchor='w',
                                                  textvariable=self.questionnaire_caption, text="test",
-                                                 bg='white',
-                                                 font=('TkDefaultFont', 14, 'bold'), pady=10)
+                                                 bg='white', font=('TkDefaultFont', 14, 'bold'), pady=10)
         self.questionnaire_caption_label.grid(row=0, column=0, sticky='we', columnspan=2)
 
-        self.questions_frame = Frame(self.questionnaire_frame, bg="white")
-        self.questions_frame.grid(row=1, column=0, sticky='nsew')
+        self.questionnaire_note_label = Label(self.questionnaire_frame, anchor='w', text="After having familiarized yourself with the clustering via the MDS Scatter Plot and the Excel file,\nanswer the following questions to perform the validation of the calculated clustering.", bg='white', justify='left')
+        self.questionnaire_note_label.grid(row=1, column=0, sticky='we', columnspan=2)
 
-        self.q1 = create_enum_validation_question(self.questions_frame, "How do you feel about the meaningfulness of the "
-                                                                   "clustering concerning the grouping of similar "
-                                                                   "values in the same cluster?",
-                                             "explanation", question_1_answers, self.update_suggestion)
+        self.questions_frame = Frame(self.questionnaire_frame, bg="white")
+        self.questions_frame.grid(row=2, column=0, sticky='nsew')
+
+        self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion)
         self.q1.frame.grid(row=0, column=0, sticky='nsew')
 
-        self.q2 = create_enum_validation_question(self.questions_frame, "How do you feel about the number of noisy values?",
-                                             "explanation", question_2_answers, self.update_suggestion)
+        self.q2 = create_enum_validation_question(self.questions_frame, question_2, question_2_answers, self.update_suggestion)
         self.q2.frame.grid(row=1, column=0, sticky='nsew')
 
         self.q3 = create_enum_validation_question(self.questions_frame,
-                                             "How do you feel about the overall level of detail of the clustering?",
-                                             "explanation", question_3_answers, self.update_suggestion)
+                                             question_3, question_3_answers, self.update_suggestion)
         self.q3.frame.grid(row=2, column=0, sticky='nsew')
 
-        self.q4 = create_enum_int_validation_question(self.questions_frame, "Do you consider individual clusters too "
-                                                                       "heterogeneous (i.e., level of detail too "
-                                                                       "low) while the others are fine?",
-                                                 "explanation", question_4_answers, self.update_suggestion)
+        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion)
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
         self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
-        self.suggestion_frame.grid(row=2, column=0, sticky='nw', columnspan=2)
+        self.suggestion_frame.grid(row=3, column=0, sticky='nw', columnspan=2)
 
         self.advice_label = Label(self.suggestion_frame, text=SATISFIED, bg='white',
                                   font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left')

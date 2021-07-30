@@ -16,21 +16,31 @@ class ValidationAnswer(str, Enum):
     MORE = 'MORE'
     LESS = 'LESS'
 
-# TODO: complete answers
-question_1_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
+
+question_1 = np.array(["How do you feel about the meaningfulness of the clustering concerning the grouping of similar values in the same cluster?",
+                      "Reflect upon the aspects on which the partitioning is oriented, the aspects that do not influence the partitioning and whether the partitioning is useful and provides an overview of the different values. "
+                      "The colors in the MDS Scatter plot being very mixed may indicate a lack of meaningful grouping."])
+question_1_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "Choose this of the clustering seems meaningful, similar values are in the same clusters and dissimilar values in different clusters."],
                                [ValidationAnswer.UNHAPPY,
                                 "I’m not happy, a lot of values that seem pretty similar are in "
                                 "different clusters and a lot of values that seem pretty "
-                                "dissimilar are in the same cluster", "unhappy tip"]], dtype=object)
-question_2_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
-                               [ValidationAnswer.MORE, "More noise please", "more tip"],
-                               [ValidationAnswer.LESS, "Less noise please", "less tip"]], dtype=object)
-question_3_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip"],
-                               [ValidationAnswer.MORE, "More clusters please", "more tip"],
-                               [ValidationAnswer.LESS, "Less clusters please", "less tip"]], dtype=object)
-question_4_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "happy tip", False],
+                                "dissimilar are in the same cluster", "Choose this if you are unhappy with the aspects on which the grouping is oriented."]], dtype=object)
+question_2 = np.array(["How do you feel about the number of noisy values?",
+                      "Inspect the noisy values. Typically they should make up a relatively small part of all values. They should be outliers that are very different from all other values."])
+question_2_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "Choose this if the number of noisy values seems appropriate."],
+                               [ValidationAnswer.MORE, "More noise please", "Choose this if a lot of values within clusters seem extremely different from all other values."],
+                               [ValidationAnswer.LESS, "Less noise please", "Choose this if a lot of noisy values do not seem extremely different from the other values."]], dtype=object)
+question_3 = np.array(["How do you feel about the overall level of detail of the clustering?",
+                      "Reflect upon whether the clustering helps you in getting an overview of the different kinds of data values and whether a finer or less-fine partitioning would be more helpful."])
+question_3_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "Choose this if you are happy with the level of detail, i.e. number of clusters, in general."],
+                               [ValidationAnswer.MORE, "More clusters please", "Choose this if in general the level of detail of the clustering is too low and you want a more fine grained partitioning."],
+                               [ValidationAnswer.LESS, "Less clusters please", "Choose this if in general the level of detail of the clustering is too high and you want a less fine grained partitioning."]], dtype=object)
+question_4 = np.array(["Do you consider individual clusters too heterogeneous (i.e., level of detail too low) while the others are fine?",
+                      "Inspect whether individual clusters contain a lot of extremely heterogeneous values, that you would like to get an overview of. "
+                      "In the third sheet of the Excel file, check clusters with extremely high variance containing a lot of values."])
+question_4_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "Choose this if all clusters seem to be at a similar level of abstraction.", False],
                                [ValidationAnswer.UNHAPPY, "I'm unhappy, the following clusters are too heterogeneous:",
-                                "unhappy tip", True]], dtype=object)
+                                "Choose this if most clusters seem at an appropriate level of abstraction but one or few clusters seem to contain extremely heterogeneous values that you would like to partition further.", True]], dtype=object)
 
 
 def get_suggested_data(validation_answers):

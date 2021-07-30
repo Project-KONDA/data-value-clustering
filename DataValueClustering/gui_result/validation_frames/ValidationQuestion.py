@@ -3,11 +3,11 @@ from tkinter import Frame, StringVar, Label, font
 
 class ValidationQuestion:
 
-    def __init__(self, parent, question, explanation, update_advice_function):
+    def __init__(self, parent, question_and_explanation, update_advice_function):
 
         self.root = parent
-        self.question = question
-        self.explanation = explanation
+        self.question = question_and_explanation[0]
+        self.explanation = question_and_explanation[1]
         self.update_suggestion_function = update_advice_function
 
         # frame:
@@ -24,7 +24,7 @@ class ValidationQuestion:
         self.explanation_text = StringVar()
         self.explanation_text.set(self.explanation)
         self.label_explanation = Label(self.frame, anchor='nw', textvariable=self.explanation_text, bg='white', padx=5,
-                                       wraplength=500, justify='left')
+                                       wraplength=800, justify='left')
         self.label_explanation.grid(row=1, column=1, sticky='w', columnspan=2)
 
     def get_result(self):

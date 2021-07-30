@@ -6,16 +6,16 @@ from gui_result.validation_frames.ValidationQuestion import ValidationQuestion
 from gui_result.validation_questionnaire import ValidationAnswer
 
 
-def create_enum_validation_question(parent, question, explanation, answers, advice_var):
-    return EnumValidationQuestion(parent, question, explanation, answers, advice_var)
+def create_enum_validation_question(parent, question_and_explanation, answers, advice_var):
+    return EnumValidationQuestion(parent, question_and_explanation, answers, advice_var)
 
 
 class EnumValidationQuestion(ValidationQuestion):
 
-    def __init__(self, parent, question, explanation, answers, result_view):
+    def __init__(self, parent, question_and_explanation, answers, result_view):
         # answers: value, text, tip, (int?)
         assert (len(answers[0, :]) >= 3)
-        super().__init__(parent, question, explanation, result_view)
+        super().__init__(parent, question_and_explanation, result_view)
 
         self.answers = answers
 
