@@ -67,7 +67,7 @@ class QuestionnaireResultInput(ABC):
                 # self.labels[i].bind("<Enter>", (lambda event, i2=i: self.on_label_enter(event, i2)))
                 # self.labels[i].bind("<Leave>", (lambda event, i2=i: self.on_label_leave(event, i2)))
 
-        self.visible = np.full(self.n, False)
+        self.visible = np.full(self.n, True)
         self.update_visibility()
 
         # caption right side:
