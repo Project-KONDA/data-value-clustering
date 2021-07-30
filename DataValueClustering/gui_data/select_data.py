@@ -36,7 +36,7 @@ class SelectData:
         self.canceled = False
 
         self.label_title = Label(self.root, text="Select Data Set", bg="white",
-                                 font=('Helvatical bold', 19))
+                                 font=('TkDefaultFont', 14, 'bold'))
 
         if self.single_cluster_data is not None:
             self.label_hint = Label(self.root, text="Data generated from a previously calculated\ncluster are highlighted in green", bg="white", fg='blue')

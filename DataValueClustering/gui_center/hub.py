@@ -77,7 +77,7 @@ class Hub:
 
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
-                                 font=('Helvatical bold', 19), anchor="c", justify="center")
+                                 font=('TkDefaultFont', 14, 'bold'), anchor="c", justify="center")
         self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4)
 
         self.label_explanation = Label(self.root, text="Perform the following steps to obtain a clustering of your data.\nThe steps required next are highlighted in blue.", bg="white")

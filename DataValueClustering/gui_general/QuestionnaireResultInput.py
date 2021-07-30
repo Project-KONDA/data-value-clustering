@@ -48,7 +48,7 @@ class QuestionnaireResultInput(ABC):
         self.question_caption = StringVar()
         self.question_caption.set("Please answer the following questions:")
         self.question_caption_label = Label(self.root, anchor='w', textvariable=self.question_caption, bg='white',
-                                            font=font.Font(size=14), padx=5)
+                                            font=('TkDefaultFont', 14, 'bold'), padx=5)
         self.question_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
 
         # question checkboxes:
@@ -74,7 +74,7 @@ class QuestionnaireResultInput(ABC):
         self.result_caption = StringVar()
         self.result_caption.set(self.help_text)
         self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, bg='white',
-                                          font=font.Font(size=14), padx=5)
+                                          font=('TkDefaultFont', 14, 'bold'), padx=5)
         self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
 
         # scrollable result:

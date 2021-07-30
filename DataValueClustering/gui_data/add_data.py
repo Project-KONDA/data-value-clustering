@@ -30,7 +30,7 @@ class AddData:
         self.menu.add_command(label="Help", command=lambda: menu_help_data_add(self.root))
         self.root.config(menu=self.menu)
 
-        self.label_title = Label(self.root, text="Extrude New Data Set", font=('Helvatical bold', 19))
+        self.label_title = Label(self.root, text="Extrude New Data Set", font=('TkDefaultFont', 14, 'bold'))
         self.label_title.grid(sticky='nswe', row=1, column=1, columnspan=4)
 
         self.label_name = Label(self.root, anchor="w", text="Name:")

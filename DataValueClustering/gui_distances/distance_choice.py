@@ -33,7 +33,7 @@ class DistanceChoice:
         self.root.config(menu=self.menu)
 
         self.title = Label(self.root, text="Distance Choice", bg="white",
-                           font=('Helvatical bold', 19))
+                           font=('TkDefaultFont', 14, 'bold'))
 
         self.label_wld = Label(self.root, text="Weighted Levenstein Distance", width=40, bg="white", justify=LEFT, anchor=W)
         self.button_wld_slider = Button(self.root, text="Slider View (Easy)", width=30,

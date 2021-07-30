@@ -54,7 +54,7 @@ class ClusterConfigurationInput:
         self.label_text = StringVar()
         self.label_text.set("Please specify the following parameters")
         self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='white',
-                           font=font.Font(size=14))
+                           font=('TkDefaultFont', 14, 'bold'))
 
         self.label_suggested = None
         if suggestion is not None:

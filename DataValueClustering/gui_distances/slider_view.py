@@ -65,7 +65,7 @@ class SliderInput:
         self.root.config(menu=self.menu)
 
         self.title = Label(self.root, text="Slider Input", bg="white",
-                           font=('bold 12', 19))
+                           font=('TkDefaultFont', 14, 'bold'))
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -89,7 +89,7 @@ class SliderInput:
             self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
 
         # scrollable canvas:
-        self.canvas = Canvas(self.root, bg='white', width=620, highlightbackground="grey", highlightthickness=1)  # TODO: set width relative
+        self.canvas = Canvas(self.root, bg='white', width=620, highlightbackground="grey")  # TODO: set width relative
         self.scrollbar = Scrollbar(self.root, orient='vertical', command=self.canvas.yview)
         self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
         self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
