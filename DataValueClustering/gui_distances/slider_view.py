@@ -69,16 +69,16 @@ class SliderInput:
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
-        self.button_ok = Button(self.root, text='OK', command=self.quit, width=54)
+        self.button_ok = Button(self.root, text='OK', command=self.quit, width=59)
         if self.fixed:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
         self.title.grid(sticky='nswe', row=0, column=1, columnspan=7)
-        self.button_minus.grid(sticky='ns', row=5, column=1, pady=(10, 0))
-        self.button_plus.grid(sticky='ns', row=5, column=2, pady=(10, 0))
-        self.button_reset.grid(sticky='nse', row=5, column=3, columnspan=2, pady=(10, 0), padx=5)
-        self.button_ok.grid(sticky='nswe', row=5, column=5, columnspan=3, pady=(10, 0))
+        self.button_minus.grid(sticky='ns', row=5, column=1, pady=2, padx=2)
+        self.button_plus.grid(sticky='ns', row=5, column=2, pady=2, padx=2)
+        self.button_reset.grid(sticky='ns', row=5, column=3, columnspan=2, pady=2, padx=2)
+        self.button_ok.grid(sticky='nswe', row=5, column=5, columnspan=3, pady=2, padx=2)
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
@@ -89,7 +89,9 @@ class SliderInput:
             self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
 
         # scrollable canvas:
-        self.canvas = Canvas(self.root, bg='white', width=620, highlightbackground="grey")  # TODO: set width relative
+        self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
+        self.frame.grid_rowconfigure(0, weight=1)
+        self.canvas = Canvas(self.frame, bg='SystemButtonFace', width=766)
         self.scrollbar = Scrollbar(self.root, orient='vertical', command=self.canvas.yview)
         self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
         self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
@@ -97,7 +99,8 @@ class SliderInput:
                                    lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='nw')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.canvas.grid(row=3, column=1, sticky='nswe', columnspan=6, pady=1, padx=1)
+        self.frame.grid(sticky='nswe', row=3, column=1, columnspan=6, pady=1, padx=1)
+        self.canvas.grid(sticky="nswe", row=0, column=0)
         self.root.grid_rowconfigure(3, weight=1)
         self.scrollbar.grid(row=3, column=7, sticky='nswe')
 
@@ -113,7 +116,7 @@ class SliderInput:
         self.label_heading3 = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_heading3, "Weights for the given character groups.")
         self.label_heading1.grid(sticky='nswe', row=2, column=1, columnspan=2)
-        self.label_heading2.grid(sticky='nse', row=2, column=3, columnspan=2)
+        self.label_heading2.grid(sticky='ns', row=2, column=3, columnspan=2)
         self.scrollable_frame.columnconfigure(3, weight=1)
         self.label_heading3.grid(sticky='nswe', row=2, column=5, columnspan=2)
 
@@ -133,7 +136,7 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT)
+            self.label_list[i] = Label(self.scrollable_frame, width=24, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
@@ -225,7 +228,7 @@ class SliderInput:
 
         entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1],
                                     state=("disabled" if self.fixed else "normal"))
-        label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT)
+        label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
         sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
                                         length=400, bg='white', highlightthickness=0, resolution=1)
 
