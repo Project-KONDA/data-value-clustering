@@ -32,7 +32,7 @@ class SliderInput:
 
         self.master = master
         self.n = n if n or costmap else len(texts)
-        self.abstraction = np.array((2, 0)) if abstraction is None else abstraction
+        self.abstraction = abstraction
         self.texts = texts
         self.abstraction_keys = self.texts
         self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
@@ -66,54 +66,55 @@ class SliderInput:
 
         self.title = Label(self.root, text="Slider Input", bg="white",
                            font=('bold 12', 19))
-        self.button_reset = Button(self.root, text='Reset', command=self.reset_groups)
+        self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
-        self.button_ok = Button(self.root, text='OK', command=self.quit)
+        self.button_ok = Button(self.root, text='OK', command=self.quit, width=54)
         if self.fixed:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
-        self.title.grid(sticky='nswe', row=0, column=1, columnspan=8)
-        self.button_reset.grid(sticky='ns', row=self.n + 5, column=1, pady=(10, 0))
-        self.button_minus.grid(sticky='ns', row=self.n + 5, column=2, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 5, column=3, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + 5, column=5, columnspan=2, pady=(10,0))
+        self.title.grid(sticky='nswe', row=0, column=1, columnspan=4)
+        self.button_minus.grid(sticky='ns', row=5, column=1, pady=(10, 0))
+        self.button_plus.grid(sticky='ns', row=5, column=2, pady=(10, 0))
+        self.button_reset.grid(sticky='nse', row=5, column=3, columnspan=2, pady=(10, 0), padx=5)
+        self.button_ok.grid(sticky='nswe', row=5, column=5, columnspan=3, pady=(10, 0))
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
-
 
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
             self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
 
         # scrollable canvas:
-        self.canvas = Canvas(self.root, bg='white', highlightthickness=0, width=800)  # TODO: set width relative
+        self.canvas = Canvas(self.root, bg='white', width=620, highlightbackground="grey", highlightthickness=1)  # TODO: set width relative
         self.scrollbar = Scrollbar(self.root, orient='vertical', command=self.canvas.yview)
         self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
-        self.scrollable_frame = Frame(self.canvas, bg='white')
+        self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
         self.scrollable_frame.bind('<Configure>',
                                    lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
-        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw')
+        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='nw')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.canvas.grid(row=3, column=1, sticky='nswe', columnspan=6)
+        self.canvas.grid(row=3, column=1, sticky='nswe', columnspan=6, pady=1, padx=1)
+        self.root.grid_rowconfigure(3, weight=1)
         self.scrollbar.grid(row=3, column=7, sticky='nswe')
 
         # headings:
-        self.label_heading1 = Label(self.scrollable_frame, text="Characters", bg="white", font=('Sans', '10', 'bold'))
+        self.label_heading1 = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_heading1, "Enumerate all characters of this group. Only the first occurrence of a "
                                            "character in one of the groups is relevant. Note that some characters may "
                                            "represent abstracted details. This mapping is provided in the column "
                                            "'Abstraction Mapping'.")
-        self.label_heading2 = Label(self.scrollable_frame, text="Abstraction Mapping", bg="white", font=('Sans', '10', 'bold'))
+        self.label_heading2 = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_heading2, "Mapping between characters of the column 'Characters' and the abstracted "
                                            "aspects they represent.")
-        self.label_heading3 = Label(self.scrollable_frame, text="Weights", bg="white", font=('Sans', '10', 'bold'))
+        self.label_heading3 = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_heading3, "Weights for the given character groups.")
         self.label_heading1.grid(sticky='nswe', row=2, column=1, columnspan=2)
-        self.label_heading2.grid(sticky='nswe', row=2, column=3, columnspan=2)
+        self.label_heading2.grid(sticky='nse', row=2, column=3, columnspan=2)
+        self.scrollable_frame.columnconfigure(3, weight=1)
         self.label_heading3.grid(sticky='nswe', row=2, column=5, columnspan=2)
 
         self.row_offset = 3
@@ -144,8 +145,8 @@ class SliderInput:
             self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
-            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
-            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
+            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=1)
+            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(15, 0), padx=1)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
@@ -159,7 +160,7 @@ class SliderInput:
         self.root.unbind_all("<MouseWheel>")
 
     def update_labels(self):
-        if self.updating_labels:
+        if self.updating_labels or self.abstraction is None:
             return
         self.updating_labels = True
         abstraction = self.abstraction.tolist()
@@ -241,8 +242,8 @@ class SliderInput:
         sliderlist[self.n] = self.sliderlist[self.n-1]
         valuelist[self.n] = self.valuelist[self.n-1]
 
-        entrylist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
-        label_list[self.n].grid(sticky='new', row=self.n + self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
+        entrylist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=1)
+        label_list[self.n].grid(sticky='new', row=self.n + self.row_offset, column=3, columnspan=2, pady=(15, 0), padx=1)
         sliderlist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         # 5. complete
@@ -254,10 +255,6 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_reset.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=1, pady=(10, 0))
-        self.button_minus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=2, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + 1 + self.row_offset, column=3, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + 1 + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.update_labels()
         self.root.update()
 
@@ -305,10 +302,6 @@ class SliderInput:
         self.valuelist = valuelist
 
         # 6. finish
-        self.button_reset.grid(sticky='ns', row=self.n + self.row_offset, column=1, pady=(10, 0))
-        self.button_minus.grid(sticky='ns', row=self.n + self.row_offset, column=2, pady=(10,0))
-        self.button_plus.grid(sticky='ns', row=self.n + self.row_offset, column=3, pady=(10,0))
-        self.button_ok.grid(sticky='nswe', row=self.n + self.row_offset, column=5, columnspan=2, pady=(10,0))
         self.root.update()
 
     def cancel(self):
