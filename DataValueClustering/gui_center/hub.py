@@ -19,16 +19,38 @@ from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_hub
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
-    get_suggested_abstraction_modifications, get_suggested_distance_modifications, get_suggested_parameter_modifications
+    get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
+    get_suggested_parameter_modifications, ValidationAnswer
 
 TITLE = "Clustering Configuration Hub"
 
-CLUSTERING_NOT_CONFIGURED = "Clustering not configured"
-DISTANCE_NOT_CONFIGURED = "Distance not configured"
-ABSTRACTION_NOT_CONFIGURED = "Abstraction not configured"
-DATA_NOT_CONFIGURED = "Data not configured"
-PATH_NOT_CONFIGURED = "Save path not configured"
+STATUS = "Status: "
+CLUSTERING_NOT_CALC = STATUS + 'Clustering configured but not calculated'
+CLUSTERING_DONE = STATUS + 'Clustering done'
+DISTANCE_NOT_CALC = STATUS + 'Distance configured but not calculated'
+DISTANCE_DONE = STATUS + 'Distance calculation done'
+ABSTRACTION_CONFIGURED = STATUS + 'Abstraction configured'
+ABSTRACTION_DONE = STATUS + 'Abstraction done'
+DATA_DONE = STATUS + 'Data extraction done'
+CLUSTERING_IN_PROGRESS = STATUS + "Clustering in progress ..."
+CLUSTERING_CONFIG_IN_PROGRESS = STATUS + "Clustering configuration in progress ..."
+DISTANCE_CALC_IN_PROGRESS = STATUS + "Distance calculation in progress ..."
+DISTANCE_CONFIGURATION_IN_PROGRESS = STATUS + "Distance configuration in progress ..."
+ABSTRACTION_CONFIG_IN_PROGRESS = STATUS + "Abstraction configuration in progress ..."
+ABSTRACTION_IN_PROGRESS = STATUS + "Abstraction in progress ..."
+DATA_EXTRACTION_IN_PROGRESS = STATUS + "Data extraction in progress ..."
+DATA_CONFIG_IN_PROGRESS = STATUS + "Data configuration in progress ..."
+CLUSTERING_NOT_CONFIGURED = STATUS + "Clustering not configured"
+DISTANCE_NOT_CONFIGURED = STATUS + "Distance not configured"
+ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
+DATA_NOT_CONFIGURED = STATUS + "Data not configured"
+
 NONE = "None"
+
+CLUSTERING_ADVICE = "Advice based on validation: reconfigure clustering"
+DISTANCE_ADVICE = "Advice based on validation: reconfigure distance"
+ABSTRACTION_ADVICE = "Advice based on validation: reconfigure abstraction"
+DATA_ADVICE = "Advice based on validation: reconfigure data"
 
 
 def data_name_from_path(data_path):
@@ -82,9 +104,9 @@ class Hub:
                                         width=42, height=2, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
-        self.button_abstraction.grid(sticky='nwe', row=7, column=1, columnspan=2, padx=10, pady=10)
-        self.button_distance.grid(sticky='nwe', row=9, column=1, columnspan=2, padx=10, pady=10)
-        self.button_clustering.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
+        self.button_abstraction.grid(sticky='nwe', row=8, column=1, columnspan=2, padx=10, pady=10)
+        self.button_distance.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
+        self.button_clustering.grid(sticky='nwe', row=14, column=1, columnspan=2, padx=10, pady=10)
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
         CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
@@ -93,18 +115,18 @@ class Hub:
 
         self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
                                            width=4, height=2, state="disabled")
-        self.button_distance_play.grid(sticky='ne', row=10, column=2, padx=10, pady=10)
+        self.button_distance_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10, rowspan=2)
         self.button_clustering_play = Button(self.root, text='▶', command=self.execute_clustering,
                                              width=4, height=2, state="disabled")
-        self.button_clustering_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10)
+        self.button_clustering_play.grid(sticky='ne', row=15, column=2, padx=10, pady=10, rowspan=2)
 
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'), width=45, height=2)
-        self.button_show_result.grid(sticky='nswe', row=14, column=1, columnspan=3, padx=10, pady=10)
+        self.button_show_result.grid(sticky='nswe', row=17, column=1, columnspan=3, padx=10, pady=10)
 
         self.button_save_result = Button(self.root, text='Save Excel...', command=self.save_excel, state="disabled",
                                          font=('Sans', '10', 'bold'), height=2)
-        self.button_save_result.grid(sticky='nswe', row=14, column=4, padx=10, pady=10)
+        self.button_save_result.grid(sticky='nswe', row=17, column=4, padx=10, pady=10)
 
         CreateToolTip(self.button_distance_play, "Execute distance calulcation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering.")
@@ -132,15 +154,31 @@ class Hub:
         self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", fg="red")
         self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white", fg="red")
 
-        self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=1, padx=20, pady=10)
-        self.label_abstraction_progress.grid(sticky='nw', row=8, column=1, columnspan=1, padx=20, pady=10)
-        self.label_distance_progress.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=10)
-        self.label_clustering_progress.grid(sticky='nw', row=12, column=1, columnspan=1, padx=20, pady=10)
+        self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=1, padx=20, pady=2)
+        self.label_abstraction_progress.grid(sticky='nw', row=9, column=1, columnspan=1, padx=20, pady=2)
+        self.label_distance_progress.grid(sticky='nw', row=12, column=1, columnspan=1, padx=20, pady=2)
+        self.label_clustering_progress.grid(sticky='nw', row=15, column=1, columnspan=1, padx=20, pady=2)
 
         CreateToolTip(self.label_data_progress, "Status of the data")
         CreateToolTip(self.label_abstraction_progress, "Status of the abstraction")
         CreateToolTip(self.label_distance_progress, "Status of the distances")
         CreateToolTip(self.label_clustering_progress, "Status of the clustering")
+
+        "advice labels"
+        self.label_data_advice = Label(self.root, text="", bg="white", fg="blue")
+        self.label_abstraction_advice = Label(self.root, text="", bg="white", fg="blue")
+        self.label_distance_advice = Label(self.root, text="", bg="white", fg="blue")
+        self.label_clustering_advice = Label(self.root, text="", bg="white", fg="blue")
+
+        self.label_data_advice.grid(sticky='nw', row=7, column=1, columnspan=1, padx=20, pady=2)
+        self.label_abstraction_advice.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=2)
+        self.label_distance_advice.grid(sticky='nw', row=13, column=1, columnspan=1, padx=20, pady=2)
+        self.label_clustering_advice.grid(sticky='nw', row=16, column=1, columnspan=1, padx=20, pady=2)
+
+        # CreateToolTip(self.label_data_advice, "Status of the data")
+        # CreateToolTip(self.label_abstraction_advice, "Status of the abstraction")
+        # CreateToolTip(self.label_distance_advice, "Status of the distances")
+        # CreateToolTip(self.label_clustering_advice, "Status of the clustering")
 
         "frames"
         self.frame_data = Frame(self.root, bg="grey90", width=200, height=100)
@@ -153,10 +191,10 @@ class Hub:
         self.frame_distance.configure(highlightbackground="grey", highlightthickness=1)
         self.frame_clustering.configure(highlightbackground="grey", highlightthickness=1)
 
-        self.frame_data.grid(sticky='nswe', row=5, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
-        self.frame_abstraction.grid(sticky='nswe', row=7, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
-        self.frame_distance.grid(sticky='nswe', row=9, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
-        self.frame_clustering.grid(sticky='nswe', row=11, column=3, rowspan=2, columnspan=2, padx=10, pady=10)
+        self.frame_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.frame_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.frame_distance.grid(sticky='nswe', row=11, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.frame_clustering.grid(sticky='nswe', row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
 
         "labels in frames"
         self.label_data_config_heading = Label(self.frame_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left")
@@ -209,7 +247,7 @@ class Hub:
         return str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt"
 
     def configure_data(self):
-        self.label_data_progress.configure(text="Data configuration in progress ...", fg='magenta2')
+        self.label_data_progress.configure(text=DATA_CONFIG_IN_PROGRESS, fg='magenta2')
         self.root.update()
         self.disable()
         previous_data_path = self.configuration.get_data_configuration()[0]
@@ -228,7 +266,7 @@ class Hub:
         self.update()
         self.root.update()
 
-        self.label_data_progress.configure(text="Data extraction in progress ...", fg='RoyalBlue1')
+        self.label_data_progress.configure(text=DATA_EXTRACTION_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
 
         self.configuration.execute_data()
@@ -236,7 +274,7 @@ class Hub:
         self.update()
 
         if self.configuration.abstraction_configuration_valid():
-            self.label_abstraction_progress.configure(text="Abstraction in progress ...", fg='RoyalBlue1')
+            self.label_abstraction_progress.configure(text=ABSTRACTION_IN_PROGRESS, fg='RoyalBlue1')
             self.root.update()
             self.configuration.execute_abstraction()
             self.update()
@@ -244,7 +282,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_abstraction(self):
-        self.label_abstraction_progress.configure(text="Abstraction configuration in progress ...", fg='magenta2')
+        self.label_abstraction_progress.configure(text=ABSTRACTION_CONFIG_IN_PROGRESS, fg='magenta2')
         self.root.update()
         # 1. get data from config
         self.disable()
@@ -266,7 +304,7 @@ class Hub:
         self.update()
         self.root.update()
 
-        self.label_abstraction_progress.configure(text="Abstraction in progress ...", fg='RoyalBlue1')
+        self.label_abstraction_progress.configure(text=ABSTRACTION_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
 
         if self.configuration.data_configuration_valid():
@@ -276,7 +314,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_distance(self):
-        self.label_distance_progress.configure(text="Distance configuration in progress ...", fg='magenta2')
+        self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
         self.root.update()
         self.disable()
         previous_cost_map, previous_blob_configuration = self.configuration.get_distance_configuration()
@@ -324,7 +362,7 @@ class Hub:
         self.root.update()
 
     def execute_distance(self):
-        self.label_distance_progress.configure(text="Distance calculation in progress ...", fg='RoyalBlue1')
+        self.label_distance_progress.configure(text=DISTANCE_CALC_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
 
         self.configuration.execute_distance()
@@ -335,7 +373,7 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_clustering(self):
-        self.label_clustering_progress.configure(text="Clustering configuration in progress ...", fg='magenta2')
+        self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_IN_PROGRESS, fg='magenta2')
         self.root.update()
         self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
@@ -365,7 +403,7 @@ class Hub:
         return self.configuration.get_validation_answer_1(), self.configuration.get_validation_answer_2(), self.configuration.get_validation_answer_3(), self.configuration.get_validation_answer_4(),
 
     def execute_clustering(self):
-        self.label_clustering_progress.configure(text="Clustering in progress ...", fg='RoyalBlue1')
+        self.label_clustering_progress.configure(text=CLUSTERING_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
 
         self.configuration.execute_clustering()
@@ -387,6 +425,25 @@ class Hub:
         #             self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
         result_view(self.root, self.configuration)
         self.update()
+
+    def update_advice(self):
+        answers = self.get_validation_answers()
+        self.label_data_advice.config(text="")
+        self.label_abstraction_advice.config(text="")
+        self.label_distance_advice.config(text="")
+        self.label_clustering_advice.config(text="")
+        if answers[0] is not None and answers[0] != ValidationAnswer.HAPPY:
+            self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
+            self.label_distance_advice.config(text=DISTANCE_ADVICE)
+            self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+        if answers[1] is not None and answers[1] != ValidationAnswer.HAPPY:
+            self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+        if answers[2] is not None and answers[2] != ValidationAnswer.HAPPY:
+            self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
+            self.label_distance_advice.config(text=DISTANCE_ADVICE)
+            self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+        if answers[3] is not None and answers[3][0] != ValidationAnswer.HAPPY:
+            self.label_data_advice.config(text=DATA_ADVICE)
 
     # def abstraction_callback(self, percentage):
     #     self.abstraction_progress['value'] = percentage
@@ -456,7 +513,7 @@ class Hub:
         self.button_abstraction.configure(state="normal")
 
         if self.configuration.data_configuration_valid():
-            self.label_data_progress.configure(text='Data extraction done', fg='green')
+            self.label_data_progress.configure(text=DATA_DONE, fg='green')
             self.button_data.configure(bg=self.original_button_color)
         else:
             self.label_data_progress.configure(text=DATA_NOT_CONFIGURED, fg='red')
@@ -465,9 +522,9 @@ class Hub:
         if self.configuration.abstraction_configuration_valid():
             self.button_abstraction.configure(bg=self.original_button_color)
             if self.configuration.data_configuration_valid():
-                self.label_abstraction_progress.configure(text='Abstraction done', fg='green')
+                self.label_abstraction_progress.configure(text=ABSTRACTION_DONE, fg='green')
             else:
-                self.label_abstraction_progress.configure(text='Abstraction configured', fg='orange')
+                self.label_abstraction_progress.configure(text=ABSTRACTION_CONFIGURED, fg='orange')
         else:
             self.button_abstraction.configure(bg='paleturquoise1')
             self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
@@ -483,7 +540,7 @@ class Hub:
             self.label_distance_progress.configure(fg='red')
 
         if self.configuration.clustering_configuration_possible():
-            self.label_distance_progress.configure(text='Distance calculation done', fg='green')
+            self.label_distance_progress.configure(text=DISTANCE_DONE, fg='green')
             self.button_distance_play.configure(state="normal", bg=self.original_button_color)
             if self.configuration.clustering_configuration_valid():
                 self.button_clustering.configure(state="normal", bg=self.original_button_color)
@@ -494,7 +551,7 @@ class Hub:
             self.label_clustering_progress.configure(fg='red')
 
             if self.configuration.distance_configuration_valid():
-                self.label_distance_progress.configure(text='Distance configured but not calculated', fg='orange')
+                self.label_distance_progress.configure(text=DISTANCE_NOT_CALC, fg='orange')
                 self.button_distance_play.configure(state="normal", bg='paleturquoise1')
             else:
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
@@ -503,14 +560,14 @@ class Hub:
         if self.configuration.result_is_ready():
             self.button_show_result.configure(state="normal", bg='pale green')
             self.button_save_result.configure(state="normal", bg='pale green')
-            self.label_clustering_progress.configure(text='Clustering done', fg='green')
+            self.label_clustering_progress.configure(text=CLUSTERING_DONE, fg='green')
             self.button_clustering_play.configure(state="normal", bg=self.original_button_color)
         else:
             self.button_show_result.configure(state="disabled", bg=self.original_button_color)
             self.button_save_result.configure(state="disabled", bg=self.original_button_color)
             if self.configuration.clustering_execution_possible():
                 # self.clustering_progress['value'] = 100
-                self.label_clustering_progress.configure(text='Clustering configured but not calculated', fg='orange')
+                self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='orange')
                 self.button_clustering_play.configure(state="normal", bg='paleturquoise1')
             else:
                 # self.clustering_progress['value'] = 0
@@ -521,6 +578,8 @@ class Hub:
         self.update_frame_abstraction()
         self.update_frame_distance()
         self.update_frame_clustering()
+
+        self.update_advice()
 
         self.root.update()
 
