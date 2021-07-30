@@ -95,10 +95,108 @@ def menu_help_clustering_selection(master):
     menu_information_display(master, "Clustering Algorithm Selection - Help", text)
 
 
+def menu_help_cost_map(master):
+    """help popup for matrix view"""
+    text = [
+        "The Matrix view gives you full control over the weights used in the calculation of distances, "
+        "i.e. dissimilarities, between data values.",
+        "The weights represent the dissimilarities between character groups.",
+        "You should specify these weights based on your domain knowledge.",
+        "",
+        ["Character Groups"],
+        "The left input fields represent groups of characters. Please enumerate all characters, that",
+        "should be in the group. Note, that the interface supports sequences like 'a-z' or 'A-Z' for",
+        "letters and '1-2' for digits.",
+        "Only the first occurrence of a character in one of the groups is relevant.",
+        "The last row and column represents all characters not mentioned in the lines above.",
+        "",
+        "Note that some characters actually represent features that were removed by the abstraction.",
+        "For example, depending on the abstraction configuration, '1' may represent any integer.",
+        "This mapping between characters and the represented features that were abstracted is provided in the second ",
+        "column.",
+        "",
+        "You are free to modify the character groups.",
+        "You can add and remove groups, i.e. lines via the '+' and '-' buttons.",
+        "The default groups are automatically derived from the abstraction configuration.",
+        "To reset the groups correspongingly, press the 'Reset' button.",
+        "",
+        ["Weights"],
+        "You must enter the weights of character deletions (first column), insertions (first row) and substitution ",
+        "(rest of the matrix) as numbers.",
+        "The first column and row represent the empty string. Here the weights of deleting",
+        "and inserting the corresponding character is entered.",
+        "The weight in row i and column j represents the weight for substituting the characters represented by row i by ",
+        "characters represented by column j.",
+        "Only the relative size of the weights matters.",
+        "Because the distance between two data values shall be symmetrical, the matrix is",
+        "mirrored on the diagonal. The entry fields above the diagonal are read only.",
+        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of ",
+        "these characters.",
+        "You should choose heigher weights for characters that you do not expect to find regularly in the data values ",
+        "and for characters that may cause great dissimilarity of the data values.",
+        "",
+        ["Confirm, Reset & Discard"],
+        "To confirm your modifications of the weights, press the 'OK' button.",
+        "To reset character groups, press the 'Reset' button.",
+        "To discard your modifications, press the 'x' button in the upper right corner.",
+    ]
+    menu_information_display(master, "Costmatrix - Help", text)
+
+
+def menu_help_blob_input(master):
+    """help popup for Blob view"""
+    text = [
+        "The Blob view allows you to configure the weights used in the calculation of distances, "
+        "i.e. dissimilarities, between data values by moving and scaling graphical objects on a 2D canvas.",
+        "The weights represent the dissimilarities between character groups.",
+        "You should specify these weights based on your domain knowledge.",
+        "",
+        ["Blobs"],
+        "Each of the spheres (we call them 'blobs') in this diagram represent a group of similar",
+        "characters. This group of characters is described in the label. There is one empty",
+        "blue blob. This represents an empty text.",
+        "The character groups are automatically derived from your configuration of the abstraction.",
+        "",
+        ["Distance"],
+        "The distances between blobs represent the weight of replacing corresponding characters. The weight ",
+        "of deleting and inserting a character is represented by the distance to the special empty ",
+        "blue blob.",
+        # interpretation
+        "When the blobs just barely touch each other, the distance between them is interpreted",
+        "as the value 1.",
+        # controls
+        "The distances can be modified via Drag & Drop.",
+        "",
+        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of "
+        "these characters.",
+        "You should choose heigher weights for characters that you do not expect to find regularly in the data values "
+        "and for characters that may cause great dissimilarity of the data values.",
+        "",
+        ["Size"],
+        "The size of each blob represents the weight of substituting characters of the represented group by each other.",
+        "Some blobs cannot be scaled. These are on default fixed on the minimal size and",
+        "are slightly less saturated. The fixed blobs depend on your configuration of the abstraction.",
+        # interpretation
+        "The minimum size represents the value 0. The default size is 1.",
+        # controls
+        "The size of not fixed blobs can be changed via the scroll wheel while the mouse hovers ",
+        "over the blob. The default size can be restored by pressing N on mouse over.",
+        "",
+        ["Confirm, Reset & Discard"],
+        "To confirm your modifications of the weights, press the 'OK' button.",
+        "To reset the position of the blobs, press the 'Reset' button.",
+        "To discard your modifications, press the 'x' button in the upper right corner.",
+    ]
+    menu_information_display(master, "Distance Specification - Help", text)
+
+
 def menu_help_distance_slider(master):
     """help popup for Slider Input view"""
     text = [
-        "The Slider Input view allows you to configure the weights used in the distance calculation via sliders.",
+        "The Slider Input view allows you to configure the weights used in the calculation of distances, "
+        "i.e. dissimilarities, between data values via sliders.",
+        "The weights represent the dissimilarities between character groups.",
+        "You should specify these weights based on your domain knowledge.",
         "",
         ["Character Groups"],
         "On the left-hand side the character groups are specified via enumerations of characters.",
@@ -131,14 +229,15 @@ def menu_help_distance_slider(master):
     menu_information_display(master, "Slider Input - Help", text)
 
 
-
 def menu_help_distance_choice(master):
     """help popup for Distance Choice view"""
     text = [
         "The Distance Choice view allows you to select a method for configuring the distance calculation, i.e. for ",
-        "specifying the similarity between character groups.",
+        "weighting the similarity between character groups based on your domain knowledge.",
         "Currently only the weighted Levenshtein distance is supported and can be configured via 3 different methods.",
-        "Note that the easier methods allow less flexibility.",
+        "The simpler methods allow less flexibility.",
+        "But as in most cases, the simplest method is sufficient to achieve useful results, we advise you to start with "
+        "the simplest method, the Slider View.",
         "Further note that once you use the Slider or Matrix View, you cannot open your configuration via the Blob View.",
         "",
         "To confirm your selection, press the 'OK' button.",
@@ -152,9 +251,11 @@ def menu_help_abstraction(master):
     text = [
         "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data ",
         "values.",
+        "The result of applying the abstraction is a smaller set of shorter values, the abstracted values.",
+        "This represents a first grouping of the data values.",
         "",
         ["Questionnaire"],
-        "For this, you should answer the questions on the left-hand side.",
+        "To achieve an abstraction that fits your data, you should answer the questions on the left-hand side.",
         "You can start with one of the predefined configurations if you like.",
         "When answering the questions, please use your domain knowledge about the selected data and data field to decide ",
         "which feature of the data values are irrelevant for clustering.",
@@ -241,95 +342,7 @@ def menu_help_hub(master):
     menu_information_display(master, "Hub - Help", text)
 
 
-def menu_help_cost_map(master):
-    """help popup for matrix view"""
-    text = [
-        "This view is designed to give full control over the weights used for the calculation of distances between ",
-        "data values.",
-        "",
-        ["Character Groups"],
-        "The left input fields represent groups of characters. Please enumerate all characters, that",
-        "should be in the group. Note, that the interface supports sequences like 'a-z' or 'A-Z' for",
-        "letters and '1-2' for digits.",
-        "Only the first occurrence of a character in one of the groups is relevant.",
-        "The last row and column represents all characters not mentioned in the lines above.",
-        "",
-        "Note that some characters actually represent features that were removed by the abstraction.",
-        "For example, depending on the abstraction configuration, '1' may represent any integer.",
-        "This mapping between characters and the represented features that were abstracted is provided in the second ",
-        "column.",
-        "",
-        "You are free to modify the character groups.",
-        "You can add and remove groups, i.e. lines via the '+' and '-' buttons.",
-        "The default groups are automatically derived from the abstraction configuration.",
-        "To reset the groups correspongingly, press the 'Reset' button.",
-        "",
-        ["Weights"],
-        "You must enter the weights of character deletions (first column), insertions (first row) and substitution ",
-        "(rest of the matrix) as numbers.",
-        "The first column and row represent the empty string. Here the weights of deleting",
-        "and inserting the corresponding character is entered.",
-        "The weight in row i and column j represents the weight for substituting the characters represented by row i by ",
-        "characters represented by column j.",
-        "Only the relative size of the weights matters.",
-        "Because the distance between two data values shall be symmetrical, the matrix is",
-        "mirrored on the diagonal. The entry fields above the diagonal are read only.",
-        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of ",
-        "these characters.",
-        "You should choose heigher weights for characters that you do not expect to find regularly in the data values ",
-        "and for characters that may cause great dissimilarity of the data values.",
-        "",
-        ["Confirm, Reset & Discard"],
-        "To confirm your modifications of the weights, press the 'OK' button.",
-        "To reset character groups, press the 'Reset' button.",
-        "To discard your modifications, press the 'x' button in the upper right corner.",
-    ]
-    menu_information_display(master, "Costmatrix - Help", text)
 
-
-def menu_help_blob_input(master):
-    """help popup for Blob view"""
-    text = [
-        "This view allows the configuration of the weights used for the calculation of distances between data values by "
-        "moving and scaling graphical objects on a 2D canvas.",
-        "",
-        ["Blobs"],
-        "Each of the spheres (we call them 'blobs') in this diagram represent a group of similar",
-        "characters. This group of characters is described in the label. There is one empty",
-        "blue blob. This represents an empty text.",
-        "The character groups are automatically derived from your configuration of the abstraction.",
-        "",
-        ["Distance"],
-        "The distances between blobs represent the weight of replacing corresponding characters. The weight ",
-        "of deleting and inserting a character is represented by the distance to the special empty ",
-        "blue blob.",
-        # interpretation
-        "When the blobs just barely touch each other, the distance between them is interpreted",
-        "as the value 1.",
-        # controls
-        "The distances can be modified via Drag & Drop.",
-        "",
-        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of "
-        "these characters.",
-        "You should choose heigher weights for characters that you do not expect to find regularly in the data values "
-        "and for characters that may cause great dissimilarity of the data values.",
-        "",
-        ["Size"],
-        "The size of each blob represents the weight of substituting characters of the represented group by each other.",
-        "Some blobs cannot be scaled. These are on default fixed on the minimal size and",
-        "are slightly less saturated. The fixed blobs depend on your configuration of the abstraction.",
-        # interpretation
-        "The minimum size represents the value 0. The default size is 1.",
-        # controls
-        "The size of not fixed blobs can be changed via the scroll wheel while the mouse hovers ",
-        "over the blob. The default size can be restored by pressing N on mouse over.",
-        "",
-        ["Confirm, Reset & Discard"],
-        "To confirm your modifications of the weights, press the 'OK' button.",
-        "To reset the position of the blobs, press the 'Reset' button.",
-        "To discard your modifications, press the 'x' button in the upper right corner.",
-    ]
-    menu_information_display(master, "Distance Specification - Help", text)
 
 
 def menu_information_display(master, title, content):
