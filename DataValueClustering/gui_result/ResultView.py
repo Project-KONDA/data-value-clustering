@@ -89,7 +89,7 @@ class ResultView:
         # excel button
         self.button = Button(self.summary_frame, text='Open Excel File Showing Clustering', command=self.open_excel,
                              bg='pale green')
-        self.button.grid(row=3, column=0, sticky='we', columnspan=1)
+        self.button.grid(row=3, column=0, sticky='we', columnspan=1, pady=20)
 
         # questionnaire:
         self.questionnaire_frame = Frame(self.root, bg="white", padx=10, borderwidth=2, relief="groove")
