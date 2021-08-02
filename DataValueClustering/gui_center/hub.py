@@ -478,6 +478,7 @@ class Hub:
                                    icon=WARNING):
             self.configuration = HubConfiguration()
             self.update()
+            self.root.title(TITLE)
 
 
     def menu_save(self):
