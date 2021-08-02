@@ -47,10 +47,10 @@ DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
 NONE = "None"
 
-CLUSTERING_ADVICE = "Advice based on validation: reconfigure clustering"
-DISTANCE_ADVICE = "Advice based on validation: reconfigure distance"
-ABSTRACTION_ADVICE = "Advice based on validation: reconfigure abstraction"
-DATA_ADVICE = "Advice based on validation: reconfigure data"
+CLUSTERING_ADVICE = "Advice based on evaluation: reconfigure clustering"
+DISTANCE_ADVICE = "Advice based on evaluation: reconfigure dissimilarities"
+ABSTRACTION_ADVICE = "Advice based on evaluation: reconfigure abstraction"
+DATA_ADVICE = "Advice based on evaluation: reconfigure data"
 
 
 def data_name_from_path(data_path):
@@ -78,10 +78,10 @@ class Hub:
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
                                  font=('TkDefaultFont', 14, 'bold'), anchor="c", justify="center")
-        self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4)
+        self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
 
         self.label_explanation = Label(self.root, text="Perform the following steps to obtain a clustering of your data.\nThe steps required next are highlighted in blue.", bg="white")
-        self.label_explanation.grid(sticky='nswe', row=1, column=1, columnspan=4)
+        self.label_explanation.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 10))
 
         "menu"
         self.menu = Menu(self.root)
@@ -99,7 +99,7 @@ class Hub:
                                   width=button_width, height=2, bg='paleturquoise1')
         self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction,
                                          width=button_width, height=2, bg='paleturquoise1')
-        self.button_distance = Button(self.root, text='Configure Distance...', command=self.configure_distance,
+        self.button_distance = Button(self.root, text='Configure Dissimilarities...', command=self.configure_distance,
                                       width=button_width, height=2, state="disabled")
         self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering,
                                         width=button_width, height=2, state="disabled")
@@ -125,7 +125,7 @@ class Hub:
                                          font=('Sans', '10', 'bold'), width=45, height=2)
         self.button_show_result.grid(sticky='nswe', row=17, column=1, columnspan=3, padx=10, pady=10)
 
-        self.button_save_result = Button(self.root, text='Save Excel...', command=self.save_excel, state="disabled",
+        self.button_save_result = Button(self.root, text='Save Clustering Table...', command=self.save_excel, state="disabled",
                                          font=('Sans', '10', 'bold'), height=2)
         self.button_save_result.grid(sticky='nswe', row=17, column=4, padx=10, pady=10)
 
@@ -227,7 +227,6 @@ class Hub:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.root.after(1, lambda: self.root.focus_force())
-        self.load("../test_data/mysecondjson.json")
         self.root.mainloop()
 
     def set_saved(self, saved):

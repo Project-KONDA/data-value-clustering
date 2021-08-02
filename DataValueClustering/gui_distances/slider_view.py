@@ -54,7 +54,7 @@ class SliderInput:
                     self.values.append(costmap[(i + 1, 0)])
 
         self.root = Toplevel(self.master)
-        self.root.title("Slider Input")
+        self.root.title("Distance Configuration - Sliders")
         self.root.config(bg="white")
         self.root.resizable(False, True)
         self.root.focus_force()
@@ -64,8 +64,8 @@ class SliderInput:
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root))
         self.root.config(menu=self.menu)
 
-        self.title = Label(self.root, text="Slider Input", bg="white",
-                           font=('TkDefaultFont', 14, 'bold'))
+        self.title = Label(self.root, text="Weight the influence of characters on the dissimilarity between data values", bg="white",
+                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -85,7 +85,7 @@ class SliderInput:
         CreateToolTip(self.button_plus, "Add line.")
 
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
             self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
 
         # scrollable canvas:

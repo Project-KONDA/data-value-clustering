@@ -19,8 +19,8 @@ def menu_help_result(master):
         "A clustering is compact if there is a high similarity within clusters and it is separate if there is a low ",
         "similarity between clusters.",
         "In general, a good clustering should have high compactness and separation.",
-        "If the colors are very mixed, this may hint at low meaningfulness of the clustering (cf. validation question 1).",
-        "The plot may also assist you in answering validation question 2.",
+        "If the colors are very mixed, this may hint at low meaningfulness of the clustering (cf. evaluation question 1).",
+        "The plot may also assist you in answering evaluation question 2.",
         "But make sure to also check the entire clustering provided as an Excel file before answering the questions.",
         "",
         ["Clustering"],
@@ -32,21 +32,21 @@ def menu_help_result(master):
         "The third sheet additionally shows the variance within each cluster and the distance of each value to the ",
         "others in the same cluster.",
         "An extremely high variance within a cluster indicates that you should consider analysing this cluster ",
-        "separately (cf. validation question 4) as it may be too heterogeneous to oversee the types of contained values.",
+        "separately (cf. evaluation question 4) as it may be too heterogeneous to oversee the types of contained values.",
         "You should further take a look at values with an extremely high distance to the other values in the ",
         "same cluster, as it may be significantly different from those.",
         "",
-        ["Validation"],
+        ["Evaluation"],
         "After having familiarized yourself with the clustering, you should validate the clustering, i.e. find out ",
         "whether you are satisfied with the clustering or need another iteration with a modified configuration.",
-        "The validation questionnaire given on the right-hand side, supports this process.",
+        "The evaluation questionnaire given on the right-hand side, supports this process.",
         "In case you are not satisfied with the clustering, we calculate suggestions for modifications of the ",
         "configuration of the next iteration.",
         "The suggestions are given in the configuration views in blue text.",
         "",
         ["Confirm & Discard"],
-        "To confirm your validation answers, press the 'OK' button.",
-        "To discard your validation answers, press the 'x' button in the upper right corner.",
+        "To confirm your evaluation answers, press the 'OK' button.",
+        "To discard your evaluation answers, press the 'x' button in the upper right corner.",
     ]
     menu_information_display(master, "Result - Help", text)
 
@@ -337,7 +337,7 @@ def menu_help_hub(master):
         ["Managing Configurations & Results"],
         "You can save, load and reset your configuration via the menu.",
         "Once the clustering is ready, you can open the result view to see further information and perform the ",
-        "validation or save the clustering in an Excel file.",
+        "evaluation or save the clustering in an Excel file.",
     ]
     menu_information_display(master, "Hub - Help", text)
 

@@ -52,13 +52,13 @@ class ClusterConfigurationInput:
 
         # caption:
         self.label_text = StringVar()
-        self.label_text.set("Please specify the following parameters")
-        self.label = Label(self.root, anchor='w', textvariable=self.label_text, bg='white',
-                           font=('TkDefaultFont', 14, 'bold'))
+        self.label_text.set("Specify the following parameters of the selected clustering algorithm")
+        self.label = Label(self.root, anchor='c', justify="center", textvariable=self.label_text, bg='white',
+                           font=('TkDefaultFont', 12, 'bold'), pady=10)
 
         self.label_suggested = None
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire is given in blue next to sliders and highlighted in green\nfor enumerations.", bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering evaluation questionnaire is given in blue next to sliders and highlighted in green\nfor enumerations.", bg="white", anchor='w', pady=10, fg='blue', justify='left')
 
         # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
@@ -93,7 +93,7 @@ class ClusterConfigurationInput:
 
     def record_parameters(self):
 
-        self.label.grid(row=0, column=0, sticky='w', pady=5, padx=5)
+        self.label.grid(row=0, column=0, sticky='nsew', pady=5, padx=5)
         if self.label_suggested is not None:
             self.label_suggested.grid(row=1, column=0, sticky='senw')
         self.canvas_border.grid(row=2, column=0, sticky='nsew')

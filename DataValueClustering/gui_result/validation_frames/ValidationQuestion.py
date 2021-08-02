@@ -11,7 +11,7 @@ class ValidationQuestion:
         self.update_suggestion_function = update_advice_function
 
         # frame:
-        self.frame = Frame(self.root, highlightthickness=1, highlightbackground='grey', bg='white')
+        self.frame = Frame(self.root, highlightbackground='grey', bg='white', pady=10)
 
         # question label:
         self.label_text = StringVar()

@@ -31,7 +31,7 @@ question_2_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "Choose thi
                                [ValidationAnswer.MORE, "More noise please", "Choose this if a lot of values within clusters seem extremely different from all other values."],
                                [ValidationAnswer.LESS, "Less noise please", "Choose this if a lot of noisy values do not seem extremely different from the other values."]], dtype=object)
 question_3 = np.array(["How do you feel about the overall level of detail of the clustering?",
-                      "Reflect upon whether the clustering helps you in getting an overview of the different kinds of data values and whether a finer or less-fine partitioning would be more helpful."])
+                      "Reflect upon whether the clustering helps you in getting an overview of the different kinds of data values and whether a more or less finge-grained partitioning would be more helpful."])
 question_3_answers = np.array([[ValidationAnswer.HAPPY, "I'm happy", "Choose this if you are happy with the level of detail, i.e. number of clusters, in general."],
                                [ValidationAnswer.MORE, "More clusters please", "Choose this if in general the level of detail of the clustering is too low and you want a more fine grained partitioning."],
                                [ValidationAnswer.LESS, "Less clusters please", "Choose this if in general the level of detail of the clustering is too high and you want a less fine grained partitioning."]], dtype=object)

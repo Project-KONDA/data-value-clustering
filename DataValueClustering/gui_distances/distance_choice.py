@@ -23,7 +23,7 @@ class DistanceChoice:
         self.canceled = False
 
         self.root = Toplevel(master)
-        self.root.title("Distance Choice")
+        self.root.title("Dissimilarity Configuration Method Selection")
         self.root.config(bg="white")
         self.root.focus_force()
         self.root.grab_set()
@@ -32,8 +32,8 @@ class DistanceChoice:
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_choice(self.root))
         self.root.config(menu=self.menu)
 
-        self.title = Label(self.root, text="Distance Choice", bg="white",
-                           font=('TkDefaultFont', 14, 'bold'))
+        self.title = Label(self.root, text="Select the method for configuring dissimilarities", bg="white",
+                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
 
         self.label_wld = Label(self.root, text="Weighted Levenstein Distance", width=40, bg="white", justify=LEFT, anchor=W)
         self.button_wld_slider = Button(self.root, text="Slider View (Easy)", width=30,

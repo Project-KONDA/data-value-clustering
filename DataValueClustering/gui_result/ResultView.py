@@ -27,7 +27,7 @@ class ResultView:
     # def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
     def __init__(self, master, configuration):
         self.root = Toplevel(master)
-        self.root.title("Result")
+        self.root.title("Clustering Result & Evaluation")
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root))
@@ -51,24 +51,31 @@ class ResultView:
         # self.distance_matrix_map = distance_matrix_map
         # self.clusters_abstracted = clusters_abstracted
 
+        self.caption = StringVar()
+        self.caption.set("Explore the calculated clustering and perform the clustering evaluation via the questionnaire")
+        self.caption = Label(self.root, anchor='c', textvariable=self.caption,
+                                           text="test", bg='white',
+                                           font=('TkDefaultFont', 12, 'bold'), pady=10)
+        self.caption.grid(row=0, column=0, sticky='wesn', columnspan=2)
+
         # summary:
-        self.summary_frame = Frame(self.root, bg="white", padx=10, pady=10)
+        self.summary_frame = Frame(self.root, bg="white", padx=10, pady=10, borderwidth=2, relief="groove")
         self.summary_frame.grid(row=1, column=0, sticky='nwse', columnspan=1)
 
-        # caption left side:
-        self.summary_caption = StringVar()
-        self.summary_caption.set("Result")
-        self.summary_caption_label = Label(self.summary_frame, anchor='w', textvariable=self.summary_caption,
-                                           text="test", bg='white',
-                                           font=('TkDefaultFont', 14, 'bold'), pady=10)
-        self.summary_caption_label.grid(row=0, column=0, sticky='wesn', columnspan=1)
+        # # caption left side:
+        # self.summary_caption = StringVar()
+        # self.summary_caption.set("Clustering Result")
+        # self.summary_caption_label = Label(self.summary_frame, anchor='w', textvariable=self.summary_caption,
+        #                                    text="test", bg='white',
+        #                                    font=('TkDefaultFont', 12, 'bold'), pady=10)
+        # self.summary_caption_label.grid(row=0, column=0, sticky='wesn', columnspan=1)
 
-        self.info_frame = Frame(self.summary_frame, bg="white", borderwidth=2, relief="groove")
+        self.info_frame = Frame(self.summary_frame, bg="white")
         self.info_frame.grid(row=1, column=0, sticky='nwse', columnspan=1)
 
-        self.info_header_label = Label(self.info_frame, text="Meta-Information", bg='white',
-                                       font=('TkDefaultFont', 12, 'bold'))
-        self.info_header_label.grid(row=0, column=0, sticky='nwes', columnspan=1)
+        # self.info_header_label = Label(self.info_frame, text="Meta-Information", bg='white',
+        #                                font=('TkDefaultFont', 12, 'bold'))
+        # self.info_header_label.grid(row=0, column=0, sticky='nwes', columnspan=1)
 
         s = self.get_info()
         self.info_label = Label(self.info_frame, text=s, justify="left", bg='white')
@@ -85,22 +92,22 @@ class ResultView:
         self.button.grid(row=3, column=0, sticky='we', columnspan=1)
 
         # questionnaire:
-        self.questionnaire_frame = Frame(self.root, bg="white", padx=10, pady=10)
+        self.questionnaire_frame = Frame(self.root, bg="white", padx=10, borderwidth=2, relief="groove")
         self.questionnaire_frame.grid(row=1, column=1, sticky='nwse')
 
-        # caption right side:
-        self.questionnaire_caption = StringVar()
-        self.questionnaire_caption.set("Validation")
-        self.questionnaire_caption_label = Label(self.questionnaire_frame, anchor='w',
-                                                 textvariable=self.questionnaire_caption, text="test",
-                                                 bg='white', font=('TkDefaultFont', 14, 'bold'), pady=10)
-        self.questionnaire_caption_label.grid(row=0, column=0, sticky='we', columnspan=2)
+        # # caption right side:
+        # self.questionnaire_caption = StringVar()
+        # self.questionnaire_caption.set("Clustering Validation")
+        # self.questionnaire_caption_label = Label(self.questionnaire_frame, anchor='w',
+        #                                          textvariable=self.questionnaire_caption, text="test",
+        #                                          bg='white', font=('TkDefaultFont', 12, 'bold'), pady=10)
+        # self.questionnaire_caption_label.grid(row=0, column=0, sticky='we', columnspan=2)
 
-        self.questionnaire_note_label = Label(self.questionnaire_frame, anchor='w', text="After having familiarized yourself with the clustering via the MDS Scatter Plot and the Excel file,\nanswer the following questions to perform the validation of the calculated clustering.", bg='white', justify='left')
-        self.questionnaire_note_label.grid(row=1, column=0, sticky='we', columnspan=2)
+        # self.questionnaire_note_label = Label(self.questionnaire_frame, anchor='w', text="After having familiarized yourself with the clustering via the MDS Scatter Plot and the Excel file,\nanswer the following questions to perform the validation of the calculated clustering.", bg='white', justify='left')
+        # self.questionnaire_note_label.grid(row=1, column=0, sticky='we', columnspan=2)
 
         self.questions_frame = Frame(self.questionnaire_frame, bg="white")
-        self.questions_frame.grid(row=2, column=0, sticky='nsew')
+        self.questions_frame.grid(row=1, column=0, sticky='nsew')
 
         self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion)
         self.q1.frame.grid(row=0, column=0, sticky='nsew')

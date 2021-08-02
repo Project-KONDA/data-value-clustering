@@ -55,7 +55,7 @@ class CostMapInput:
 
         self.case_entry = Entry(self.root)
 
-        self.root.title('Please enter Weight Matrix')
+        self.root.title('Dissimilarity Configuration - Matrix')
         self.root.configure(background='white')
         # self.root.resizable(False, False)
 
@@ -64,7 +64,7 @@ class CostMapInput:
         self.root.config(menu=menu)
 
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
             self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=self.n+4)
 
         Label(self.root, text='Case Change:', background='white').grid(sticky=W, row=9, column=1, columnspan=2)
@@ -87,8 +87,8 @@ class CostMapInput:
             self.regex_label[i].grid(sticky="nswe", row=i + 10, column=4, columnspan=1)
 
             if i == 0:
-                self.regex[i].insert(END, 'insert')
-                self.label[i].configure(text='delete', state='disabled')
+                self.regex[i].insert(END, '<insert>')
+                self.label[i].configure(text='<delete>', state='disabled')
                 self.regex[i].config(state='disabled')
             elif i == self.n - 1:
                 self.regex[i].insert(END, '<rest>')

@@ -26,15 +26,15 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     """Binary questionnaire view to support the selection of the clustering algorithm"""
 
     def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
-        self.help_text = "Please choose one of the suggested algorithms:\n"
-        super().__init__(master, "Clustering Configuration", config, predefined_answers)
+        self.help_text = "Answer the following questions to narrow the set of fitting clustering algorithms and choose one."
+        super().__init__(master, "Clustering Algorithm Selection", config, predefined_answers)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_clustering_selection(self.root))
         self.root.config(menu=self.menu)
 
         if len(suggested_algorithms) > 0:
-            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering validation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10, fg='blue')
+            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering evaluation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10, fg='blue')
             self.label_suggested.grid(row=0, column=0, sticky='senw')
 
         self.suggested_algorithms = suggested_algorithms
@@ -50,7 +50,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
 
     def build_result_frame(self):
         for i, algorithm in enumerate(self.algorithms):
-            self.radio_buttons[i] = Radiobutton(self.scrollable_result_frame, text=algorithm[2], padx=20, variable=self.choice,
+            self.radio_buttons[i] = Radiobutton(self.scrollable_result_frame, text=algorithm[2], padx=20, variable=self.choice, bg="white",
                                        value=i, justify='left')
             self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
             if algorithm[2] in self.suggested_algorithms:

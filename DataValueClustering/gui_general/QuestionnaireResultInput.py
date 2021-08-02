@@ -44,15 +44,15 @@ class QuestionnaireResultInput(ABC):
 
         self.root.bind_all("<Return>", self.close)
 
-        # caption left side:
+        # caption:
         self.question_caption = StringVar()
-        self.question_caption.set("Please answer the following questions:")
-        self.question_caption_label = Label(self.root, anchor='w', textvariable=self.question_caption, bg='white',
-                                            font=('TkDefaultFont', 14, 'bold'), padx=5)
-        self.question_caption_label.grid(row=0, column=0, sticky='w', columnspan=2)
+        self.question_caption.set(self.help_text)
+        self.question_caption_label = Label(self.root, anchor='c', justify="center", textvariable=self.question_caption, bg='white',
+                                            font=('TkDefaultFont', 12, 'bold'), pady=10)
+        self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=3)
 
         # question checkboxes:
-        self.question_frame = Frame(self.root, bg="white")
+        self.question_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")
         self.question_frame.grid(row=1, column=0, sticky='nw')
 
         for i, question in enumerate(self.config_question):
@@ -71,24 +71,25 @@ class QuestionnaireResultInput(ABC):
         self.update_visibility()
 
         # caption right side:
-        self.result_caption = StringVar()
-        self.result_caption.set(self.help_text)
-        self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, bg='white',
-                                          font=('TkDefaultFont', 14, 'bold'), padx=5)
-        self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
+        # self.result_caption = StringVar()
+        # self.result_caption.set(self.help_text)
+        # self.result_caption_label = Label(self.root, anchor='w', textvariable=self.result_caption, bg='white',
+        #                                   font=('TkDefaultFont', 14, 'bold'), padx=5)
+        # self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
+
 
         # scrollable result:
-        self.canvas = Canvas(self.root, bg="white", highlightthickness=0)
+        self.canvas = Canvas(self.root, bg="white", highlightthickness=0, borderwidth=2, relief="groove")
         self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-        self.scrollable_result_frame = Frame(self.canvas)
+        self.scrollable_result_frame = Frame(self.canvas, bg="white")
         self.scrollable_result_frame.bind(
             "<Configure>",
             lambda e: self.canvas.configure(
                 scrollregion=self.canvas.bbox("all")
             )
         )
-        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_result_frame, anchor="nw")
+        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_result_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.canvas.grid(row=1, column=1, sticky='nswe')
         self.scrollbar.grid(row=1, column=2, sticky='nswe')

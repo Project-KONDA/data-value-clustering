@@ -25,7 +25,7 @@ class SelectData:
         self.single_cluster_data = single_cluster_data
 
         self.root = Toplevel(master)
-        self.root.title("Select Data")
+        self.root.title("Data Selection")
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
@@ -35,13 +35,13 @@ class SelectData:
         self.datalist = list()
         self.canceled = False
 
-        self.label_title = Label(self.root, text="Select Data Set", bg="white",
-                                 font=('TkDefaultFont', 14, 'bold'))
+        self.label_title = Label(self.root, text="Select the data set to be clustered", bg="white",
+                                 font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
 
         if self.single_cluster_data is not None:
             self.label_hint = Label(self.root, text="Data generated from a previously calculated\ncluster are highlighted in green", bg="white", fg='blue')
 
-        self.listbox = Listbox(self.root, selectmode="single", width=40, height=20)
+        self.listbox = Listbox(self.root, selectmode="single", width=50, height=20)
         self.scrollbar = Scrollbar(self.root, command=self.listbox.yview)
         self.listbox.config(yscrollcommand=self.scrollbar.set)
 

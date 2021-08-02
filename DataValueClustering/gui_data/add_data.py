@@ -20,7 +20,7 @@ class AddData:
         self.path = path
 
         self.root = Toplevel(master)
-        self.root.title("Add Data")
+        self.root.title("Data Addition")
         self.root.configure(bg="white")
         self.root.grab_set()
         self.root.focus_force()
@@ -30,7 +30,7 @@ class AddData:
         self.menu.add_command(label="Help", command=lambda: menu_help_data_add(self.root))
         self.root.config(menu=self.menu)
 
-        self.label_title = Label(self.root, text="Extrude New Data Set", font=('TkDefaultFont', 14, 'bold'))
+        self.label_title = Label(self.root, text="Specify data from which to create data set", font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
         self.label_title.grid(sticky='nswe', row=1, column=1, columnspan=4)
 
         self.label_name = Label(self.root, anchor="w", text="Name:")

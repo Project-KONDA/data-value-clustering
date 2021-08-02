@@ -41,7 +41,7 @@ class BlobInput:
         """Root"""
         self.master = master
         self.root = Toplevel(self.master)
-        self.root.title('Distance Specification')
+        self.root.title('Dissimilarity Configuration - Blobs')
         self.root.focus_force()
         self.root.grab_set()
         self.canceled = False
@@ -107,9 +107,13 @@ class BlobInput:
         self.canvas.bind("<Motion>", self.canvas_blob_info)
         self.canvas.text = self.canvas.create_text(10, 10, text="", anchor="nw")
 
-        if suggestion is not None:
-            self.canvas.advice= self.canvas.create_text(500, 10, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, anchor="nw")
 
+        if suggestion is not None:
+            self.canvas.advice= self.canvas.create_text(500, 10, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, anchor="nw")
+        else:
+            self.canvas.advice = self.canvas.create_text(300, 10,
+                                                         text="Weight the influence of character deletions/insertions and substitutions on the dissimilarity between data values",
+                                                         anchor="nw", font=('TkDefaultFont', 12, 'bold'))
 
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)

@@ -5,6 +5,9 @@ from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
 
+CAPTION_PART_TWO = " The resulting abstracted data values are shown on the right-hand side."
+CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details."
+
 DEFAULT_CONFIG = "Default Configuration"
 MANUAL_CONFIG = "Manual Configuration"
 
@@ -26,7 +29,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     """ binary questionaire GUI for configuring the abstraction function """
 
     def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
-        self.help_text = "Abstraction of the first 100 data values:\n"
+        self.help_text = CAPTION_PART_ONE + CAPTION_PART_TWO
         super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10)
 
         self.menu = Menu(self.root)
@@ -34,7 +37,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.root.config(menu=self.menu)
 
         if suggestion is not None:
-            self.label_suggested = Label(self.question_frame, text="Advice based on your answers to the clustering validation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.question_frame, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
             self.label_suggested.grid(row=1, column=0, sticky='senw', columnspan=2)
 
         self.predefined_abstractions = np.array([
@@ -80,11 +83,20 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def apply(self):
         if self.data is None:
-            self.result_caption_label.destroy()
             self.scrollable_result_frame.destroy()
             self.canvas.destroy()
             self.scrollbar.destroy()
             self.root.grid_columnconfigure((1), minsize=0)
+            self.question_caption_label.destroy()
+
+            self.help_text = CAPTION_PART_ONE
+
+            self.question_caption = StringVar()
+            self.question_caption.set(self.help_text)
+            self.question_caption_label = Label(self.root, anchor='c', justify="center",
+                                                textvariable=self.question_caption, bg='white',
+                                                font=('TkDefaultFont', 12, 'bold'), pady=10)
+            self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=2)
             return
         answers = self.get()
         abstraction_f = get_abstraction_method(answers)
