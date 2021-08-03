@@ -31,15 +31,14 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
         self.caption_text = CAPTION_PART_ONE + CAPTION_PART_TWO
         self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly."
-        super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10)
+        if suggestion is not None:
+            suggestion = "Advice based on the clustering evaluation:" + suggestion
+        super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion)
+
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root))
         self.root.config(menu=self.menu)
-
-        if suggestion is not None:
-            self.label_suggested = Label(self.question_frame, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
-            self.label_suggested.grid(row=1, column=0, sticky='senw', columnspan=2, padx=10)
 
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
@@ -98,6 +97,8 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
                                                 textvariable=self.question_caption, bg='white',
                                                 font=('TkDefaultFont', 12, 'bold'), pady=10)
             self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=2)
+            if self.label_suggested is not None:
+                self.label_suggested.configure(wraplengt = 800)
             return
         answers = self.get()
         abstraction_f = get_abstraction_method(answers)

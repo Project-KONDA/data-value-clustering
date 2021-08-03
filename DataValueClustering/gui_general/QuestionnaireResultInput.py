@@ -11,7 +11,7 @@ class QuestionnaireResultInput(ABC):
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 
-    def __init__(self, master, title, config, predefined_answers=None, start_row=0):
+    def __init__(self, master, title, config, predefined_answers=None, start_row=0, suggestion=None):
         # Parameters
         self.config = np.array(config, dtype=object)
         self.n = len(config)
@@ -49,16 +49,25 @@ class QuestionnaireResultInput(ABC):
         self.question_caption.set(self.caption_text)
         self.question_caption_label = Label(self.root, anchor='c', justify="center", textvariable=self.question_caption, bg='white',
                                             font=('TkDefaultFont', 12, 'bold'))
-        self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=3, pady=(10,0))
 
         self.hint_var = StringVar()
         self.hint_var.set(self.hint_text)
         self.hint_label = Label(self.root, anchor='c', justify="center", textvariable=self.hint_var, bg='white')
-        self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=3, pady=(0,10))
+
+        self.label_suggested = None
+        if suggestion is not None:
+            self.label_suggested = Label(self.root, text=suggestion, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=3, pady=(10, 0))
+            self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=3, pady=(0, 0))
+            self.label_suggested.grid(row=2, column=0, sticky='senw', columnspan=3, padx=10)
+        else:
+            self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=3, pady=(10, 0))
+            self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=3, pady=(0, 10))
+
 
         # question checkboxes:
         self.question_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")
-        self.question_frame.grid(row=2, column=0, sticky='nw')
+        self.question_frame.grid(row=3, column=0, sticky='nw')
 
         for i, question in enumerate(self.config_question):
             j = start_row + i
@@ -96,12 +105,12 @@ class QuestionnaireResultInput(ABC):
         )
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_result_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.canvas.grid(row=2, column=1, sticky='nswe')
-        self.scrollbar.grid(row=2, column=2, sticky='nswe')
+        self.canvas.grid(row=3, column=1, sticky='nswe')
+        self.scrollbar.grid(row=3, column=2, sticky='nswe')
 
         # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
-        self.button.grid(row=3, column=0, sticky='nswe', columnspan=3)
+        self.button.grid(row=4, column=0, sticky='nswe', columnspan=3)
 
     def on_mousewheel(self, event):
         if self.scrollable_result_frame.winfo_height() > self.canvas.winfo_height():
