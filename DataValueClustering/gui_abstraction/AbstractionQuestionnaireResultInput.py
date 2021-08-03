@@ -61,13 +61,13 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         ], dtype=object)
 
         self.label = Label(self.question_frame, text="You can start with one of the following predefined configurations:", bg="white")
-        self.label.grid(row=2, column=0, sticky='we')
+        self.label.grid(sticky='nw', row=2, column=0)
 
         self.predefined_options = list(self.predefined_abstractions[:, 0])
         self.selected_predefined_option = StringVar()
         self.selected_predefined_option.set(DEFAULT_CONFIG)
         self.predefined_option_menu = OptionMenu(self.question_frame, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
-        self.predefined_option_menu.grid(row=2, column=1, sticky='w', padx=10)
+        self.predefined_option_menu.grid(sticky='ne', row=2, column=0, padx=10)
 
         self.data = data
         self.labels = []

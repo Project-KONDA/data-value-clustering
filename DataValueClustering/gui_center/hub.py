@@ -75,7 +75,7 @@ class Hub:
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
-        self.set_saved(False)
+        self.set_saved(True)
 
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
