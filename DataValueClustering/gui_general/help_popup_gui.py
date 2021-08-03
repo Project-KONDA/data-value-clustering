@@ -3,15 +3,16 @@ from tkinter import *
 
 
 def menu_help_result(master):
-    """help popup for Result view"""
+    """help popup for Clustering Result & Evaluation view"""
     text = [
-        "The Result view provides information on the calculated clustering and supports you in validating it.",
+        "The Clustering Result & Evaluation view provides information on the calculated clustering and supports you in ",
+        "validating it.",
         "",
         ["Meta-Information"],
         "In the top left, quantitative meta-information on the calculated clustering are given.",
         "Below, the MDS Scatter Plot gives an overview of the clustering.",
         "Each dot represents an abstracted data value.",
-        "The distances between the blobs represent the distances, i.e. dissimilarities, between the abstracted data "
+        "The distances between the blobs represent the dissimilarities between the abstracted data "
         "values.",
         "Each cluster is represented by a different color.",
         "Noise is colored black.",
@@ -29,11 +30,11 @@ def menu_help_result(master):
         "The Excel file contains three sheets.",
         "The first one shows the clustering of the original values.",
         "The second one shows the clustering of the abstracted values by means of original values as representatives.",
-        "The third sheet additionally shows the variance within each cluster and the distance of each value to the ",
+        "The third sheet additionally shows the variance within each cluster and the dissimilarity of each value to the ",
         "others in the same cluster.",
         "An extremely high variance within a cluster indicates that you should consider analysing this cluster ",
         "separately (cf. evaluation question 4) as it may be too heterogeneous to oversee the types of contained values.",
-        "You should further take a look at values with an extremely high distance to the other values in the ",
+        "You should further take a look at values with an extremely high dissimilarity to the other values in the ",
         "same cluster, as it may be significantly different from those.",
         "",
         ["Evaluation"],
@@ -48,14 +49,14 @@ def menu_help_result(master):
         "To confirm your evaluation answers, press the 'OK' button.",
         "To discard your evaluation answers, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Result - Help", text)
+    menu_information_display(master, "Clustering Result & Evaluation - Help", text)
 
 
 def menu_help_clustering_configuration(master):
-    """help popup for Clustering Configuration view"""
+    """help popup for Clustering Parameter Configuration view"""
     text = [
-        "The Clustering Configuration Selection view allows you to specify the parameter values for the chosen clustering ",
-        "algorithm.",
+        "The Clustering Parameter Configuration view allows you to specify the parameter values for the chosen ",
+        "clustering algorithm.",
         "",
         ["Parameters"],
         "All parameters that can be specified are listed and brief explanations are given below the title.",
@@ -75,7 +76,7 @@ def menu_help_clustering_configuration(master):
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Clustering Configuration - Help", text)
+    menu_information_display(master, "Clustering Parameter Configuration - Help", text)
 
 
 def menu_help_clustering_selection(master):
@@ -96,10 +97,10 @@ def menu_help_clustering_selection(master):
 
 
 def menu_help_cost_map(master):
-    """help popup for matrix view"""
+    """help popup for Dissimilarity Configuration - Matrix view"""
     text = [
-        "The Matrix view gives you full control over the weights used in the calculation of distances, "
-        "i.e. dissimilarities, between data values.",
+        "The Dissimilarity Configuration - Matrix view gives you full control over the weights used in the calculation ",
+        "of dissimilarities between data values.",
         "The weights represent the dissimilarities between character groups.",
         "You should specify these weights based on your domain knowledge.",
         "",
@@ -128,7 +129,7 @@ def menu_help_cost_map(master):
         "The weight in row i and column j represents the weight for substituting the characters represented by row i by ",
         "characters represented by column j.",
         "Only the relative size of the weights matters.",
-        "Because the distance between two data values shall be symmetrical, the matrix is",
+        "Because the dissimilarity between two data values shall be symmetrical, the matrix is",
         "mirrored on the diagonal. The entry fields above the diagonal are read only.",
         "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of ",
         "these characters.",
@@ -140,14 +141,14 @@ def menu_help_cost_map(master):
         "To reset character groups, press the 'Reset' button.",
         "To discard your modifications, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Costmatrix - Help", text)
+    menu_information_display(master, "Dissimilarity Configuration - Matrix - Help", text)
 
 
 def menu_help_blob_input(master):
-    """help popup for Blob view"""
+    """help popup for Dissimilarity Configuration - Blobs view"""
     text = [
-        "The Blob view allows you to configure the weights used in the calculation of distances, "
-        "i.e. dissimilarities, between data values by moving and scaling graphical objects on a 2D canvas.",
+        "The Dissimilarity Configuration - Blobs view allows you to configure the weights used in the calculation of ",
+        "dissimilarities between data values by moving and scaling graphical objects on a 2D canvas.",
         "The weights represent the dissimilarities between character groups.",
         "You should specify these weights based on your domain knowledge.",
         "",
@@ -162,7 +163,7 @@ def menu_help_blob_input(master):
         "of deleting and inserting a character is represented by the distance to the special empty ",
         "blue blob.",
         # interpretation
-        "When the blobs just barely touch each other, the distance between them is interpreted",
+        "When the blobs just barely touch each other, the dissimilarity between them is interpreted",
         "as the value 1.",
         # controls
         "The distances can be modified via Drag & Drop.",
@@ -187,14 +188,14 @@ def menu_help_blob_input(master):
         "To reset the position of the blobs, press the 'Reset' button.",
         "To discard your modifications, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Distance Specification - Help", text)
+    menu_information_display(master, "Dissimilarity Configuration - Blobs - Help", text)
 
 
 def menu_help_distance_slider(master):
-    """help popup for Slider Input view"""
+    """help popup for Dissimilarity Configuration - Sliders view"""
     text = [
-        "The Slider Input view allows you to configure the weights used in the calculation of distances, "
-        "i.e. dissimilarities, between data values via sliders.",
+        "The Dissimilarity Configuration - Sliders view allows you to configure the weights used in the calculation of ",
+        "dissimilarities between data values via sliders.",
         "The weights represent the dissimilarities between character groups.",
         "You should specify these weights based on your domain knowledge.",
         "",
@@ -226,14 +227,15 @@ def menu_help_distance_slider(master):
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Slider Input - Help", text)
+    menu_information_display(master, "Dissimilarity Configuration - Sliders - Help", text)
 
 
 def menu_help_distance_choice(master):
-    """help popup for Distance Choice view"""
+    """help popup for Dissimilarity Configuration Method Selection view"""
     text = [
-        "The Distance Choice view allows you to select a method for configuring the distance calculation, i.e. for ",
-        "weighting the similarity between character groups based on your domain knowledge.",
+        "The Dissimilarity Configuration Method Selection view allows you to select a method for configuring the ",
+        "dissimilarity calculation, i.e. for weighting the similarity between character groups based on your domain ",
+        "knowledge.",
         "Currently only the weighted Levenshtein distance is supported and can be configured via 3 different methods.",
         "The easier methods allow less flexibility.",
         "But as in most cases, the easiest method is sufficient to achieve useful results, we advise you to start with "
@@ -243,7 +245,7 @@ def menu_help_distance_choice(master):
         "To confirm your selection, press the 'OK' button.",
         "To discard your selection, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Distance Choice - Help", text)
+    menu_information_display(master, "Dissimilarity Configuration Method Selection - Help", text)
 
 
 def menu_help_abstraction(master):
@@ -276,9 +278,9 @@ def menu_help_abstraction(master):
 
 
 def menu_help_data_add(master):
-    """help popup for Add Data view"""
+    """help popup for Data Addition view"""
     text = [
-        "The Add Data view allows you to add a data set to the list of supported data sets selectable in the Select ",
+        "The Data Addition view allows you to add a data set to the list of supported data sets selectable in the Select ",
         "Data view.",
         "Currently only XML data is supported.",
         "For this, you must specify a name for the data set, which will be displayed in the Select Data view.",
@@ -290,13 +292,13 @@ def menu_help_data_add(master):
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Add Data - Help", text)
+    menu_information_display(master, "Data Addition - Help", text)
 
 
 def menu_help_data_selection(master):
-    """help popup for Select Data view"""
+    """help popup for Data Selection view"""
     text = [
-        "The Select Data view allows you to select the data set to be clustered.",
+        "The Data Selection view allows you to select the data set to be clustered.",
         "Each data set consists of a set of data values extracted from a database.",
         "When first starting the program, a few predefined data sets are available.",
         "To add a data set, press the '+' button below.",
@@ -305,14 +307,14 @@ def menu_help_data_selection(master):
         "To confirm your data selection, press the 'OK' button.",
         "To discard your selection, press the 'x' button in the upper right corner.",
     ]
-    menu_information_display(master, "Select Data - Help", text)
+    menu_information_display(master, "Data Selection - Help", text)
 
 
 def menu_help_hub(master):
     """help popup for hub view"""
     text = [
         "The Hub view is the central view of this program for data value clustering.",
-        "The data value clustering requires you to perform 4 configuration steps: data, abstraction, distance and ",
+        "The data value clustering requires you to perform 4 configuration steps: data, abstraction, dissimilarity and ",
         "clustering configuration.",
         "The hub view allows you to navigate through the 4 configuration steps and access the calculated clustering ",
         "subsequently.",
@@ -328,7 +330,7 @@ def menu_help_hub(master):
         ["Execution"],
         "Once configured, the data extraction and abstraction are performed automatically.",
         "This typically takes only a few seconds.",
-        "But since distance calculation and clustering may take up to multiple hours, they are startet manually by ",
+        "But since dissimilarity calculation and clustering may take up to multiple hours, they are startet manually by ",
         "pressing the corresponding play button.",
         "Note that below each configuration button there is a small label indicating the status, ",
         "i.e. whether no configuration is present, the configuration is in progress, ",
@@ -364,17 +366,17 @@ def menu_information_display(master, title, content):
     root.configure(bg='white')
     root.resizable(False, False)
     Label(root, text=title, font='Arial 14 bold underline',
-          anchor=W, justify=LEFT, fg="green", background='white'
+          anchor=W, justify=LEFT, fg="dark green", background='white'
           ).grid(row=1, column=1, sticky=W)
 
     for i, t in enumerate(content):
         if isinstance(t, str):
             Label(root, text=t, font='Arial 10',
-                  anchor=W, justify=LEFT, fg="green", background='white'
+                  anchor=W, justify=LEFT, fg="dark green", background='white'
                   ).grid(row=i + 2, column=1, sticky=W + E)
         else:
             Label(root, text=t[0], font='Arial 12 bold',
-                  anchor=W, justify=LEFT, fg="green", background='white'
+                  anchor=W, justify=LEFT, fg="dark green", background='white'
                   ).grid(row=i + 2, column=1, sticky=W)
 
     def button_quit():
@@ -383,7 +385,7 @@ def menu_information_display(master, title, content):
 
     Button(root, text='OK', command=button_quit,
            justify=RIGHT, width=15, background='snow'
-           ).grid(row=len(content) + 3, column=1)
+           ).grid(row=len(content) + 3, column=1, pady=(20,0))
 
     root.update()
     # root.geometry("500x" + str(root.winfo_height() + 10))

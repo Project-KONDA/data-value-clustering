@@ -27,21 +27,21 @@ TITLE = "Clustering Configuration Hub"
 STATUS = "Status: "
 CLUSTERING_NOT_CALC = STATUS + 'Clustering configured but not calculated'
 CLUSTERING_DONE = STATUS + 'Clustering done'
-DISTANCE_NOT_CALC = STATUS + 'Distance configured but not calculated'
-DISTANCE_DONE = STATUS + 'Distance calculation done'
+DISTANCE_NOT_CALC = STATUS + 'Dissimilarities configured but not calculated'
+DISTANCE_DONE = STATUS + 'Dissimilarity calculation done'
 ABSTRACTION_CONFIGURED = STATUS + 'Abstraction configured'
 ABSTRACTION_DONE = STATUS + 'Abstraction done'
 DATA_DONE = STATUS + 'Data extraction done'
 CLUSTERING_IN_PROGRESS = STATUS + "Clustering in progress ..."
 CLUSTERING_CONFIG_IN_PROGRESS = STATUS + "Clustering configuration in progress ..."
-DISTANCE_CALC_IN_PROGRESS = STATUS + "Distance calculation in progress ..."
-DISTANCE_CONFIGURATION_IN_PROGRESS = STATUS + "Distance configuration in progress ..."
+DISTANCE_CALC_IN_PROGRESS = STATUS + "Dissimilarity calculation in progress ..."
+DISTANCE_CONFIGURATION_IN_PROGRESS = STATUS + "Dissimilarity configuration in progress ..."
 ABSTRACTION_CONFIG_IN_PROGRESS = STATUS + "Abstraction configuration in progress ..."
 ABSTRACTION_IN_PROGRESS = STATUS + "Abstraction in progress ..."
 DATA_EXTRACTION_IN_PROGRESS = STATUS + "Data extraction in progress ..."
 DATA_CONFIG_IN_PROGRESS = STATUS + "Data configuration in progress ..."
 CLUSTERING_NOT_CONFIGURED = STATUS + "Clustering not configured"
-DISTANCE_NOT_CONFIGURED = STATUS + "Distance not configured"
+DISTANCE_NOT_CONFIGURED = STATUS + "Dissimilarities not configured"
 ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
@@ -129,7 +129,7 @@ class Hub:
                                          font=('Sans', '10', 'bold'), height=2)
         self.button_save_result.grid(sticky='nswe', row=17, column=4, padx=10, pady=10)
 
-        CreateToolTip(self.button_distance_play, "Execute distance calulcation.")
+        CreateToolTip(self.button_distance_play, "Execute dissimilarity calulcation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering.")
         CreateToolTip(self.button_show_result, "Show calculated clustering and meta-information.")
         CreateToolTip(self.button_save_result, "Save calculated clustering in an Excel file.")
@@ -162,7 +162,7 @@ class Hub:
 
         CreateToolTip(self.label_data_progress, "Status of the data")
         CreateToolTip(self.label_abstraction_progress, "Status of the abstraction")
-        CreateToolTip(self.label_distance_progress, "Status of the distances")
+        CreateToolTip(self.label_distance_progress, "Status of the dissimilarities")
         CreateToolTip(self.label_clustering_progress, "Status of the clustering")
 
         "advice labels"
@@ -201,7 +201,7 @@ class Hub:
         self.label_data_config_heading = Label(self.frame_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left")
         self.label_abstraction_config_heading = Label(self.frame_abstraction, text="Current Abstraction Configuration:", bg="grey90", anchor="w",
                                               justify="left")
-        self.label_distance_config_heading = Label(self.frame_distance, text="Current Distance Configuration:", bg="grey90", anchor="w", justify="left")
+        self.label_distance_config_heading = Label(self.frame_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left")
         self.label_clustering_config_heading = Label(self.frame_clustering, text="Current Clustering Configuration:", bg="grey90", anchor="w", justify="left")
 
         self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
@@ -221,7 +221,7 @@ class Hub:
 
         CreateToolTip(self.label_data_config, "Name of the selected data set.")
         CreateToolTip(self.label_abstraction_config, "Abstracted details marked by 'True'.")
-        CreateToolTip(self.label_distance_config, "The first line shows the characters groups. Below corresponding distance weights.")
+        CreateToolTip(self.label_distance_config, "The first line shows the characters groups. Below corresponding dissimilarity weights.")
         CreateToolTip(self.label_clustering_config, "Selected clustering algorithm and specified parameters.")
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -338,7 +338,7 @@ class Hub:
             if previous_blob_configuration is None:
                 if previous_cost_map is None or \
                     messagebox.askokcancel("Potential Information Loss",
-                                           "You previously configured the distance "
+                                           "You previously configured the dissimilarity "
                                            "calculation via a different method. This configuration will be "
                                            "lost upon opening the Blob Configuration View. Do you want to proceed?",
                                            icon=WARNING):
