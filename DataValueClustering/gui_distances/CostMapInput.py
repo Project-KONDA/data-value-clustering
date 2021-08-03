@@ -130,7 +130,7 @@ class CostMapInput:
         self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
 
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups,
-                                   justify=LEFT, width=3, background='snow')
+                                   justify=LEFT, background='snow')
         self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
