@@ -1,3 +1,5 @@
+import os
+import sys
 from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu
 from pathlib import Path
 from tkinter.messagebox import WARNING
@@ -245,7 +247,13 @@ class Hub:
     def data_path_from_name(self, data_name):
         if data_name is None:
             return None
-        return str(Path(__file__).parent.parent) + "\\data\\" + data_name + ".txt"
+        relative_path = "data\\" + data_name + ".txt"
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = Path(__file__).parent.parent
+        return os.path.join(base_path, relative_path)
 
     def configure_data(self):
         self.label_data_progress.configure(text=DATA_CONFIG_IN_PROGRESS, fg='magenta2')
