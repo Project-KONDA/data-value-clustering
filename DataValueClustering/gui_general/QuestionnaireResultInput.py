@@ -126,6 +126,8 @@ class QuestionnaireResultInput(ABC):
             if is_visible and not should_visible:
                 self.checks[i].config(state=DISABLED)
                 # self.checks[i].grid_forget()
+                # self.answers[i].set(False)
+            if not should_visible:
                 self.answers[i].set(False)
             self.visible[i] = should_visible
 
