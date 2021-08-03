@@ -385,6 +385,12 @@ class HubConfiguration():
     def get_validation_answer_4(self):
         return self.validation_answer_4
 
+    def reset_validation_answers(self):
+        self.validation_answer_1 = None
+        self.validation_answer_2 = None
+        self.validation_answer_3 = None
+        self.validation_answer_4 = (None, None)
+
     def reset_data(self):
         self.data = None
 

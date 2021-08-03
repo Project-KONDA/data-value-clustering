@@ -262,6 +262,7 @@ class Hub:
             return
 
         self.set_saved(False)
+        self.reset_validation_answers()
         self.configuration.set_data_configuration(self.data_path_from_name(data_name))
 
         self.update()
@@ -298,6 +299,7 @@ class Hub:
 
         # 4. save abstraction into configuration
         self.set_saved(False)
+        self.reset_validation_answers()
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
         # 6. initiate execution of abstraction in config
@@ -329,6 +331,7 @@ class Hub:
         blob_configuration = None
 
         self.set_saved(False)
+        self.reset_validation_answers()
         if distance_choice == DistanceView.SLIDER:
             blob_configuration = self.configuration.create_blob_configuration()
             cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:2],
@@ -394,6 +397,7 @@ class Hub:
             return
 
         self.set_saved(False)
+        self.reset_validation_answers()
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         self.configuration.set_clustering_configuration(parameters)
 
@@ -509,6 +513,10 @@ class Hub:
         self.button_clustering_play.configure(state="disabled")
         self.button_show_result.configure(state="disabled")
         self.button_save_result.configure(state="disabled")
+
+    def reset_validation_answers(self):
+        self.configuration.reset_validation_answers()
+
 
     def update(self):
         self.button_data.configure(state="normal")
