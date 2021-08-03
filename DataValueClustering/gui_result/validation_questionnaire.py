@@ -59,7 +59,7 @@ def get_suggested_abstraction_modifications(validation_answers, configuration):
                               "\nFurther, check that all details that do not cause significant dissimilarity of data values are abstracted from. " \
                               "For this, please reconsider the unchecked questions."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
-        if configuration.get_clustering_selection[0] == HIERARCHICAL or configuration.get_clustering_selection[0] == K_MEDOIDS and configuration.cluster_no == configuration.no_values_abstracted:
+        if configuration.get_clustering_selection()[0] == HIERARCHICAL or configuration.get_clustering_selection()[0] == K_MEDOIDS and configuration.cluster_no == configuration.no_values_abstracted:
             abstraction_advice += "\nUse a lower-level abstraction, i.e. uncheck some checked answers."
         else:
             abstraction_advice += "\nYou might want to consider using a lower-level abstraction, i.e. unchecking some checked answers."
@@ -71,10 +71,12 @@ def get_suggested_abstraction_modifications(validation_answers, configuration):
 def get_suggested_distance_modifications(validation_answers, configuration):
     distance_advice = ""
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
-        distance_advice += "\nEnsure that you specify higher weights for aspects that cause more dissimilarity."
+        distance_advice += "Ensure that you specify higher weights for aspects that cause more dissimilarity."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
         # TODO: check calculated distances concerning lack of diversity!?
-        distance_advice += "\nYou might want to consider choosing more diverse weights, i.e. emphasise character groups that you do not expect or that alter the values’ meaning significantly."
+        if distance_advice != "":
+            distance_advice += " "
+        distance_advice += "You might want to consider choosing more diverse weights, i.e. emphasise character groups that you do not expect or that alter the values’ meaning significantly."
     return distance_advice if distance_advice != "" else None
 
 

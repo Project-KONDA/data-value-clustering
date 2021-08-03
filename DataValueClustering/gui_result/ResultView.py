@@ -109,23 +109,23 @@ class ResultView:
         self.questions_frame = Frame(self.questionnaire_frame, bg="white")
         self.questions_frame.grid(row=1, column=0, sticky='nsew')
 
-        self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion)
+        self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion, self.configuration.get_validation_answer_1())
         self.q1.frame.grid(row=0, column=0, sticky='nsew')
 
-        self.q2 = create_enum_validation_question(self.questions_frame, question_2, question_2_answers, self.update_suggestion)
+        self.q2 = create_enum_validation_question(self.questions_frame, question_2, question_2_answers, self.update_suggestion, self.configuration.get_validation_answer_2())
         self.q2.frame.grid(row=1, column=0, sticky='nsew')
 
         self.q3 = create_enum_validation_question(self.questions_frame,
-                                             question_3, question_3_answers, self.update_suggestion)
+                                             question_3, question_3_answers, self.update_suggestion, self.configuration.get_validation_answer_3())
         self.q3.frame.grid(row=2, column=0, sticky='nsew')
 
-        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion)
+        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, self.configuration.get_validation_answer_4()[0], (None, self.configuration.get_validation_answer_4()[1]))
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
         self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
         self.suggestion_frame.grid(row=3, column=0, sticky='nw', columnspan=2)
 
-        self.advice_label = Label(self.suggestion_frame, text=SATISFIED, bg='white',
+        self.advice_label = Label(self.suggestion_frame, text="", bg='white',
                                   font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left')
         self.advice_label.grid(row=0, column=0, sticky='nwes', columnspan=1)
 
@@ -143,13 +143,20 @@ class ResultView:
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
 
+        self.update_suggestion()
         self.root.mainloop()
 
     def update_suggestion(self):
-        if self.q1.get_result() == ValidationAnswer.HAPPY and self.q2.get_result() == ValidationAnswer.HAPPY and self.q3.get_result() == ValidationAnswer.HAPPY and self.q4.get_result()[0] == ValidationAnswer.HAPPY:
-            self.advice_label.config(text=SATISFIED)
+        if self.q1.get_result() is None and self.q2.get_result() is None and self.q3.get_result() is None and \
+                self.q4.get_result()[0] is None:
+            self.advice_label.config(text="", fg="blue")
+        elif (self.q1.get_result() == ValidationAnswer.HAPPY or self.q1.get_result() is None) \
+                and (self.q2.get_result() == ValidationAnswer.HAPPY or self.q2.get_result() is None) \
+                and (self.q3.get_result() == ValidationAnswer.HAPPY or self.q3.get_result() is None)\
+                and (self.q4.get_result()[0] == ValidationAnswer.HAPPY or self.q4.get_result()[0] is None):
+            self.advice_label.config(text=SATISFIED, fg="green")
         else:
-            self.advice_label.config(text=NOT_SATISFIED)
+            self.advice_label.config(text=NOT_SATISFIED, fg="red")
 
 
     def open_excel(self):

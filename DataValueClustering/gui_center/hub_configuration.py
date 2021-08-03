@@ -37,6 +37,11 @@ def create_hub_configuration_from_dict(dict):
     return hub
 
 
+def cluster_number_from_txt_name(txt_name):
+    split = txt_name.split("_")
+    return split[1]
+
+
 class HubConfiguration():
 
     def fill_hub_configuration_from_dict(self, dic):
