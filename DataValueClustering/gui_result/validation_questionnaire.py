@@ -54,29 +54,30 @@ def get_suggested_data(validation_answers):
 def get_suggested_abstraction_modifications(validation_answers, configuration):
     abstraction_advice = ""
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
-        abstraction_advice += "\nFirst, check your configuration concerning an erroneous abstraction of aspects that actually cause significant dissimilarity of data values. " \
+        abstraction_advice += "\nTo achieve a more meaningful clustering, first, check your configuration concerning an erroneous abstraction of aspects that actually cause significant dissimilarity of data values. " \
                               "For this, please reconsider the checked questions." \
-                              "\nFurther, check that all details that do not cause significant dissimilarity of data values are abstracted from. " \
+                              "Further, check that all details that do not cause significant dissimilarity of data values are abstracted from. " \
                               "For this, please reconsider the unchecked questions."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
         if configuration.get_clustering_selection()[0] == HIERARCHICAL or configuration.get_clustering_selection()[0] == K_MEDOIDS and configuration.cluster_no == configuration.no_values_abstracted:
-            abstraction_advice = "\nUse a lower-level abstraction, i.e. uncheck some checked answers."
+            abstraction_advice = "\nTo achieve more clusters, use a lower-level abstraction, i.e. uncheck some checked answers."
         else:
-            abstraction_advice += "\nYou might want to consider using a lower-level abstraction, i.e. unchecking some checked answers."
+            abstraction_advice += "\nTo achieve more clusters, you might want to consider using a lower-level abstraction, i.e. unchecking some checked answers."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.LESS:
-        abstraction_advice += "\nYou might want to consider using a higher abstraction level, i.e. checking some unchecked answers."
+        abstraction_advice += "\nTo achieve less clusters, you might want to consider using a higher abstraction level, i.e. checking some unchecked answers."
     return abstraction_advice if abstraction_advice != "" else None
 
 
 def get_suggested_distance_modifications(validation_answers, configuration):
     distance_advice = ""
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
-        distance_advice += "Ensure that you specify higher weights for aspects that cause more dissimilarity."
+        distance_advice += "To achieve a more meaningful clustering, ensure that you specify higher weights for aspects that cause more dissimilarity."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
         # TODO: check calculated distances concerning lack of diversity!?
         if distance_advice != "":
             distance_advice += " "
-        distance_advice += "You might want to consider choosing more diverse weights, i.e. emphasise character groups that you do not expect or that alter the values’ meaning significantly."
+        distance_advice += "To achieve more clusters, you might want to consider choosing more diverse weights, i.e. emphasise character groups that you do not expect or that alter the values’ meaning significantly."
+    # TODO: if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.LESS:
     return distance_advice if distance_advice != "" else None
 
 
