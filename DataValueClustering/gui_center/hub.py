@@ -131,7 +131,7 @@ class Hub:
 
         CreateToolTip(self.button_distance_play, "Execute dissimilarity calulcation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering.")
-        CreateToolTip(self.button_show_result, "Show calculated clustering and meta-information.")
+        CreateToolTip(self.button_show_result, "Show calculated clustering and evaluation questionnaire.")
         CreateToolTip(self.button_save_result, "Save calculated clustering in an Excel file.")
 
         # "progress bars"
@@ -443,7 +443,7 @@ class Hub:
             self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
             self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
-        if answers[3] is not None and answers[3][0] != ValidationAnswer.HAPPY:
+        if answers[3] is not None and answers[3][0] is not None and answers[3][0] != ValidationAnswer.HAPPY:
             self.label_data_advice.config(text=DATA_ADVICE)
 
     # def abstraction_callback(self, percentage):

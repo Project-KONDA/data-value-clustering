@@ -51,7 +51,7 @@ class SelectData:
 
         self.label_title.grid(sticky='nswe', row=1, column=1, columnspan=4)
         if self.single_cluster_data is not None:
-            self.label_hint.grid(sticky='nswe', row=2, column=1, columnspan=4)
+            self.label_hint.grid(sticky='nswe', row=2, column=1, columnspan=4, padx=10)
         self.listbox.grid(sticky='nswe', row=3, column=1, columnspan=3)
         self.scrollbar.grid(sticky='nse', row=3, column=4)
         self.button_add.grid(sticky='nswe', row=5, column=1, columnspan=1)

@@ -109,7 +109,7 @@ class BlobInput:
 
 
         if suggestion is not None:
-            self.canvas.advice= self.canvas.create_text(500, 10, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, anchor="nw")
+            self.canvas.advice= self.canvas.create_text(500, 10, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=500)
         else:
             self.canvas.advice = self.canvas.create_text(300, 10,
                                                          text="Weight the influence of character deletions/insertions and substitutions on the dissimilarity between data values",
