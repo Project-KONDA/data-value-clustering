@@ -331,7 +331,7 @@ class Hub:
         blob_configuration = None
 
         self.set_saved(False)
-        self.reset_validation_answers()
+
         if distance_choice == DistanceView.SLIDER:
             blob_configuration = self.configuration.create_blob_configuration()
             cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:2],
@@ -356,6 +356,8 @@ class Hub:
             cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:, 1]), costmap=previous_cost_map,
                                          abstraction=blob_configuration[1:, 0:2], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
+
+        self.reset_validation_answers()
 
         if cost_map is None or previous_cost_map == cost_map:
             self.configuration.blob_configuration = previous_blob_configuration
