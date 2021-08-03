@@ -65,7 +65,8 @@ class SliderInput:
         self.root.config(menu=self.menu)
 
         self.title = Label(self.root, text="Weight the influence of characters on the dissimilarity between data values", bg="white",
-                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
+                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
+        self.hint = Label(self.root, text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -74,7 +75,15 @@ class SliderInput:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
-        self.title.grid(sticky='nswe', row=0, column=1, columnspan=7)
+        if suggestion is not None:
+            self.label_suggested = Label(self.root, text="Advice based on evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
+            self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 0))
+            self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=7, pady=(0,10), padx=10)
+        else:
+            self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 10))
+
         self.button_minus.grid(sticky='ns', row=5, column=1, pady=2, padx=2)
         self.button_plus.grid(sticky='ns', row=5, column=2, pady=2, padx=2)
         self.button_reset.grid(sticky='ns', row=5, column=3, columnspan=2, pady=2, padx=2)
@@ -84,9 +93,7 @@ class SliderInput:
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
 
-        if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
-            self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=7)
+
 
         # scrollable canvas:
         self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
@@ -99,10 +106,10 @@ class SliderInput:
                                    lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='nw')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.frame.grid(sticky='nswe', row=3, column=1, columnspan=6, pady=1, padx=1)
+        self.frame.grid(sticky='nswe', row=4, column=1, columnspan=6, pady=1, padx=1)
         self.canvas.grid(sticky="nswe", row=0, column=0)
-        self.root.grid_rowconfigure(3, weight=1)
-        self.scrollbar.grid(row=3, column=7, sticky='nswe')
+        self.root.grid_rowconfigure(4, weight=1)
+        self.scrollbar.grid(row=4, column=7, sticky='nswe')
 
         # headings:
         self.label_heading1 = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
@@ -115,12 +122,12 @@ class SliderInput:
                                            "aspects they represent.")
         self.label_heading3 = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_heading3, "Weights for the given character groups.")
-        self.label_heading1.grid(sticky='nswe', row=2, column=1, columnspan=2)
-        self.label_heading2.grid(sticky='ns', row=2, column=3, columnspan=2)
+        self.label_heading1.grid(sticky='nswe', row=3, column=1, columnspan=2)
+        self.label_heading2.grid(sticky='ns', row=3, column=3, columnspan=2)
         self.scrollable_frame.columnconfigure(3, weight=1)
-        self.label_heading3.grid(sticky='nswe', row=2, column=5, columnspan=2)
+        self.label_heading3.grid(sticky='nswe', row=3, column=5, columnspan=2)
 
-        self.row_offset = 3
+        self.row_offset = 4
 
         self.entrylist = np.full(self.n, Entry(self.scrollable_frame))
         self.entry_var_list = np.full(self.n, StringVar())

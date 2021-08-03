@@ -26,7 +26,8 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     """Binary questionnaire view to support the selection of the clustering algorithm"""
 
     def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
-        self.help_text = "Answer the following questions to narrow the set of fitting clustering algorithms and choose one."
+        self.caption_text = "Answer the following questions to narrow the set of fitting clustering algorithms and choose one."
+        self.hint_text = "Typically the preselected algorithms achieve good results."
         super().__init__(master, "Clustering Algorithm Selection", config, predefined_answers)
 
         self.menu = Menu(self.root)
@@ -34,8 +35,8 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         self.root.config(menu=self.menu)
 
         if len(suggested_algorithms) > 0:
-            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on your answers to the clustering evaluation questionnaire are highlighted in green.", bg="white", anchor='w', pady=10, fg='blue')
-            self.label_suggested.grid(row=0, column=0, sticky='senw')
+            self.label_suggested = Label(self.scrollable_result_frame, text="Algorithms suggested based on the evaluation are highlighted in green.", bg="white", anchor='w', fg='blue')
+            self.label_suggested.grid(row=0, column=0, sticky='senw', padx=10)
 
         self.suggested_algorithms = suggested_algorithms
         self.algorithms = np.array(algorithm_array, dtype=object)

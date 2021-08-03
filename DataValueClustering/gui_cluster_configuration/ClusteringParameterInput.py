@@ -54,11 +54,15 @@ class ClusterConfigurationInput:
         self.label_text = StringVar()
         self.label_text.set("Specify the following parameters of the selected clustering algorithm")
         self.label = Label(self.root, anchor='c', justify="center", textvariable=self.label_text, bg='white',
-                           font=('TkDefaultFont', 12, 'bold'), pady=10)
+                           font=('TkDefaultFont', 12, 'bold'))
+
+        self.hint_label_text = StringVar()
+        self.hint_label_text.set("Typically the default values are a good starting point.")
+        self.hint_label = Label(self.root, anchor='c', justify="center", textvariable=self.hint_label_text, bg='white')
 
         self.label_suggested = None
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering evaluation questionnaire is given in blue next to sliders and highlighted in green\nfor enumerations.", bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Advice based on the evaluation is given in blue next to sliders and highlighted in green for enumerations.", bg="white", anchor='w', pady=10, fg='blue', justify='left')
 
         # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
@@ -93,17 +97,18 @@ class ClusterConfigurationInput:
 
     def record_parameters(self):
 
-        self.label.grid(row=0, column=0, sticky='nsew', pady=5, padx=5)
+        self.label.grid(row=0, column=0, sticky='nsew', pady=(10,0), padx=5)
+        self.hint_label.grid(row=1, column=0, sticky='nsew', pady=(0,10), padx=5)
         if self.label_suggested is not None:
-            self.label_suggested.grid(row=1, column=0, sticky='senw')
-        self.canvas_border.grid(row=2, column=0, sticky='nsew')
+            self.label_suggested.grid(row=2, column=0, sticky='senw', padx=10)
+        self.canvas_border.grid(row=3, column=0, sticky='nsew')
         self.canvas.grid(row=0, column=0, sticky='nsew')
         self.scrollbar.grid(row=0, column=1, sticky='nsew')
 
         for i, param in enumerate(self.parameters):
             param.frame.grid(row=i + 1, column=0, sticky='nsew', pady=5, padx=5)
 
-        self.button.grid(row=3, column=0, sticky='nsew')
+        self.button.grid(row=4, column=0, sticky='nsew')
 
         # Center Window on Screen
         self.root.update_idletasks()

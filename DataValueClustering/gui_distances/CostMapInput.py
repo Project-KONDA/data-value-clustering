@@ -66,12 +66,19 @@ class CostMapInput:
         self.title = Label(self.root,
                            text="Weight the influence of characters on the dissimilarity between data values",
                            bg="white",
-                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
-        self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n+4)
+                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
+
+
+        self.hint = Label(self.root, text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
 
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on your answers to the clustering evaluation questionnaire:" + suggestion, wraplengt=800, bg="white", anchor='w', pady=10, fg='blue', justify='left')
-            self.label_suggested.grid(row=1, column=1, sticky='senw', columnspan=self.n+4)
+            self.label_suggested = Label(self.root, text="Advice based on evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
+            self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n + 4, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=self.n + 4, pady=(0, 0))
+            self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=self.n+4, pady=(0,10), padx=10)
+        else:
+            self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n + 4, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=self.n + 4, pady=(0, 10))
 
         Label(self.root, text='Case Change:', background='white').grid(sticky=W, row=9, column=1, columnspan=2)
         self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
