@@ -60,7 +60,7 @@ def get_suggested_abstraction_modifications(validation_answers, configuration):
                               "For this, please reconsider the unchecked questions."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
         if configuration.get_clustering_selection()[0] == HIERARCHICAL or configuration.get_clustering_selection()[0] == K_MEDOIDS and configuration.cluster_no == configuration.no_values_abstracted:
-            abstraction_advice += "\nUse a lower-level abstraction, i.e. uncheck some checked answers."
+            abstraction_advice = "\nUse a lower-level abstraction, i.e. uncheck some checked answers."
         else:
             abstraction_advice += "\nYou might want to consider using a lower-level abstraction, i.e. unchecking some checked answers."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.LESS:
