@@ -200,7 +200,13 @@ class HubConfiguration():
     def translate_cost_map_to_json(self):
         if not self.cost_map is None:
             cost_map_case, cost_map_regex, cost_map_weights = split_cost_map(self.cost_map)
-            self.cost_map = {"weight_case_switch": cost_map_case, "rgx": [item for sublist in cost_map_regex.tolist() for item in sublist],
+            rgx_list = list()
+            for sublist in cost_map_regex.tolist():
+                s = ""
+                for item in sublist:
+                    s += item
+                rgx_list.append(s)
+            self.cost_map = {"weight_case_switch": cost_map_case, "rgx": rgx_list,
                              "w": cost_map_weights.tolist()}
 
     def translate_cost_map_to_dict(self):
