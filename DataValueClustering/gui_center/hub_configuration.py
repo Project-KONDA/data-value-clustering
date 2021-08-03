@@ -116,7 +116,7 @@ class HubConfiguration():
         self.validation_answer_1 = None  # binary: ValidationAnswer.HAPPY or UNHAPPY
         self.validation_answer_2 = None  # ternary: ValidationAnswer.HAPPY or MORE or LESS
         self.validation_answer_3 = None  # ternary: ValidationAnswer.HAPPY or MORE or LESS
-        self.validation_answer_4 = None  # binary & list(int): ValidationAnswer.HAPPY or UNHAPPY & and if UNHAPPY list(int)
+        self.validation_answer_4 = (None, None)  # binary & list(int): ValidationAnswer.HAPPY or UNHAPPY & and if UNHAPPY list(int)
 
     def execute_data(self):
         self.data = read_data_values_from_file(self.data_path)[self.data_lower_limit:self.data_upper_limit]
@@ -338,20 +338,20 @@ class HubConfiguration():
             self.reset_clustering()
 
     def set_validation_answer_1(self, answer):
-        assert (answer in question_1_answers[:, 0].tolist())
+        assert (answer is None or answer in question_1_answers[:, 0].tolist())
         self.validation_answer_1 = answer
 
     def set_validation_answer_2(self, answer):
-        assert (answer in question_2_answers[:, 0].tolist())
+        assert (answer is None or answer in question_2_answers[:, 0].tolist())
         self.validation_answer_2 = answer
 
     def set_validation_answer_3(self, answer):
-        assert (answer in question_3_answers[:, 0].tolist())
+        assert (answer is None or answer in question_3_answers[:, 0].tolist())
         self.validation_answer_3 = answer
 
     def set_validation_answer_4(self, answer):
-        assert (answer[0] in question_4_answers[:, 0].tolist())
-        assert (answer[1] is None or len(answer[1]) > 0)
+        assert (answer[0] is None or answer[0] in question_4_answers[:, 0].tolist())
+        assert (answer[1] is None or answer[1] is None or len(answer[1]) > 0)
         if answer[1] is not None:
             for i, v in enumerate(answer[1]):
                 assert (type(v) == int)
