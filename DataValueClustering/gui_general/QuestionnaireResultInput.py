@@ -40,7 +40,7 @@ class QuestionnaireResultInput(ABC):
         self.root.title(title)
         self.root.config(bg='white')
         # self.root.grid_rowconfigure(1, minsize=400)
-        self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
+
 
         self.root.bind_all("<Return>", self.close)
 

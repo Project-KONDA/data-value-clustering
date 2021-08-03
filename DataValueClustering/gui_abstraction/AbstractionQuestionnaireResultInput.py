@@ -35,6 +35,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             suggestion = "Advice based on the clustering evaluation:" + suggestion
         super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion)
 
+        self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root))
