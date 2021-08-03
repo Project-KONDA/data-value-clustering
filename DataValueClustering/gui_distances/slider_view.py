@@ -76,7 +76,7 @@ class SliderInput:
             self.button_plus.configure(state="disabled")
 
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 0))
             self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=7, pady=(0,10), padx=10)

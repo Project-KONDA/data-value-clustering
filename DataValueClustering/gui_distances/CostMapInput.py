@@ -72,7 +72,7 @@ class CostMapInput:
         self.hint = Label(self.root, text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
 
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n + 4, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=self.n + 4, pady=(0, 0))
             self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=self.n+4, pady=(0,10), padx=10)

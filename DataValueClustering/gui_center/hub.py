@@ -47,10 +47,10 @@ DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
 NONE = "None"
 
-CLUSTERING_ADVICE = "Advice based on evaluation: reconfigure clustering"
-DISTANCE_ADVICE = "Advice based on evaluation: reconfigure dissimilarities"
-ABSTRACTION_ADVICE = "Advice based on evaluation: reconfigure abstraction"
-DATA_ADVICE = "Advice based on evaluation: reconfigure data"
+CLUSTERING_ADVICE = "Advice based on the evaluation: reconfigure clustering"
+DISTANCE_ADVICE = "Advice based on the evaluation: reconfigure dissimilarities"
+ABSTRACTION_ADVICE = "Advice based on the evaluation: reconfigure abstraction"
+DATA_ADVICE = "Advice based on the evaluation: reconfigure data"
 
 
 def data_name_from_path(data_path):
