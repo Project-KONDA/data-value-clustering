@@ -28,7 +28,19 @@ def load_hub_configuration(path):
     text = open(path, "r")
     json_data = json.load(text)
     hub = create_hub_configuration_from_dict(json_data)
+    blob_config_to_nparray(hub)
     return hub
+
+
+def blob_config_to_nparray(hub):
+    bc = hub.blob_configuration
+    x_len = len(bc)
+    y_len = len(bc[0])
+    array = np.empty((x_len, y_len), dtype=object)
+    for x in range(x_len):
+        for y in range(y_len):
+            array[x,y] = bc[x][y]
+    hub.blob_configuration = array
 
 
 def create_hub_configuration_from_dict(dict):
