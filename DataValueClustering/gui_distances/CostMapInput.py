@@ -190,6 +190,7 @@ class CostMapInput:
             return
         for st in self.regex_label:
             st.config(text="")
+        tool_tips = np.full(len(self.regex), "").tolist()
         for mapping in self.abstraction.tolist():
             for x, entry in enumerate(self.regex):
                 value = text if x == i else entry.get()
@@ -199,8 +200,13 @@ class CostMapInput:
                         string += "\n"
                     string += "'" + mapping[1] + "' - " + mapping[0]
                     self.regex_label[x].config(text=string)
+                    if tool_tips[x] != "":
+                        tool_tips[x] = tool_tips[x] + "\n" + mapping[3]
+                    else:
+                        tool_tips[x] = mapping[3]
                     break
-
+        for j, tip in enumerate(tool_tips):
+            CreateToolTip(self.regex_label[j], tip)
         self.updating_labels = False
         return True
 
