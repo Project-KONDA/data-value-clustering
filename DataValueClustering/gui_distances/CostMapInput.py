@@ -1,6 +1,7 @@
 from tkinter import *
 import numpy as np
 
+from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_cost_map
 from gui_distances.costmapinput_helper import validate_input_float, print_cost_map, character_escape, get_n_from_map, \
     preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
@@ -88,7 +89,9 @@ class CostMapInput:
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n + 4, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=self.n + 4, pady=(0, 10))
 
-        Label(self.root, text='Case Change:', background='white').grid(sticky=NW, row=9, column=1, columnspan=2)
+        case_change_label = Label(self.root, text='Capitalization change:', background='white')
+        case_change_label.grid(sticky=NW, row=9, column=1, columnspan=3)
+        CreateToolTip(case_change_label, "Weight for the substitution of any lower case letter by its upper case variant or vice versa.")
         self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
                                 validatecommand=(self.case_entry.register(validate_input_float), '%P'))
         if not self.empty and self.costmap is None:
@@ -109,11 +112,15 @@ class CostMapInput:
 
             if i == 0:
                 self.regex[i].insert(END, '<insert>')
+                CreateToolTip(self.regex[i], "This row contains the weights for the insertion of characters.")
                 self.label[i].configure(text='<delete>', state='disabled')
+                CreateToolTip(self.label[i], "This column contains the weights for the deletion of characters.")
                 self.regex[i].config(state='disabled')
             elif i == self.n - 1:
                 self.regex[i].insert(END, '<rest>')
+                CreateToolTip(self.regex[i], "This row represents any characters not covered above.")
                 self.label[i].configure(text='<rest>', state='disabled')
+                CreateToolTip(self.label[i], "This column represents any characters not covered by the columns to the left.")
                 self.regex[i].config(state='disabled')
             else:
                 if not self.empty and i < len(self.predefined_labels):
