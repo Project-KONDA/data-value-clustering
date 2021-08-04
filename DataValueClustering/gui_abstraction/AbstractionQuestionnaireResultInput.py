@@ -6,7 +6,7 @@ from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
 
-CAPTION_PART_TWO = " The resulting abstracted data values are shown on the right-hand side."
+CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
 CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details."
 
 DEFAULT_CONFIG = "Default Configuration"
@@ -120,7 +120,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
             abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
                                              wraplength=540, justify=LEFT)  # TODO: calculate wraplength
-            CreateToolTip(abstraction_source_label, "Original data values represented by the abstracted value shown on the right hand side")
+            CreateToolTip(abstraction_source_label, "Original data values represented by the abstracted value shown on the left hand side")
             abstraction_source_label.grid(row=i + 10, column=1, sticky='nwse')
             self.labels.append(abstraction_source_label)
 
