@@ -103,7 +103,7 @@ class CostMapInput:
 
         for i in range(self.n):
             self.label[i] = Label(self.root, width=7, bg='lightgrey', anchor=W)
-            self.label[i].grid(sticky=NW, row=9, column=i + 5)
+            self.label[i].grid(sticky=NW, row=9, column=i + 5, padx=(0,1))
             self.regex[i] = Entry(self.root, width=20, bg='ivory2', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
             self.regex_label[i] = Label(self.root, anchor=W, bg="white")
@@ -155,8 +155,6 @@ class CostMapInput:
         self.root.mainloop()
 
     def generate_entry(self, i, j):
-        if i == 0 and j == 0:
-            return None
         entry = Entry(self.root, validate='key', width=7, justify=RIGHT, bg='alice blue')
         entry['validatecommand'] = (
             entry.register(
@@ -170,7 +168,8 @@ class CostMapInput:
             entry.config(bg='floral white')
         if i > j:
             entry.config(state='readonly')
-        entry.grid(sticky=NW, column=i + 5, row=j + 10)
+        if i + j > 0:
+            entry.grid(sticky=NW, column=i + 5, row=j + 10)
         return entry
 
     def reset_groups(self):
@@ -285,8 +284,8 @@ class CostMapInput:
         # 4. place elements
         self.regex[self.n - 1].grid(sticky=NW, row=self.n + 9, column=1, columnspan=3)
         self.regex[self.n].grid(sticky=NW, row=self.n + 10, column=1, columnspan=3)
-        self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n + 4)
-        self.label[self.n].grid(sticky=NW, row=9, column=self.n + 5)
+        self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n + 4, padx=(0,1))
+        self.label[self.n].grid(sticky=NW, row=9, column=self.n + 5, padx=(0,1))
         self.regex_label[self.n - 1].grid(sticky=NW, row=self.n + 9, column=4, columnspan=1)
         self.regex_label[self.n].grid(sticky=NW, row=self.n + 10, column=4, columnspan=1)
 
@@ -344,7 +343,7 @@ class CostMapInput:
 
             # 5. move elements
             self.regex[self.n - 1].grid(sticky=NW, row=self.n + 9, column=1, columnspan=3)
-            self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n + 4)
+            self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n + 4, padx=(0, 1))
             self.regex_label[self.n - 1].grid(sticky=NW, row=self.n + 9, column=4, columnspan=1)
 
             for j in range(self.n):
