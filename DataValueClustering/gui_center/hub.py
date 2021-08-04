@@ -361,7 +361,7 @@ class Hub:
             cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
         elif distance_choice == DistanceView.MATRIX:
             blob_configuration = self.configuration.create_blob_configuration()
-            cost_map = input_costmap(self.root, regexes=list(blob_configuration[1:, 1]), costmap=previous_cost_map,
+            cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
                                          abstraction=blob_configuration[1:, 0:2], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
 
