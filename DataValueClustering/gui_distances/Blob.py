@@ -65,8 +65,9 @@ class Blob:
         self.blob_input.canvas.move(self.image, dx, dy)
 
     def set_position(self, x=0, y=0):
-        self.rel_x = self.blob_input.get_relative_coordinate_value(x, True, diff=False)
-        self.rel_y = self.blob_input.get_relative_coordinate_value(y, False, diff=False)
+        x_new = self.blob_input.get_absolute_coordinate_value(x, True) - self.get_abs_x()
+        y_new = self.blob_input.get_absolute_coordinate_value(y, False) - self.get_abs_y()
+        self.move(x_new, y_new)
 
     def scale(self, up=None, reset=False):
         self.lift()

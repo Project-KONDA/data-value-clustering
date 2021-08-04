@@ -109,7 +109,7 @@ class BlobInput:
 
 
         if suggestion is not None:
-            self.canvas.advice= self.canvas.create_text(500, 10, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=500)
+            self.canvas.advice = self.canvas.create_text(500, 10, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=500)
         else:
             self.canvas.advice = self.canvas.create_text(300, 10,
                                                          text="Weight the influence of character deletions/insertions and substitutions on the dissimilarity between data values",
@@ -275,13 +275,10 @@ class BlobInput:
         """Reopen the window, inclusive positions and sizes."""
         configuration = self.get_config()
         new_coordinates = create_coordinates_relative(self.n)
+        for i, blob in enumerate(self.blobs):
+            blob.set_position(new_coordinates[i, 0], new_coordinates[i, 1])
+            blob.scale(reset=True)
 
-        for i in range(self.n):
-            for j in range(3):
-                configuration[i, j+4] = new_coordinates[i, j]
-
-        self.root.destroy()
-        self.__init__(self.master, configuration)
 
     def get_absolute_coordinate_value(self, relative_value, x=True):
         # ca. (-0.2, 1.2) -> (0-1920)

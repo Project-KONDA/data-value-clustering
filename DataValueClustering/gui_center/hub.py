@@ -96,7 +96,7 @@ class Hub:
         self.root.resizable(False, False)
 
         "buttons"
-        button_width=47
+        button_width = 50
         self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data,
                                   width=button_width, height=2, bg='paleturquoise1')
         self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction,
