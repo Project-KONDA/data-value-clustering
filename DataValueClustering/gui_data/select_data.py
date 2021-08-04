@@ -35,11 +35,11 @@ class SelectData:
         self.datalist = list()
         self.canceled = False
 
-        self.label_title = Label(self.root, text="Select the data set to be clustered", bg="white",
+        self.label_title = Label(self.root, text="Select the data value set to be clustered", bg="white",
                                  font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
 
         if self.single_cluster_data is not None:
-            self.label_hint = Label(self.root, text="Data generated from a previously calculated\ncluster are highlighted in green", bg="white", fg='blue')
+            self.label_hint = Label(self.root, text="Data value sets generated from a previously calculated\ncluster are highlighted in green", bg="white", fg='blue')
 
         self.listbox = Listbox(self.root, selectmode="single", width=50, height=20)
         self.scrollbar = Scrollbar(self.root, command=self.listbox.yview)
@@ -58,8 +58,8 @@ class SelectData:
         self.button_remove.grid(sticky='nswe', row=5, column=2, columnspan=1)
         self.button_ok.grid(sticky='nswe', row=5, column=3, columnspan=2)
 
-        CreateToolTip(self.button_add, "Add a data set.")
-        CreateToolTip(self.button_remove, "Remove selected data set.")
+        CreateToolTip(self.button_add, "Add a data value set.")
+        CreateToolTip(self.button_remove, "Remove selected data value set.")
 
         self.load()
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)

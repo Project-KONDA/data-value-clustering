@@ -7,6 +7,7 @@ import tk
 from data_extraction.extract_xml_field import write_fielddata_from_xml, get_attributenames, get_fieldnames, \
     execute_xquery
 from export.path import getOpenFilePath
+from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_data_add
 
 
@@ -30,15 +31,17 @@ class AddData:
         self.menu.add_command(label="Help", command=lambda: menu_help_data_add(self.root))
         self.root.config(menu=self.menu)
 
-        self.label_title = Label(self.root, text="Specify data from which to create data set", font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
+        self.label_title = Label(self.root, text="Specify data from which to create the data value set", font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center", pady=10)
         self.label_title.grid(sticky='nswe', row=1, column=1, columnspan=4)
 
         self.label_name = Label(self.root, anchor="w", text="Name:")
+        CreateToolTip(self.label_name, "The name of the data value set to be created.")
         self.entry_name = Entry(self.root, width=50)
         self.label_name.grid(sticky='nswe', row=2, column=1, columnspan=1)
         self.entry_name.grid(sticky='nswe', row=2, column=2, columnspan=3, pady=1, padx=1)
 
         self.label_path = Label(self.root, anchor="w", text="File:")
+        CreateToolTip(self.label_path, "The XML file containing the data from which to generate the data value set.")
         self.entry_path = Entry(self.root, width=50, state="readonly")
         self.button_path = Button(self.root, text="...", command=self.selectpath)
         self.label_path.grid(sticky='nswe', row=3, column=1, columnspan=1)
@@ -46,6 +49,7 @@ class AddData:
         self.button_path.grid(sticky='nsew', row=3, column=4, pady=1, padx=1)
 
         self.label_field = Label(self.root, anchor="w", text="Field:")
+        CreateToolTip(self.label_field, "The name of the XML element from which to extract the data values.")
         self.fieldnames = list()
         self.field_selection = StringVar()
         self.combobox_field = ttk.Combobox(self.root, values=list(), state="disabled",
@@ -56,6 +60,7 @@ class AddData:
         self.combobox_field.grid(sticky='nswe', row=4, column=2, columnspan=3, pady=1, padx=1)
 
         self.label_attribute = Label(self.root, anchor="w", text="Attribute:")
+        CreateToolTip(self.label_attribute, "Instead of extracting the XML content of the chosen element, the value of a specified attribute can be extracted.")
         self.attributenames = list()
         self.attribute_selection = StringVar()
         self.combobox_attribute = ttk.Combobox(self.root, width=50, state="disabled",
