@@ -106,7 +106,7 @@ class CostMapInput:
             self.label[i].grid(sticky=NW, row=9, column=i + 5, padx=(0,1))
             self.regex[i] = Entry(self.root, width=20, bg='ivory2', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
-            self.regex_label[i] = Label(self.root, anchor=W, bg="white")
+            self.regex_label[i] = Label(self.root, anchor=W, bg="white", justify="left")
             self.regex[i].grid(sticky=NW, row=i + 10, column=1, columnspan=3)
             self.regex_label[i].grid(sticky=NW, row=i + 10, column=4, columnspan=1)
 
