@@ -1,6 +1,7 @@
 from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu
 
 import gui_abstraction.abstraction_questions
+from gui_general import CreateToolTip
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
@@ -112,12 +113,14 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             s1.set(key)
             abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
                                              bg='lemonchiffon')
+            CreateToolTip(abstraction_target_label, "Abstracted data value representing all original values shown on the right hand side")
             abstraction_target_label.grid(row=i + 10, column=0, sticky='nwse')
             self.labels.append(abstraction_target_label)
             s2 = StringVar()
             s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
             abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
                                              wraplength=540, justify=LEFT)  # TODO: calculate wraplength
+            CreateToolTip(abstraction_source_label, "Original data values represented by the abstracted value shown on the right hand side")
             abstraction_source_label.grid(row=i + 10, column=1, sticky='nwse')
             self.labels.append(abstraction_source_label)
 
