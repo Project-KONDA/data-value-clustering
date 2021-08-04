@@ -20,7 +20,7 @@ abstraction_question_array = [
      "Abstraction from the length of sequences of lower case letters. "
      "Choose yes if the length of lower case letter sequences does not have a crucial impact on the meaning and if\n" +
      "you expect a lot of lower case letter sequences of heterogeneous length.\n" +
-     "For example, 'red' and 'architecture' will be treated equally since both consist of a sequence of lower case\n" +
+     "For example, 'red' and 'to' will be treated equally since both consist of a sequence of lower case\n" +
      "letters."],  # 3
     [[0, 1], [], "sequence", False,
      "Should all letter sequences be treated equally?",
@@ -37,7 +37,7 @@ abstraction_question_array = [
      "Should all lower and upper case words be treated equally?",
      "Abstraction from the capitalization of the first letter of words. "
      "Choose yes if the capitalization of the first letter of a word does not have a crucial impact on the meaning and you expect a lot of words.\n" +
-     "For example, 'Portrait' and 'child' will be treated equally since both are words."],  # 6
+     "For example, 'red' and 'Portrait' will be treated equally since both are words."],  # 6
     [[0, 3, 6], [1], "word_sequence", False,
      "Should all sequences of lower or upper case words separated by a blank space (= sentences) be treated equally?",
      "Abstraction from the length of sequences of sequences of lower or upper case words separated by a blank. "
