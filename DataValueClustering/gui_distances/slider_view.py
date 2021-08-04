@@ -176,6 +176,7 @@ class SliderInput:
         abstraction = self.abstraction.tolist()
         entry_from = self.entrylist
         string_to = self.label_list
+        tool_tips = np.full(len(entry_from), "").tolist()
         for st in string_to:
             st.config(text="")
         for mapping in abstraction:
@@ -187,7 +188,13 @@ class SliderInput:
                         string += "\n"
                     string += "'" + mapping[1] + "' - " + mapping[0]
                     string_to[i].config(text=string)
+                    if tool_tips[i] != "":
+                        tool_tips[i] = tool_tips[i] + "\n" + mapping[3]
+                    else:
+                        tool_tips[i] = mapping[3]
                     break
+        for i, tip in enumerate(tool_tips):
+            CreateToolTip(string_to[i], tip)
         self.updating_labels = False
 
     def get(self):
