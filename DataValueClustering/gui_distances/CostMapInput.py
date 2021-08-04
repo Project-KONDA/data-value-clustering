@@ -268,7 +268,7 @@ class CostMapInput:
         # 3. add element n-1
         self.regex[self.n - 1] = Entry(self.root, width=20, bg='ivory2', validate=ALL)
         self.regex[self.n - 1]['validatecommand'] = (
-            self.regex[self.n - 1].register(lambda s, i2=self.n: self.copy_to_column(i2, s)), '%P')
+            self.regex[self.n - 1].register(lambda s, i2=self.n-1: self.copy_to_column(i2, s)), '%P')
 
         self.regex_label[self.n - 1] = Label(self.root, anchor=W, bg="white")
         self.label[self.n - 1] = Label(self.root, width=7, bg='lightgrey', anchor=W)
