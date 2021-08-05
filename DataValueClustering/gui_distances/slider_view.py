@@ -3,10 +3,12 @@ from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar
 
 import numpy as np
 
+from gui_distances import input_costmap
 from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
     example_costmap, groups_to_enumerations
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
+from gui_result.validation_questionnaire import get_suggested_distance_modifications
 
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
@@ -21,6 +23,7 @@ class SliderInput:
         assert (n or costmap or abstraction is not None)
 
         self.costmap = costmap
+        self.matrix_costmap = None
         self.abstraction = abstraction
         self.texts = texts
         self.value = value
@@ -65,6 +68,7 @@ class SliderInput:
         self.title = Label(self.root, text="Weight the influence of characters on the dissimilarity between data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
         self.hint = Label(self.root, text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
+        self.button_expert = Button(self.root, text='Expert', command=self.matrix_view, width=5)
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -73,6 +77,7 @@ class SliderInput:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
+        self.button_expert.grid(sticky='ne', row=1, column=6)
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
@@ -90,8 +95,6 @@ class SliderInput:
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
-
-
 
         # scrollable canvas:
         self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
@@ -157,6 +160,9 @@ class SliderInput:
             self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(15, 0), padx=1)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
+        if self.costmap and self.costmap != self.get():
+            self.button_expert.config(bg="#bbddbb")
+
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
@@ -198,6 +204,8 @@ class SliderInput:
     def get(self):
         if self.canceled:
             return None
+        if self.matrix_costmap:
+            return self.matrix_costmap
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
@@ -322,6 +330,13 @@ class SliderInput:
         # 6. finish
         self.root.update()
 
+    def matrix_view(self):
+        self.matrix_costmap = input_costmap(self.root, regexes=self.texts, costmap=self.get(),
+                                            abstraction=self.abstraction, suggestion=self.suggestion,
+                                            configuration=self.configuration)
+        if self.matrix_costmap is not None:
+            self.quit()
+
     def cancel(self):
         self.canceled = True
         self.quit()
@@ -334,7 +349,8 @@ class SliderInput:
 
 if __name__ == "__main__":
     # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
-    result = slider_view(None, costmap=example_costmap())
+    # result = slider_view(None, costmap=example_costmap())
+    result = slider_view(None, n=4)
     valid = costmap_is_valid(result)
     print("Costmap result is valid: ", valid)
     if valid:
