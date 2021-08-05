@@ -163,12 +163,14 @@ class ResultView:
     def open_excel(self):
         if self.configuration.excel_save_path is None:
             self.configuration.excel_save_path = getExcelSavePath()
+        if not self.configuration.excel_saved:
             self.configuration.save_as_excel()
         if self.configuration.excel_save_path:
             # os.system(self.excel_path)
             os.system('"' + self.configuration.excel_save_path + '"')
             # subprocess.call([self.excel_path])
             # subprocess.run(['open', self.excel_path], check=True)
+            self.configuration.excel_saved = True
 
     def get_info(self):
         s = "Number of Data Values: " + str(self.configuration.num_data)

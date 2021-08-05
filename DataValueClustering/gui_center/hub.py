@@ -75,7 +75,6 @@ class Hub:
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
-        self.set_saved(True)
 
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
@@ -127,7 +126,7 @@ class Hub:
                                          font=('Sans', '10', 'bold'), width=45, height=2)
         self.button_show_result.grid(sticky='nswe', row=17, column=1, columnspan=3, padx=10, pady=10)
 
-        self.button_save_result = Button(self.root, text='Save Clustering Table...', command=self.save_excel, state="disabled",
+        self.button_save_result = Button(self.root, text='Save', command=self.menu_save,
                                          font=('Sans', '10', 'bold'), height=2)
         self.button_save_result.grid(sticky='nswe', row=17, column=4, padx=10, pady=10)
 
@@ -232,12 +231,12 @@ class Hub:
         self.root.mainloop()
 
     def set_saved(self, saved):
-        self.saved = saved
+        self.configuration.json_saved = saved
         if not saved and self.root.title() != TITLE and not self.root.title().endswith("*"):
             self.root.title(self.root.title() + "*")
 
     def on_closing(self):
-        if self.saved or \
+        if self.configuration.json_saved or \
                 messagebox.askokcancel("Quit",
                                        "Closing the window without prior saving the configuration will delete the configuration."
                                        "\nDo you want to quit?",
@@ -380,8 +379,7 @@ class Hub:
         self.root.update()
 
         self.configuration.execute_distance()
-
-        # TODO: show percentage
+        self.set_saved(False)
 
         self.update()
         # self.configuration.save_as_json()
@@ -407,6 +405,7 @@ class Hub:
             return
 
         self.set_saved(False)
+        self.configuration.excel_saved = False
         self.reset_validation_answers()
         self.configuration.set_clustering_selection(clustering_algorithm, answers)
         self.configuration.set_clustering_configuration(parameters)
@@ -423,7 +422,8 @@ class Hub:
 
         self.configuration.execute_clustering()
 
-        # self.update()
+        self.set_saved(False)
+        self.configuration.excel_saved = False
 
         # self.label_clustering_progress.configure(text="Saving in progress ...", fg='RoyalBlue1')
         # self.root.update()
@@ -485,7 +485,7 @@ class Hub:
         self.update()
 
     def menu_new(self):
-        if self.saved or \
+        if self.configuration.json_saved or \
             messagebox.askokcancel("New Configuration",
                                    "Creating a new configuration without prior saving the configuration will delete the configuration."
                                    "\nDo you want to restart?",
@@ -494,25 +494,21 @@ class Hub:
             self.update()
             self.root.title(TITLE)
 
-
     def menu_save(self):
-        self.disable()
-        if self.configuration.json_save_path:
-            self.configuration.save_as_json()
-            self.set_saved(True)
-        else:
-            self.menu_saveas()
-        self.update()
+        if not self.configuration.json_saved:
+            self.disable()
+            if self.configuration.json_save_path:
+                self.configuration.save_as_json()
+                self.set_saved(True)
+            else:
+                self.menu_saveas()
+            self.update()
 
     def menu_saveas(self):
         self.configuration.json_save_path = getJsonSavePath()
         self.root.title(self.configuration.json_save_path)
         if self.configuration.json_save_path:
             self.menu_save()
-
-    def save_excel(self):
-        self.configuration.excel_save_path = getExcelSavePath()
-        self.configuration.save_as_excel()
 
     def disable(self):
         self.button_data.configure(state="disabled")
@@ -526,7 +522,6 @@ class Hub:
 
     def reset_validation_answers(self):
         self.configuration.reset_validation_answers()
-
 
     def update(self):
         self.button_data.configure(state="normal")
@@ -579,12 +574,10 @@ class Hub:
 
         if self.configuration.result_is_ready():
             self.button_show_result.configure(state="normal", bg='pale green')
-            self.button_save_result.configure(state="normal", bg='pale green')
             self.label_clustering_progress.configure(text=CLUSTERING_DONE, fg='green')
             self.button_clustering_play.configure(state="normal", bg=self.original_button_color)
         else:
             self.button_show_result.configure(state="disabled", bg=self.original_button_color)
-            self.button_save_result.configure(state="disabled", bg=self.original_button_color)
             if self.configuration.clustering_execution_possible():
                 # self.clustering_progress['value'] = 100
                 self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='orange')
@@ -593,6 +586,12 @@ class Hub:
                 # self.clustering_progress['value'] = 0
                 self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
                 self.button_clustering_play.configure(state="disabled", bg=self.original_button_color)
+
+        print(self.configuration.json_saved)
+        if self.configuration.json_saved:
+            self.button_save_result.configure(state="normal", bg=self.original_button_color) # state="disabled"
+        else:
+            self.button_save_result.configure(state="normal", bg='pale green')
 
         self.update_frame_data()
         self.update_frame_abstraction()

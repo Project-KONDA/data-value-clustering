@@ -128,6 +128,8 @@ class HubConfiguration():
 
         self.json_save_path = None
         self.excel_save_path = None
+        self.excel_saved = False
+        self.json_saved = True
 
         self.timedelta_total = None
 
