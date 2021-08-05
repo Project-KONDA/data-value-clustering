@@ -213,11 +213,16 @@ class SliderInput:
 
     def reset_groups(self):
         blob_configuration = self.configuration.create_blob_configuration()
-        self.root.withdraw()
-        self.next_slider_view = slider_view(self.master, abstraction=blob_configuration[1:, 0:2],
-                               texts=list(blob_configuration[1:, 1]), costmap=self.costmap,
-                               suggestion=self.suggestion, configuration=self.configuration)
-        self.quit()
+        newtexts = list(blob_configuration[1:, 1])
+        new_n = len(newtexts)
+
+        while(self.n < new_n):
+            self.plus()
+        while(self.n > new_n):
+            self.minus()
+        for i, t in enumerate(newtexts):
+            self.entry_var_list[i].set(t)
+            self.sliderlist[i].set(1)
 
     def plus(self):
         # 1. create arrays
