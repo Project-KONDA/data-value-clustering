@@ -94,7 +94,7 @@ def get_suggested_algorithms(validation_answers):
     elif validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
         suggested_algorithms.append(HIERARCHICAL)
         suggested_algorithms.append(OPTICS)
-    return suggested_algorithms
+    return suggested_algorithms if len(suggested_algorithms) > 0 else None
 
 
 def get_suggested_parameter_modifications(validation_answers, configuration):
