@@ -27,9 +27,11 @@ from gui_result.validation_questionnaire import get_suggested_algorithms, get_su
 TITLE = "Clustering Configuration Hub"
 
 STATUS = "Status: "
-CLUSTERING_NOT_CALC = STATUS + 'Clustering configured but not calculated'
+CLUSTERING_NOT_CALC = STATUS + 'Clustering not calculated'
+CLUSTERING_CONFIG_DONE = STATUS + 'Clustering configuration done'
 CLUSTERING_DONE = STATUS + 'Clustering done'
-DISTANCE_NOT_CALC = STATUS + 'Dissimilarities configured but not calculated'
+DISTANCE_NOT_CALC = STATUS + 'Dissimilarities not calculated'
+DISTANCE_CONFIG_DONE = STATUS + 'Dissimilarity configuration done'
 DISTANCE_DONE = STATUS + 'Dissimilarity calculation done'
 ABSTRACTION_CONFIGURED = STATUS + 'Abstraction configured'
 ABSTRACTION_DONE = STATUS + 'Abstraction done'
@@ -115,20 +117,20 @@ class Hub:
         CreateToolTip(self.button_distance, "Specify how certain features influence the dissimilarity between data values.")
         CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
 
-        self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
+        self.button_distance_play = Button(self.root, text='Execute Dissimiliarity Calculation', command=self.execute_distance,
                                            width=4, height=2, state="disabled")
-        self.button_distance_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10, rowspan=2)
-        self.button_clustering_play = Button(self.root, text='▶', command=self.execute_clustering,
+        self.button_distance_play.grid(sticky='new', row=16, column=1, padx=10, pady=10, columnspan=2)
+        self.button_clustering_play = Button(self.root, text='Execute Clustering', command=self.execute_clustering,
                                              width=4, height=2, state="disabled")
-        self.button_clustering_play.grid(sticky='ne', row=15, column=2, padx=10, pady=10, rowspan=2)
+        self.button_clustering_play.grid(sticky='new', row=19, column=1, padx=10, pady=10, columnspan=2)
 
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'), width=45, height=2)
-        self.button_show_result.grid(sticky='nswe', row=17, column=1, columnspan=3, padx=10, pady=10)
+        self.button_show_result.grid(sticky='nswe', row=21, column=1, columnspan=3, padx=10, pady=10)
 
         self.button_save_result = Button(self.root, text='Save', command=self.menu_save,
                                          font=('Sans', '10', 'bold'), height=2)
-        self.button_save_result.grid(sticky='nswe', row=17, column=4, padx=10, pady=10)
+        self.button_save_result.grid(sticky='nswe', row=21, column=4, padx=10, pady=10)
 
         CreateToolTip(self.button_distance_play, "Execute dissimilarity calulcation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering.")
@@ -154,17 +156,24 @@ class Hub:
         self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
         self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
         self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_distance_exec_progress = Label(self.root, text=DISTANCE_NOT_CALC, bg="white", fg="red")
         self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_clustering_exec_progress = Label(self.root, text=CLUSTERING_NOT_CALC, bg="white", fg="red")
 
         self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=1, padx=20, pady=2)
         self.label_abstraction_progress.grid(sticky='nw', row=9, column=1, columnspan=1, padx=20, pady=2)
         self.label_distance_progress.grid(sticky='nw', row=12, column=1, columnspan=1, padx=20, pady=2)
-        self.label_clustering_progress.grid(sticky='nw', row=15, column=1, columnspan=1, padx=20, pady=2)
+        self.label_distance_exec_progress.grid(sticky='nw', row=15, column=1, columnspan=1, padx=20, pady=2)
+        self.label_clustering_progress.grid(sticky='nw', row=17, column=1, columnspan=1, padx=20, pady=2)
+        self.label_clustering_exec_progress.grid(sticky='nw', row=20, column=1, columnspan=1, padx=20, pady=2)
 
         CreateToolTip(self.label_data_progress, "Status of the data")
         CreateToolTip(self.label_abstraction_progress, "Status of the abstraction")
-        CreateToolTip(self.label_distance_progress, "Status of the dissimilarities")
-        CreateToolTip(self.label_clustering_progress, "Status of the clustering")
+        CreateToolTip(self.label_distance_progress, "Status of the dissimilarity configuration")
+        CreateToolTip(self.label_distance_exec_progress, "Status of the dissimilarity calculation")
+        CreateToolTip(self.label_clustering_progress, "Status of the clustering configuration")
+        CreateToolTip(self.label_distance_exec_progress, "Status of the clustering execution")
+
 
         "advice labels"
         self.label_data_advice = Label(self.root, text="", bg="white", fg="blue")
@@ -175,7 +184,7 @@ class Hub:
         self.label_data_advice.grid(sticky='nw', row=7, column=1, columnspan=1, padx=20, pady=2)
         self.label_abstraction_advice.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=2)
         self.label_distance_advice.grid(sticky='nw', row=13, column=1, columnspan=1, padx=20, pady=2)
-        self.label_clustering_advice.grid(sticky='nw', row=16, column=1, columnspan=1, padx=20, pady=2)
+        self.label_clustering_advice.grid(sticky='nw', row=18, column=1, columnspan=1, padx=20, pady=2)
 
         # CreateToolTip(self.label_data_advice, "Status of the data")
         # CreateToolTip(self.label_abstraction_advice, "Status of the abstraction")
@@ -195,8 +204,8 @@ class Hub:
 
         self.frame_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
         self.frame_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.frame_distance.grid(sticky='nswe', row=11, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.frame_clustering.grid(sticky='nswe', row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.frame_distance.grid(sticky='nswe', row=11, column=3, rowspan=5, columnspan=2, padx=10, pady=10)
+        self.frame_clustering.grid(sticky='nswe', row=16, column=3, rowspan=5, columnspan=2, padx=10, pady=10)
 
         "labels in frames"
         self.label_data_config_heading = Label(self.frame_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left")
@@ -566,7 +575,7 @@ class Hub:
             self.label_clustering_progress.configure(fg='red')
 
             if self.configuration.distance_configuration_valid():
-                self.label_distance_progress.configure(text=DISTANCE_NOT_CALC, fg='orange')
+                self.label_distance_progress.configure(text=DISTANCE_CONFIG_DONE, fg='green')
                 self.button_distance_play.configure(state="normal", bg='paleturquoise1')
             else:
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
@@ -580,14 +589,13 @@ class Hub:
             self.button_show_result.configure(state="disabled", bg=self.original_button_color)
             if self.configuration.clustering_execution_possible():
                 # self.clustering_progress['value'] = 100
-                self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='orange')
+                self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_DONE, fg='orange')
                 self.button_clustering_play.configure(state="normal", bg='paleturquoise1')
             else:
                 # self.clustering_progress['value'] = 0
                 self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
                 self.button_clustering_play.configure(state="disabled", bg=self.original_button_color)
 
-        print(self.configuration.json_saved)
         if self.configuration.json_saved:
             self.button_save_result.configure(state="normal", bg=self.original_button_color) # state="disabled"
         else:
