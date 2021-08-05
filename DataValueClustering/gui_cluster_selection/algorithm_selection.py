@@ -19,11 +19,11 @@ algorithm_array = [
     # dependencies, not-dependencies, name, configuration view function, clustering function accepting parameters as arguments
     # suggest value if none of the 'not-dependencies' questions were answered with True
 
-    [[], [2],       HIERARCHICAL,           cluster_hierarchical,   hierarchical_args],
-    [[], [2, 4],    K_MEDOIDS,              cluster_kmedoids,       kmedoids_args],
-    [[], [1,3],     DBSCAN,                 cluster_dbscan,         dbscan_args],
-    [[], [1],       OPTICS,                 cluster_optics,         optics_args],
-    [[], [0,1,2,4], AFFINITY_PROPAGATION,   cluster_affinity,       affinity_args],
-    [[], [0,1,2,5], SPECTRAL_CLUSTERING,    cluster_spectral,       spectral_args],
+    [[], [2],       HIERARCHICAL,           cluster_hierarchical,   hierarchical_args,  "Recommended choice if you do not expect noise in the data."],
+    [[], [2, 4],    K_MEDOIDS,              cluster_kmedoids,       kmedoids_args,      "..."],
+    [[], [1,3],     DBSCAN,                 cluster_dbscan,         dbscan_args,        "Appropriate if you expect noise in the data. OPTICS may achieve better results."],
+    [[], [1],       OPTICS,                 cluster_optics,         optics_args,        "Recommended choice if you expect noise in the data."],
+    [[], [0,1,2,4], AFFINITY_PROPAGATION,   cluster_affinity,       affinity_args,      "..."],
+    [[], [0,1,2,5], SPECTRAL_CLUSTERING,    cluster_spectral,       spectral_args,      "..."],
 
 ]

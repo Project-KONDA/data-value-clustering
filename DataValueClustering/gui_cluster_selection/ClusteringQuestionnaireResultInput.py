@@ -5,6 +5,7 @@ import numpy as np
 import gui_cluster_selection
 from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_cluster_selection.clustering_questions import clustering_question_array
+from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_clustering_selection
 from util.question_result_array_util import get_array_part
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
@@ -26,8 +27,8 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     """Binary questionnaire view to support the selection of the clustering algorithm"""
 
     def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
-        self.caption_text = "Answer the questions to narrow the set of fitting clustering algorithms and choose one."
-        self.hint_text = "Typically the preselected algorithms achieve good results."
+        self.caption_text = "Answer the questions to narrow the set of fitting clustering algorithms and choose one"
+        self.hint_text = "Typically the highlighted algorithm achieves good results."
         suggestion = None
         if suggested_algorithms is not None:
             suggestion = "Algorithms suggested based on the evaluation are highlighted in green."
@@ -45,6 +46,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         else:
             self.choice.set(np.where(self.algorithms[:, 2] == predefined_algorithm)[0][0])
         self.radio_buttons = np.empty(len(self.algorithms), dtype=Radiobutton)
+        self.orig_color = None
         self.build_result_frame()
         self.selection_changed()
 
@@ -53,8 +55,14 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
             self.radio_buttons[i] = Radiobutton(self.scrollable_result_frame, text=algorithm[2], padx=20, variable=self.choice, bg="white",
                                        value=i, justify='left')
             self.radio_buttons[i].grid(row=i + 10, column=0, sticky='w')
-            if algorithm[2] in self.suggested_algorithms:
-                self.radio_buttons[i].configure(bg='SeaGreen1')
+            CreateToolTip(self.radio_buttons[i], algorithm[5])
+            if self.orig_color is None:
+                self.orig_color = self.radio_buttons[i].cget("bg")
+            if self.suggested_algorithms is not None and algorithm[2] in self.suggested_algorithms:
+                self.radio_buttons[i].configure(bg='pale green')
+            # elif i == 0 or i == 3:
+            #     self.radio_buttons[i].configure(bg='pale green')
+
 
     def get(self):
         if self.canceled:
@@ -74,18 +82,25 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         suggested_algorithms_names = self.get_suggested_algorithm_names(suggested_algorithms)
         previous_choice = self.choice.get()
         preferred_choice = -1
-        first_suggested = -1
+        first_enabled = -1
         for i, button in enumerate(self.radio_buttons):
+            if self.suggested_algorithms is None:
+                button.configure(bg=self.orig_color)
             if self.algorithms[i, 2] in suggested_algorithms_names:
                 button.config(state=NORMAL)
                 if i == 0:
                     preferred_choice = 0  # hierarchical
+                    if self.suggested_algorithms is None:
+                        button.configure(bg='pale green')
                 elif preferred_choice == -1 and i == 3:
                     preferred_choice = 3  # optics
-                if first_suggested == -1:
-                    first_suggested = i
+                    if self.suggested_algorithms is None:
+                        button.configure(bg='pale green')
+                if first_enabled == -1:
+                    first_enabled = i
             else:
                 button.config(state=DISABLED)
+                # button.configure(bg=self.orig_color)
                 if previous_choice == i:
                     previous_choice = -1
         if previous_choice != -1:
@@ -93,7 +108,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
         elif preferred_choice != -1:
             self.choice.set(preferred_choice)
         else:
-            self.choice.set(first_suggested)
+            self.choice.set(first_enabled)
 
     def get_suggested_algorithm_names(self, suggested_algorithms):
         if len(suggested_algorithms.shape) == 2:
