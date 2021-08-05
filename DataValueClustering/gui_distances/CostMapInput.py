@@ -127,6 +127,8 @@ class CostMapInput:
 
             for j in range(self.n):
                 self.value_entries[i, j] = self.generate_entry(i, j)
+                
+        self.costmap = None
 
         self.button_ok = Button(self.root, text='OK', command=self.button_click_output_map,
                                 justify=RIGHT, background='snow')
