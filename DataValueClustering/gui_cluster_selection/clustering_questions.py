@@ -3,10 +3,10 @@ clustering_question_array = [
     # dependencies, not-dependencies, name, default, question, explanation
 
     [[], [],    "fast",             False,  "Is fast clustering desired?",
-     "Choose yes if you prefer a fast execution over high quality (i.e. precise) clustering."],
+     "Choose yes if you prefer a fast execution over high quality (i.e. precise) clustering. In case you are not sure, choose no."],
     [[], [],    "deterministic",    False,  "Is deterministic clustering desired?",
      "Choose yes if you want each execution to return the exact same result.\n"
-     + "Otherwise random initialization may be used."],
+     + "Otherwise random initialization may be used. In case you are not sure, choose no."],
     [[], [],    "noise",            False,   "Do you expect noise in the data?",
      "Choose yes if you expect outliers that are very different from the other values\n"
      + "and thus do not belong to any of the clusters."],
