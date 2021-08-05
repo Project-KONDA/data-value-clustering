@@ -28,8 +28,6 @@ class SliderInput:
         self.suggestion = suggestion
         self.configuration = configuration
 
-        self.next_slider_view = None
-
         self.master = master
         self.n = n if n or costmap else len(texts)
         self.abstraction = abstraction
@@ -200,8 +198,6 @@ class SliderInput:
     def get(self):
         if self.canceled:
             return None
-        if self.next_slider_view is not None:
-            return self.next_slider_view
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
@@ -216,9 +212,9 @@ class SliderInput:
         newtexts = list(blob_configuration[1:, 1])
         new_n = len(newtexts)
 
-        while(self.n < new_n):
+        while self.n < new_n:
             self.plus()
-        while(self.n > new_n):
+        while self.n > new_n:
             self.minus()
         for i, t in enumerate(newtexts):
             self.entry_var_list[i].set(t)

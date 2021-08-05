@@ -33,8 +33,6 @@ class CostMapInput:
         self.suggestion = suggestion
         self.configuration = configuration
 
-        self.next_matrix_view = None
-
         self.canceled = False
         self.n = n if n is not None \
             else len(regexes) if regexes is not None \
@@ -174,11 +172,20 @@ class CostMapInput:
 
     def reset_groups(self):
         blob_configuration = self.configuration.create_blob_configuration()
-        self.root.withdraw()
-        self.next_matrix_view = input_costmap(self.root, regexes=list(blob_configuration[1:, 1]), costmap=self.costmap,
-                                              abstraction=blob_configuration[1:, 0:2], suggestion=self.suggestion,
-                                              configuration=self.configuration)
-        self.quit()
+        newtexts = list(blob_configuration[1:, 1])
+        new_n = len(newtexts)
+
+        while self.n < new_n:
+            self.plus()
+        while self.n > new_n:
+            self.minus()
+        for i, t in enumerate(newtexts):
+            self.regex[i].delete(0, END)
+            self.regex[i].insert(0, t)
+            for j in range(self.n):
+                self.value_entries[i, j].delete(0, END)
+                self.value_entries[i, j].insert(0, int(i != j))
+        self.costmap = None
 
     def copy_to_column(self, i, text):
         if self.updating_labels:
@@ -385,8 +392,6 @@ class CostMapInput:
     def get(self):
         if self.canceled:
             return None
-        if self.next_matrix_view is not None:
-            return self.next_matrix_view
         return self.costmap
 
 
