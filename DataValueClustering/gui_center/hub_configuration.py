@@ -34,13 +34,14 @@ def load_hub_configuration(path):
 
 def blob_config_to_nparray(hub_config):
     bc = hub_config.blob_configuration
-    x_len = len(bc)
-    y_len = len(bc[0])
-    array = np.empty((x_len, y_len), dtype=object)
-    for x in range(x_len):
-        for y in range(y_len):
-            array[x,y] = bc[x][y]
-    hub_config.blob_configuration = array
+    if bc is not None:
+        x_len = len(bc)
+        y_len = len(bc[0])
+        array = np.empty((x_len, y_len), dtype=object)
+        for x in range(x_len):
+            for y in range(y_len):
+                array[x,y] = bc[x][y]
+        hub_config.blob_configuration = array
 
 
 def create_hub_configuration_from_dict(dict):
