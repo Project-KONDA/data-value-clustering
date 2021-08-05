@@ -27,20 +27,20 @@ from validation.intra_inter_cluster_distance import max_intra_cluster_distances,
 def load_hub_configuration(path):
     text = open(path, "r")
     json_data = json.load(text)
-    hub = create_hub_configuration_from_dict(json_data)
-    blob_config_to_nparray(hub)
-    return hub
+    hub_config = create_hub_configuration_from_dict(json_data)
+    blob_config_to_nparray(hub_config)
+    return hub_config
 
 
-def blob_config_to_nparray(hub):
-    bc = hub.blob_configuration
+def blob_config_to_nparray(hub_config):
+    bc = hub_config.blob_configuration
     x_len = len(bc)
     y_len = len(bc[0])
     array = np.empty((x_len, y_len), dtype=object)
     for x in range(x_len):
         for y in range(y_len):
             array[x,y] = bc[x][y]
-    hub.blob_configuration = array
+    hub_config.blob_configuration = array
 
 
 def create_hub_configuration_from_dict(dict):
