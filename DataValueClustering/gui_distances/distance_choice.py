@@ -25,6 +25,7 @@ class DistanceChoice:
         self.root = Toplevel(master)
         self.root.title("Dissimilarity Configuration Method Selection")
         self.root.config(bg="white")
+        self.root.resizable(False, False)
         self.root.focus_force()
         self.root.grab_set()
 

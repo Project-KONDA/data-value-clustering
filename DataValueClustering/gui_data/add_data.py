@@ -23,6 +23,7 @@ class AddData:
         self.root = Toplevel(master)
         self.root.title("Data Addition")
         self.root.configure(bg="white")
+        self.root.resizable(False, False)
         self.root.grab_set()
         self.root.focus_force()
         self.canceled = False

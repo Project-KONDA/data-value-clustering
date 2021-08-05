@@ -28,6 +28,7 @@ class ResultView:
     def __init__(self, master, configuration):
         self.root = Toplevel(master)
         self.root.title("Clustering Result & Evaluation")
+        self.root.resizable(False, False)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root))

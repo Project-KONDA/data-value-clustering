@@ -20,7 +20,7 @@ class ClusterConfigurationInput:
         self.root.title(title)
         self.root.resizable(False, True)
         self.root.minsize(200, 200)
-        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_rowconfigure(3, weight=1)
         self.root.config(bg='white')
         self.canceled = False
         self.root.focus_force()

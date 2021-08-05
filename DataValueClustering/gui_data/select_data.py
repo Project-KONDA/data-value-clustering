@@ -26,6 +26,7 @@ class SelectData:
 
         self.root = Toplevel(master)
         self.root.title("Data Selection")
+        self.root.resizable(False, False)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
