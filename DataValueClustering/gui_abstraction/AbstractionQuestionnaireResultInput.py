@@ -108,6 +108,20 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         for i in range(len(self.labels)):
             self.labels[i].destroy()
 
+        s1 = StringVar()
+        s1.set("Abstracted values")
+        abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
+                                         bg='lemonchiffon', font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
+        abstraction_target_label.grid(row=5, column=0, sticky='nwse')
+        self.labels.append(abstraction_target_label)
+
+        s2 = StringVar()
+        s2.set("Original values")
+        abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
+                                         wraplength=540, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)  # TODO: calculate wraplength
+        abstraction_source_label.grid(row=5, column=1, sticky='nwse')
+        self.labels.append(abstraction_source_label)
+
         for i, key in enumerate(abstraction_dict):
             s1 = StringVar()
             s1.set(key)

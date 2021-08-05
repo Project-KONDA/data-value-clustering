@@ -51,7 +51,7 @@ blob_configuration_array = [
     [[],           [],                       "none",                        "",                                                        False,  # TODO: handle "nothing"
      ""],
     [[],           [],                       "space",                        " ",                                                        False,
-     "Blank space."],
+     "' ' represents a blank space."],
 
     [[0],          [1, 3],                   "lower_case_letters",          "l",                                                       False,
      "'l' represents all lower case letters, e.g. 'a', 'b' and 'c'."],
