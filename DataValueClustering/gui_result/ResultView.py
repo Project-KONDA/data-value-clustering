@@ -88,7 +88,8 @@ class ResultView:
         self.info_label.grid(row=1, column=0, sticky='nwes', columnspan=1)
 
         # scatter plot in summary_frame
-        show_mds_scatter_plot_integrated(self.summary_frame, self.configuration.values_abstracted,
+        representatives = get_repr_list(self.configuration.values_abstracted, self.configuration.abstraction_dict)
+        show_mds_scatter_plot_integrated(self.summary_frame,representatives,
                                          self.configuration.distance_matrix_map["distance_matrix"],
                                          self.configuration.clusters_abstracted)
 
