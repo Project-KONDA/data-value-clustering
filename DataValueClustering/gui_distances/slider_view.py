@@ -1,5 +1,5 @@
 from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT, Frame, Canvas, Scrollbar, \
-    Menu
+    Menu, Checkbutton
 
 import numpy as np
 
@@ -38,7 +38,6 @@ class SliderInput:
         self.abstraction_keys = self.texts
         self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
         self.values = value
-        self.fixed = fixed
         self.updating_labels = False
 
         self.canceled = False
@@ -69,6 +68,8 @@ class SliderInput:
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
         self.hint = Label(self.root, text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert', command=self.matrix_view, width=5)
+        self.extended = IntVar(self.root, int(not self.fixed))
+        self.checkbutton_extend = Checkbutton(self.root, text="Extended", bg="white", variable=self.extended, command=self.trigger_extend)
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -87,14 +88,16 @@ class SliderInput:
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 10))
 
-        self.button_minus.grid(sticky='ns', row=5, column=1, pady=2, padx=2)
-        self.button_plus.grid(sticky='ns', row=5, column=2, pady=2, padx=2)
-        self.button_reset.grid(sticky='ns', row=5, column=3, columnspan=2, pady=2, padx=2)
+        self.button_minus.grid(sticky='ns', row=5, column=1, pady=2, padx=10)
+        self.button_plus.grid(sticky='ns', row=5, column=2, pady=2, padx=10)
+        self.button_reset.grid(sticky='ns', row=5, column=3, columnspan=2, pady=2, padx=100)
         self.button_ok.grid(sticky='nswe', row=5, column=5, columnspan=3, pady=2, padx=2)
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
+
+        self.checkbutton_extend.grid(sticky="sw", row=1, column=1)
 
         # scrollable canvas:
         self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
@@ -105,7 +108,8 @@ class SliderInput:
         self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
         self.scrollable_frame.bind('<Configure>',
                                    lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
-        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='nw')
+        self.scrollable_frame.columnconfigure(3, weight=1)
+        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='ne')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.frame.grid(sticky='nswe', row=4, column=1, columnspan=6, pady=1, padx=1)
         self.canvas.grid(sticky="nswe", row=0, column=0)
@@ -113,20 +117,19 @@ class SliderInput:
         self.scrollbar.grid(row=4, column=7, sticky='nswe')
 
         # headings:
-        self.label_heading1 = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
-        CreateToolTip(self.label_heading1, "Enumerate all characters of this group. Only the first occurrence of a "
+        self.label_head_characters = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
+        self.label_head_mapping = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'))
+        self.label_head_weights = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
+        CreateToolTip(self.label_head_characters, "Enumerate all characters of this group. Only the first occurrence of a "
                                            "character in one of the groups is relevant. Note that some characters may "
                                            "represent abstracted details. This mapping is provided in the column "
                                            "'Abstraction Mapping'.")
-        self.label_heading2 = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'))
-        CreateToolTip(self.label_heading2, "Mapping between characters of the column 'Characters' and the abstracted "
+        CreateToolTip(self.label_head_mapping, "Mapping between characters of the column 'Characters' and the abstracted "
                                            "aspects they represent.")
-        self.label_heading3 = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
-        CreateToolTip(self.label_heading3, "Weights for the given character groups.")
-        self.label_heading1.grid(sticky='nswe', row=3, column=1, columnspan=2)
-        self.label_heading2.grid(sticky='ns', row=3, column=3, columnspan=2)
-        self.scrollable_frame.columnconfigure(3, weight=1)
-        self.label_heading3.grid(sticky='nswe', row=3, column=5, columnspan=2)
+        CreateToolTip(self.label_head_weights, "Weights for the given character groups.")
+        self.label_head_characters.grid(sticky='nswe', row=3, column=1, columnspan=2)
+        self.label_head_mapping.grid(sticky='ns', row=3, column=3, columnspan=2)
+        self.label_head_weights.grid(sticky='nswe', row=3, column=5, columnspan=2)
 
         self.row_offset = 4
 
@@ -144,7 +147,7 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.scrollable_frame, width=24, bg="white", anchor=W, justify=LEFT)
+            self.label_list[i] = Label(self.scrollable_frame, width=51, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
@@ -157,13 +160,14 @@ class SliderInput:
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
             self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=1)
-            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(15, 0), padx=1)
+            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(18, 0), padx=1)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         if self.costmap and self.costmap != self.get():
             self.button_expert.config(bg="#bbddbb")
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+        self.trigger_extend()
         self.root.mainloop()
 
     def on_mousewheel(self, event):
@@ -174,32 +178,60 @@ class SliderInput:
         self.root.unbind_all("<MouseWheel>")
 
     def update_labels(self):
-        if self.updating_labels or self.abstraction is None:
+        if self.updating_labels:
             return
-        self.updating_labels = True
-        abstraction = self.abstraction.tolist()
-        entry_from = self.entrylist
-        string_to = self.label_list
-        tool_tips = np.full(len(entry_from), "").tolist()
-        for st in string_to:
-            st.config(text="")
-        for mapping in abstraction:
-            for i, entry in enumerate(entry_from):
-                value = entry.get()
-                if len(mapping[1]) == 1 and mapping[1] in value:
-                    string = string_to[i].cget("text")
-                    if string != "":
-                        string += "\n"
-                    string += "'" + mapping[1] + "' - " + mapping[0]
-                    string_to[i].config(text=string)
-                    if tool_tips[i] != "":
-                        tool_tips[i] = tool_tips[i] + "\n" + mapping[3]
-                    else:
-                        tool_tips[i] = mapping[3]
-                    break
-        for i, tip in enumerate(tool_tips):
-            CreateToolTip(string_to[i], tip)
-        self.updating_labels = False
+        if self.abstraction is None:
+            if not self.extended.get():
+                for i, e in enumerate(self.entrylist):
+                    self.label_list[i].config(text=e.get())
+            else:
+                for i, e in enumerate(self.entrylist):
+                    self.label_list[i].config(text="")
+            return
+
+        if self.extended.get():
+            tool_tips = np.full(len(self.entrylist), "").tolist()
+            for st in self.label_list:
+                st.config(text="")
+            for mapping in self.abstraction:
+                for i, entry in enumerate(self.entrylist):
+                    value = entry.get()
+                    if len(mapping[1]) == 1 and mapping[1] in value:
+                        string = self.label_list[i].cget("text")
+                        if string != "":
+                            string += "\n"
+                        string += "'" + mapping[1] + "' - " + mapping[0]
+                        self.label_list[i].config(text=string)
+                        if tool_tips[i] != "":
+                            tool_tips[i] = tool_tips[i] + "\n" + mapping[3]
+                        else:
+                            tool_tips[i] = mapping[3]
+                        break
+            for i, tip in enumerate(tool_tips):
+                CreateToolTip(self.entrylist[i], tip)
+            self.updating_labels = False
+        else:
+            text = np.full(self.n, "", dtype=object)
+            label_text = np.full(self.n, "", dtype=object)
+            for i, e in enumerate(self.entrylist):
+                self.label_list[i].config(text="")
+                text[i] = e.get()
+            for i, t in enumerate(text):
+                for char in t:
+                    for j in range(i+1, self.n):
+                        text[j] = text[j].replace(char, "")
+            for mapping in self.abstraction:
+                for i, t in enumerate(text):
+                    if len(mapping[1]) == 1 and mapping[1] in t:
+                        text[i] = t.replace(mapping[1], "")
+                        label_text[i] += "\n" + " <" + mapping[0] + ">"
+                        break
+            for i, l in enumerate(self.label_list):
+
+                if text[i] == "":
+                    label_text[i] = label_text[i][2:]
+                newtext = text[i] + label_text[i]
+                l.config(text=newtext)
 
     def get(self):
         if self.canceled:
@@ -216,6 +248,8 @@ class SliderInput:
         return map
 
     def reset_groups(self):
+        if not self.configuration:
+            return
         blob_configuration = self.configuration.create_blob_configuration()
         newtexts = list(blob_configuration[1:, 1])
         new_n = len(newtexts)
@@ -224,9 +258,12 @@ class SliderInput:
             self.plus()
         while self.n > new_n:
             self.minus()
+        self.updating_labels = True
         for i, t in enumerate(newtexts):
             self.entry_var_list[i].set(t)
             self.sliderlist[i].set(1)
+        self.updating_labels = False
+        self.trigger_extend()
 
     def plus(self):
         # 1. create arrays
@@ -250,7 +287,7 @@ class SliderInput:
         valuelist[self.n-1].set(1)
 
         entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1],
-                                    state=("disabled" if self.fixed else "normal"))
+                                    state=("normal"))
         label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
         sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
                                         length=400, bg='white', highlightthickness=0, resolution=1)
@@ -337,6 +374,31 @@ class SliderInput:
         if self.matrix_costmap is not None:
             self.quit()
 
+    def trigger_extend(self):
+        if self.extended.get() == 1:
+            self.label_head_characters.grid(sticky='nswe', row=3, column=1, columnspan=2)
+            self.label_head_mapping.configure(width=24)
+            self.label_head_mapping.grid(column=3, columnspan=2)
+            if not self.fixed:
+                self.button_plus.configure(state="normal")
+                self.button_minus.configure(state="normal")
+            for i, e in enumerate(self.entrylist):
+                e.grid()
+                self.label_list[i].grid(column=3, columnspan=1)
+                self.label_list[i].configure(width=24)
+        else:
+            self.label_head_characters.grid_forget()
+            self.label_head_mapping.configure(width=44)
+            self.label_head_mapping.grid(column=1, columnspan=4)
+            self.button_plus.configure(state="disabled")
+            self.button_minus.configure(state="disabled")
+            for i, e in enumerate(self.entrylist):
+                e.grid_remove()
+                self.label_list[i].grid(column=2, columnspan=2)
+                self.label_list[i].configure(width=51)
+        self.root.update()
+        self.update_labels()
+
     def cancel(self):
         self.canceled = True
         self.quit()
@@ -351,7 +413,9 @@ if __name__ == "__main__":
     # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
     # result = slider_view(None, costmap=example_costmap())
     result = slider_view(None, n=4)
-    valid = costmap_is_valid(result)
-    print("Costmap result is valid: ", valid)
-    if valid:
+    try:
+        costmap_is_valid(result)
+        print("Costmap result is valid:", True)
         print_cost_map(result)
+    except:
+        print("Costmap result is valid:", False)
