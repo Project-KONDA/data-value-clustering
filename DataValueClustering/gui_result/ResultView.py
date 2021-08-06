@@ -93,6 +93,14 @@ class ResultView:
                                          self.configuration.distance_matrix_map["distance_matrix"],
                                          self.configuration.clusters_abstracted)
 
+        self.info = Label(self.summary_frame,
+                          text="The plot visualizes the calculated distances and clusters. "
+                               "Each dot represents an abstracted value representing a group of original values treated equivalently. "
+                               "Each dot is labeled with one of these original values. "
+                               "Each cluster is represented by a different color.", justify="left", anchor="w",
+                          wraplength=350)
+        self.info.grid(row=3, column=0, sticky='wesn', columnspan=1, pady=(0,20))
+
         # excel button
         self.button = Button(self.summary_frame, text='Open Excel File Showing Clustering', command=self.open_excel,
                              bg='pale green')
