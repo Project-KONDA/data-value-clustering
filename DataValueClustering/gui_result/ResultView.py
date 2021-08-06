@@ -13,6 +13,7 @@ from gui_result.validation_questionnaire import question_1_answers, question_2_a
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
+QUESTIONNAIRE_EXPLANATION = "Please answer the questions above so we can help you decide whether another iteration is necessary\nand how to modify the parameters correspondingly."
 NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration.\nPay attention to the advice given in the configuration views in blue text."
 SATISFIED = "According to your answers above, you are satisfied with the clustering.\nCongratulations, you are done!"
 
@@ -28,6 +29,7 @@ class ResultView:
     def __init__(self, master, configuration):
         self.root = Toplevel(master)
         self.root.title("Clustering Result & Evaluation")
+        self.root.config(bg='white')
         self.root.resizable(False, False)
 
         self.menu = Menu(self.root)
@@ -53,15 +55,18 @@ class ResultView:
         # self.clusters_abstracted = clusters_abstracted
 
         self.caption = StringVar()
-        self.caption.set("Explore the calculated clustering and perform the clustering evaluation via the questionnaire")
+        self.caption.set("Explore the calculated clustering and perform the clustering evaluation")
         self.caption = Label(self.root, anchor='c', textvariable=self.caption,
                                            text="test", bg='white',
-                                           font=('TkDefaultFont', 12, 'bold'), pady=10)
-        self.caption.grid(row=0, column=0, sticky='wesn', columnspan=2)
+                                           font=('TkDefaultFont', 12, 'bold'))
+        self.caption.grid(row=0, column=0, sticky='wesn', columnspan=2, pady=(10,0))
+
+        self.info = Label(self.root, anchor='c', text="After having familiarized yourself with the clustering, answer the questions to perform the evaluation so we can support you in the next iteration.", bg='white', )
+        self.info.grid(row=1, column=0, sticky='wesn', columnspan=2, pady=(0,10))
 
         # summary:
         self.summary_frame = Frame(self.root, bg="white", padx=10, pady=10, borderwidth=2, relief="groove")
-        self.summary_frame.grid(row=1, column=0, sticky='nwse', columnspan=1)
+        self.summary_frame.grid(row=2, column=0, sticky='nwse', columnspan=1)
 
         # # caption left side:
         # self.summary_caption = StringVar()
@@ -93,8 +98,8 @@ class ResultView:
         self.button.grid(row=3, column=0, sticky='we', columnspan=1, pady=20)
 
         # questionnaire:
-        self.questionnaire_frame = Frame(self.root, bg="white", padx=10, borderwidth=2, relief="groove")
-        self.questionnaire_frame.grid(row=1, column=1, sticky='nwse')
+        self.questionnaire_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")  # padx=10,
+        self.questionnaire_frame.grid(row=2, column=1, sticky='nwse')
 
         # # caption right side:
         # self.questionnaire_caption = StringVar()
@@ -126,7 +131,7 @@ class ResultView:
         self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
         self.suggestion_frame.grid(row=3, column=0, sticky='nw', columnspan=2)
 
-        self.advice_label = Label(self.suggestion_frame, text="", bg='white',
+        self.advice_label = Label(self.suggestion_frame, text=QUESTIONNAIRE_EXPLANATION, bg='white',
                                   font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left')
         self.advice_label.grid(row=0, column=0, sticky='nwes', columnspan=1)
 
@@ -134,7 +139,7 @@ class ResultView:
 
         # close button:
         self.button = Button(self.root, text='Close', command=self.close, bg='azure')
-        self.button.grid(row=2, column=0, sticky='we', columnspan=3)
+        self.button.grid(row=3, column=0, sticky='we', columnspan=3)
 
         self.root.update_idletasks()
         midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
@@ -150,7 +155,7 @@ class ResultView:
     def update_suggestion(self):
         if self.q1.get_result() is None and self.q2.get_result() is None and self.q3.get_result() is None and \
                 self.q4.get_result()[0] is None:
-            self.advice_label.config(text="", fg="blue")
+            self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
         elif (self.q1.get_result() == ValidationAnswer.HAPPY or self.q1.get_result() is None) \
                 and (self.q2.get_result() == ValidationAnswer.HAPPY or self.q2.get_result() is None) \
                 and (self.q3.get_result() == ValidationAnswer.HAPPY or self.q3.get_result() is None)\
