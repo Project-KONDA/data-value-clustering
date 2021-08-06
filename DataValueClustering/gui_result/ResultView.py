@@ -1,7 +1,8 @@
 import os
-from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu
+from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, LabelFrame
 import numpy as np
 
+from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration
 from gui_general.help_popup_gui import menu_help_result
@@ -65,8 +66,8 @@ class ResultView:
         self.info.grid(row=1, column=0, sticky='wesn', columnspan=2, pady=(0,10))
 
         # summary:
-        self.summary_frame = Frame(self.root, bg="white", padx=10, pady=10, borderwidth=2, relief="groove")
-        self.summary_frame.grid(row=2, column=0, sticky='nwse', columnspan=1)
+        self.summary_frame = LabelFrame(self.root, bg="white", padx=10, borderwidth=2, relief="groove", text=" Clustering Result ")
+        self.summary_frame.grid(row=2, column=0, sticky='nwse', columnspan=1, padx=5, pady=5)
 
         # # caption left side:
         # self.summary_caption = StringVar()
@@ -104,11 +105,11 @@ class ResultView:
         # excel button
         self.button = Button(self.summary_frame, text='Open Excel File Showing Clustering', command=self.open_excel,
                              bg='pale green')
-        self.button.grid(row=3, column=0, sticky='we', columnspan=1, pady=20)
+        self.button.grid(row=4, column=0, sticky='we', columnspan=1, pady=20)
 
         # questionnaire:
-        self.questionnaire_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")  # padx=10,
-        self.questionnaire_frame.grid(row=2, column=1, sticky='nwse')
+        self.questionnaire_frame = LabelFrame(self.root, bg="white", borderwidth=2, relief="groove", text=" Clustering Evaluation ", padx=10)  # padx=10,
+        self.questionnaire_frame.grid(row=2, column=1, sticky='nwse', padx=5, pady=5)
 
         # # caption right side:
         # self.questionnaire_caption = StringVar()
