@@ -26,7 +26,7 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
             self.check_vars_per_answer[i] = []
 
         for i, answer in enumerate(answers):
-            self.radio_buttons[i].configure(command = lambda j=i: self.activate_check_buttons(j))
+            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j))
             if answer[3]:
                 assert self.check_labels_per_answer[i] is not None
                 assert self.check_labels_per_answer[i]
@@ -51,24 +51,30 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
                 for j,v in enumerate(self.check_labels_per_answer[i]):
                     var = IntVar()
                     self.check_vars_per_answer[i].append(var)
-                    check_button = Checkbutton(self.scrollable_check_frame, variable=var, bg='white', anchor='w', text=(str(v)))
+                    check_button = Checkbutton(self.scrollable_check_frame, variable=var, bg='white', anchor='w', text=(str(v)), state="disabled")
                     check_button.grid(row=j + 10, column=0, sticky='w')
                     self.check_buttons_per_answer[i].append(check_button)
 
                 if previous_cluster is not None:
                     self.set_previously_selected_checks(previous_cluster)
 
+                if self.choice.get() == i:
+                    self.activate_check_buttons(i)
+
     def on_mousewheel(self, event):
         if self.scrollable_check_frame.winfo_height() > self.canvas.winfo_height():
             self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
-    def activate_check_buttons(self, j):
+    def update_advice_and_activate_check_buttons(self, j):
         self.update_advice()
+        self.activate_check_buttons(j)
+
+    def activate_check_buttons(self, j):
         for i, answer in enumerate(self.answers):
             if answer[3]:
-                for k,btn in enumerate(self.check_buttons_per_answer[i]):
+                for k, btn in enumerate(self.check_buttons_per_answer[i]):
                     btn.configure(state="disabled")
-        if self.answers[j,3]:
+        if self.answers[j, 3]:
             for k, btn in enumerate(self.check_buttons_per_answer[j]):
                 btn.configure(state="normal")
 
