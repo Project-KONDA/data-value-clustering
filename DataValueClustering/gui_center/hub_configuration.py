@@ -384,13 +384,18 @@ class HubConfiguration():
                 data_names.append(data_name)
         self.validation_answer_4 = answer, data_names
 
-    def export_cluster_as_txt(self, v):
+    def export_cluster_as_txt(self, cluster_label):
         now = str(datetime.now())
         now = now.replace(":", "-").replace(" ", "_").replace(".", "-")
-        data_name = "cluster_" + str(v) + "_" + str(now)
+        data_name = "cluster_" + str(cluster_label) + "_" + str(now)
         data_file = data_name + ".txt"
         path = str(Path(__file__).parent.parent) + "/data/" + data_file
-        write_data_values_to_file(path, self.fancy_cluster_list[v])
+        if cluster_label == "noise":
+            data = self.noise
+        else:
+            cluster_number = int(cluster_label) - 1
+            data = self.fancy_cluster_list[cluster_number]
+        write_data_values_to_file(path, data)
         return data_name
 
     def get_validation_answer_1(self):
