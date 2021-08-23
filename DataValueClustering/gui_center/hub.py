@@ -1,5 +1,6 @@
 import os
 import sys
+from math import floor, sqrt
 from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu
 from pathlib import Path
 from tkinter.messagebox import WARNING
@@ -59,7 +60,7 @@ def data_name_from_path(data_path):
     if data_path is None:
         return None
     data_path_split = data_path.split("\\")
-    last = data_path_split[len(data_path_split)-1]
+    last = data_path_split[len(data_path_split) - 1]
     last_split = last.split(".")
     data_name = last_split[0]
     return data_name
@@ -622,33 +623,67 @@ class Hub:
         else:
             abbreviations = np.array(abstraction_question_array, dtype=object)[:, 2]
             text = ""
+            count = 0
             for i, abb in enumerate(abbreviations):
-                if i > 0:
-                    text += ", "
-                    if i % 3 == 0:
-                        text += "\n"
-                text += abb + "=" + str(answers[i])
+                # if i > 0:
+                #     text += ", "
+                #     if i % 3 == 0:
+                #         text += "\n"
+                # text += abb + "=" + str(answers[i])
+                if answers[i]:
+                    count += 1
+                    if count > 1:
+                        if count % 5 == 1:
+                            text += ",\n"
+                        else:
+                            text += ",  "
+                    text += abb
             self.label_abstraction_config.configure(text=text)
 
     def update_frame_distance(self):
+
+        def calculateFontSize(string):
+            from PIL import ImageFont
+            font = ImageFont.truetype('arial', 12)
+            return font.getsize(string)[0]
+
+
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         if cost_map is None:
             self.label_distance_config.configure(text=NONE)
         else:
-            costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
-            text = "["
-            for i, v in enumerate(regex_np):
-                if i > 0:
-                    text += ", "
-                s = ""
-                for j, c in enumerate(v):
-                    s += c
-                text += str(s)
-            text += "]"
-            text += "\n" + str(costmap_weights)
+            n = int(floor(sqrt(len(cost_map))))
+            text = ""
+            for i in range(n):
+                # if type(cost_map[i])
+                s = "[" + str(cost_map[i]) + "]:\t"
+                if calculateFontSize(s) < 53:
+                    s += "\t"
+                for j in range(n):
+                    s2 = str(cost_map[(j, i)]) + "  "
+                    while calculateFontSize(s2) < 35:
+                        s2 += " "
+                    s += s2
+                if text == "":
+                    text = s
+                else:
+                    text += "\n" + s
+
+            # costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
+            # text = "["
+            # for i, v in enumerate(regex_np):
+            #     if i > 0:
+            #         text += ", "
+            #     s = ""
+            #     for j, c in enumerate(v):
+            #         s += c
+            #     text += str(s)
+            # text += "]"
+            # text += "\n" + str(costmap_weights)
             self.label_distance_config.configure(text=text)
 
     def update_frame_clustering(self):
+
         clustering_algorithm, clustering_answers = self.configuration.get_clustering_selection()
         if clustering_algorithm is None:
             self.label_clustering_config.configure(text=NONE)
@@ -658,7 +693,7 @@ class Hub:
             if clustering_parameters is None:
                 self.label_clustering_config.configure(text=text)
             else:
-                text += "\nParameters: "
+                text += "\nParameters:\n\t"
                 for i, key in enumerate(clustering_parameters.keys()):
                     if i > 0:
                         text += ", "
@@ -666,6 +701,7 @@ class Hub:
                             text += "\n\t"
                     text += key + "=" + str(clustering_parameters[key])
                 self.label_clustering_config.configure(text=text)
+
 
 
 if __name__ == "__main__":
