@@ -18,14 +18,14 @@ class ValidationQuestion:
         self.label_text.set(self.question)
         self.label = Label(self.frame, anchor='w', textvariable=self.label_text, bg='white',
                            font=('TkDefaultFont', 12, 'bold'))
-        self.label.grid(row=0, column=1, sticky='w', columnspan=2)
+        self.label.grid(row=0, column=1, sticky='w', columnspan=3)
 
         # explanation label:
         self.explanation_text = StringVar()
         self.explanation_text.set(self.explanation)
         self.label_explanation = Label(self.frame, anchor='nw', textvariable=self.explanation_text, bg='white',
                                        wraplength=800, justify='left')
-        self.label_explanation.grid(row=1, column=1, sticky='w', columnspan=2)
+        self.label_explanation.grid(row=1, column=1, sticky='w', columnspan=3)
 
     def get_result(self):
         pass

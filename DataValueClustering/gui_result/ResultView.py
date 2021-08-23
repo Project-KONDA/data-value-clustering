@@ -4,7 +4,7 @@ import numpy as np
 
 from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
-from gui_center.hub_configuration import HubConfiguration
+from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
@@ -135,7 +135,11 @@ class ResultView:
                                              question_3, question_3_answers, self.update_suggestion, self.configuration.get_validation_answer_3())
         self.q3.frame.grid(row=2, column=0, sticky='nsew')
 
-        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, self.configuration.get_validation_answer_4()[0], (None, self.configuration.get_validation_answer_4()[1]))
+        cluster_range_plus = list(range(min(self.configuration.clusters_abstracted)+1, max(self.configuration.clusters_abstracted)+2))
+        cluster_range_plus_noise = ["noise" if x==0 else x for x in cluster_range_plus]
+        check_labels_per_answer = np.array([[], cluster_range_plus_noise], dtype=object)
+        previosly_selected_check_labels = self.previous_cluster_file_names_to_labels(self.configuration.get_validation_answer_4()[1])
+        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, self.configuration.get_validation_answer_4()[0], [[], previosly_selected_check_labels], check_labels_per_answer)
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
         self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
@@ -162,6 +166,15 @@ class ResultView:
         self.update_suggestion()
         self.root.mainloop()
 
+    def previous_cluster_file_names_to_labels(self, previous_cluster_names):
+        if previous_cluster_names is None:
+            return None
+        labels = []
+        for i, name in enumerate(previous_cluster_names):
+            label = cluster_label_from_txt_name(name)
+            labels.append(label)
+        return labels
+
     def update_suggestion(self):
         if self.q1.get_result() is None and self.q2.get_result() is None and self.q3.get_result() is None and \
                 self.q4.get_result()[0] is None:
@@ -173,7 +186,6 @@ class ResultView:
             self.advice_label.config(text=SATISFIED, fg="green")
         else:
             self.advice_label.config(text=NOT_SATISFIED, fg="red")
-
 
     def open_excel(self):
         if self.configuration.excel_save_path is None:
@@ -227,7 +239,9 @@ class ResultView:
         self.configuration.set_validation_answer_1(self.q1.get_result())
         self.configuration.set_validation_answer_2(self.q2.get_result())
         self.configuration.set_validation_answer_3(self.q3.get_result())
-        self.configuration.set_validation_answer_4(self.q4.get_result())
+        answer, selected_checks_per_answer = self.q4.get_result()
+        selected_clusters = selected_checks_per_answer[1]
+        self.configuration.set_validation_answer_4(answer, selected_clusters)
 
 
 if __name__ == '__main__':

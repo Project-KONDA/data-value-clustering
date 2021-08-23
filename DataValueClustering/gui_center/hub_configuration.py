@@ -50,9 +50,9 @@ def create_hub_configuration_from_dict(dict):
     return hub
 
 
-def cluster_number_from_txt_name(txt_name):
+def cluster_label_from_txt_name(txt_name):
     split = txt_name.split("_")
-    return split[1]
+    return int(split[1])
 
 
 class HubConfiguration():
@@ -369,20 +369,20 @@ class HubConfiguration():
         assert (answer is None or answer in question_3_answers[:, 0].tolist())
         self.validation_answer_3 = answer
 
-    def set_validation_answer_4(self, answer):
-        assert (answer[0] is None or answer[0] in question_4_answers[:, 0].tolist())
-        assert (answer[1] is None or answer[1] is None or len(answer[1]) > 0)
-        if answer[1] is not None:
-            for i, v in enumerate(answer[1]):
+    def set_validation_answer_4(self, answer, clusters):
+        assert (answer is None or answer in question_4_answers[:, 0].tolist())
+        assert (clusters is None or clusters is None or len(clusters) > 0)
+        if clusters is not None:
+            for i, v in enumerate(clusters):
                 assert (type(v) == int)
                 assert (v < self.no_clusters)
         data_names = None
-        if answer[1] is not None:
+        if clusters is not None:
             data_names = list()
-            for i, v in enumerate(answer[1]):
+            for i, v in enumerate(clusters):
                 data_name = self.export_cluster_as_txt(v)
                 data_names.append(data_name)
-        self.validation_answer_4 = answer[0], data_names
+        self.validation_answer_4 = answer, data_names
 
     def export_cluster_as_txt(self, v):
         now = str(datetime.now())
