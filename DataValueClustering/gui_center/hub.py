@@ -653,21 +653,22 @@ class Hub:
             self.label_distance_config.configure(text=NONE)
         else:
             n = int(floor(sqrt(len(cost_map))))
-            text = "{" + str(cost_map[()])
+            text = ""
             for i in range(n):
                 # if type(cost_map[i])
                 s = "[" + str(cost_map[i]) + "]:\t"
-                # print(calculateFontSize(s))
-                if calculateFontSize(s) < 46:
+                if calculateFontSize(s) < 53:
                     s += "\t"
                 for j in range(n):
                     s2 = str(cost_map[(j, i)]) + "  "
                     while calculateFontSize(s2) < 35:
                         s2 += " "
                     s += s2
-                text += "\n  " + s
+                if text == "":
+                    text = s
+                else:
+                    text += "\n" + s
 
-            text += "\n}"
             # costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
             # text = "["
             # for i, v in enumerate(regex_np):
