@@ -107,11 +107,13 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.canvas.yview_moveto(0)
 
         s1 = StringVar()
-        s1.set("Abstracted values")
+        s1.set("Abstracted Values")
         abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
-                                         bg='lemonchiffon', font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
-        abstraction_target_label.grid(row=5, column=0, sticky='nwse')
+                                         bg='ivory', font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
+        abstraction_target_label.grid(row=5, column=1, sticky='nwse', pady=4)
         self.labels.append(abstraction_target_label)
+        CreateToolTip(abstraction_target_label,
+                      "Abstracted data values representing all original values shown on the left hand side")
 
         # calculate wrap lengths:
         self.scrollable_result_frame.update()
@@ -120,27 +122,27 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         wrap_right = self.w - 1 - left_caption_width
 
         s2 = StringVar()
-        s2.set("Original values")
-        abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
+        s2.set("Preview of Simple Clustering")
+        abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='lemonchiffon',
                                          wraplength=wrap_right, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
-        abstraction_source_label.grid(row=5, column=1, sticky='nwse')
+        abstraction_source_label.grid(row=5, column=0, sticky='nwse', pady=4)
         self.labels.append(abstraction_source_label)
+        CreateToolTip(abstraction_source_label,
+                      "Clusters of original data values represented by the abstracted value shown on the right hand side")
 
         for i, key in enumerate(abstraction_dict):
             s1 = StringVar()
             s1.set(key)
             abstraction_target_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1, wraplength=wrap_left,
-                                             bg='lemonchiffon')
-            CreateToolTip(abstraction_target_content_label, "Abstracted data value representing all original values shown on the right hand side")
-            abstraction_target_content_label.grid(row=i + 10, column=0, sticky='nwse')
+                                             bg='ivory')
+            abstraction_target_content_label.grid(row=i + 10, column=1, sticky='nwse', pady=4)
             self.labels.append(abstraction_target_content_label)
 
             s2 = StringVar()
             s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
-            abstraction_source_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
+            abstraction_source_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='lemonchiffon',
                                              wraplength=wrap_right, justify=LEFT)
-            CreateToolTip(abstraction_source_content_label, "Original data values represented by the abstracted value shown on the left hand side")
-            abstraction_source_content_label.grid(row=i + 10, column=1, sticky='nwse')
+            abstraction_source_content_label.grid(row=i + 10, column=0, sticky='nwse', pady=4)
             self.labels.append(abstraction_source_content_label)
 
     def toggle_show_hide(self):
