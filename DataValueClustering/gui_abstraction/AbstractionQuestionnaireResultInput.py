@@ -1,4 +1,4 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button
 
 import gui_abstraction.abstraction_questions
 from gui_general import CreateToolTip
@@ -6,8 +6,11 @@ from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
 
-CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
-CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details."
+SHOW = "▶"
+HIDE = "◀"
+
+# CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
+CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details"
 
 DEFAULT_CONFIG = "Default Configuration"
 MANUAL_CONFIG = "Manual Configuration"
@@ -30,13 +33,13 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     """ binary questionaire GUI for configuring the abstraction function """
 
     def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
-        self.caption_text = CAPTION_PART_ONE + CAPTION_PART_TWO
-        self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly."
+        self.caption_text = CAPTION_PART_ONE
+        self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values\nand that do not alter the values’ meaning significantly.\nA preview of the simple clustering achieved through the abstraction is shown on demand."
         if suggestion is not None:
             suggestion = "Advice based on the clustering evaluation:" + suggestion
         super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion)
 
-        self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
+        # self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root))
@@ -72,7 +75,10 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
         self.data = data
         self.labels = []
+        self.preview_shown = False
         super().selection_changed()
+        if self.data is not None:
+            self.hide_preview()
 
     def option_changed(self, *args):
         selected_option = self.selected_predefined_option.get()
@@ -85,23 +91,9 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def apply(self):
         if self.data is None:
-            self.scrollable_result_frame.destroy()
-            self.canvas.destroy()
-            self.scrollbar.destroy()
-            self.root.grid_columnconfigure((1), minsize=0)
-            self.question_caption_label.destroy()
-
-            self.caption_text = CAPTION_PART_ONE
-
-            self.question_caption = StringVar()
-            self.question_caption.set(self.caption_text)
-            self.question_caption_label = Label(self.root, anchor='c', justify="center",
-                                                textvariable=self.question_caption, bg='white',
-                                                font=('TkDefaultFont', 12, 'bold'), pady=10)
-            self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=2)
-            if self.label_suggested is not None:
-                self.label_suggested.configure(wraplengt = 800)
+            self.destroy_preview()
             return
+
         answers = self.get()
         abstraction_f = get_abstraction_method(answers)
         values_abstracted, abstraction_dict = abstraction_f(self.data[0:100])
@@ -118,9 +110,13 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         s2 = StringVar()
         s2.set("Original values")
         abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
-                                         wraplength=540, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)  # TODO: calculate wraplength
+                                         wraplength=500, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)  # TODO: calculate wraplength
         abstraction_source_label.grid(row=5, column=1, sticky='nwse')
         self.labels.append(abstraction_source_label)
+
+        self.button_show_hide = Button(self.root, text=SHOW, command=self.show_hide, width=1)
+        self.button_show_hide.grid(row=3, column=1, sticky='ns', pady=5, padx=1)
+        CreateToolTip(self.button_show_hide, "Show/hide abstraction preview")
 
         for i, key in enumerate(abstraction_dict):
             s1 = StringVar()
@@ -133,10 +129,49 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             s2 = StringVar()
             s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
             abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
-                                             wraplength=540, justify=LEFT)  # TODO: calculate wraplength
+                                             wraplength=500, justify=LEFT)  # TODO: calculate wraplength
             CreateToolTip(abstraction_source_label, "Original data values represented by the abstracted value shown on the left hand side")
             abstraction_source_label.grid(row=i + 10, column=1, sticky='nwse')
             self.labels.append(abstraction_source_label)
+
+    def show_hide(self):
+        if self.preview_shown:
+            self.button_show_hide.configure(text=SHOW)
+            self.hide_preview()
+        else:
+            self.button_show_hide.configure(text=HIDE)
+            self.show_preview()
+        self.preview_shown = not self.preview_shown
+
+    def show_preview(self):
+        self.around_canvas_frame.grid()
+        self.scrollable_result_frame.grid()
+        self.canvas.grid()
+        self.scrollbar.grid()
+
+    def hide_preview(self):
+        self.around_canvas_frame.grid_remove()
+        self.scrollable_result_frame.grid_remove()
+        self.canvas.grid_remove()
+        self.scrollbar.grid_remove()
+        self.root.grid_columnconfigure((1), minsize=0)
+
+    def destroy_preview(self):
+        self.around_canvas_frame.destroy()
+        self.scrollable_result_frame.destroy()
+        self.canvas.destroy()
+        self.scrollbar.destroy()
+        self.root.grid_columnconfigure((1), minsize=0)
+        self.question_caption_label.destroy()
+        self.caption_text = CAPTION_PART_ONE
+        self.question_caption = StringVar()
+        self.question_caption.set(self.caption_text)
+        self.question_caption_label = Label(self.root, anchor='c', justify="center",
+                                            textvariable=self.question_caption, bg='white',
+                                            font=('TkDefaultFont', 12, 'bold'), pady=10)
+        self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=2)
+        if self.label_suggested is not None:
+            self.label_suggested.configure(wraplengt=800)
 
 
 if __name__ == '__main__':
