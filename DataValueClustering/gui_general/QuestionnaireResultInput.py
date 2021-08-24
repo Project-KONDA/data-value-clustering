@@ -66,8 +66,9 @@ class QuestionnaireResultInput(ABC):
 
 
         # question checkboxes:
+        self.root.rowconfigure(3, weight=1)
         self.question_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")
-        self.question_frame.grid(row=3, column=0, sticky='nw', padx=5, pady=5)
+        self.question_frame.grid(row=3, column=0, sticky='nsew', padx=5, pady=5)
 
         for i, question in enumerate(self.config_question):
             j = start_row + i
@@ -93,8 +94,10 @@ class QuestionnaireResultInput(ABC):
 
 
         # scrollable result:
-        self.canvas = Canvas(self.root, bg="white", highlightthickness=0, borderwidth=2, relief="groove")
-        self.scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
+        self.around_canvas_frame = Frame(self.root, bg="white", relief="groove", borderwidth=2)
+        self.around_canvas_frame.grid_rowconfigure(0, weight=1)
+        self.canvas = Canvas(self.around_canvas_frame, bg="white", highlightthickness=0)
+        self.scrollbar = Scrollbar(self.around_canvas_frame, orient="vertical", command=self.canvas.yview)
         self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
         self.scrollable_result_frame = Frame(self.canvas, bg="white")
         self.scrollable_result_frame.bind(
@@ -103,14 +106,17 @@ class QuestionnaireResultInput(ABC):
                 scrollregion=self.canvas.bbox("all")
             )
         )
+        self.scrollable_result_frame.columnconfigure(3, weight=1)
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_result_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.canvas.grid(row=3, column=1, sticky='nswe', padx=5, pady=5)
-        self.scrollbar.grid(row=3, column=3, sticky='nswe')
+        self.around_canvas_frame.grid(row=3, column=2, sticky='nsw', pady=5, padx=5)
+        self.canvas.grid(row=0, column=0, sticky='nswe')
+        self.root.grid_rowconfigure(4, weight=1)
+        self.scrollbar.grid(row=0, column=5, sticky='nswe')
 
         # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
-        self.button.grid(row=4, column=0, sticky='nswe', columnspan=4)
+        self.button.grid(row=4, column=0, sticky='nswe', columnspan=6)
 
     def on_mousewheel(self, event):
         if self.scrollable_result_frame.winfo_height() > self.canvas.winfo_height():
