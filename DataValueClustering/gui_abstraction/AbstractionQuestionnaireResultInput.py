@@ -128,7 +128,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         abstraction_source_label.grid(row=5, column=0, sticky='nwse', pady=4)
         self.labels.append(abstraction_source_label)
         CreateToolTip(abstraction_source_label,
-                      "Clusters of original data values represented by the abstracted value shown on the right hand side")
+                      "Clusters of the first 100 original data values represented by the abstracted value shown on the right hand side")
 
         for i, key in enumerate(abstraction_dict):
             s1 = StringVar()
