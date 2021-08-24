@@ -80,7 +80,7 @@ def hierarchical_n_clusters_config(no_values):
     explanation = "Maximum number of clusters created. Higher values will yield more clusters. Increase if there is one giant cluster that you want being split up into smaller clusters."
     min_n_clusters = 2
     max_n_clusters = no_values
-    suggestion_value = min(7, no_values // 2)
+    suggestion_value = 7 if no_values is None else min(7, no_values // 2)
     resolution = 1
     deactivatable = True
     default_active = True

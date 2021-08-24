@@ -71,7 +71,6 @@ class ClusterConfigurationInput:
             self.parameters[i] = frame_init(self.scrollable_frame)
 
         for i, dep in enumerate(self.dependencies):
-            print(str(dep))
             param1 = self.get_frame_with_name(dep[0])
             param2 = self.get_frame_with_name(dep[1])
             param1.add_dependency(param2, dep[2], dep[3])
