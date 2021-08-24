@@ -73,6 +73,10 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.predefined_option_menu = OptionMenu(self.question_frame, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
         self.predefined_option_menu.grid(sticky='ne', row=2, column=0, padx=10)
 
+        self.button_show_hide = Button(self.root, text=SHOW, command=self.toggle_show_hide, width=1)
+        self.button_show_hide.grid(row=3, column=1, sticky='ns', pady=5, padx=1)
+        CreateToolTip(self.button_show_hide, "Show/hide abstraction preview")
+
         self.data = data
         self.labels = []
         self.preview_shown = False
@@ -100,6 +104,8 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         for i in range(len(self.labels)):
             self.labels[i].destroy()
 
+        self.canvas.yview_moveto(0)
+
         s1 = StringVar()
         s1.set("Abstracted values")
         abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
@@ -107,34 +113,37 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         abstraction_target_label.grid(row=5, column=0, sticky='nwse')
         self.labels.append(abstraction_target_label)
 
+        # calculate wrap lengths:
+        self.scrollable_result_frame.update()
+        left_caption_width = abstraction_target_label.winfo_width()
+        wrap_left = left_caption_width
+        wrap_right = self.w - 1 - left_caption_width
+
         s2 = StringVar()
         s2.set("Original values")
         abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
-                                         wraplength=500, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)  # TODO: calculate wraplength
+                                         wraplength=wrap_right, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
         abstraction_source_label.grid(row=5, column=1, sticky='nwse')
         self.labels.append(abstraction_source_label)
-
-        self.button_show_hide = Button(self.root, text=SHOW, command=self.show_hide, width=1)
-        self.button_show_hide.grid(row=3, column=1, sticky='ns', pady=5, padx=1)
-        CreateToolTip(self.button_show_hide, "Show/hide abstraction preview")
 
         for i, key in enumerate(abstraction_dict):
             s1 = StringVar()
             s1.set(key)
-            abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
+            abstraction_target_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1, wraplength=wrap_left,
                                              bg='lemonchiffon')
-            CreateToolTip(abstraction_target_label, "Abstracted data value representing all original values shown on the right hand side")
-            abstraction_target_label.grid(row=i + 10, column=0, sticky='nwse')
-            self.labels.append(abstraction_target_label)
+            CreateToolTip(abstraction_target_content_label, "Abstracted data value representing all original values shown on the right hand side")
+            abstraction_target_content_label.grid(row=i + 10, column=0, sticky='nwse')
+            self.labels.append(abstraction_target_content_label)
+
             s2 = StringVar()
             s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
-            abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
-                                             wraplength=500, justify=LEFT)  # TODO: calculate wraplength
-            CreateToolTip(abstraction_source_label, "Original data values represented by the abstracted value shown on the left hand side")
-            abstraction_source_label.grid(row=i + 10, column=1, sticky='nwse')
-            self.labels.append(abstraction_source_label)
+            abstraction_source_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='ivory',
+                                             wraplength=wrap_right, justify=LEFT)
+            CreateToolTip(abstraction_source_content_label, "Original data values represented by the abstracted value shown on the left hand side")
+            abstraction_source_content_label.grid(row=i + 10, column=1, sticky='nwse')
+            self.labels.append(abstraction_source_content_label)
 
-    def show_hide(self):
+    def toggle_show_hide(self):
         if self.preview_shown:
             self.button_show_hide.configure(text=SHOW)
             self.hide_preview()
@@ -145,31 +154,14 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def show_preview(self):
         self.around_canvas_frame.grid()
-        self.scrollable_result_frame.grid()
-        self.canvas.grid()
-        self.scrollbar.grid()
 
     def hide_preview(self):
         self.around_canvas_frame.grid_remove()
-        self.scrollable_result_frame.grid_remove()
-        self.canvas.grid_remove()
-        self.scrollbar.grid_remove()
-        self.root.grid_columnconfigure((1), minsize=0)
 
     def destroy_preview(self):
         self.around_canvas_frame.destroy()
-        self.scrollable_result_frame.destroy()
-        self.canvas.destroy()
-        self.scrollbar.destroy()
+        self.button_show_hide.destroy()
         self.root.grid_columnconfigure((1), minsize=0)
-        self.question_caption_label.destroy()
-        self.caption_text = CAPTION_PART_ONE
-        self.question_caption = StringVar()
-        self.question_caption.set(self.caption_text)
-        self.question_caption_label = Label(self.root, anchor='c', justify="center",
-                                            textvariable=self.question_caption, bg='white',
-                                            font=('TkDefaultFont', 12, 'bold'), pady=10)
-        self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=2)
         if self.label_suggested is not None:
             self.label_suggested.configure(wraplengt=800)
 
