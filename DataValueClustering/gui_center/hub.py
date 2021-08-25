@@ -619,7 +619,10 @@ class Hub:
                 self.button_clustering_play.configure(state="normal", bg='paleturquoise1')
             else:
                 # self.clustering_progress['value'] = 0
-                self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
+                if self.configuration.clustering_configuration_valid():
+                    self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='orange')
+                else:
+                    self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
                 self.button_clustering_play.configure(state="disabled", bg=self.original_button_color)
 
         if self.configuration.json_saved:
