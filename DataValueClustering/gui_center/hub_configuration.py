@@ -300,9 +300,8 @@ class HubConfiguration():
                and self.distance_result_valid()
 
     def clustering_execution_possible(self):
-        # return self.clustering_configuration_possible() \
-        #     and self.clustering_configuration_valid()
-        return self.clustering_configuration_valid()
+        return self.clustering_configuration_possible() \
+            and self.clustering_configuration_valid()
 
     def clustering_configuration_is_default(self):
         from clustering.hierarchical_clustering import hierarchical_n_clusters_config
