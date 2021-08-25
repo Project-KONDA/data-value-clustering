@@ -106,18 +106,17 @@ class Hub:
         self.refined_clustering_frame.grid(sticky='nswe', row=4, column=0, columnspan=2, padx=5, pady=5)
 
         "buttons"
-        button_width_part = self.root.winfo_screenwidth() / 9
-        button_width_full = button_width_part + button_width_part * 1/2
-        button_height = self.root.winfo_screenheight() / 25
-        pixelVirtual = PhotoImage(width=1, height=1)
+        button_width_part = 30
+        button_width_full = 50
+        button_height = 2
         self.button_data = Button(self.data_frame, text='Configure Data...', command=self.configure_data,
-                                  width=button_width_full, height=button_height, bg='paleturquoise1', image=pixelVirtual, compound="c")
+                                  width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_abstraction = Button(self.simple_clustering_frame, text='Configure Abstraction...', command=self.configure_abstraction,
-                                         width=button_width_full, height=button_height, bg='paleturquoise1', image=pixelVirtual, compound="c")
+                                         width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_distance = Button(self.refined_clustering_frame, text='Configure Dissimilarities...', command=self.configure_distance,
-                                      width=button_width_full, height=button_height, state="disabled", image=pixelVirtual, compound="c")
+                                      width=button_width_full, height=button_height, state="disabled")
         self.button_clustering = Button(self.refined_clustering_frame, text='Configure Clustering...', command=self.configure_clustering,
-                                        width=button_width_part, height=button_height, state="disabled", image=pixelVirtual, compound="c")
+                                        width=button_width_part, height=button_height, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=8, column=1, columnspan=2, padx=10, pady=10)
