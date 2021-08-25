@@ -1,7 +1,8 @@
 import os
 import sys
 from math import floor, sqrt
-from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu, Checkbutton, IntVar
+from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu, Checkbutton, IntVar, LabelFrame, \
+    PhotoImage
 from pathlib import Path
 from tkinter.messagebox import WARNING
 from tkinter.ttk import Progressbar
@@ -80,10 +81,10 @@ class Hub:
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
                                  font=('TkDefaultFont', 14, 'bold'), anchor="c", justify="center")
-        self.label_title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
+        self.label_title.grid(sticky='nswe', row=0, column=0, columnspan=4, pady=(10, 0))
 
         self.label_explanation = Label(self.root, text="Perform the following steps to obtain a clustering of your data.\nThe steps required next are highlighted in blue.", bg="white")
-        self.label_explanation.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 10))
+        self.label_explanation.grid(sticky='nswe', row=1, column=0, columnspan=4, pady=(0, 10))
 
         "menu"
         self.menu = Menu(self.root)
@@ -95,48 +96,60 @@ class Hub:
         self.root.config(menu=self.menu)
         self.root.resizable(False, False)
 
+        "frames"
+        self.data_frame = LabelFrame(self.root, text=' Data ', bg="white")
+        self.simple_clustering_frame = LabelFrame(self.root, text=' Simple Clustering ', bg="white")
+        self.refined_clustering_frame = LabelFrame(self.root, text=' Refined Clustering ', bg="white")
+
+        self.data_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=5)
+        self.refined_clustering_frame.grid(sticky='nswe', row=4, column=0, columnspan=2, padx=5, pady=5)
+
         "buttons"
-        button_width = 50
-        self.button_data = Button(self.root, text='Configure Data...', command=self.configure_data,
-                                  width=button_width, height=2, bg='paleturquoise1')
-        self.button_abstraction = Button(self.root, text='Configure Abstraction...', command=self.configure_abstraction,
-                                         width=button_width, height=2, bg='paleturquoise1')
-        self.button_distance = Button(self.root, text='Configure Dissimilarities...', command=self.configure_distance,
-                                      width=button_width, height=2, state="disabled")
-        self.button_clustering = Button(self.root, text='Configure Clustering...', command=self.configure_clustering,
-                                        width=button_width, height=2, state="disabled")
+        button_width_part = self.root.winfo_screenwidth() / 9
+        button_width_full = button_width_part + button_width_part * 1/2
+        button_height = self.root.winfo_screenheight() / 25
+        pixelVirtual = PhotoImage(width=1, height=1)
+        self.button_data = Button(self.data_frame, text='Configure Data...', command=self.configure_data,
+                                  width=button_width_full, height=button_height, bg='paleturquoise1', image=pixelVirtual, compound="c")
+        self.button_abstraction = Button(self.simple_clustering_frame, text='Configure Abstraction...', command=self.configure_abstraction,
+                                         width=button_width_full, height=button_height, bg='paleturquoise1', image=pixelVirtual, compound="c")
+        self.button_distance = Button(self.refined_clustering_frame, text='Configure Dissimilarities...', command=self.configure_distance,
+                                      width=button_width_full, height=button_height, state="disabled", image=pixelVirtual, compound="c")
+        self.button_clustering = Button(self.refined_clustering_frame, text='Configure Clustering...', command=self.configure_clustering,
+                                        width=button_width_part, height=button_height, state="disabled", image=pixelVirtual, compound="c")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=8, column=1, columnspan=2, padx=10, pady=10)
         self.button_distance.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
-        self.button_clustering.grid(sticky='nwe', row=14, column=2, columnspan=1, padx=10, pady=10)
+        self.button_clustering.grid(sticky='new', row=14, column=2, columnspan=1, padx=10, pady=10)
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
         CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
         CreateToolTip(self.button_distance, "Specify how certain features influence the dissimilarity between data values.")
         CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
 
-        self.button_distance_play = Button(self.root, text='▶', command=self.execute_distance,
+        self.button_distance_play = Button(self.refined_clustering_frame, text='▶', command=self.execute_distance,
                                            width=4, height=2, state="disabled")
         self.button_distance_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10, rowspan=2)
-        self.button_clustering_play = Button(self.root, text='▶', command=self.execute_clustering,
+        self.button_clustering_play = Button(self.refined_clustering_frame, text='▶', command=self.execute_clustering,
                                              width=4, height=2, state="disabled")
         self.button_clustering_play.grid(sticky='ne', row=15, column=2, padx=10, pady=10, rowspan=2)
 
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'), width=45, height=2)
-        self.button_show_result.grid(sticky='nswe', row=17, column=1, columnspan=3, padx=10, pady=10)
+        self.button_show_result.grid(sticky='nswe', row=17, column=0, padx=10, pady=10)
 
         self.button_save_result = Button(self.root, text='Save', command=self.menu_save,
                                          font=('Sans', '10', 'bold'), height=2)
-        self.button_save_result.grid(sticky='nswe', row=17, column=4, padx=10, pady=10)
+        self.button_save_result.grid(sticky='nswe', row=17, column=1, padx=10, pady=10)
 
         self.checked_clustering = IntVar(value=1)
-        self.checkbutton_clustering = Checkbutton(self.root, variable=self.checked_clustering, state="disabled",
-                                                  bg="white", command=self.check_default_clustering)
-        self.checkbutton_clustering.grid(sticky='swe', row=14, column=1, columnspan=1, padx=10, pady=10)
-        self.checkbutton_clustering_label = Label(self.root, text="Default", bg="white", width=7)
-        self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
+        self.checkbutton_clustering = Checkbutton(self.refined_clustering_frame, variable=self.checked_clustering, state="disabled",
+                                                  bg="white", command=self.check_default_clustering, text="Default")
+        self.checkbutton_clustering.grid(sticky='nsw', row=14, column=1, columnspan=1, padx=(10,0), pady=10)
+        # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
+        # self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
 
         CreateToolTip(self.button_distance_play, "Execute dissimilarity calculation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering.")
@@ -159,10 +172,10 @@ class Hub:
         self.original_button_color = self.button_show_result.cget("background")
 
         "progress labels"
-        self.label_data_progress = Label(self.root, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
-        self.label_abstraction_progress = Label(self.root, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
-        self.label_distance_progress = Label(self.root, text=DISTANCE_NOT_CONFIGURED, bg="white", fg="red")
-        self.label_clustering_progress = Label(self.root, text=CLUSTERING_NOT_CALC, bg="white", fg="red")
+        self.label_data_progress = Label(self.data_frame, text=DATA_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_abstraction_progress = Label(self.simple_clustering_frame, text=ABSTRACTION_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_distance_progress = Label(self.refined_clustering_frame, text=DISTANCE_NOT_CONFIGURED, bg="white", fg="red")
+        self.label_clustering_progress = Label(self.refined_clustering_frame, text=CLUSTERING_NOT_CALC, bg="white", fg="red")
 
         self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=2, padx=20, pady=2)
         self.label_abstraction_progress.grid(sticky='nw', row=9, column=1, columnspan=2, padx=20, pady=2)
@@ -175,10 +188,10 @@ class Hub:
         CreateToolTip(self.label_clustering_progress, "Status of the clustering")
 
         "advice labels"
-        self.label_data_advice = Label(self.root, text="", bg="white", fg="blue")
-        self.label_abstraction_advice = Label(self.root, text="", bg="white", fg="blue")
-        self.label_distance_advice = Label(self.root, text="", bg="white", fg="blue")
-        self.label_clustering_advice = Label(self.root, text="", bg="white", fg="blue")
+        self.label_data_advice = Label(self.data_frame, text="", bg="white", fg="blue")
+        self.label_abstraction_advice = Label(self.simple_clustering_frame, text="", bg="white", fg="blue")
+        self.label_distance_advice = Label(self.refined_clustering_frame, text="", bg="white", fg="blue")
+        self.label_clustering_advice = Label(self.refined_clustering_frame, text="", bg="white", fg="blue")
 
         self.label_data_advice.grid(sticky='nw', row=7, column=1, columnspan=1, padx=20, pady=2)
         self.label_abstraction_advice.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=2)
@@ -190,38 +203,40 @@ class Hub:
         # CreateToolTip(self.label_distance_advice, "Status of the distances")
         # CreateToolTip(self.label_clustering_advice, "Status of the clustering")
 
-        "frames"
-        self.frame_data = Frame(self.root, bg="grey90", width=200, height=100)
-        self.frame_abstraction = Frame(self.root, bg="grey90", width=200, height=100)
-        self.frame_distance = Frame(self.root, bg="grey90", width=200, height=100)
-        self.frame_clustering = Frame(self.root, bg="grey90", width=200, height=100)
+        "preview frames"
+        frame_width = button_width_full
+        self.preview_data = Frame(self.data_frame, bg="grey90", width=frame_width, height=100)
+        self.preview_abstraction = Frame(self.simple_clustering_frame, bg="grey90", width=frame_width, height=100)
+        self.preview_distance = Frame(self.refined_clustering_frame, bg="grey90", width=frame_width, height=100)
+        self.preview_clustering = Frame(self.refined_clustering_frame, bg="grey90", width=frame_width, height=100)
 
-        self.frame_data.configure(highlightbackground="grey", highlightthickness=1)
-        self.frame_abstraction.configure(highlightbackground="grey", highlightthickness=1)
-        self.frame_distance.configure(highlightbackground="grey", highlightthickness=1)
-        self.frame_clustering.configure(highlightbackground="grey", highlightthickness=1)
+        self.preview_data.configure(highlightbackground="grey", highlightthickness=1)
+        self.preview_abstraction.configure(highlightbackground="grey", highlightthickness=1)
+        self.preview_distance.configure(highlightbackground="grey", highlightthickness=1)
+        self.preview_clustering.configure(highlightbackground="grey", highlightthickness=1)
 
-        self.frame_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.frame_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.frame_distance.grid(sticky='nswe', row=11, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.frame_clustering.grid(sticky='nswe', row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_distance.grid(sticky='nswe', row=11, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_clustering.grid(sticky='nswe', row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
 
-        "labels in frames"
-        self.label_data_config_heading = Label(self.frame_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left")
-        self.label_abstraction_config_heading = Label(self.frame_abstraction, text="Current Abstraction Configuration:", bg="grey90", anchor="w",
-                                              justify="left")
-        self.label_distance_config_heading = Label(self.frame_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left")
-        self.label_clustering_config_heading = Label(self.frame_clustering, text="Current Clustering Configuration:", bg="grey90", anchor="w", justify="left")
+        "labels in preview frames"
+        label_width = 40
+        self.label_data_config_heading = Label(self.preview_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_abstraction_config_heading = Label(self.preview_abstraction, text="Current Abstraction Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_distance_config_heading = Label(self.preview_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Clustering Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
 
         self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
         self.label_abstraction_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
         self.label_distance_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
         self.label_clustering_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
 
-        self.label_data_config = Label(self.frame_data, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
-        self.label_abstraction_config = Label(self.frame_abstraction, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
-        self.label_distance_config = Label(self.frame_distance, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
-        self.label_clustering_config = Label(self.frame_clustering, text=NONE, bg="grey90", anchor="w", justify="left", padx=10)
+        # TODO: add scrollbars or use Text instead of Label
+        self.label_data_config = Label(self.preview_data, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
+        self.label_abstraction_config = Label(self.preview_abstraction, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
+        self.label_distance_config = Label(self.preview_distance, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
+        self.label_clustering_config = Label(self.preview_clustering, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
 
         self.label_data_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
         self.label_abstraction_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
