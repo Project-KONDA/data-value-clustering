@@ -138,10 +138,10 @@ class Hub:
         self.checkbutton_clustering_label = Label(self.root, text="Default", bg="white", width=7)
         self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
 
-        CreateToolTip(self.button_distance_play, "Execute dissimilarity calulcation.")
+        CreateToolTip(self.button_distance_play, "Execute dissimilarity calculation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering.")
         CreateToolTip(self.button_show_result, "Show calculated clustering and evaluation questionnaire.")
-        CreateToolTip(self.button_save_result, "Save calculated clustering in an Excel file.")
+        CreateToolTip(self.button_save_result, "Save configuration.")
 
         # "progress bars"
         # self.path_progress = Progressbar(self.root, orient=HORIZONTAL, length=100, mode='determinate')
@@ -230,7 +230,7 @@ class Hub:
 
         CreateToolTip(self.label_data_config, "Name of the selected data set.")
         CreateToolTip(self.label_abstraction_config, "Abstracted details marked by 'True'.")
-        CreateToolTip(self.label_distance_config, "The first row shows the characters groups. Besides corresponding dissimilarity weights.")
+        CreateToolTip(self.label_distance_config, "The first column shows the character groups. Besides corresponding dissimilarity weights are shown.")
         CreateToolTip(self.label_clustering_config, "Selected clustering algorithm and specified parameters.")
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
