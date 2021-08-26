@@ -123,6 +123,7 @@ class HubConfiguration():
         self.cluster_sizes_abstracted = None
         self.noise_size_abstracted = None
         self.fancy_cluster_list = None
+        self.fancy_simple_cluster_list = None
         self.noise = None
         self.fancy_cluster_list_abstracted = None
         self.noise_abstracted = None
@@ -131,9 +132,12 @@ class HubConfiguration():
         self.timedelta_cluster = None
 
         self.json_save_path = None
+        self.json_saved = True
         self.excel_save_path = None
         self.excel_saved = False
-        self.json_saved = True
+        self.excel_simple_save_path = None
+        self.excel_simple_saved = False
+
 
         self.timedelta_total = None
 
@@ -155,6 +159,10 @@ class HubConfiguration():
         self.timedelta_abstraction = time_abstraction_end - time_abstraction_start
         self.num_abstracted_data = len(self.values_abstracted)
         self.abstraction_rate = self.num_data / self.num_abstracted_data
+        self.fancy_simple_cluster_list = list()
+        for i,v in enumerate(self.abstraction_dict.values()):
+            self.fancy_simple_cluster_list.append(v)
+
 
     def execute_distance(self):
         time_distance_start = datetime.now()
@@ -179,6 +187,9 @@ class HubConfiguration():
                                                                                                  self.clusters_abstracted)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
+
+    def save_simple_as_excel(self):
+        cluster_to_excel(self.excel_simple_save_path, self.fancy_simple_cluster_list, [], None, self.noise_abstracted, None, None, None)
 
     def save_as_excel(self):
         # TODO: add the following to json exports?
