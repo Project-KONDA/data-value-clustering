@@ -193,8 +193,6 @@ class HubConfiguration():
             *index_parameters)
         cluster_to_excel(self.excel_save_path, self.fancy_cluster_list, self.noise, self.fancy_cluster_list_abstracted,
                          self.noise_abstracted, map,
-                         self.cluster_sizes,
-                         self.noise_size, self.cluster_sizes_abstracted, self.noise_size_abstracted,
                          intra_cluster_distances_per_cluster_per_value,
                          intra_cluster_distances)
 

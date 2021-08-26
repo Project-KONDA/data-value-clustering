@@ -252,10 +252,6 @@ class ExecutionConfiguration(object):
                          self.cluster_list_abstracted,
                          self.noise_abstracted,
                          map,
-                         self.cluster_sizes,
-                         self.noise_size,
-                         self.cluster_sizes_abstracted,
-                         self.noise_size_abstracted,
                          self.average_intra_cluster_distances_per_cluster_per_value,
                          self.intra_cluster_distances)
 

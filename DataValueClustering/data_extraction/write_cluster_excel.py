@@ -4,8 +4,7 @@ import xlsxwriter
 from data_extraction.representants import get_repr_list
 
 
-def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map, cluster_sizes,
-                     noise_size, cluster_sizes_compressed, noise_size_compressed,
+def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map,
                      average_intra_cluster_distances_per_cluster_per_value,
                      intra_cluster_distances):
     aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
