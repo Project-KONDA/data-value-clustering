@@ -189,8 +189,8 @@ class SliderInput:
                     self.label_list[i].config(text="")
             return
 
+        tool_tips = np.full(len(self.entrylist), "").tolist()
         if self.extended.get():
-            tool_tips = np.full(len(self.entrylist), "").tolist()
             for st in self.label_list:
                 st.config(text="")
             for mapping in self.abstraction:
@@ -209,6 +209,7 @@ class SliderInput:
                         break
             for i, tip in enumerate(tool_tips):
                 CreateToolTip(self.entrylist[i], tip)
+                CreateToolTip(self.label_list[i], tip)
             self.updating_labels = False
         else:
             text = np.full(self.n, "", dtype=object)
@@ -225,6 +226,11 @@ class SliderInput:
                     if len(mapping[1]) == 1 and mapping[1] in t:
                         text[i] = t.replace(mapping[1], "")
                         label_text[i] += "\n" + " <" + mapping[0] + ">"
+                        tip = "<" + mapping[0] + ">" + mapping[3][3:]
+                        if tool_tips[i] != "":
+                            tool_tips[i] = tool_tips[i] + "\n" + tip
+                        else:
+                            tool_tips[i] = tip
                         break
             for i, l in enumerate(self.label_list):
 
@@ -232,6 +238,8 @@ class SliderInput:
                     label_text[i] = label_text[i][2:]
                 newtext = text[i] + label_text[i]
                 l.config(text=newtext)
+            for i, tip in enumerate(tool_tips):
+                CreateToolTip(self.label_list[i], tip)
 
     def get(self):
         if self.canceled:
