@@ -369,12 +369,12 @@ class Hub:
         # self.configuration.save_as_json()
 
     def show_simple_clustering_hint(self, i):
-        self.label_abstraction_hint.configure(text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
-        self.button_abstraction_excel.grid()
+        self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
+        self.button_abstraction_excel.configure(state="normal")
 
     def hide_simple_clustering_hint(self):
-        self.label_abstraction_hint.configure(text="\n")
-        self.button_abstraction_excel.grid_remove()
+        self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
+        self.button_abstraction_excel.configure(state="disabled")
 
     def configure_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
