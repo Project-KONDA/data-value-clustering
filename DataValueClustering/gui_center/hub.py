@@ -29,29 +29,29 @@ from gui_result.validation_questionnaire import get_suggested_algorithms, get_su
 TITLE = "Clustering Configuration Hub"
 
 STATUS = "Status: "
-CLUSTERING_NOT_CALC = STATUS + 'Clustering configured but not calculated'
-CLUSTERING_DONE = STATUS + 'Clustering done'
+CLUSTERING_NOT_CALC = STATUS + 'Algorithm configured but not executed'
+CLUSTERING_DONE = STATUS + 'Algorithm execution done'
 DISTANCE_NOT_CALC = STATUS + 'Dissimilarities configured but not calculated'
 DISTANCE_DONE = STATUS + 'Dissimilarity calculation done'
 ABSTRACTION_CONFIGURED = STATUS + 'Abstraction configured'
 ABSTRACTION_DONE = STATUS + 'Abstraction done'
 DATA_DONE = STATUS + 'Data extraction done'
-CLUSTERING_IN_PROGRESS = STATUS + "Clustering in progress ..."
-CLUSTERING_CONFIG_IN_PROGRESS = STATUS + "Clustering configuration in progress ..."
+CLUSTERING_IN_PROGRESS = STATUS + "Algorithm execution in progress ..."
+CLUSTERING_CONFIG_IN_PROGRESS = STATUS + "Algorithm configuration in progress ..."
 DISTANCE_CALC_IN_PROGRESS = STATUS + "Dissimilarity calculation in progress ..."
 DISTANCE_CONFIGURATION_IN_PROGRESS = STATUS + "Dissimilarity configuration in progress ..."
 ABSTRACTION_CONFIG_IN_PROGRESS = STATUS + "Abstraction configuration in progress ..."
 ABSTRACTION_IN_PROGRESS = STATUS + "Abstraction in progress ..."
 DATA_EXTRACTION_IN_PROGRESS = STATUS + "Data extraction in progress ..."
 DATA_CONFIG_IN_PROGRESS = STATUS + "Data configuration in progress ..."
-CLUSTERING_NOT_CONFIGURED = STATUS + "Clustering not configured"
+CLUSTERING_NOT_CONFIGURED = STATUS + "Algorithm not configured"
 DISTANCE_NOT_CONFIGURED = STATUS + "Dissimilarities not configured"
 ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
 NONE = "None"
 
-CLUSTERING_ADVICE = "Advice based on the evaluation: reconfigure clustering"
+CLUSTERING_ADVICE = "Advice based on the evaluation: reconfigure algorithm"
 DISTANCE_ADVICE = "Advice based on the evaluation: reconfigure dissimilarities"
 ABSTRACTION_ADVICE = "Advice based on the evaluation: reconfigure abstraction"
 DATA_ADVICE = "Advice based on the evaluation: reconfigure data"
@@ -115,7 +115,7 @@ class Hub:
                                          width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_distance = Button(self.refined_clustering_frame, text='Configure Dissimilarities...', command=self.configure_distance,
                                       width=button_width_full, height=button_height, state="disabled")
-        self.button_clustering = Button(self.refined_clustering_frame, text='Configure Clustering...', command=self.configure_clustering,
+        self.button_clustering = Button(self.refined_clustering_frame, text='Configure Algorithm...', command=self.configure_clustering,
                                         width=button_width_part, height=button_height, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
@@ -151,7 +151,7 @@ class Hub:
         # self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
 
         CreateToolTip(self.button_distance_play, "Execute dissimilarity calculation.")
-        CreateToolTip(self.button_clustering_play, "Execute clustering.")
+        CreateToolTip(self.button_clustering_play, "Execute clustering algorithm.")
         CreateToolTip(self.button_show_result, "Show calculated clustering and evaluation questionnaire.")
         CreateToolTip(self.button_save_result, "Save configuration.")
 
@@ -224,7 +224,7 @@ class Hub:
         self.label_data_config_heading = Label(self.preview_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
         self.label_abstraction_config_heading = Label(self.preview_abstraction, text="Current Abstraction Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
         self.label_distance_config_heading = Label(self.preview_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
-        self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Clustering Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Algorithm Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
 
         self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
         self.label_abstraction_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
