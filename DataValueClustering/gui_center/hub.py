@@ -49,6 +49,9 @@ DISTANCE_NOT_CONFIGURED = STATUS + "Dissimilarities not configured"
 ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
+SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
+SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
+
 NONE = "None"
 
 CLUSTERING_ADVICE = "Advice based on the evaluation: reconfigure algorithm"
@@ -247,6 +250,14 @@ class Hub:
         CreateToolTip(self.label_distance_config, "The first column shows the character groups. Besides corresponding dissimilarity weights are shown.")
         CreateToolTip(self.label_clustering_config, "Selected clustering algorithm and specified parameters.")
 
+        "Simple Clustering Hint"
+        self.label_abstraction_hint = Label(self.simple_clustering_frame, text="\n", bg="white", justify="left")
+        self.label_abstraction_hint.grid(sticky='nw', row=11, column=1, columnspan=1, padx=20, pady=10)
+        self.button_abstraction_excel = Button(self.simple_clustering_frame, text="Open Simple Clustering", width=20, height=2, command=self.open_simple_clustering)
+        self.button_abstraction_excel.grid(sticky='nw', row=11, column=3, columnspan=1, padx=10, pady=10)
+        self.hide_simple_clustering_hint()
+
+
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.update()
         self.root.after(1, lambda: self.root.focus_force())
@@ -264,6 +275,18 @@ class Hub:
                                        "\nDo you want to quit?",
                                        icon=WARNING):
             self.root.destroy()
+
+    def open_simple_clustering(self):
+        if self.configuration.excel_simple_save_path is None:
+            self.configuration.excel_simple_save_path = getExcelSavePath()
+        if not self.configuration.excel_simple_saved:
+            self.configuration.save_simple_as_excel()
+        if self.configuration.excel_simple_save_path:
+            # os.system(self.excel_path)
+            os.system('"' + self.configuration.excel_simple_save_path + '"')
+            # subprocess.call([self.excel_path])
+            # subprocess.run(['open', self.excel_path], check=True)
+            self.configuration.excel_simple_saved = True
 
     def data_path_from_name(self, data_name):
         if data_name is None:
@@ -344,6 +367,14 @@ class Hub:
 
         self.update()
         # self.configuration.save_as_json()
+
+    def show_simple_clustering_hint(self, i):
+        self.label_abstraction_hint.configure(text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
+        self.button_abstraction_excel.grid()
+
+    def hide_simple_clustering_hint(self):
+        self.label_abstraction_hint.configure(text="\n")
+        self.button_abstraction_excel.grid_remove()
 
     def configure_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
@@ -568,6 +599,7 @@ class Hub:
     def update(self):
         self.button_data.configure(state="normal")
         self.button_abstraction.configure(state="normal")
+        self.hide_simple_clustering_hint()
 
         if self.configuration.data_configuration_valid():
             self.label_data_progress.configure(text=DATA_DONE, fg='green')
@@ -580,6 +612,7 @@ class Hub:
             self.button_abstraction.configure(bg=self.original_button_color)
             if self.configuration.data_configuration_valid():
                 self.label_abstraction_progress.configure(text=ABSTRACTION_DONE, fg='green')
+                self.show_simple_clustering_hint(self.configuration.no_values_abstracted)
             else:
                 self.label_abstraction_progress.configure(text=ABSTRACTION_CONFIGURED, fg='orange')
         else:
