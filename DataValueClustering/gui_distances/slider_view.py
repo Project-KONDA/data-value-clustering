@@ -80,7 +80,7 @@ class SliderInput:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
-        self.button_expert.grid(sticky='ne', row=1, column=6)
+        self.button_expert.grid(sticky='ne', row=1, column=7, padx=10)
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
@@ -105,7 +105,7 @@ class SliderInput:
         self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
         self.frame.grid_rowconfigure(0, weight=1)
         self.canvas = Canvas(self.frame, bg='SystemButtonFace', width=766)
-        self.scrollbar = Scrollbar(self.root, orient='vertical', command=self.canvas.yview)
+        self.scrollbar = Scrollbar(self.frame, orient='vertical', command=self.canvas.yview)
         self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
         self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
         self.scrollable_frame.bind('<Configure>',
@@ -113,10 +113,10 @@ class SliderInput:
         self.scrollable_frame.columnconfigure(3, weight=1)
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='ne')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.frame.grid(sticky='nswe', row=4, column=1, columnspan=6, pady=1, padx=1)
+        self.frame.grid(sticky='nswe', row=4, column=1, columnspan=7, pady=1, padx=1)
         self.canvas.grid(sticky="nswe", row=0, column=0)
         self.root.grid_rowconfigure(4, weight=1)
-        self.scrollbar.grid(row=4, column=7, sticky='nswe')
+        self.scrollbar.grid(row=0, column=1, sticky='nse')
 
         # headings:
         self.label_head_characters = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
