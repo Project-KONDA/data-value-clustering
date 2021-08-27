@@ -107,9 +107,9 @@ def hierarchical_criterion_config():
     name = CRITERION
     explanation = "The criterion to use in forming flat clusters from the hierarchical clustering tree."
     options = np.array([
-        ["inconsistent", ""],
+        ["inconsistent", "The inconsistent function compares each link in the cluster hierarchy with adjacent links a few levels below it in the cluster hierarchy."],
         ["distance", ""],
-        ["maxclust", ""],
+        ["maxclust", "Finds minimum threshold to form a maximum of n_clusters."],
         ["monocrit", ""],
         ["maxclust_monocrit", ""],
     ], dtype=object)  # TODO
@@ -123,8 +123,8 @@ def hierarchical_depth_config():
     # only activated if criterion = 'inconsistent', then mandatory
     # int slider
     name = DEPTH  # TODO
-    explanation = ""  # TODO
-    mini = 0  # TODO
+    explanation = "Amount of levels the inconsistency function compares links."  # TODO
+    mini = 1  # TODO
     maxi = 5  # TODO
     default = 2
     resolution = 1

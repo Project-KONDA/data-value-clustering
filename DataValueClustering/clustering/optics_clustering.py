@@ -35,7 +35,7 @@ def optics_min_samples_config(no_values, answers):
     return dbscan_clustering.dbscan_min_samples_config(no_values, answers)
 
 
-def optics_max_eps_config():
+def optics_max_eps_config(distance_matrix):
     # float or inf
     # "default value of np.inf will identify clusters across all scales"
     # "reducing max_eps will result in shorter run times"
@@ -43,34 +43,36 @@ def optics_max_eps_config():
 
     # see DBSCAN
     name = MAX_EPS  # TODO
-    explanation = "Default value of infinite will identify clusters across all scales. Reducing max_eps will result in shorter run times."
-    mini = 0.01  # TODO
-    maxi = 2.  # TODO: handle infinity
-    default = 1.  # TODO
-    resolution = 0.01  # TODO
-    deactivatable = True  # TODO
+    explanation = "Default value of infinite will identify clusters across all scales. Reducing max_eps will result in shorter run times." \
+                  "\nLower values will result in more clusters but shorter run times."
+    mini = float(distance_matrix.min())
+    maxi = float(distance_matrix.max())  # TODO: handle infinity <- is handled by making it optional
+    default = (maxi-mini)/2 + mini  # TODO
+    resolution = 0.01
+    deactivatable = True  # handles infinity
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 def optics_cluster_method_config():
     # enum
     name = CLUSTER_METHOD  # TODO
-    explanation = ""  # TODO
-    options = np.array([["dbscan", ""],
-                        ["xi", ""]])  # TODO
+    explanation = "Method for cluster extraction."  # TODO
+    options = np.array([["dbscan", "Extraction method similar to DBSCAN."],
+                        ["xi", "Extraction method proposed by Ankerst et al. 1999: "
+                               "'OPTICS: ordering points to identify the clustering structure."]])  # TODO
     suggestions = ["xi"]  # TODO
     deactivatable = False
     return name, explanation, options, suggestions, deactivatable
 
 
-def optics_eps_config():
+def optics_eps_config(distance_matrix):
     # float
     # Used only when cluster_method='dbscan'
     name = EPS  # TODO
-    explanation = ""  # TODO
-    mini = 0.  # TODO
-    maxi = 2.  # TODO
-    default = 1.  # TODO: default same value as max_eps
+    explanation = "Similar to max_eps defines maximum distance for data points to be considered as neighbour."  # TODO
+    mini = float(distance_matrix.min())
+    maxi = (float(distance_matrix.max())-mini)/2 + mini
+    default = maxi  # default same value as max_eps
     resolution = 0.01
     deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable

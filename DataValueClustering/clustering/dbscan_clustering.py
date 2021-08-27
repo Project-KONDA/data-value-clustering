@@ -62,6 +62,7 @@ def calculate_eps_max(distance_matrix, min_samples):
         distances[i] = sorted[k + 1]
     max_eps = max(distances)
     return float(max_eps)
+    # return float(distance_matrix.max()) TODO ?
 
 
 # def dbscan_algorithm_config():

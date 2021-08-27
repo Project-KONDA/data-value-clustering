@@ -154,7 +154,8 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     min_samples_frame = create_slider_frame(*min_samples_info, previous_value=None if previous_parameters is None else previous_parameters[min_samples_info[0]], suggestion=suggestion)
 
     # max_eps = np.inf
-    max_eps_info = optics_max_eps_config()
+    distance_matrix = distance_matrix_map["distance_matrix"]
+    max_eps_info = optics_max_eps_config(distance_matrix)
     max_eps_frame = create_slider_frame(*max_eps_info, previous_value=None if previous_parameters is None else previous_parameters[max_eps_info[0]], suggestion=suggestion)
 
     # cluster_method = 'xi'
@@ -162,7 +163,7 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     cluster_method_frame = create_enum_frame(*cluster_method_info, previous_value=None if previous_parameters is None else previous_parameters[cluster_method_info[0]], suggestion=suggestion)
 
     # eps = None
-    eps_info = optics_eps_config()
+    eps_info = optics_eps_config(distance_matrix)
     eps_frame = create_slider_frame(*eps_info, previous_value=None if previous_parameters is None else previous_parameters[eps_info[0]], suggestion=suggestion)
 
     # xi = 0.05
