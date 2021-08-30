@@ -404,7 +404,6 @@ class HubConfiguration():
 
     def set_validation_answer_4(self, answer, clusters):
         assert (answer is None or answer in question_4_answers[:, 0].tolist())
-        assert (clusters is None or clusters is None or len(clusters) > 0)
         if clusters is not None:
             for i, v in enumerate(clusters):
                 assert (type(v) == int)
