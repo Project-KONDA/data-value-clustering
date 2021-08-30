@@ -2,7 +2,7 @@ import os
 import sys
 from math import floor, sqrt
 from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu, Checkbutton, IntVar, LabelFrame, \
-    PhotoImage
+    PhotoImage, OptionMenu, StringVar
 from pathlib import Path
 from tkinter.messagebox import WARNING
 from tkinter.ttk import Progressbar
@@ -25,6 +25,13 @@ from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
     get_suggested_parameter_modifications, ValidationAnswer
+
+DISTANCE_OPTION_BLOBS = "Blobs (advanced)"
+DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
+
+CONFIG_DISSIMILARITIES = 'Configure Dissimilarities...'
+CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Dissimilarities via Sliders...'
+CONFIG_DISSIMILARITIES_BLOBS = 'Configure Dissimilarities via Blobs...'
 
 TITLE = "Clustering Configuration Hub"
 
@@ -108,15 +115,26 @@ class Hub:
         self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=5)
         self.refined_clustering_frame.grid(sticky='nswe', row=4, column=0, columnspan=2, padx=5, pady=5)
 
+        "distance method choice"
+        self.label_distance_choice = Label(self.refined_clustering_frame, text="Dissimilarities Configuration Method:", bg="white")
+        self.label_distance_choice.grid(sticky='w', row=10, column=1, padx=(10,0), pady=10)
+
+        self.distance_options = [DISTANCE_OPTION_SLIDERS, DISTANCE_OPTION_BLOBS]
+        self.selected_distance_option = StringVar()
+        self.selected_distance_option.set(DISTANCE_OPTION_SLIDERS)
+        self.option_menu_distance_choice = OptionMenu(self.refined_clustering_frame, self.selected_distance_option,
+                                                 *self.distance_options, command=self.selected_distance_option_changed)
+        self.option_menu_distance_choice.grid(sticky='ws', row=10, column=2, pady=10)
+
         "buttons"
-        button_width_part = 30
+        button_width_part = 37
         button_width_full = 50
         button_height = 2
         self.button_data = Button(self.data_frame, text='Configure Data...', command=self.configure_data,
                                   width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_abstraction = Button(self.simple_clustering_frame, text='Configure Abstraction...', command=self.configure_abstraction,
                                          width=button_width_full, height=button_height, bg='paleturquoise1')
-        self.button_distance = Button(self.refined_clustering_frame, text='Configure Dissimilarities...', command=self.configure_distance,
+        self.button_distance = Button(self.refined_clustering_frame, text=CONFIG_DISSIMILARITIES_SLIDERS, command=self.configure_distance,
                                       width=button_width_full, height=button_height, state="disabled")
         self.button_clustering = Button(self.refined_clustering_frame, text='Configure Algorithm...', command=self.configure_clustering,
                                         width=button_width_part, height=button_height, state="disabled")
@@ -124,7 +142,7 @@ class Hub:
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=8, column=1, columnspan=2, padx=10, pady=10)
         self.button_distance.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
-        self.button_clustering.grid(sticky='new', row=14, column=2, columnspan=1, padx=10, pady=10)
+        self.button_clustering.grid(sticky='ne', row=14, column=1, columnspan=2, padx=10, pady=10)
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
         CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
@@ -219,7 +237,7 @@ class Hub:
 
         self.preview_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
         self.preview_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.preview_distance.grid(sticky='nswe', row=11, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_distance.grid(sticky='nswe', row=10, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
         self.preview_clustering.grid(sticky='nswe', row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
 
         "labels in preview frames"
@@ -262,6 +280,12 @@ class Hub:
         self.update()
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
+
+    def selected_distance_option_changed(self, *args):
+        if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
+            self.button_distance.configure(text=CONFIG_DISSIMILARITIES_SLIDERS)
+        else:
+            self.button_distance.configure(text=CONFIG_DISSIMILARITIES_BLOBS)
 
     def set_saved(self, saved):
         self.configuration.json_saved = saved
@@ -381,23 +405,18 @@ class Hub:
         self.root.update()
         self.disable()
         previous_cost_map, previous_blob_configuration = self.configuration.get_distance_configuration()
-        distance_choice = get_distance_choice(self.root)
-        if distance_choice is None:
-            self.update()
-            self.root.update()
-            return
 
         cost_map = None
         blob_configuration = None
 
         self.set_saved(False)
 
-        if distance_choice == DistanceView.SLIDER:
+        if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
             blob_configuration = self.configuration.create_blob_configuration()
             cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:4],
                                    texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
-        elif distance_choice == DistanceView.BLOB:
+        else:
             if previous_blob_configuration is None:
                 if previous_cost_map is None or \
                     messagebox.askokcancel("Potential Information Loss",
@@ -407,15 +426,18 @@ class Hub:
                                            icon=WARNING):
                     blob_configuration = self.configuration.create_blob_configuration()
                 else:
-                    self.configure_distance()
+                    self.update()
+                    self.root.update()
+                    return
             else:
                 blob_configuration = previous_blob_configuration
             cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
-        elif distance_choice == DistanceView.MATRIX:
-            blob_configuration = self.configuration.create_blob_configuration()
-            cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
-                                         abstraction=blob_configuration[1:, 0:4], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
-            blob_configuration = None
+
+        # elif distance_choice == DistanceView.MATRIX:
+        #     blob_configuration = self.configuration.create_blob_configuration()
+        #     cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
+        #                                  abstraction=blob_configuration[1:, 0:4], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
+        #     blob_configuration = None
 
         self.reset_validation_answers()
 
