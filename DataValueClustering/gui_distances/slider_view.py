@@ -90,10 +90,14 @@ class SliderInput:
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 10))
 
-        self.button_minus.grid(sticky='ns', row=5, column=1, pady=2, padx=10)
-        self.button_plus.grid(sticky='ns', row=5, column=2, pady=2, padx=10)
-        self.button_reset.grid(sticky='ns', row=5, column=3, columnspan=2, pady=2, padx=100)
-        self.button_ok.grid(sticky='nswe', row=5, column=5, columnspan=3, pady=2, padx=2)
+        self.label_warning = Label(self.root, text="", wraplengt=800,
+                                     bg="white", anchor='center', fg='red', justify='center')
+        self.label_warning.grid(row=3, column=1, sticky='senw', columnspan=7, pady=(0, 10), padx=10)
+
+        self.button_minus.grid(sticky='ns', row=6, column=1, pady=2, padx=10)
+        self.button_plus.grid(sticky='ns', row=6, column=2, pady=2, padx=10)
+        self.button_reset.grid(sticky='ns', row=6, column=3, columnspan=2, pady=2, padx=100)
+        self.button_ok.grid(sticky='nswe', row=6, column=5, columnspan=3, pady=2, padx=2)
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
@@ -113,9 +117,9 @@ class SliderInput:
         self.scrollable_frame.columnconfigure(3, weight=1)
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='ne')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.frame.grid(sticky='nswe', row=4, column=1, columnspan=7, pady=1, padx=1)
+        self.frame.grid(sticky='nswe', row=5, column=1, columnspan=7, pady=1, padx=1)
         self.canvas.grid(sticky="nswe", row=0, column=0)
-        self.root.grid_rowconfigure(4, weight=1)
+        self.root.grid_rowconfigure(5, weight=1)
         self.scrollbar.grid(row=0, column=1, sticky='nse')
 
         # headings:
@@ -129,11 +133,11 @@ class SliderInput:
         CreateToolTip(self.label_head_mapping, "Mapping between characters of the column 'Characters' and the abstracted "
                                            "aspects they represent.")
         CreateToolTip(self.label_head_weights, "Weights for the given character groups.")
-        self.label_head_characters.grid(sticky='nswe', row=3, column=1, columnspan=2)
-        self.label_head_mapping.grid(sticky='ns', row=3, column=3, columnspan=2)
-        self.label_head_weights.grid(sticky='nswe', row=3, column=5, columnspan=2)
+        self.label_head_characters.grid(sticky='nswe', row=4, column=1, columnspan=2)
+        self.label_head_mapping.grid(sticky='ns', row=4, column=3, columnspan=2)
+        self.label_head_weights.grid(sticky='nswe', row=4, column=5, columnspan=2)
 
-        self.row_offset = 4
+        self.row_offset = 5
 
         self.entrylist = np.full(self.n, Entry(self.scrollable_frame))
         self.entry_var_list = np.full(self.n, StringVar())
@@ -179,6 +183,15 @@ class SliderInput:
     def unbind_all(self):
         self.root.unbind_all("<MouseWheel>")
 
+    def highlight_entry(self, entry):
+        entry.configure(highlightbackground="red", highlightcolor="red", highlightthickness=2)
+        self.label_warning.configure(text="Warning: At least one character is contained in multiple groups. Only the first occurence of a character is relevant")
+
+    def undo_highlight_entries(self):
+        for i, entry in enumerate(self.entrylist):
+            entry.configure(highlightthickness=0)
+        self.label_warning.configure(text="")
+
     def update_labels(self):
         if self.updating_labels:
             return
@@ -192,23 +205,39 @@ class SliderInput:
             return
 
         tool_tips = np.full(len(self.entrylist), "").tolist()
+        self.undo_highlight_entries()
+
         if self.extended.get():
             for st in self.label_list:
                 st.config(text="")
             for mapping in self.abstraction:
-                for i, entry in enumerate(self.entrylist):
-                    value = entry.get()
-                    if len(mapping[1]) == 1 and mapping[1] in value:
-                        string = self.label_list[i].cget("text")
-                        if string != "":
-                            string += "\n"
-                        string += "'" + mapping[1] + "' - " + mapping[0]
-                        self.label_list[i].config(text=string)
-                        if tool_tips[i] != "":
-                            tool_tips[i] = tool_tips[i] + "\n" + mapping[3]
-                        else:
-                            tool_tips[i] = mapping[3]
-                        break
+                for j, char in enumerate(mapping[1]):
+                    char_occurred = False
+                    for i, entry in enumerate(self.entrylist):
+                        if i < len(self.entrylist)-1:
+                            value = entry.get()
+                            if char in value:
+                                if char_occurred:
+                                    # warn user:
+                                    self.highlight_entry(entry)
+                                    warning = "Warning: This character group contains at least one character already contained in a previous Group."
+                                    if tool_tips[i] != "":
+                                        tool_tips[i] = tool_tips[i] + "\n" + warning
+                                    else:
+                                        tool_tips[i] = warning
+                                elif len(mapping[1]) == 1:
+                                    # show mapping in label:
+                                    string = self.label_list[i].cget("text")
+                                    if string != "":
+                                        string += "\n"
+                                    string += "'" + char + "' - " + mapping[0]
+                                    self.label_list[i].config(text=string)
+                                    if tool_tips[i] != "":
+                                        tool_tips[i] = tool_tips[i] + "\n" + mapping[3]
+                                    else:
+                                        tool_tips[i] = mapping[3]
+                                char_occurred = True
+
             for i, tip in enumerate(tool_tips):
                 CreateToolTip(self.entrylist[i], tip)
                 CreateToolTip(self.label_list[i], tip)
@@ -386,7 +415,7 @@ class SliderInput:
 
     def trigger_extend(self):
         if self.extended.get() == 1:
-            self.label_head_characters.grid(sticky='nswe', row=3, column=1, columnspan=2)
+            self.label_head_characters.grid(sticky='nswe', row=4, column=1, columnspan=2)
             self.label_head_mapping.configure(width=24)
             self.label_head_mapping.grid(column=3, columnspan=2)
             if not self.fixed:
