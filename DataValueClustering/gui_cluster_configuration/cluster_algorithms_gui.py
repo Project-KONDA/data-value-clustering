@@ -80,7 +80,7 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     n_clusters, distance_threshold, criterion, depth = \
         get_configuration_parameters(master, "Hierarchical Clustering Parameter Configuration Part 2/2", frames, dependencies2, suggestion)
 
-    if n_clusters is None:
+    if n_clusters is None and distance_threshold is None:
         return None
 
     return {"method": method, "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": criterion, "depth": depth}
