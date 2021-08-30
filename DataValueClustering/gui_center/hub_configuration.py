@@ -102,6 +102,7 @@ class HubConfiguration():
 
         # self.distance_f = None
         # self.distance_algorithm = None # string
+        self.distance_config_method = None
         self.blob_configuration = None
         self.cost_map = None  # dict
         self.distance_matrix_map = None
@@ -343,6 +344,14 @@ class HubConfiguration():
 
     def get_clustering_configuration(self):
         return self.clustering_parameters
+
+    "Set & Get configuration methods"
+
+    def get_distance_config_method(self):
+        return self.distance_config_method
+
+    def set_distance_config_method(self, method):
+        self.distance_config_method = method
 
     "Set configuration"
 
