@@ -444,11 +444,12 @@ class Hub:
 
     def show_simple_clustering_hint(self, i):
         self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
-        self.button_abstraction_excel.configure(state="normal")
+        self.button_abstraction_excel.configure(state="normal", bg='pale green')
 
     def hide_simple_clustering_hint(self):
         self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
         self.button_abstraction_excel.configure(state="disabled")
+        self.button_abstraction_excel.configure(bg=self.original_button_color)
 
     def configure_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
@@ -715,6 +716,7 @@ class Hub:
         else:
             self.button_abstraction.configure(bg='paleturquoise1')
             self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
+
 
         if self.configuration.distance_configuration_possible():
             if self.configuration.distance_configuration_valid():
