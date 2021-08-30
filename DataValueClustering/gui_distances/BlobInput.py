@@ -113,6 +113,7 @@ class BlobInput:
 
 
         if suggestion is not None:
+            # TODO set position relative to screen size
             self.canvas.advice = self.canvas.create_text(500, 10, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=500)
         else:
             self.canvas.advice = self.canvas.create_text(300, 10,
