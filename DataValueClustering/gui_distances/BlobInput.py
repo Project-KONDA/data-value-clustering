@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image, ImageTk
 
 from gui_distances.CostMapInput import input_costmap
+from gui_distances.distance_choice import DistanceView
 from gui_general.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
 from gui_distances.blobinput_helper import get_blob_configuration, \
@@ -13,8 +14,8 @@ from gui_distances.costmapinput_helper import print_cost_map
 
 def input_blobs(root, config, suggestion=None):
     blobs = BlobInput(root, config, suggestion)
-    cost_map, new_config = blobs.get()
-    return cost_map, new_config
+    config_method, cost_map, new_config = blobs.get()
+    return config_method, cost_map, new_config
 
 
 class BlobInput:
@@ -269,10 +270,10 @@ class BlobInput:
 
     def get(self):
         if self.canceled:
-            return None, None
+            return None, None, None
         if self.matrix_costmap is not None:
-            return self.matrix_costmap, self.get_config()
-        return self.get_distance_map(), self.get_config()
+            return DistanceView.MATRIX, self.matrix_costmap, self.get_config()
+        return DistanceView.BLOB, self.get_distance_map(), self.get_config()
 
     def cancel(self):
         self.canceled = True
@@ -294,7 +295,7 @@ class BlobInput:
             blob.scale(reset=True)
 
     def expert_view(self):
-        costmap, config = self.get()
+        config_method, costmap, config = self.get()
         self.matrix_costmap = input_costmap(self.root, regexes=list(config[1:, 1]), costmap=costmap, empty=False,
                                             abstraction=config[1:, 0:4], suggestion=self.suggestion, configuration=config)
         if self.matrix_costmap is not None:

@@ -468,8 +468,7 @@ class Hub:
                 blob_configuration = self.configuration.create_blob_configuration()
             else:
                 blob_configuration = previous_blob_configuration
-            cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
-            config_method = DistanceView.BLOB  # TODO: handle expert mode started from blob view
+            config_method, cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
         else:
             blob_configuration = self.configuration.create_blob_configuration()
             cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
