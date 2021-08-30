@@ -5,10 +5,10 @@ from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_choice
 
 
-class DistanceView(Enum):
-    SLIDER = 1
-    BLOB = 2
-    MATRIX = 3
+class DistanceView(str, Enum):
+    SLIDER = 'SLIDER'
+    BLOB = 'BLOB'
+    MATRIX = 'MATRIX'
 
 
 def get_distance_choice(root):
