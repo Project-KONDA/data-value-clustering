@@ -878,13 +878,17 @@ class Hub:
             if clustering_parameters is None:
                 self.label_clustering_config.configure(text=text)
             else:
-                text += "\nParameters:\n\t"
+                text += "\nParameters:\n  "
+                k = 0
                 for i, key in enumerate(clustering_parameters.keys()):
-                    if i > 0:
-                        text += ", "
-                        if i % 3 == 0:
-                            text += "\n\t"
-                    text += key + "=" + str(clustering_parameters[key])
+                    parameter_value = clustering_parameters[key]
+                    if parameter_value is not None:
+                        if k > 0:
+                            text += ", "
+                            if k % 3 == 0:
+                                text += "\n  "
+                        text += key + "=" + str(parameter_value)
+                        k += 1
                 self.label_clustering_config.configure(text=text)
 
 
