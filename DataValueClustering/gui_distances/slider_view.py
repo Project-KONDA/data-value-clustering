@@ -80,7 +80,7 @@ class SliderInput:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
 
-        self.button_expert.grid(sticky='ne', row=1, column=7, padx=10)
+        self.button_expert.grid(sticky='ne', row=4, column=7, padx=10)
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
@@ -94,16 +94,16 @@ class SliderInput:
                                      bg="white", anchor='center', fg='red', justify='center')
         self.label_warning.grid(row=3, column=1, sticky='senw', columnspan=7, pady=(0, 10), padx=10)
 
-        self.button_minus.grid(sticky='ns', row=6, column=1, pady=2, padx=10)
-        self.button_plus.grid(sticky='ns', row=6, column=2, pady=2, padx=10)
-        self.button_reset.grid(sticky='ns', row=6, column=3, columnspan=2, pady=2, padx=100)
-        self.button_ok.grid(sticky='nswe', row=6, column=5, columnspan=3, pady=2, padx=2)
+        self.button_minus.grid(sticky='ns', row=7, column=1, pady=2, padx=10)
+        self.button_plus.grid(sticky='ns', row=7, column=2, pady=2, padx=10)
+        self.button_reset.grid(sticky='ns', row=7, column=3, columnspan=2, pady=2, padx=100)
+        self.button_ok.grid(sticky='nswe', row=7, column=5, columnspan=3, pady=2, padx=2)
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
 
-        self.checkbutton_extend.grid(sticky="sw", row=1, column=1)
+        self.checkbutton_extend.grid(sticky="nw", row=4, column=1, padx=10)
 
         # scrollable canvas:
         self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
@@ -117,9 +117,9 @@ class SliderInput:
         self.scrollable_frame.columnconfigure(3, weight=1)
         self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='ne')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.frame.grid(sticky='nswe', row=5, column=1, columnspan=7, pady=1, padx=1)
+        self.frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
         self.canvas.grid(sticky="nswe", row=0, column=0)
-        self.root.grid_rowconfigure(5, weight=1)
+        self.root.grid_rowconfigure(6, weight=1)
         self.scrollbar.grid(row=0, column=1, sticky='nse')
 
         # headings:
@@ -133,11 +133,11 @@ class SliderInput:
         CreateToolTip(self.label_head_mapping, "Mapping between characters of the column 'Characters' and the abstracted "
                                            "aspects they represent.")
         CreateToolTip(self.label_head_weights, "Weights for the given character groups.")
-        self.label_head_characters.grid(sticky='nswe', row=4, column=1, columnspan=2)
-        self.label_head_mapping.grid(sticky='ns', row=4, column=3, columnspan=2)
-        self.label_head_weights.grid(sticky='nswe', row=4, column=5, columnspan=2)
+        self.label_head_characters.grid(sticky='nswe', row=5, column=1, columnspan=2)
+        self.label_head_mapping.grid(sticky='ns', row=5, column=3, columnspan=2)
+        self.label_head_weights.grid(sticky='nswe', row=5, column=5, columnspan=2)
 
-        self.row_offset = 5
+        self.row_offset = 6
 
         self.entrylist = np.full(self.n, Entry(self.scrollable_frame))
         self.entry_var_list = np.full(self.n, StringVar())
@@ -415,7 +415,7 @@ class SliderInput:
 
     def trigger_extend(self):
         if self.extended.get() == 1:
-            self.label_head_characters.grid(sticky='nswe', row=4, column=1, columnspan=2)
+            self.label_head_characters.grid(sticky='nswe', row=5, column=1, columnspan=2)
             self.label_head_mapping.configure(width=24)
             self.label_head_mapping.grid(column=3, columnspan=2)
             if not self.fixed:
