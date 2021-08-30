@@ -105,26 +105,45 @@ class SliderInput:
 
         self.checkbutton_extend.grid(sticky="nw", row=4, column=1, padx=10)
 
-        # scrollable canvas:
+        # scrollable frame:
         self.frame = Frame(self.root, highlightbackground="grey", highlightthickness=1)
-        self.frame.grid_rowconfigure(0, weight=1)
-        self.canvas = Canvas(self.frame, bg='SystemButtonFace', width=836)
-        self.scrollbar = Scrollbar(self.frame, orient='vertical', command=self.canvas.yview)
-        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
-        self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
-        self.scrollable_frame.bind('<Configure>',
-                                   lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
-        # self.scrollable_frame.columnconfigure(3, weight=1)
-        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='nw')
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
-        self.canvas.grid(sticky="nswe", row=0, column=0)
-        self.root.grid_rowconfigure(6, weight=1)
+
+        self.scrollbar = Scrollbar(self.frame, orient='vertical')
         self.scrollbar.grid(row=0, column=1, sticky='nse')
+
+        self.canvas = Canvas(self.frame, bg='SystemButtonFace', yscrollcommand=self.scrollbar.set, highlightthickness=0)
+        self.canvas.grid(sticky="nswe", row=0, column=0)
+        self.scrollbar.config(command=self.canvas.yview)
+
+        self.canvas.xview_moveto(0)
+        self.canvas.yview_moveto(0)
+
+        self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
+        interior_id = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw')
+
+        def _configure_scrollable_frame(event):
+            size = (self.scrollable_frame.winfo_reqwidth(), self.scrollable_frame.winfo_reqheight())
+            self.canvas.config(scrollregion="0 0 %s %s" % size)
+            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
+                self.canvas.config(width=self.scrollable_frame.winfo_reqwidth())
+                self.frame.config(width=self.scrollable_frame.winfo_reqwidth())
+
+        self.scrollable_frame.bind('<Configure>', _configure_scrollable_frame)
+
+        def _configure_canvas(event):
+            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
+                self.canvas.itemconfigure(interior_id, width=self.canvas.winfo_width())
+                self.frame.config(width=self.canvas.winfo_width())
+
+
+        self.canvas.bind('<Configure>', _configure_canvas)
+
+        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
 
         # headings:
         self.label_head_characters = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
-        self.label_head_mapping = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'))
+        self.label_head_mapping = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'), width=25)
         self.label_head_weights = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_head_characters, "Enumerate all characters of this group. Only the first occurrence of a "
                                            "character in one of the groups is relevant. Note that some characters may "
@@ -153,7 +172,7 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.scrollable_frame, width=54, bg="white", anchor=W, justify=LEFT)
+            self.label_list[i] = Label(self.scrollable_frame, width=25, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
@@ -165,9 +184,9 @@ class SliderInput:
             self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
-            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=2)
-            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(18, 0), padx=2)
-            self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=2, pady=(0, 0))
+            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=1, pady=(15, 0), padx=2)
+            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=1, pady=(18, 0), padx=2)
+            self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=1, pady=(0, 0))
 
         if self.costmap and self.costmap != self.get():
             self.button_expert.config(bg="#bbddbb")
