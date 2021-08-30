@@ -37,9 +37,11 @@ class SliderClusteringParameter(ClusteringParameter):
         else:
             self.value_var = DoubleVar()
         if self.previous is None:
-            self.value_var.set(self.default)
+            self.start_value = self.default
         else:
-            self.value_var.set(self.previous)
+            self.start_value = self.previous
+        self.value_var.set(self.start_value)
+
         self.slider = Scale(self.frame, from_=mini, to=maxi, orient='horizontal', variable=self.value_var, command=self.update_slider, length=400,
                             bg='white', highlightthickness=0, resolution=self.resolution, tickinterval=maxi-mini)
         self.slider.grid(row=2, column=1, sticky='w')
@@ -48,12 +50,18 @@ class SliderClusteringParameter(ClusteringParameter):
         self.label_suggested = None
         if suggestion is not None and self.name in suggestion:
             self.validation_suggestion = suggestion[self.name]
-            self.label_suggested = Label(self.frame,
-                                         text="Advice: " + self.validation_suggestion,
-                                        anchor='nw', pady=10, fg='blue', bg='white')
-            self.label_suggested.grid(row=2, column=2, sticky='w')
+            if self.check_suggestion_in_bounds():
+                self.label_suggested = Label(self.frame,
+                                             text="Advice: " + self.validation_suggestion,
+                                            anchor='nw', pady=10, fg='blue', bg='white')
+                self.label_suggested.grid(row=2, column=2, sticky='w')
 
         # self.update_active()
+
+    def check_suggestion_in_bounds(self):
+        too_high = self.validation_suggestion == '⬇' and self.start_value == self.mini
+        too_low = self.validation_suggestion == '⬆' and self.start_value == self.maxi
+        return not(too_high or too_low)
 
     def update_active(self):
         super().update_active()
