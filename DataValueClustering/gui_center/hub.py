@@ -26,12 +26,16 @@ from gui_result.validation_questionnaire import get_suggested_algorithms, get_su
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
     get_suggested_parameter_modifications, ValidationAnswer
 
+DISTANCE_OPTION_MATRIX = "Matrix (expert)"
 DISTANCE_OPTION_BLOBS = "Blobs (advanced)"
 DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
+
 
 CONFIG_DISSIMILARITIES = 'Configure Dissimilarities...'
 CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Dissimilarities via Sliders...'
 CONFIG_DISSIMILARITIES_BLOBS = 'Configure Dissimilarities via Blobs...'
+CONFIG_DISSIMILARITIES_MATRIX = 'Configure Dissimilarities via Matrix...'
+
 
 TITLE = "Clustering Configuration Hub"
 
@@ -281,11 +285,56 @@ class Hub:
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
+    def set_selected_distance_option(self, value):
+        self.selected_distance_option.set(value)
+        self.selected_distance_option_changed()
+
     def selected_distance_option_changed(self, *args):
-        if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
+        self.update_selected_distance_option()
+        self.update_distance_button()
+
+    def update_distance_button(self):
+        current_selection = self.selected_distance_option.get()
+        if current_selection == DISTANCE_OPTION_SLIDERS:
             self.button_distance.configure(text=CONFIG_DISSIMILARITIES_SLIDERS)
-        else:
+        elif current_selection == DISTANCE_OPTION_BLOBS:
             self.button_distance.configure(text=CONFIG_DISSIMILARITIES_BLOBS)
+        else:
+            self.button_distance.configure(text=CONFIG_DISSIMILARITIES_MATRIX)
+
+    def update_selected_distance_option(self):
+        new_selection = self.selected_distance_option.get()
+        previous_method = self.configuration.get_distance_config_method()
+        if new_selection == DISTANCE_OPTION_SLIDERS:
+            if previous_method == DistanceView.MATRIX:
+                if not messagebox.askokcancel("Potential Information Loss",
+                                              "You previously configured the dissimilarity "
+                                              "calculation via Expert Mode, i.e. the matrix. This configuration will be "
+                                              "lost if you configure the weights via the Sliders view.",
+                                              icon=WARNING):
+                    self.set_selected_distance_option(DISTANCE_OPTION_MATRIX)
+            elif previous_method == DistanceView.BLOB:
+                if not messagebox.askokcancel("Potential Information Loss",
+                                              "You previously configured the dissimilarity "
+                                              "calculation via Blobs. This configuration will be "
+                                              "lost if you configure the weights via the Sliders view.",
+                                              icon=WARNING):
+                    self.set_selected_distance_option(DISTANCE_OPTION_BLOBS)
+        elif new_selection == DISTANCE_OPTION_BLOBS:
+            if previous_method == DistanceView.MATRIX:
+                if not messagebox.askokcancel("Potential Information Loss",
+                                              "You previously configured the dissimilarity "
+                                              "calculation via Expert Mode, i.e. the matrix. This configuration will be "
+                                              "lost if you configure the weights via the Blobs view.",
+                                              icon=WARNING):
+                    self.set_selected_distance_option(DISTANCE_OPTION_MATRIX)
+            elif previous_method == DistanceView.SLIDER:
+                if not messagebox.askokcancel("Potential Information Loss",
+                                              "You previously configured the dissimilarity "
+                                              "calculation via Sliders. This configuration will be "
+                                              "lost if you configure the weights via the Blobs view.",
+                                              icon=WARNING):
+                    self.set_selected_distance_option(DISTANCE_OPTION_SLIDERS)
 
     def set_saved(self, saved):
         self.configuration.json_saved = saved
@@ -406,38 +455,26 @@ class Hub:
         self.disable()
         previous_cost_map, previous_blob_configuration = self.configuration.get_distance_configuration()
 
-        cost_map = None
-        blob_configuration = None
-
         self.set_saved(False)
 
         if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
             blob_configuration = self.configuration.create_blob_configuration()
-            cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:4],
+            config_method, cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:4],
                                    texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
-        else:
+        elif self.selected_distance_option.get() == DISTANCE_OPTION_BLOBS:
             if previous_blob_configuration is None:
-                if previous_cost_map is None or \
-                    messagebox.askokcancel("Potential Information Loss",
-                                           "You previously configured the dissimilarity "
-                                           "calculation via a different method. This configuration will be "
-                                           "lost upon opening the Blob Configuration View. Do you want to proceed?",
-                                           icon=WARNING):
-                    blob_configuration = self.configuration.create_blob_configuration()
-                else:
-                    self.update()
-                    self.root.update()
-                    return
+                blob_configuration = self.configuration.create_blob_configuration()
             else:
                 blob_configuration = previous_blob_configuration
             cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
-
-        # elif distance_choice == DistanceView.MATRIX:
-        #     blob_configuration = self.configuration.create_blob_configuration()
-        #     cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
-        #                                  abstraction=blob_configuration[1:, 0:4], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
-        #     blob_configuration = None
+            config_method = DistanceView.BLOB  # TODO: handle expert mode started from blob view
+        else:
+            blob_configuration = self.configuration.create_blob_configuration()
+            cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
+                                         abstraction=blob_configuration[1:, 0:4], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
+            blob_configuration = None
+            config_method = DistanceView.MATRIX
 
         self.reset_validation_answers()
 
@@ -446,8 +483,38 @@ class Hub:
         else:
             self.configuration.set_distance_configuration(cost_map, blob_configuration)
 
+        if config_method is not None:
+            self.configuration.set_distance_config_method(config_method)
+
         self.update()
         self.root.update()
+
+    def update_option_menu_value_list(self):
+        menu = self.option_menu_distance_choice["menu"]
+        menu.delete(0, "end")
+        for string in self.distance_options:
+            menu.add_command(label=string,
+                             command=lambda value=string: self.option_menu_command(value))
+
+    def option_menu_command(self, value):
+        self.set_selected_distance_option(value)
+
+    def update_option_menu(self):
+        method = self.configuration.get_distance_config_method()
+        if method == DistanceView.MATRIX:
+            # expert mode was used, thus add matrix option to menu
+            self.distance_options = [DISTANCE_OPTION_SLIDERS, DISTANCE_OPTION_BLOBS, DISTANCE_OPTION_MATRIX]
+            self.update_option_menu_value_list()
+            self.set_selected_distance_option(DISTANCE_OPTION_MATRIX)
+        else:
+            # remove matrix option from menu
+            self.distance_options = [DISTANCE_OPTION_SLIDERS, DISTANCE_OPTION_BLOBS]
+            self.update_option_menu_value_list()
+            if method is None or method == DistanceView.SLIDER:
+                self.set_selected_distance_option(DISTANCE_OPTION_SLIDERS)
+            else:
+                self.set_selected_distance_option(DISTANCE_OPTION_BLOBS)
+
 
     def execute_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CALC_IN_PROGRESS, fg='RoyalBlue1')
@@ -619,6 +686,8 @@ class Hub:
         self.configuration.reset_validation_answers()
 
     def update(self):
+        self.update_option_menu()
+
         self.button_data.configure(state="normal")
         self.button_abstraction.configure(state="normal")
         self.hide_simple_clustering_hint()
@@ -646,10 +715,14 @@ class Hub:
                 self.button_distance.configure(state="normal", bg=self.original_button_color)
             else:
                 self.button_distance.configure(state="normal", bg='paleturquoise1')
+            self.label_distance_choice.configure(state="normal")
+            self.option_menu_distance_choice.configure(state="normal")
             # self.label_distance_progress.configure(state="normal")
         else:
             self.button_distance.configure(state="disabled")
             self.label_distance_progress.configure(fg='red')
+            self.label_distance_choice.configure(state="disabled")
+            self.option_menu_distance_choice.configure(state="disabled")
 
         if self.configuration.clustering_configuration_possible():
             self.label_distance_progress.configure(text=DISTANCE_DONE, fg='green')

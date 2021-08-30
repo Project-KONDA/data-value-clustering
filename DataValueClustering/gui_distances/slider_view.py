@@ -6,6 +6,7 @@ import numpy as np
 from gui_distances import input_costmap
 from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
     example_costmap, groups_to_enumerations
+from gui_distances.distance_choice import DistanceView
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_result.validation_questionnaire import get_suggested_distance_modifications
@@ -190,9 +191,6 @@ class SliderInput:
             self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=1, pady=(18, 0), padx=2)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=1, pady=(0, 0))
 
-        if self.costmap and self.costmap != self.get():
-            self.button_expert.config(bg="#bbddbb")
-
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.trigger_extend()
         self.root.mainloop()
@@ -295,9 +293,9 @@ class SliderInput:
 
     def get(self):
         if self.canceled:
-            return None
+            return None, None
         if self.matrix_costmap:
-            return self.matrix_costmap
+            return DistanceView.MATRIX, self.matrix_costmap
         map = {(()): 100., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
@@ -305,7 +303,7 @@ class SliderInput:
             map[(i + 1, 0)] = self.valuelist[i].get()
             for j in range(self.n):
                 map[(i + 1, j + 1)] = max(self.valuelist[i].get(), self.valuelist[j].get())
-        return map
+        return DistanceView.SLIDER, map
 
     def reset_groups(self):
         if not self.configuration:
@@ -428,7 +426,7 @@ class SliderInput:
         self.root.update()
 
     def matrix_view(self):
-        self.matrix_costmap = input_costmap(self.root, regexes=self.texts, costmap=self.get(),
+        self.matrix_costmap = input_costmap(self.root, regexes=self.texts, costmap=self.get()[1],
                                             abstraction=self.abstraction, suggestion=self.suggestion,
                                             configuration=self.configuration)
         if self.matrix_costmap is not None:
