@@ -407,7 +407,7 @@ class HubConfiguration():
         if clusters is not None:
             for i, v in enumerate(clusters):
                 assert (type(v) == int)
-                assert (v < self.no_clusters)
+                assert (v <= self.no_clusters)
         data_names = None
         if clusters is not None:
             data_names = list()
