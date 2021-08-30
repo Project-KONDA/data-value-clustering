@@ -106,8 +106,10 @@ class SliderInput:
         self.checkbutton_extend.grid(sticky="nw", row=4, column=1, padx=10)
 
         # scrollable frame:
+        self.root.grid_rowconfigure(6, weight=1)
         self.frame = Frame(self.root, highlightbackground="grey", highlightthickness=1)
         self.frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
+        self.frame.grid_rowconfigure(0, weight=1)
 
         self.scrollbar = Scrollbar(self.frame, orient='vertical')
         self.scrollbar.grid(row=0, column=1, sticky='nse')
