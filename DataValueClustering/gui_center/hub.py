@@ -15,7 +15,8 @@ from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 from gui_data.select_data import select_data
-from gui_distances import input_blobs, input_costmap
+from gui_distances.BlobInput import input_blobs
+from gui_distances.CostMapInput import input_costmap
 from gui_distances.blobinput_helper import get_blob_configuration
 from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view

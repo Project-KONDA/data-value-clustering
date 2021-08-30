@@ -3,7 +3,7 @@ from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar
 
 import numpy as np
 
-from gui_distances import input_costmap
+from gui_distances.CostMapInput import input_costmap
 from gui_distances.costmapinput_helper import costmap_is_valid, character_escape, print_cost_map, get_n_from_map, \
     example_costmap, groups_to_enumerations
 from gui_general import CreateToolTip
