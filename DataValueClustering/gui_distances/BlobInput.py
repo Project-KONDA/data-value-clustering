@@ -298,7 +298,7 @@ class BlobInput:
         self.matrix_costmap = input_costmap(self.root, regexes=list(config[1:, 1]), costmap=costmap, empty=False,
                                             abstraction=config[1:, 0:4], suggestion=self.suggestion, configuration=config)
         if self.matrix_costmap is not None:
-            self.quit()
+            self.close()
 
     def get_absolute_coordinate_value(self, relative_value, x=True):
         # ca. (-0.2, 1.2) -> (0-1920)
