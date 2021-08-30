@@ -37,6 +37,7 @@ class BlobInput:
         self.chars_info = config[:, 3]
         self.coordinates = config[:, (4, 5)]
         self.sizes = config[:, 6]
+        self.suggestion = suggestion
 
         """Root"""
         self.master = master
@@ -78,7 +79,7 @@ class BlobInput:
         self.size_factor = 1.  # 2 / self.image_sizes  # self.max_distance / self.diagonal / 0.62
 
         """Canvas"""
-        self.canvas_h = 17 * self.h // 18 - 4 * self.gui_spacing
+        self.canvas_h = 17 * self.h // 18 - self.gui_spacing
         self.canvas_w = self.w - 3 * self.gui_spacing
         self.canvas = Canvas(self.root, width=self.canvas_w, height=self.canvas_h,
                              highlightbackground="black")  # , background="alice blue")
@@ -123,8 +124,8 @@ class BlobInput:
                                  rel_size=self.sizes[i])
 
         """Buttons"""
-        self.button_h = self.h // 18
-        self.button_w = self.x - 2 * self.gui_spacing
+        self.button_h = self.h * 2 // 3 // 18
+        self.button_w = self.x * 2 // 3 - 2 * self.gui_spacing
 
         self.button_image_restart = Image.open("..\\gui_distances\\blob_images\\button_restart.png")
         self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
@@ -132,6 +133,9 @@ class BlobInput:
         self.button_image_ok = Image.open("..\\gui_distances\\blob_images\\button_ok.png")
         self.button_image_ok = self.button_image_ok.resize((self.button_w, self.button_h), Image.ANTIALIAS)
         self.button_image_ok = ImageTk.PhotoImage(self.button_image_ok)
+        self.button_image_expert = Image.open("..\\gui_distances\\blob_images\\button_expert.png")
+        self.button_image_expert = self.button_image_expert.resize((self.button_w, self.button_h), Image.ANTIALIAS)
+        self.button_image_expert = ImageTk.PhotoImage(self.button_image_expert)
 
         self.button_restart = Button(self.root, text='Restart', command=self.restart,
                                      width=self.button_w, height=self.button_h, bg='black', border=0,
@@ -144,6 +148,12 @@ class BlobInput:
                                 image=self.button_image_ok)
         # self.button_ok.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
         self.button_ok.place(anchor='se', x=self.w - self.gui_spacing - 1, y=self.h - self.gui_spacing)
+
+        self.button_expert = Button(self.root, text='Expert', command=self.expert_view,
+                                width=self.button_w, height=self.button_h, bg='black', border=0,
+                                image=self.button_image_expert)
+        # self.button_expert.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
+        self.button_expert.place(anchor='s', x=self.w//2, y=self.h - self.gui_spacing)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
@@ -279,6 +289,8 @@ class BlobInput:
             blob.set_position(new_coordinates[i, 0], new_coordinates[i, 1])
             blob.scale(reset=True)
 
+    def expert_view(self):
+        pass
 
     def get_absolute_coordinate_value(self, relative_value, x=True):
         # ca. (-0.2, 1.2) -> (0-1920)
