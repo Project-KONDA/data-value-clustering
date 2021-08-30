@@ -532,7 +532,9 @@ class Hub:
         self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm, get_suggested_algorithms(self.get_validation_answers()))
+        suggested_algorithms = get_suggested_algorithms(self.get_validation_answers())
+        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm,
+                                                                          suggested_algorithms)
         if clustering_algorithm is None:
             self.update()
             self.root.update()
@@ -540,7 +542,11 @@ class Hub:
 
         if prev_clustering_algorithm != clustering_algorithm:
             prev_parameters = None
-        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration))
+            suggested_parameter_modifications = None
+        else:
+            suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
+
+        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
             self.root.update()
