@@ -26,7 +26,7 @@ class SelectData:
 
         self.root = Toplevel(master)
         self.root.title("Data Selection")
-        self.root.resizable(False, False)
+        self.root.resizable(False, True)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
@@ -41,6 +41,8 @@ class SelectData:
 
         if self.single_cluster_data is not None:
             self.label_hint = Label(self.root, text="Data value sets generated from a previously calculated\ncluster are highlighted in green", bg="white", fg='blue')
+
+        self.root.grid_rowconfigure(3, weight=1)
 
         self.listbox = Listbox(self.root, selectmode="single", width=50, height=20)
         self.scrollbar = Scrollbar(self.root, command=self.listbox.yview)
