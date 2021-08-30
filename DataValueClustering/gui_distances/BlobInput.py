@@ -3,6 +3,7 @@ from tkinter import Tk, Button, Canvas, Menu, FLAT, Toplevel
 import numpy as np
 from PIL import Image, ImageTk
 
+from gui_distances.CostMapInput import input_costmap
 from gui_general.help_popup_gui import menu_help_blob_input
 from gui_distances.Blob import Blob
 from gui_distances.blobinput_helper import get_blob_configuration, \
@@ -46,6 +47,7 @@ class BlobInput:
         self.root.focus_force()
         self.root.grab_set()
         self.canceled = False
+        self.matrix_costmap = None
 
         """Frame"""
         self.window_size = 3/4
@@ -268,6 +270,8 @@ class BlobInput:
     def get(self):
         if self.canceled:
             return None, None
+        if self.matrix_costmap is not None:
+            return self.matrix_costmap, self.get_config()
         return self.get_distance_map(), self.get_config()
 
     def cancel(self):
@@ -290,7 +294,11 @@ class BlobInput:
             blob.scale(reset=True)
 
     def expert_view(self):
-        pass
+        costmap, config = self.get()
+        self.matrix_costmap = input_costmap(self.root, regexes=list(config[1:, 1]), costmap=costmap, empty=False,
+                                            abstraction=config[1:, 0:4], suggestion=self.suggestion, configuration=config)
+        if self.matrix_costmap is not None:
+            self.quit()
 
     def get_absolute_coordinate_value(self, relative_value, x=True):
         # ca. (-0.2, 1.2) -> (0-1920)
