@@ -106,16 +106,16 @@ class SliderInput:
         self.checkbutton_extend.grid(sticky="nw", row=4, column=1, padx=10)
 
         # scrollable canvas:
-        self.frame = Frame(self.root, width=766, highlightbackground="grey", highlightthickness=1)
+        self.frame = Frame(self.root, highlightbackground="grey", highlightthickness=1)
         self.frame.grid_rowconfigure(0, weight=1)
-        self.canvas = Canvas(self.frame, bg='SystemButtonFace', width=766)
+        self.canvas = Canvas(self.frame, bg='SystemButtonFace', width=836)
         self.scrollbar = Scrollbar(self.frame, orient='vertical', command=self.canvas.yview)
         self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
         self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
         self.scrollable_frame.bind('<Configure>',
                                    lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
-        self.scrollable_frame.columnconfigure(3, weight=1)
-        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='ne')
+        # self.scrollable_frame.columnconfigure(3, weight=1)
+        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_frame, anchor='nw')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
         self.canvas.grid(sticky="nswe", row=0, column=0)
@@ -153,20 +153,20 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.scrollable_frame, width=51, bg="white", anchor=W, justify=LEFT)
+            self.label_list[i] = Label(self.scrollable_frame, width=54, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
             self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
-            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i])
+            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i], width=25, highlightthickness=2)
             if i == self.n-1 or self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
             self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
                                        length=400, bg='white', highlightthickness=0, resolution=1)
 
-            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=1)
-            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(18, 0), padx=1)
+            self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=2)
+            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=2, pady=(18, 0), padx=2)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
         if self.costmap and self.costmap != self.get():
@@ -184,12 +184,12 @@ class SliderInput:
         self.root.unbind_all("<MouseWheel>")
 
     def highlight_entry(self, entry):
-        entry.configure(highlightbackground="red", highlightcolor="red", highlightthickness=2)
+        entry.configure(highlightbackground="red", highlightcolor="red")
         self.label_warning.configure(text="Warning: At least one character is contained in multiple groups. Only the first occurence of a character is relevant")
 
     def undo_highlight_entries(self):
         for i, entry in enumerate(self.entrylist):
-            entry.configure(highlightthickness=0)
+            entry.configure(highlightbackground="white", highlightcolor="white")
         self.label_warning.configure(text="")
 
     def update_labels(self):
@@ -415,26 +415,26 @@ class SliderInput:
 
     def trigger_extend(self):
         if self.extended.get() == 1:
-            self.label_head_characters.grid(sticky='nswe', row=5, column=1, columnspan=2)
-            self.label_head_mapping.configure(width=24)
+            self.label_head_characters.grid() # sticky='nswe', row=5, column=1, columnspan=2
+            self.label_head_mapping.configure(width=25)
             self.label_head_mapping.grid(column=3, columnspan=2)
             if not self.fixed:
                 self.button_plus.configure(state="normal")
                 self.button_minus.configure(state="normal")
             for i, e in enumerate(self.entrylist):
                 e.grid()
-                self.label_list[i].grid(column=3, columnspan=1)
-                self.label_list[i].configure(width=24)
+                self.label_list[i].grid(column=3, columnspan=1, padx=2)
+                self.label_list[i].configure(width=25)
         else:
-            self.label_head_characters.grid_forget()
-            self.label_head_mapping.configure(width=44)
+            self.label_head_characters.grid_remove()
+            # self.label_head_mapping.configure(width=58)
             self.label_head_mapping.grid(column=1, columnspan=4)
             self.button_plus.configure(state="disabled")
             self.button_minus.configure(state="disabled")
             for i, e in enumerate(self.entrylist):
                 e.grid_remove()
-                self.label_list[i].grid(column=2, columnspan=2)
-                self.label_list[i].configure(width=51)
+                self.label_list[i].grid(column=2, columnspan=2, padx=2)
+                self.label_list[i].configure(width=58)
         self.root.update()
         self.update_labels()
 
