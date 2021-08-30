@@ -1,2 +1,0 @@
-from gui_distances.BlobInput import input_blobs
-from gui_distances.CostMapInput import input_costmap
