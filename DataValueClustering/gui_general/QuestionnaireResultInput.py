@@ -39,7 +39,7 @@ class QuestionnaireResultInput(ABC):
         self.root = Toplevel(master)
         self.root.title(title)
         self.root.config(bg='white')
-        self.root.resizable(False, False)
+        self.root.resizable(False, True)
         # self.root.grid_rowconfigure(1, minsize=400)
 
         self.root.bind_all("<Return>", self.close)
