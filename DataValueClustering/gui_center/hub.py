@@ -66,10 +66,10 @@ SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to '
 
 NONE = "None"
 
-CLUSTERING_ADVICE = "Advice based on the evaluation: reconfigure algorithm"
-DISTANCE_ADVICE = "Advice based on the evaluation: reconfigure dissimilarities"
-ABSTRACTION_ADVICE = "Advice based on the evaluation: reconfigure abstraction"
-DATA_ADVICE = "Advice based on the evaluation: reconfigure data"
+CLUSTERING_ADVICE = "Advice: reconfigure algorithm"
+DISTANCE_ADVICE = "Advice: reconfigure dissimilarities"
+ABSTRACTION_ADVICE = "Advice: reconfigure abstraction"
+DATA_ADVICE = "Advice: reconfigure data"
 
 
 def data_name_from_path(data_path):
