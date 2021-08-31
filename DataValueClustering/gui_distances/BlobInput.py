@@ -111,14 +111,15 @@ class BlobInput:
         self.canvas.bind("<Motion>", self.canvas_blob_info)
         self.canvas.text = self.canvas.create_text(10, 10, text="", anchor="nw")
 
-
+        text_x = self.canvas_w / 6
+        text_y = self.canvas_h / 30
+        text_w = self.canvas_w * 4 / 6
         if suggestion is not None:
-            # TODO set position relative to screen size
-            self.canvas.advice = self.canvas.create_text(500, 10, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=500)
+            self.canvas.advice = self.canvas.create_text(text_x, text_y, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=text_w)
         else:
-            self.canvas.advice = self.canvas.create_text(300, 10,
+            self.canvas.advice = self.canvas.create_text(text_x, text_y,
                                                          text="Weight the influence of character deletions/insertions and substitutions on the dissimilarity between data values",
-                                                         anchor="nw", font=('TkDefaultFont', 12, 'bold'))
+                                                         anchor="nw", font=('TkDefaultFont', 12, 'bold'), width=text_w)
 
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)
