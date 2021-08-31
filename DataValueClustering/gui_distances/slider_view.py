@@ -165,10 +165,6 @@ class SliderInput:
         self.trigger_extend()
         self.root.mainloop()
 
-    def on_mousewheel(self, event):
-        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
-            self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
-
     def unbind_all(self):
         self.root.unbind_all("<MouseWheel>")
 
