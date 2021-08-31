@@ -1,16 +1,25 @@
-from tkinter import Frame, Canvas, Scrollbar
+from tkinter import Frame, Canvas, Scrollbar, LabelFrame
+
+
+def create_scrollable_label_frame(root, text):
+    outer_frame = LabelFrame(root, bg="white", relief="groove", borderwidth=2, text=text)
+    outer_frame.grid_rowconfigure(0, weight=1)
+    return _create_scrollable_frame_in_outer_frame(outer_frame)
 
 
 def create_scrollable_frame(root):
     outer_frame = Frame(root, bg="white", relief="groove", borderwidth=2)
     outer_frame.grid_rowconfigure(0, weight=1)
+    return _create_scrollable_frame_in_outer_frame(outer_frame)
 
+
+def _create_scrollable_frame_in_outer_frame(outer_frame):
     canvas = Canvas(outer_frame, bg="white", highlightthickness=0)
     canvas.grid(row=0, column=0, sticky='nswe')
 
     scrollbar = Scrollbar(outer_frame, orient="vertical",
                                          command=canvas.yview)
-    scrollbar.grid(row=0, column=5, sticky='nswe')
+    scrollbar.grid(row=0, column=1, sticky='nswe')
 
     canvas.configure(yscrollcommand=scrollbar.set)
     canvas.xview_moveto(0)
