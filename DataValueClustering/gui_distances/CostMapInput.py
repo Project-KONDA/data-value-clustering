@@ -40,7 +40,7 @@ class CostMapInput:
             else 7
 
         self.root = Toplevel(master)
-        self.root.resizable(False, False)
+        self.root.resizable(True, True)
         self.root.focus_force()
         self.root.grab_set()
 
@@ -80,33 +80,108 @@ class CostMapInput:
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800,
                                          bg="white", anchor='w', fg='blue', justify='left')
-            self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n + 4, pady=(10, 0))
-            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=self.n + 4, pady=(0, 0))
-            self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=self.n + 4, pady=(0, 10), padx=10)
+            self.title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 0))
+            self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=4, pady=(0, 10), padx=10)
         else:
-            self.title.grid(sticky='nswe', row=0, column=1, columnspan=self.n + 4, pady=(10, 0))
-            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=self.n + 4, pady=(0, 10))
+            self.title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 10))
 
-        case_change_label = Label(self.root, text='Capitalization change:', background='white')
-        case_change_label.grid(sticky=NW, row=9, column=1, columnspan=3)
-        CreateToolTip(case_change_label, "Weight for the substitution of any lower case letter by its upper case variant or vice versa.")
-        self.case_entry = Entry(self.root, width=10, validate='key', justify=RIGHT,
+        # Frames and Canvas
+
+        self.frame = Frame(self.root, relief="groove", borderwidth=2)
+
+        self.frame.grid(sticky='nswe', row=3, column=1, columnspan=4)
+
+        self.root.rowconfigure(3, weight=1)
+        self.root.columnconfigure(1, weight=1)
+        self.frame.rowconfigure(1, weight=1)
+        self.frame.columnconfigure(2, weight=1)
+
+        self.scrollbarE = Scrollbar(self.frame, orient='vertical')
+        self.scrollbarS = Scrollbar(self.frame, orient='horizontal')
+
+        self.canvasNE = Canvas(self.frame, height=5, relief="groove", borderwidth=1,
+                               yscrollcommand=self.scrollbarE.set)
+        self.canvasSW = Canvas(self.frame, width=100, relief="groove", borderwidth=1,
+                               xscrollcommand=self.scrollbarS.set)
+        self.canvasSE = Canvas(self.frame, relief="groove", borderwidth=1,
+                               yscrollcommand=self.scrollbarE.set, xscrollcommand=self.scrollbarS.set)
+
+        self.canvasNE.xview_moveto(0)
+        self.canvasNE.yview_moveto(0)
+        self.canvasSW.xview_moveto(0)
+        self.canvasSW.yview_moveto(0)
+        self.canvasSE.xview_moveto(0)
+        self.canvasSE.yview_moveto(0)
+
+        self.canvasNE.grid(sticky='nswe', row=0, column=2)
+        self.canvasSW.grid(sticky='nswe', row=1, column=0, columnspan=2)
+        self.canvasSE.grid(sticky='nswe', row=1, column=2)
+        self.scrollbarE.grid(sticky='nes', row=1, column=3)
+        self.scrollbarS.grid(sticky='sew', row=2, column=2)
+
+        self.scrollableframeNE = Frame(self.canvasNE)
+        self.canvasNE.create_window((0, 0), window=self.scrollableframeNE, anchor='nw')
+        self.scrollableframeSW = Frame(self.canvasSW)
+        self.canvasSW.create_window((0, 0), window=self.scrollableframeSW, anchor='nw')
+        self.scrollableframeSE = Frame(self.canvasSE)
+        self.canvasSE.create_window((0, 0), window=self.scrollableframeSE, anchor='nw')
+
+        def configE(command, amount, units=None):
+            self.canvasSW.yview(command, amount, units)
+            self.canvasSE.yview(command, amount, units)
+
+        def configS(command, amount, units=None):
+            self.canvasNE.xview(command, amount, units)
+            self.canvasSE.xview(command, amount, units)
+
+        self.scrollbarE.config(command=configE)
+        self.scrollbarS.config(command=configS)
+
+        def _configure_scrollable_frame(event, scrollable_frame, canvas, outer_frame, w=False, h=False):
+            size = (scrollable_frame.winfo_reqwidth(), scrollable_frame.winfo_reqheight())
+            canvas.config(scrollregion="0 0 %s %s" % size)
+            # if w and scrollable_frame.winfo_reqwidth() != canvas.winfo_width():
+            #     canvas.config(width=scrollable_frame.winfo_reqwidth())
+            #     outer_frame.config(width=scrollable_frame.winfo_reqwidth())
+            #
+            # if h and scrollable_frame.winfo_reqheight() != canvas.winfo_height():
+            #     canvas.config(height=scrollable_frame.winfo_reqheight())
+            #     outer_frame.config(height=scrollable_frame.winfo_reqheight())
+
+        self.scrollableframeNE.bind('<Configure>',
+                              lambda event: _configure_scrollable_frame(event, self.scrollableframeNE, self.canvasNE, self.frame, h=True))
+
+        self.scrollableframeSW.bind('<Configure>',
+                              lambda event: _configure_scrollable_frame(event, self.scrollableframeSW, self.canvasSW, self.frame, w=True))
+
+        self.scrollableframeSE.bind('<Configure>',
+                              lambda event: _configure_scrollable_frame(event, self.scrollableframeSE, self.canvasSE, self.frame, h=True, w=True))
+
+        # Labels and Entry Fields
+
+        case_change_label = Label(self.frame, text='Capitalization change:')
+        case_change_label.grid(sticky=NW, row=0, column=0)
+        CreateToolTip(case_change_label,
+                      "Weight for the substitution of any lower case letter by its upper case variant or vice versa.")
+        self.case_entry = Entry(self.frame, width=10, validate='key', justify=RIGHT,
                                 validatecommand=(self.case_entry.register(validate_input_float), '%P'))
         if not self.empty and self.costmap is None:
             self.case_entry.insert(END, '.5')
         elif not self.empty and self.costmap is not None:
             self.case_entry.insert(END, str(self.costmap[()]))
 
-        self.case_entry.grid(sticky=NW, row=9, column=4)
+        self.case_entry.grid(sticky=NW, row=0, column=1)
 
         for i in range(self.n):
-            self.label[i] = Label(self.root, width=7, bg='lightgrey', anchor=W)
-            self.label[i].grid(sticky=NW, row=9, column=i + 5, padx=(0,1))
-            self.regex[i] = Entry(self.root, width=20, bg='ivory2', validate=ALL, validatecommand=(
+            self.label[i] = Label(self.scrollableframeNE, width=7, bg='white', anchor=W)
+            self.label[i].grid(sticky=NW, row=9, column=i, padx=(0, 1))
+            self.regex[i] = Entry(self.scrollableframeSW, width=20, bg='ivory2', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
-            self.regex_label[i] = Label(self.root, anchor=W, bg="white", justify="left")
-            self.regex[i].grid(sticky=NW, row=i + 10, column=1, columnspan=3)
-            self.regex_label[i].grid(sticky=NW, row=i + 10, column=4, columnspan=1)
+            self.regex_label[i] = Label(self.scrollableframeSW, anchor=W, justify="left", width=20)
+            self.regex[i].grid(sticky=NW, row=i, column=1)
+            self.regex_label[i].grid(sticky=NW, row=i, column=4, columnspan=1)
 
             if i == 0:
                 self.regex[i].insert(END, '<insert>')
@@ -118,7 +193,8 @@ class CostMapInput:
                 self.regex[i].insert(END, '<rest>')
                 CreateToolTip(self.regex[i], "This row represents any characters not covered above.")
                 self.label[i].configure(text='<rest>', state='disabled')
-                CreateToolTip(self.label[i], "This column represents any characters not covered by the columns to the left.")
+                CreateToolTip(self.label[i],
+                              "This column represents any characters not covered by the columns to the left.")
                 self.regex[i].config(state='disabled')
             else:
                 if not self.empty and i < len(self.predefined_labels):
@@ -127,22 +203,24 @@ class CostMapInput:
 
             for j in range(self.n):
                 self.value_entries[i, j] = self.generate_entry(i, j)
-                
+
         self.costmap = None
+
+        # BUTTONS
 
         self.button_ok = Button(self.root, text='OK', command=self.button_click_output_map,
                                 justify=RIGHT, background='snow')
-        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
+        self.button_ok.grid(sticky="nswe", row=4, column=4, pady=2, padx=2)
 
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups,
                                    justify=LEFT, background='snow')
-        self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
+        self.button_reset.grid(sticky=E, row=4, column=1, pady=2, padx=2)
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
-        self.button_minus.grid(sticky=E, row=self.n + 12, column=2, pady=2, padx=2)
+        self.button_minus.grid(sticky=E, row=4, column=2, pady=2, padx=2)
 
         self.button_plus = Button(self.root, text='+', command=self.plus, justify=RIGHT, width=3, background='snow')
-        self.button_plus.grid(sticky=W, row=self.n + 12, column=3, pady=2, padx=2)
+        self.button_plus.grid(sticky=W, row=4, column=3, pady=2, padx=2)
 
         # Center Window on Screen
         self.root.update_idletasks()
@@ -155,7 +233,7 @@ class CostMapInput:
         self.root.mainloop()
 
     def generate_entry(self, i, j):
-        entry = Entry(self.root, validate='key', width=7, justify=RIGHT, bg='alice blue')
+        entry = Entry(self.scrollableframeSE, validate='key', width=7, justify=RIGHT, bg='alice blue')
         entry['validatecommand'] = (
             entry.register(
                 lambda s, i2=i, j2=j: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')  # , '%d')
@@ -169,7 +247,7 @@ class CostMapInput:
         if i > j:
             entry.config(state='readonly')
         if i + j > 0:
-            entry.grid(sticky=NW, column=i + 5, row=j + 10)
+            entry.grid(sticky=NW, column=i, row=j, padx=5, pady=1)
         return entry
 
     def reset_groups(self):
@@ -280,16 +358,16 @@ class CostMapInput:
         self.regex_label = regex_label
 
         # 3. add element n-1
-        self.regex[self.n - 1] = Entry(self.root, width=20, bg='ivory2', validate=ALL)
+        self.regex[self.n - 1] = Entry(self.scrollableframeSW, width=20, bg='ivory2', validate=ALL)
         self.regex[self.n - 1]['validatecommand'] = (
-            self.regex[self.n - 1].register(lambda s, i2=self.n-1: self.copy_to_column(i2, s)), '%P')
+            self.regex[self.n - 1].register(lambda s, i2=self.n - 1: self.copy_to_column(i2, s)), '%P')
 
-        self.regex_label[self.n - 1] = Label(self.root, anchor=W, bg="white")
-        self.label[self.n - 1] = Label(self.root, width=7, bg='lightgrey', anchor=W)
+        self.regex_label[self.n - 1] = Label(self.scrollableframeSW, anchor=W, bg="white")
+        self.label[self.n - 1] = Label(self.scrollableframeNE, width=7, bg='lightgrey', anchor=W)
 
         for i in range(self.n + 1):
             for j in range(self.n + 1):
-                if i+j == 0:
+                if i + j == 0:
                     continue
                 if not self.value_entries[i, j]:
                     self.value_entries[i, j] = self.generate_entry(i, j)
@@ -297,27 +375,23 @@ class CostMapInput:
                     lambda s, i2=i, j2=j: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')
 
         # 4. place elements
-        self.regex[self.n - 1].grid(sticky=NW, row=self.n + 9, column=1, columnspan=3)
-        self.regex[self.n].grid(sticky=NW, row=self.n + 10, column=1, columnspan=3)
-        self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n + 4, padx=(0,1))
-        self.label[self.n].grid(sticky=NW, row=9, column=self.n + 5, padx=(0,1))
-        self.regex_label[self.n - 1].grid(sticky=NW, row=self.n + 9, column=4, columnspan=1)
-        self.regex_label[self.n].grid(sticky=NW, row=self.n + 10, column=4, columnspan=1)
+        self.regex[self.n - 1].grid(sticky=NW, row=self.n - 1, column=1, columnspan=3)
+        self.regex[self.n].grid(sticky=NW, row=self.n, column=1)
+        self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n - 1, padx=(0, 1))
+        self.label[self.n].grid(sticky=NW, row=9, column=self.n, padx=(0, 1))
+        self.regex_label[self.n - 1].grid(sticky=NW, row=self.n - 1, column=4, columnspan=1)
+        self.regex_label[self.n].grid(sticky=NW, row=self.n, column=4, columnspan=1)
 
         for j in range(self.n + 1):
             for i in range(self.n + 1):
                 if i > self.n - 2 or j > self.n - 2:
                     if self.value_entries[i, j]:
-                        self.value_entries[i, j].grid(sticky=NW, column=i + 5, row=j + 10)
+                        self.value_entries[i, j].grid(sticky=NW, column=i, row=j)
                     else:
                         print("not", i, j)
 
         # 5. complete
         self.n = self.n + 1
-        self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
-        self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
-        self.button_minus.grid(sticky=E, row=self.n + 12, column=2, pady=2, padx=2)
-        self.button_plus.grid(sticky=W, row=self.n + 12, column=3, pady=2, padx=2)
         self.root.update()
 
     def minus(self):
@@ -357,22 +431,18 @@ class CostMapInput:
             self.regex_label = regex_label
 
             # 5. move elements
-            self.regex[self.n - 1].grid(sticky=NW, row=self.n + 9, column=1, columnspan=3)
-            self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n + 4, padx=(0, 1))
-            self.regex_label[self.n - 1].grid(sticky=NW, row=self.n + 9, column=4, columnspan=1)
+            self.regex[self.n - 1].grid(sticky=NW, row=self.n - 1, column=1)
+            self.label[self.n - 1].grid(sticky=NW, row=9, column=self.n - 1, padx=(0, 1))
+            self.regex_label[self.n - 1].grid(sticky=NW, row=self.n - 1, column=4, columnspan=1)
 
             for j in range(self.n):
                 for i in range(self.n):
                     if i > self.n - 2 or j > self.n - 2:
-                        self.value_entries[i, j].grid(sticky=NW, column=i + 5, row=j + 10)
+                        self.value_entries[i, j].grid(sticky=NW, column=i, row=j)
                         self.value_entries[i, j]['validatecommand'] = (self.value_entries[i, j].register(
                             lambda s, i2=i, j2=j: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')
 
             # 6. complete
-            self.button_ok.grid(sticky="nswe", row=self.n + 12, column=4, columnspan=self.n + 3, pady=2, padx=2)
-            self.button_reset.grid(sticky=E, row=self.n + 12, column=1, pady=2, padx=2)
-            self.button_minus.grid(sticky=E, row=self.n + 12, column=2, pady=2, padx=2)
-            self.button_plus.grid(sticky=W, row=self.n + 12, column=3, pady=2, padx=2)
             self.root.update()
 
     def update_regex_label(self):
