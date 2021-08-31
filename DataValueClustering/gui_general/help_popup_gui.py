@@ -121,42 +121,59 @@ def menu_help_clustering_selection(master):
 def menu_help_cost_map(master):
     """help popup for Dissimilarity Configuration - Matrix view"""
     text = [
-        "The Dissimilarity Configuration - Matrix view gives you full control over the weights used in the calculation ",
-        "of dissimilarities between data values.",
-        "The weights represent the dissimilarities between character groups.",
-        "You should specify these weights based on your domain knowledge.",
+        "The Matrix View is a view for the Configuration of the Dissimilarities between values. "
+        "It  gives you full control over the weights ",
+        "used in the calculation of dissimilarities between data values."
+        "That means you assign numerical values to the distance between ",
+        "groups of values. "
+        "The weights represent the dissimilarities between the specified character groups.",
+        "This matrix can be read as single transformations from a character out of the group specified in the left "
+        "column to a character ",
+        "from the group in the top row.",
+        "You should specify these weights based on your domain knowledge, which means based on your understanding "
+        "on how ",
+        "different the characters are in the context of the data field that you want to analyse.",
         "",
         ["Character Groups"],
-        "The left input fields represent groups of characters. Please enumerate all characters, that",
-        "should be in the group. Note, that the interface supports sequences like 'a-z' or 'A-Z' for",
-        "letters and '1-2' for digits.",
-        "Only the first occurrence of a character in one of the groups is relevant.",
+        "The left input fields represent groups of characters. Please enumerate all characters, that should be in the "
+        "group. Note, that ",
+        "the interface supports sequences like 'a-z' or 'A-Z' for letters and '1-2' for digits. "
+        "Only the first occurrence of a character in one ",
+        "of the groups is relevant. "
         "The last row and column represents all characters not mentioned in the lines above.",
+        "You are free to modify the character groups.",
+        "The default groups are automatically derived from the abstraction configuration. "
+        "You also can add new groups i.e. lines via the ",
+        "'+' button or remove the last group via the '-' button. "
+        "To reset the groups correspondingly, press the 'Reset' button.",
         "",
         "Note that some characters actually represent features that were removed by the abstraction.",
         "For example, depending on the abstraction configuration, '1' may represent any integer.",
-        "This mapping between characters and the represented features that were abstracted is provided in the second ",
+        "This mapping between characters and the represented features that were abstracted is provided in the second "
         "column.",
         "",
-        "You are free to modify the character groups.",
-        "You can add and remove groups, i.e. lines via the '+' and '-' buttons.",
-        "The default groups are automatically derived from the abstraction configuration.",
-        "To reset the groups correspongingly, press the 'Reset' button.",
-        "",
         ["Weights"],
-        "You must enter the weights of character deletions (first column), insertions (first row) and substitution ",
-        "(rest of the matrix) as numbers.",
-        "The first column and row represent the empty string. Here the weights of deleting",
-        "and inserting the corresponding character is entered.",
+        "You must enter the weights of character deletions (first column), insertions (first row) and substitution "
+        "(rest of the matrix) as ",
+        "numbers. ",
+        "The first column and row represent the empty string. Here the weights of deleting "
+        "and inserting the corresponding character ",
+        "is entered. "
         "The weight in row i and column j represents the weight for substituting the characters represented by row i by ",
-        "characters represented by column j.",
+        "characters represented by column j. "
         "Only the relative size of the weights matters.",
-        "Because the dissimilarity between two data values shall be symmetrical, the matrix is",
-        "mirrored on the diagonal. The entry fields above the diagonal are read only.",
-        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of ",
-        "these characters.",
-        "You should choose heigher weights for characters that you do not expect to find regularly in the data values ",
-        "and for characters that may cause great dissimilarity of the data values.",
+        "The dissimilarity measure between two values shall be symmetrical. "
+        "That means, the distance from value A to value B is ",
+        "the same as from B to A. "
+        "Because of this, the matrix is mirrored on the diagonal. "
+        "The entry fields above the diagonal are ",
+        "read only.",
+        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution "
+        "of these ",
+        "characters. "
+        "Therefore, you should choose heigher weights for characters that you do not expect to find regularly "
+        "in the data ",
+        "values and for characters that may cause great dissimilarity of the data values.",
         "",
         ["Confirm, Reset & Discard"],
         "To confirm your modifications of the weights, press the 'OK' button.",
@@ -169,41 +186,53 @@ def menu_help_cost_map(master):
 def menu_help_blob_input(master):
     """help popup for Dissimilarity Configuration - Blobs view"""
     text = [
-        "The Dissimilarity Configuration - Blobs view allows you to configure the weights used in the calculation of ",
-        "dissimilarities between data values by moving and scaling graphical objects on a 2D canvas.",
-        "The weights represent the dissimilarities between character groups.",
-        "You should specify these weights based on your domain knowledge.",
+        "The Blob View is a view for the Configuration of the Dissimilarities between values. "
+        "It allows you to configure the weights ",
+        "used in the calculation of dissimilarities between data values by moving and scaling graphical objects "
+        "on a 2D canvas. ",
+        "The weights represent the dissimilarities between character groups. ",
+        "You should specify these weights based on your domain knowledge, which means based on your understanding "
+        "on how ",
+        "different the characters are in the context of the data field that you want to analyse.",
         "",
         ["Blobs"],
-        "Each of the spheres (we call them 'blobs') in this diagram represent a group of similar",
-        "characters. This group of characters is described in the label. There is one empty",
-        "blue blob. This represents an empty text.",
-        "The character groups are automatically derived from your configuration of the abstraction.",
+        "Each of the spheres (we call them 'blobs') in this diagram represent a group of similar characters. "
+        "This group of characters ",
+        "is described in the label. "
+        "There is one empty blue blob. This represents an empty text. "
+        "The character groups are ",
+        "automatically derived from your configuration of the abstraction. ",
         "",
         ["Distance"],
-        "The distances between blobs represent the weight of replacing corresponding characters. The weight ",
-        "of deleting and inserting a character is represented by the distance to the special empty ",
-        "blue blob.",
+        "The distances between blobs represent the weight of replacing corresponding characters. The weight "
+        "of deleting and ",
+        "inserting a character is represented by the distance to the special empty blue blob.",
         # interpretation
-        "When the blobs just barely touch each other, the dissimilarity between them is interpreted",
+        "When the blobs just barely touch each other, the dissimilarity between them is interpreted "
         "as the value 1.",
         # controls
         "The distances can be modified via Drag & Drop.",
         "",
-        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution of "
-        "these characters.",
-        "You should choose heigher weights for characters that you do not expect to find regularly in the data values "
-        "and for characters that may cause great dissimilarity of the data values.",
+        "Heigher weights for a character group mean more dissimilarity caused by the deletion/insertion/substitution ",
+        "of these characters. "
+        "You should choose higher weights for characters that you do not expect to find regularly in the data ",
+        "values and for characters that may cause great dissimilarity of the data values.",
         "",
         ["Size"],
-        "The size of each blob represents the weight of substituting characters of the represented group by each other.",
-        "Some blobs cannot be scaled. These are on default fixed on the minimal size and",
-        "are slightly less saturated. The fixed blobs depend on your configuration of the abstraction.",
+        "The size of each blob represents the weight of substituting characters of the represented group "
+        "by each other. "
+        "Some blobs ",
+        "cannot be scaled. "
+        "These are on default fixed on the minimal size and are slightly less saturated. "
+        "The fixed blobs depend ",
+        "on your configuration of the abstraction. "
         # interpretation
         "The minimum size represents the value 0. The default size is 1.",
         # controls
-        "The size of not fixed blobs can be changed via the scroll wheel while the mouse hovers ",
-        "over the blob. The default size can be restored by pressing N on mouse over.",
+        "The size of not fixed blobs can be changed via the scroll wheel while the mouse hovers "
+        "over the blob. "
+        "The default size can ",
+        "be restored by pressing N (for 'normalize') on mouse over.",
         "",
         ["Confirm, Reset & Discard"],
         "To confirm your modifications of the weights, press the 'OK' button.",
@@ -233,8 +262,8 @@ def menu_help_distance_slider(master):
         "",
         "You are free to modify the character groups, thus move characters between groups.",
         "You can add and remove groups, i.e. lines via the '+' and '-' buttons.",
-        "The default groups are automatically derived from the abstraction configuration and serve as a godd starting",
-        "To reset the groups correspondingly, press the 'Reset' button.",
+        "The default groups are automatically derived from the abstraction configuration and serve as a good starting",
+        "point. To reset the groups correspondingly, press the 'Reset' button.",
         "",
         ["Weights"],
         "Per character group you specify the weight via the slider given on the right-hand side.",

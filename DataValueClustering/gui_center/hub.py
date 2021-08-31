@@ -2,7 +2,7 @@ import os
 import sys
 from math import floor, sqrt
 from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu, Checkbutton, IntVar, LabelFrame, \
-    PhotoImage, OptionMenu, StringVar
+    PhotoImage, OptionMenu, StringVar, Scrollbar, Canvas
 from pathlib import Path
 from tkinter.messagebox import WARNING
 from tkinter.ttk import Progressbar
@@ -109,12 +109,48 @@ class Hub:
         self.menu.add_command(label="Load", command=self.menu_load)
         self.menu.add_command(label="Help", command=lambda: menu_help_hub(self.root))
         self.root.config(menu=self.menu)
-        self.root.resizable(False, False)
+        self.root.resizable(False, True)
+
+        "scrollable canvas"
+        self.frame = Frame(self.root, highlightbackground="grey", highlightthickness=1)
+        self.root.grid_rowconfigure(2, weight=1)
+        self.frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.frame.grid_rowconfigure(0, weight=1)
+        self.scrollbar = Scrollbar(self.frame, orient='vertical')
+        self.scrollbar.grid(row=0, column=1, sticky='ns')
+        self.canvas = Canvas(self.frame, bg='SystemButtonFace', yscrollcommand=self.scrollbar.set, highlightthickness=0)
+
+        self.canvas.grid(sticky="nswe", row=0, column=0)
+        self.scrollbar.config(command=self.canvas.yview)
+
+        self.canvas.xview_moveto(0)
+        self.canvas.yview_moveto(0)
+
+        self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
+        interior_id = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw')
+
+        def _configure_scrollable_frame(event):
+            size = (self.scrollable_frame.winfo_reqwidth(), self.scrollable_frame.winfo_reqheight())
+            self.canvas.config(scrollregion="0 0 %s %s" % size)
+            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
+                self.canvas.config(width=self.scrollable_frame.winfo_reqwidth())
+                self.frame.config(width=self.scrollable_frame.winfo_reqwidth())
+
+        self.scrollable_frame.bind('<Configure>', _configure_scrollable_frame)
+
+        def _configure_canvas(event):
+            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
+                self.canvas.itemconfigure(interior_id, width=self.canvas.winfo_width())
+                self.frame.config(width=self.canvas.winfo_width())
+
+        self.canvas.bind('<Configure>', _configure_canvas)
+
+        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
 
         "frames"
-        self.data_frame = LabelFrame(self.root, text=' Data ', bg="white")
-        self.simple_clustering_frame = LabelFrame(self.root, text=' Simple Clustering ', bg="white")
-        self.refined_clustering_frame = LabelFrame(self.root, text=' Refined Clustering ', bg="white")
+        self.data_frame = LabelFrame(self.scrollable_frame, text=' Data ', bg="white")
+        self.simple_clustering_frame = LabelFrame(self.scrollable_frame, text=' Simple Clustering ', bg="white")
+        self.refined_clustering_frame = LabelFrame(self.scrollable_frame, text=' Refined Clustering ', bg="white")
 
         self.data_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
         self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=5)
@@ -284,7 +320,12 @@ class Hub:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.update()
         self.root.after(1, lambda: self.root.focus_force())
+        self.load("../test_data/mysecondjson.json")
         self.root.mainloop()
+
+    def on_mousewheel(self, event):
+        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
+            self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
 
     def set_selected_distance_option(self, value):
         self.selected_distance_option.set(value)
