@@ -159,9 +159,6 @@ class ResultView:
         self.button.grid(row=3, column=0, sticky='we', columnspan=3)
 
         self.root.update_idletasks()
-        # midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
-        # midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
-        # self.root.geometry(f"+%s+%s" % (midx, midy))
 
         # set windows size:
         w_root = self.root.winfo_reqwidth()
@@ -177,9 +174,12 @@ class ResultView:
 
         h_max = max(h_expanded_summary, h_expanded_questionnaire)
         h = min(self.root.winfo_screenheight(), h_max)
-        s = str(w_root) + 'x' + str(h)
-        self.root.geometry(s)
 
+        x_shift = max(0, (self.root.winfo_screenwidth() - w_root) // 2)
+        y_shift = max(0, (self.root.winfo_screenheight() - h) // 2)
+
+        s = str(w_root) + 'x' + str(h) + '+' + str(x_shift) + '+' + str(y_shift)
+        self.root.geometry(s)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)

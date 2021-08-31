@@ -299,7 +299,11 @@ class Hub:
         h_canvas_questionnaire = self.canvas.winfo_height()
         h_expanded = h_root - h_canvas_questionnaire + h_scrollable
         h = min(self.root.winfo_screenheight(), h_expanded)
-        s = str(w_root) + 'x' + str(h)
+
+        x_shift = max(0, (self.root.winfo_screenwidth() - w_root) // 2)
+        y_shift = max(0, (self.root.winfo_screenheight() - h) // 2)
+
+        s = str(w_root) + 'x' + str(h) + '+' + str(x_shift) + '+' + str(y_shift)
         self.root.geometry(s)
 
         self.root.after(1, lambda: self.root.focus_force())
