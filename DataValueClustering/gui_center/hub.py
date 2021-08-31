@@ -320,7 +320,6 @@ class Hub:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.update()
         self.root.after(1, lambda: self.root.focus_force())
-        self.load("../test_data/mysecondjson.json")
         self.root.mainloop()
 
     def on_mousewheel(self, event):
