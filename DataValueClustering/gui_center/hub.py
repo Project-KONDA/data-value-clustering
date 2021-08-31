@@ -295,10 +295,9 @@ class Hub:
         # set windows size:
         w_root = self.root.winfo_reqwidth()
         h_root = self.root.winfo_reqheight()
-        h_around = self.around_canvas_frame.winfo_height()
         h_scrollable = self.scrollable_frame.winfo_height()
-        border_with = self.around_canvas_frame['borderwidth']
-        h_expanded = h_root - h_around + h_scrollable + border_with * 2
+        h_canvas_questionnaire = self.canvas.winfo_height()
+        h_expanded = h_root - h_canvas_questionnaire + h_scrollable
         h = min(self.root.winfo_screenheight(), h_expanded)
         s = str(w_root) + 'x' + str(h)
         self.root.geometry(s)
