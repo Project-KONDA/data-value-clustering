@@ -104,7 +104,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         for i in range(len(self.labels)):
             self.labels[i].destroy()
 
-        self.canvas.yview_moveto(0)
+        self.canvas_result.yview_moveto(0)
 
         self.w = self.root.winfo_screenwidth() / 2
         wrap_left = 2/3 * self.w
@@ -159,13 +159,13 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.preview_shown = not self.preview_shown
 
     def show_preview(self):
-        self.around_canvas_frame.grid()
+        self.around_canvas_frame_result.grid()
 
     def hide_preview(self):
-        self.around_canvas_frame.grid_remove()
+        self.around_canvas_frame_result.grid_remove()
 
     def destroy_preview(self):
-        self.around_canvas_frame.destroy()
+        self.around_canvas_frame_result.destroy()
         self.button_show_hide.destroy()
         self.root.grid_columnconfigure((1), minsize=0)
         if self.label_suggested is not None:

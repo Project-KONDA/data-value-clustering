@@ -75,7 +75,6 @@ class QuestionnaireResultInput(ABC):
         self.scrollbar_questions = Scrollbar(self.around_canvas_frame_questions, orient="vertical", command=self.canvas_questions.yview)
         self.scrollbar_questions.grid(row=0, column=5, sticky='nswe')
         self.canvas_questions.configure(yscrollcommand=self.scrollbar_questions.set)
-        # self.canvas_questions.bind_all("<MouseWheel>", self.on_mousewheel_questions_frame)
 
         self.canvas_questions.xview_moveto(0)
         self.canvas_questions.yview_moveto(0)
@@ -103,9 +102,6 @@ class QuestionnaireResultInput(ABC):
         self.canvas_questions.bind('<Configure>', _configure_canvas_questions)
 
         # question checkboxes:
-        # self.question_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")
-        # self.question_frame.grid(row=3, column=0, sticky='nsew', padx=5, pady=5)
-
         for i, question in enumerate(self.config_question):
             j = start_row + i
             self.answers[i] = IntVar()
@@ -128,45 +124,43 @@ class QuestionnaireResultInput(ABC):
         #                                   font=('TkDefaultFont', 14, 'bold'), padx=5)
         # self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
 
-
         # scrollable result frame:
-        self.around_canvas_frame = Frame(self.root, bg="white", relief="groove", borderwidth=2)
-        self.around_canvas_frame.grid_rowconfigure(0, weight=1)
-        self.around_canvas_frame.grid(row=3, column=2, sticky='nsw', pady=5, padx=5)
+        self.around_canvas_frame_result = Frame(self.root, bg="white", relief="groove", borderwidth=2)
+        self.around_canvas_frame_result.grid_rowconfigure(0, weight=1)
+        self.around_canvas_frame_result.grid(row=3, column=2, sticky='nsw', pady=5, padx=5)
 
-        self.canvas = Canvas(self.around_canvas_frame, bg="white", highlightthickness=0)
-        self.canvas.grid(row=0, column=0, sticky='nswe')
-        self.scrollbar = Scrollbar(self.around_canvas_frame, orient="vertical", command=self.canvas.yview)
-        self.scrollbar.grid(row=0, column=5, sticky='nswe')
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        # self.canvas.bind_all("<MouseWheel>", self.on_mousewheel_result_frame)
+        self.canvas_result = Canvas(self.around_canvas_frame_result, bg="white", highlightthickness=0)
+        self.canvas_result.grid(row=0, column=0, sticky='nswe')
+        self.scrollbar_result = Scrollbar(self.around_canvas_frame_result, orient="vertical", command=self.canvas_result.yview)
+        self.scrollbar_result.grid(row=0, column=5, sticky='nswe')
+        self.canvas_result.configure(yscrollcommand=self.scrollbar_result.set)
 
-        self.canvas.xview_moveto(0)
-        self.canvas.yview_moveto(0)
+        self.canvas_result.xview_moveto(0)
+        self.canvas_result.yview_moveto(0)
 
-        self.scrollable_result_frame = Frame(self.canvas, bg="white")
+        self.scrollable_result_frame = Frame(self.canvas_result, bg="white")
 
-        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_result_frame, anchor="nw")
+        self.canvas_frame_result = self.canvas_result.create_window((0, 0), window=self.scrollable_result_frame, anchor="nw")
 
-        def _configure_scrollable_frame(event):
+        def _configure_scrollable_frame_result(event):
             size = (self.scrollable_result_frame.winfo_reqwidth(), self.scrollable_result_frame.winfo_reqheight())
-            self.canvas.config(scrollregion="0 0 %s %s" % size)
-            if self.scrollable_result_frame.winfo_reqwidth() != self.canvas.winfo_width():
-                self.canvas.config(width=self.scrollable_result_frame.winfo_reqwidth())
-                self.around_canvas_frame.config(width=self.scrollable_result_frame.winfo_reqwidth())
+            self.canvas_result.config(scrollregion="0 0 %s %s" % size)
+            if self.scrollable_result_frame.winfo_reqwidth() != self.canvas_result.winfo_width():
+                self.canvas_result.config(width=self.scrollable_result_frame.winfo_reqwidth())
+                self.around_canvas_frame_result.config(width=self.scrollable_result_frame.winfo_reqwidth())
 
-        self.scrollable_result_frame.bind('<Configure>', _configure_scrollable_frame)
+        self.scrollable_result_frame.bind('<Configure>', _configure_scrollable_frame_result)
         self.scrollable_result_frame.bind('<Enter>', self.enter_scrollable_result_frame)
         self.scrollable_result_frame.bind('<Leave>', self.leave_scrollable_result_frame)
 
-        def _configure_canvas(event):
-            if self.scrollable_result_frame.winfo_reqwidth() != self.canvas.winfo_width():
-                self.canvas.itemconfigure(self.canvas_frame, width=self.canvas.winfo_width())
-                self.around_canvas_frame.config(width=self.canvas.winfo_width())
+        def _configure_canvas_result(event):
+            if self.scrollable_result_frame.winfo_reqwidth() != self.canvas_result.winfo_width():
+                self.canvas_result.itemconfigure(self.canvas_frame_result, width=self.canvas_result.winfo_width())
+                self.around_canvas_frame_result.config(width=self.canvas_result.winfo_width())
 
-        self.canvas.bind('<Configure>', _configure_canvas)
+        self.canvas_result.bind('<Configure>', _configure_canvas_result)
 
-        # button:
+        # OK button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
         self.button.grid(row=4, column=0, sticky='nswe', columnspan=6)
 
@@ -187,8 +181,8 @@ class QuestionnaireResultInput(ABC):
             self.canvas_questions.yview_scroll(-1 * (event.delta // 120), "units")
 
     def on_mousewheel_result_frame(self, event):
-        if self.scrollable_result_frame.winfo_height() > self.canvas.winfo_height():
-            self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
+        if self.scrollable_result_frame.winfo_height() > self.canvas_result.winfo_height():
+            self.canvas_result.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
         # Center Window on Screen
