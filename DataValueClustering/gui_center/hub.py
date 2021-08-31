@@ -22,6 +22,7 @@ from gui_distances.distance_choice import get_distance_choice, DistanceView
 from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_hub
+from gui_general.scrollable_frame import create_scrollable_frame
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
@@ -112,40 +113,9 @@ class Hub:
         self.root.resizable(False, True)
 
         "scrollable canvas"
-        self.frame = Frame(self.root, highlightbackground="grey", highlightthickness=1)
-        self.root.grid_rowconfigure(2, weight=1)
+        self.frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
+        self.root.rowconfigure(2, weight=1)
         self.frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
-        self.frame.grid_rowconfigure(0, weight=1)
-        self.scrollbar = Scrollbar(self.frame, orient='vertical')
-        self.scrollbar.grid(row=0, column=1, sticky='ns')
-        self.canvas = Canvas(self.frame, bg='SystemButtonFace', yscrollcommand=self.scrollbar.set, highlightthickness=0)
-
-        self.canvas.grid(sticky="nswe", row=0, column=0)
-        self.scrollbar.config(command=self.canvas.yview)
-
-        self.canvas.xview_moveto(0)
-        self.canvas.yview_moveto(0)
-
-        self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
-        interior_id = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw')
-
-        def _configure_scrollable_frame(event):
-            size = (self.scrollable_frame.winfo_reqwidth(), self.scrollable_frame.winfo_reqheight())
-            self.canvas.config(scrollregion="0 0 %s %s" % size)
-            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
-                self.canvas.config(width=self.scrollable_frame.winfo_reqwidth())
-                self.frame.config(width=self.scrollable_frame.winfo_reqwidth())
-
-        self.scrollable_frame.bind('<Configure>', _configure_scrollable_frame)
-
-        def _configure_canvas(event):
-            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
-                self.canvas.itemconfigure(interior_id, width=self.canvas.winfo_width())
-                self.frame.config(width=self.canvas.winfo_width())
-
-        self.canvas.bind('<Configure>', _configure_canvas)
-
-        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
 
         "frames"
         self.data_frame = LabelFrame(self.scrollable_frame, text=' Data ', bg="white")
@@ -316,15 +286,10 @@ class Hub:
         self.button_abstraction_excel.grid(sticky='nw', row=11, column=3, columnspan=1, padx=10, pady=10)
         self.hide_simple_clustering_hint()
 
-
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.update()
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
-
-    def on_mousewheel(self, event):
-        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
-            self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
 
     def set_selected_distance_option(self, value):
         self.selected_distance_option.set(value)
