@@ -27,7 +27,7 @@ class ClusteringQuestionnaireResultInput(QuestionnaireResultInput):
     """Binary questionnaire view to support the selection of the clustering algorithm"""
 
     def __init__(self, master, config, predefined_answers=None, predefined_algorithm=None, suggested_algorithms=None):
-        self.caption_text = "Answer the questions to narrow the set of fitting clustering algorithms and choose one"
+        self.caption_text = "Answer the questions to narrow the set of\nfitting clustering algorithms and choose one"
         self.hint_text = "Typically the highlighted algorithm achieves good results."
         suggestion = None
         if suggested_algorithms is not None:

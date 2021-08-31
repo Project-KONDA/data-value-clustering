@@ -106,6 +106,10 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
         self.canvas.yview_moveto(0)
 
+        self.w = self.root.winfo_screenwidth() / 2
+        wrap_left = 2/3 * self.w
+        wrap_right = 1/3 * self.w
+
         s1 = StringVar()
         s1.set("Abstracted Values")
         abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
@@ -116,10 +120,10 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
                       "Abstracted data values representing all original values shown on the left hand side")
 
         # calculate wrap lengths:
-        self.scrollable_result_frame.update()
-        left_caption_width = abstraction_target_label.winfo_width()
-        wrap_left = left_caption_width
-        wrap_right = self.w - 1 - left_caption_width
+        # self.scrollable_result_frame.update()
+        # left_caption_width = abstraction_target_label.winfo_width()
+        # wrap_left = left_caption_width
+        # wrap_right = self.w - 1 - left_caption_width
 
         s2 = StringVar()
         s2.set("Preview of Simple Clustering")

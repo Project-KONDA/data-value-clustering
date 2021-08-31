@@ -94,24 +94,39 @@ class QuestionnaireResultInput(ABC):
 
 
         # scrollable result:
-        self.w = self.root.winfo_screenwidth() / 3
-        self.around_canvas_frame = Frame(self.root, bg="white", width=self.w, relief="groove", borderwidth=2)
+        self.around_canvas_frame = Frame(self.root, bg="white", relief="groove", borderwidth=2)
         self.around_canvas_frame.grid_rowconfigure(0, weight=1)
-        self.canvas = Canvas(self.around_canvas_frame, bg="white", width=self.w-1, highlightthickness=0)
-        self.scrollbar = Scrollbar(self.around_canvas_frame, orient="vertical", command=self.canvas.yview)
-        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-        self.scrollable_result_frame = Frame(self.canvas, bg="white")
-        self.scrollable_result_frame.bind(
-            "<Configure>",
-            lambda e: self.canvas.configure(
-                scrollregion=self.canvas.bbox("all")
-            )
-        )
-        self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_result_frame, anchor="nw")
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
         self.around_canvas_frame.grid(row=3, column=2, sticky='nsw', pady=5, padx=5)
+
+        self.canvas = Canvas(self.around_canvas_frame, bg="white", highlightthickness=0)
         self.canvas.grid(row=0, column=0, sticky='nswe')
+        self.scrollbar = Scrollbar(self.around_canvas_frame, orient="vertical", command=self.canvas.yview)
         self.scrollbar.grid(row=0, column=5, sticky='nswe')
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
+
+        self.canvas.xview_moveto(0)
+        self.canvas.yview_moveto(0)
+
+        self.scrollable_result_frame = Frame(self.canvas, bg="white")
+
+        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_result_frame, anchor="nw")
+
+        def _configure_scrollable_frame(event):
+            size = (self.scrollable_result_frame.winfo_reqwidth(), self.scrollable_result_frame.winfo_reqheight())
+            self.canvas.config(scrollregion="0 0 %s %s" % size)
+            if self.scrollable_result_frame.winfo_reqwidth() != self.canvas.winfo_width():
+                self.canvas.config(width=self.scrollable_result_frame.winfo_reqwidth())
+                self.around_canvas_frame.config(width=self.scrollable_result_frame.winfo_reqwidth())
+
+        self.scrollable_result_frame.bind('<Configure>', _configure_scrollable_frame)
+
+        def _configure_canvas(event):
+            if self.scrollable_result_frame.winfo_reqwidth() != self.canvas.winfo_width():
+                self.canvas.itemconfigure(self.canvas_frame, width=self.canvas.winfo_width())
+                self.around_canvas_frame.config(width=self.canvas.winfo_width())
+
+        self.canvas.bind('<Configure>', _configure_canvas)
 
         # button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
