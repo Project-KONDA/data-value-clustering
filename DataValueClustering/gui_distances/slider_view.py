@@ -65,14 +65,14 @@ class SliderInput:
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root))
         self.root.config(menu=self.menu)
 
-        self.title = Label(self.root, text="Weight the influence of characters on the dissimilarity between data values", bg="white",
+        self.title = Label(self.root, text="Weight the influence of certain structures on the dissimilarity between data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
-        self.hint = Label(self.root, text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
+        self.hint = Label(self.root, text="Choose heigher weights for structures that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view)
         CreateToolTip(self.button_expert, "Open Matrix view, which allows setting the weights entirely flexible.")
         self.extended = IntVar(self.root, 0)
         self.checkbutton_extend = Checkbutton(self.root, text="Advanced Mode", bg="white", variable=self.extended, command=self.trigger_extend)
-        CreateToolTip(self.checkbutton_extend, "Enable/disable modification of character groups.")
+        CreateToolTip(self.checkbutton_extend, "Enable/disable modification of structures groups.")
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -100,7 +100,7 @@ class SliderInput:
         self.button_reset.grid(sticky='ns', row=7, column=3, columnspan=2, pady=2, padx=100)
         self.button_ok.grid(sticky='nswe', row=7, column=5, columnspan=3, pady=2, padx=2)
 
-        CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
+        CreateToolTip(self.button_reset, "Reset structures groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
 
@@ -145,7 +145,7 @@ class SliderInput:
         self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
 
         # headings:
-        self.label_head_characters = Label(self.root, text="Characters", bg="white", font=('Sans', '10', 'bold'))
+        self.label_head_characters = Label(self.root, text="Character Groups", bg="white", font=('Sans', '10', 'bold'))
         self.label_head_mapping = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'), width=25)
         self.label_head_weights = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_head_characters, "Enumerate all characters of this group. Only the first occurrence of a "
@@ -435,7 +435,7 @@ class SliderInput:
     def trigger_extend(self):
         if self.extended.get() == 1:
             self.label_head_characters.grid() # sticky='nswe', row=5, column=1, columnspan=2
-            self.label_head_mapping.configure(width=25)
+            self.label_head_mapping.configure(width=25, text="Mapping")
             self.label_head_mapping.grid(column=3, columnspan=2)
             if not self.fixed:
                 self.button_plus.configure(state="normal")
@@ -448,6 +448,7 @@ class SliderInput:
             self.label_head_characters.grid_remove()
             # self.label_head_mapping.configure(width=58)
             self.label_head_mapping.grid(column=1, columnspan=4)
+            self.label_head_mapping.configure(text="Structure Groups")
             self.button_plus.configure(state="disabled")
             self.button_minus.configure(state="disabled")
             for i, e in enumerate(self.entrylist):
