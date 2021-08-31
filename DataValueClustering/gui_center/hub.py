@@ -113,9 +113,10 @@ class Hub:
         self.root.resizable(False, True)
 
         "scrollable canvas"
-        self.frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
+        self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
         self.root.rowconfigure(2, weight=1)
-        self.frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.around_canvas_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.around_canvas_frame.configure(borderwidth=0)
 
         "frames"
         self.data_frame = LabelFrame(self.scrollable_frame, text=' Data ', bg="white")
@@ -288,6 +289,20 @@ class Hub:
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.update()
+
+        self.root.update_idletasks()
+
+        # set windows size:
+        w_root = self.root.winfo_reqwidth()
+        h_root = self.root.winfo_reqheight()
+        h_around = self.around_canvas_frame.winfo_height()
+        h_scrollable = self.scrollable_frame.winfo_height()
+        border_with = self.around_canvas_frame['borderwidth']
+        h_expanded = h_root - h_around + h_scrollable + border_with * 2
+        h = min(self.root.winfo_screenheight(), h_expanded)
+        s = str(w_root) + 'x' + str(h)
+        self.root.geometry(s)
+
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()
 
