@@ -9,6 +9,7 @@ from gui_distances.costmapinput_helper import costmap_is_valid, character_escape
 from gui_distances.distance_choice import DistanceView
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
+from gui_general.scrollable_frame import create_scrollable_frame
 from gui_result.validation_questionnaire import get_suggested_distance_modifications
 
 
@@ -107,42 +108,11 @@ class SliderInput:
         self.checkbutton_extend.grid(sticky="nw", row=4, column=1, padx=10)
 
         # scrollable frame:
-        self.root.grid_rowconfigure(6, weight=1)
-        self.frame = Frame(self.root, highlightbackground="grey", highlightthickness=1)
-        self.frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
-        self.frame.grid_rowconfigure(0, weight=1)
-
-        self.scrollbar = Scrollbar(self.frame, orient='vertical')
-        self.scrollbar.grid(row=0, column=1, sticky='nse')
-
-        self.canvas = Canvas(self.frame, bg='SystemButtonFace', yscrollcommand=self.scrollbar.set, highlightthickness=0)
-        self.canvas.grid(sticky="nswe", row=0, column=0)
-        self.scrollbar.config(command=self.canvas.yview)
-
-        self.canvas.xview_moveto(0)
-        self.canvas.yview_moveto(0)
-
-        self.scrollable_frame = Frame(self.canvas, bg='white', highlightbackground='grey', highlightthickness=1)
-        interior_id = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw')
-
-        def _configure_scrollable_frame(event):
-            size = (self.scrollable_frame.winfo_reqwidth(), self.scrollable_frame.winfo_reqheight())
-            self.canvas.config(scrollregion="0 0 %s %s" % size)
-            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
-                self.canvas.config(width=self.scrollable_frame.winfo_reqwidth())
-                # self.frame.config(width=self.scrollable_frame.winfo_reqwidth())
-
-        self.scrollable_frame.bind('<Configure>', _configure_scrollable_frame)
-
-        def _configure_canvas(event):
-            if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
-                self.canvas.itemconfigure(interior_id, width=self.canvas.winfo_width())
-                # self.frame.config(width=self.canvas.winfo_width())
-
-
-        self.canvas.bind('<Configure>', _configure_canvas)
-
-        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
+        self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
+        self.root.rowconfigure(6, weight=1)
+        self.around_canvas_frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
+        self.canvas.configure(bg='SystemButtonFace')
+        self.scrollable_frame.configure(highlightbackground='grey', highlightthickness=1)
 
         # headings:
         self.label_head_characters = Label(self.root, text="Character Groups", bg="white", font=('Sans', '10', 'bold'))
