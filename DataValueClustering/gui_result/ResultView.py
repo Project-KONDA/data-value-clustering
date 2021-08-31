@@ -240,7 +240,10 @@ class ResultView:
         self.configuration.set_validation_answer_2(self.q2.get_result())
         self.configuration.set_validation_answer_3(self.q3.get_result())
         answer, selected_checks_per_answer = self.q4.get_result()
-        selected_clusters = selected_checks_per_answer[1]
+        if selected_checks_per_answer is None:
+            selected_clusters = None
+        else:
+            selected_clusters = selected_checks_per_answer[1]
         self.configuration.set_validation_answer_4(answer, selected_clusters)
 
 
