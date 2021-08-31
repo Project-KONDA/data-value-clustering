@@ -3,6 +3,7 @@ import numpy as np
 
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 from gui_general.help_popup_gui import menu_help_clustering_configuration
+from gui_general.scrollable_frame import create_scrollable_frame
 
 
 def get_configuration_parameters(master, title, parameter_frame_inits, dependencies, suggestion=None):
@@ -38,17 +39,12 @@ class ClusterConfigurationInput:
         self.parameters = np.empty(self.n, dtype=ClusteringParameter)
 
         # scrollable canvas:
-        self.canvas_border = Frame(self.root, bg='SystemButtonFace', bd=2, relief='groove')
-        self.canvas_border.grid_rowconfigure(0, weight=1)
-        self.canvas = Canvas(self.canvas_border, bg='SystemButtonFace', highlightthickness=0,
-                             width=self.root.winfo_screenwidth() / 25 + self.root.winfo_screenwidth() / 3 + 12)
-        self.scrollbar = Scrollbar(self.canvas_border, orient='vertical', command=self.canvas.yview)
-        self.canvas.bind_all('<MouseWheel>', self.on_mousewheel)
-        self.scrollable_frame = Frame(self.canvas)
-        self.scrollable_frame.bind('<Configure>', lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
-        self.canvas_frame = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor='nw',
-                                                      width=self.canvas.winfo_screenwidth())
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
+        self.root.rowconfigure(3, weight=1)
+        self.around_canvas_frame.grid(row=3, column=0, sticky='nsew')
+        self.around_canvas_frame.configure(bd=2, relief='groove')
+        self.scrollable_frame.configure(bg='SystemButtonFace')
+        self.canvas.configure(bg='SystemButtonFace')
 
         # caption:
         self.label_text = StringVar()
@@ -85,10 +81,6 @@ class ClusterConfigurationInput:
             if param.name == name:
                 return param
 
-    def on_mousewheel(self, event):
-        if self.scrollable_frame.winfo_height() > self.canvas.winfo_height():
-            self.canvas.yview_scroll(-1 * (event.delta // 120), 'units')
-
     def close(self, event=None):
         self.unbind_all()
         self.root.quit()
@@ -100,9 +92,6 @@ class ClusterConfigurationInput:
         self.hint_label.grid(row=1, column=0, sticky='nsew', pady=(0,10), padx=5)
         if self.label_suggested is not None:
             self.label_suggested.grid(row=2, column=0, sticky='senw', padx=10)
-        self.canvas_border.grid(row=3, column=0, sticky='nsew')
-        self.canvas.grid(row=0, column=0, sticky='nsew')
-        self.scrollbar.grid(row=0, column=1, sticky='nsew')
 
         for i, param in enumerate(self.parameters):
             param.frame.grid(row=i + 1, column=0, sticky='nsew', pady=5, padx=5)
