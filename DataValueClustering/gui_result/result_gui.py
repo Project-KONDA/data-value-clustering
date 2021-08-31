@@ -51,7 +51,7 @@ def show_mds_scatter_plot_integrated(root, values_compressed, distance_matrix, c
 
     if show:
         canvas = FigureCanvasTkAgg(fig, master=root)
-        canvas.get_tk_widget().grid(row=2, column=0, sticky='nwse', pady=(20,0))
+        canvas.get_tk_widget().grid(row=2, column=0, sticky='nwse', pady=(20,0), padx=10)
         canvas.draw()
 
 

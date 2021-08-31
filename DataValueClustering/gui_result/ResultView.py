@@ -6,6 +6,7 @@ from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
+from gui_general.scrollable_frame import create_scrollable_label_frame
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
@@ -31,7 +32,7 @@ class ResultView:
         self.root = Toplevel(master)
         self.root.title("Clustering Result & Evaluation")
         self.root.config(bg='white')
-        self.root.resizable(False, False)
+        self.root.resizable(False, True)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root))
@@ -65,9 +66,10 @@ class ResultView:
         self.info = Label(self.root, anchor='c', text="After having familiarized yourself with the clustering, answer the questions to perform the evaluation so we can support you in the next iteration.", bg='white', )
         self.info.grid(row=1, column=0, sticky='wesn', columnspan=2, pady=(0,10))
 
-        # summary:
-        self.summary_frame = LabelFrame(self.root, bg="white", padx=10, borderwidth=2, relief="groove", text=" Clustering Result ")
-        self.summary_frame.grid(row=2, column=0, sticky='nwse', columnspan=1, padx=5, pady=5)
+        # scrollable summary:
+        self.around_canvas_frame_summary, self.canvas_summary, self.scrollable_frame_summary = create_scrollable_label_frame(self.root, " Clustering Result ")
+        self.root.rowconfigure(2, weight=1)
+        self.around_canvas_frame_summary.grid(row=2, column=0, sticky='nwse', padx=5, pady=5)
 
         # # caption left side:
         # self.summary_caption = StringVar()
@@ -77,7 +79,7 @@ class ResultView:
         #                                    font=('TkDefaultFont', 12, 'bold'), pady=10)
         # self.summary_caption_label.grid(row=0, column=0, sticky='wesn', columnspan=1)
 
-        self.info_frame = Frame(self.summary_frame, bg="white")
+        self.info_frame = Frame(self.scrollable_frame_summary, bg="white")
         self.info_frame.grid(row=1, column=0, sticky='nwse', columnspan=1)
 
         # self.info_header_label = Label(self.info_frame, text="Meta-Information", bg='white',
@@ -86,30 +88,31 @@ class ResultView:
 
         s = self.get_info()
         self.info_label = Label(self.info_frame, text=s, justify="left", bg='white')
-        self.info_label.grid(row=1, column=0, sticky='nwes', columnspan=1)
+        self.info_label.grid(row=1, column=0, sticky='nwes', columnspan=1, padx=10)
 
         # scatter plot in summary_frame
         representatives = get_repr_list(self.configuration.values_abstracted, self.configuration.abstraction_dict)
-        show_mds_scatter_plot_integrated(self.summary_frame,representatives,
+        show_mds_scatter_plot_integrated(self.scrollable_frame_summary,representatives,
                                          self.configuration.distance_matrix_map["distance_matrix"],
                                          self.configuration.clusters_abstracted)
 
-        self.info = Label(self.summary_frame,
+        self.info = Label(self.scrollable_frame_summary,
                           text="The plot visualizes the calculated distances and clusters. "
                                "Each dot represents an abstracted value representing a group of original values treated equivalently. "
                                "Each dot is labeled with one of these original values. "
                                "Each cluster is represented by a different color.", justify="left", anchor="w",
                           wraplength=350)
-        self.info.grid(row=3, column=0, sticky='wesn', columnspan=1, pady=(0,20))
+        self.info.grid(row=3, column=0, sticky='wesn', columnspan=1, pady=(0,20), padx=10)
 
         # excel button
-        self.button = Button(self.summary_frame, text='Open Excel File Showing Clustering', command=self.open_excel,
+        self.button = Button(self.scrollable_frame_summary, text='Open Excel File Showing Clustering', command=self.open_excel,
                              bg='pale green')
-        self.button.grid(row=4, column=0, sticky='we', columnspan=1, pady=20)
+        self.button.grid(row=4, column=0, sticky='we', columnspan=1, pady=20, padx=10)
 
-        # questionnaire:
-        self.questionnaire_frame = LabelFrame(self.root, bg="white", borderwidth=2, relief="groove", text=" Clustering Evaluation ", padx=10)  # padx=10,
-        self.questionnaire_frame.grid(row=2, column=1, sticky='nwse', padx=5, pady=5)
+        # scrollable questionnaire:
+        self.around_canvas_frame_questionnaire, self.canvas_questionnaire, self.scrollable_frame_questionnaire = create_scrollable_label_frame(self.root, " Clustering Evaluation ")
+        self.root.rowconfigure(2, weight=1)
+        self.around_canvas_frame_questionnaire.grid(row=2, column=1, sticky='nwse', padx=5, pady=5)
 
         # # caption right side:
         # self.questionnaire_caption = StringVar()
@@ -122,8 +125,8 @@ class ResultView:
         # self.questionnaire_note_label = Label(self.questionnaire_frame, anchor='w', text="After having familiarized yourself with the clustering via the MDS Scatter Plot and the Excel file,\nanswer the following questions to perform the validation of the calculated clustering.", bg='white', justify='left')
         # self.questionnaire_note_label.grid(row=1, column=0, sticky='we', columnspan=2)
 
-        self.questions_frame = Frame(self.questionnaire_frame, bg="white")
-        self.questions_frame.grid(row=1, column=0, sticky='nsew')
+        self.questions_frame = Frame(self.scrollable_frame_questionnaire, bg="white")
+        self.questions_frame.grid(row=1, column=0, sticky='nsew', padx=10)
 
         self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion, self.configuration.get_validation_answer_1())
         self.q1.frame.grid(row=0, column=0, sticky='nsew')
@@ -142,8 +145,8 @@ class ResultView:
         self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, self.configuration.get_validation_answer_4()[0], [[], previosly_selected_check_labels], check_labels_per_answer)
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
-        self.suggestion_frame = Frame(self.questionnaire_frame, bg="white")
-        self.suggestion_frame.grid(row=3, column=0, sticky='nw', columnspan=2)
+        self.suggestion_frame = Frame(self.scrollable_frame_questionnaire, bg="white")
+        self.suggestion_frame.grid(row=3, column=0, sticky='nw', columnspan=2, padx=10)
 
         self.advice_label = Label(self.suggestion_frame, text=QUESTIONNAIRE_EXPLANATION, bg='white',
                                   font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left')
