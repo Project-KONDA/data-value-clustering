@@ -64,17 +64,53 @@ class QuestionnaireResultInput(ABC):
             self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=3, pady=(10, 0))
             self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=3, pady=(0, 10))
 
+        # scrollable question frame:
+        self.root.rowconfigure(3, weight=1)
+        self.around_canvas_frame_questions = Frame(self.root, bg="white", relief="groove", borderwidth=2)
+        self.around_canvas_frame_questions.grid_rowconfigure(0, weight=1)
+        self.around_canvas_frame_questions.grid(row=3, column=0, sticky='nsw', pady=5, padx=5)
+
+        self.canvas_questions = Canvas(self.around_canvas_frame_questions, bg="white", highlightthickness=0)
+        self.canvas_questions.grid(row=0, column=0, sticky='nswe')
+        self.scrollbar_questions = Scrollbar(self.around_canvas_frame_questions, orient="vertical", command=self.canvas_questions.yview)
+        self.scrollbar_questions.grid(row=0, column=5, sticky='nswe')
+        self.canvas_questions.configure(yscrollcommand=self.scrollbar_questions.set)
+        # self.canvas_questions.bind_all("<MouseWheel>", self.on_mousewheel_questions_frame)
+
+        self.canvas_questions.xview_moveto(0)
+        self.canvas_questions.yview_moveto(0)
+
+        self.scrollable_questions_frame = Frame(self.canvas_questions, bg="white")
+        self.scrollable_questions_frame.bind('<Enter>', self.enter_scrollable_questions_frame)
+        self.scrollable_questions_frame.bind('<Leave>', self.leave_scrollable_questions_frame)
+
+        self.canvas_frame_questions = self.canvas_questions.create_window((0, 0), window=self.scrollable_questions_frame, anchor="nw")
+
+        def _configure_scrollable_frame_questions(event):
+            size = (self.scrollable_questions_frame.winfo_reqwidth(), self.scrollable_questions_frame.winfo_reqheight())
+            self.canvas_questions.config(scrollregion="0 0 %s %s" % size)
+            if self.scrollable_questions_frame.winfo_reqwidth() != self.canvas_questions.winfo_width():
+                self.canvas_questions.config(width=self.scrollable_questions_frame.winfo_reqwidth())
+                self.around_canvas_frame_questions.config(width=self.scrollable_questions_frame.winfo_reqwidth())
+
+        self.scrollable_questions_frame.bind('<Configure>', _configure_scrollable_frame_questions)
+
+        def _configure_canvas_questions(event):
+            if self.scrollable_questions_frame.winfo_reqwidth() != self.canvas_questions.winfo_width():
+                self.canvas_questions.itemconfigure(self.canvas_frame_questions, width=self.canvas_questions.winfo_width())
+                self.around_canvas_frame_questions.config(width=self.canvas_questions.winfo_width())
+
+        self.canvas_questions.bind('<Configure>', _configure_canvas_questions)
 
         # question checkboxes:
-        self.root.rowconfigure(3, weight=1)
-        self.question_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")
-        self.question_frame.grid(row=3, column=0, sticky='nsew', padx=5, pady=5)
+        # self.question_frame = Frame(self.root, bg="white", borderwidth=2, relief="groove")
+        # self.question_frame.grid(row=3, column=0, sticky='nsew', padx=5, pady=5)
 
         for i, question in enumerate(self.config_question):
             j = start_row + i
             self.answers[i] = IntVar()
             self.answers[i].set(int(self.config_default[i]))
-            self.checks[i] = Checkbutton(self.question_frame, variable=self.answers[i], command=self.selection_changed, bg='white', text=question, anchor='nw', padx=20)
+            self.checks[i] = Checkbutton(self.scrollable_questions_frame, variable=self.answers[i], command=self.selection_changed, bg='white', text=question, anchor='nw', padx=20)
             self.checks[i].grid(row=j + 5, column=0, sticky='nw')
             if self.m > 5:
                 message = str(self.config_notes[i])
@@ -93,7 +129,7 @@ class QuestionnaireResultInput(ABC):
         # self.result_caption_label.grid(row=0, column=1, sticky='we', columnspan=2)
 
 
-        # scrollable result:
+        # scrollable result frame:
         self.around_canvas_frame = Frame(self.root, bg="white", relief="groove", borderwidth=2)
         self.around_canvas_frame.grid_rowconfigure(0, weight=1)
         self.around_canvas_frame.grid(row=3, column=2, sticky='nsw', pady=5, padx=5)
@@ -103,7 +139,7 @@ class QuestionnaireResultInput(ABC):
         self.scrollbar = Scrollbar(self.around_canvas_frame, orient="vertical", command=self.canvas.yview)
         self.scrollbar.grid(row=0, column=5, sticky='nswe')
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
-        self.canvas.bind_all("<MouseWheel>", self.on_mousewheel)
+        # self.canvas.bind_all("<MouseWheel>", self.on_mousewheel_result_frame)
 
         self.canvas.xview_moveto(0)
         self.canvas.yview_moveto(0)
@@ -120,6 +156,8 @@ class QuestionnaireResultInput(ABC):
                 self.around_canvas_frame.config(width=self.scrollable_result_frame.winfo_reqwidth())
 
         self.scrollable_result_frame.bind('<Configure>', _configure_scrollable_frame)
+        self.scrollable_result_frame.bind('<Enter>', self.enter_scrollable_result_frame)
+        self.scrollable_result_frame.bind('<Leave>', self.leave_scrollable_result_frame)
 
         def _configure_canvas(event):
             if self.scrollable_result_frame.winfo_reqwidth() != self.canvas.winfo_width():
@@ -132,7 +170,23 @@ class QuestionnaireResultInput(ABC):
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
         self.button.grid(row=4, column=0, sticky='nswe', columnspan=6)
 
-    def on_mousewheel(self, event):
+    def enter_scrollable_questions_frame(self, *args):
+        self.scrollable_questions_frame.bind_all("<MouseWheel>", self.on_mousewheel_questions_frame)
+
+    def leave_scrollable_questions_frame(self, *args):
+        self.scrollable_questions_frame.unbind_all("<MouseWheel>")
+
+    def enter_scrollable_result_frame(self, *args):
+        self.scrollable_result_frame.bind_all("<MouseWheel>", self.on_mousewheel_result_frame)
+
+    def leave_scrollable_result_frame(self, *args):
+        self.scrollable_result_frame.unbind_all("<MouseWheel>")
+
+    def on_mousewheel_questions_frame(self, event):
+        if self.scrollable_questions_frame.winfo_height() > self.canvas_questions.winfo_height():
+            self.canvas_questions.yview_scroll(-1 * (event.delta // 120), "units")
+
+    def on_mousewheel_result_frame(self, event):
         if self.scrollable_result_frame.winfo_height() > self.canvas.winfo_height():
             self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
 
@@ -205,7 +259,8 @@ class QuestionnaireResultInput(ABC):
         self.root.destroy()
 
     def unbind_all(self):
-        self.canvas.unbind_all("<MouseWheel>")
+        self.scrollable_result_frame.unbind_all("<MouseWheel>")
+        self.scrollable_questions_frame.unbind_all("<MouseWheel>")
         self.root.unbind_all("<Return>")
 
 
