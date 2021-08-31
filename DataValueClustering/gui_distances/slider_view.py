@@ -76,7 +76,7 @@ class SliderInput:
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
-        self.button_ok = Button(self.root, text='OK', command=self.quit, width=59)
+        self.button_ok = Button(self.root, text='OK', command=self.quit)
         if self.fixed:
             self.button_minus.configure(state="disabled")
             self.button_plus.configure(state="disabled")
@@ -130,14 +130,14 @@ class SliderInput:
             self.canvas.config(scrollregion="0 0 %s %s" % size)
             if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
                 self.canvas.config(width=self.scrollable_frame.winfo_reqwidth())
-                self.frame.config(width=self.scrollable_frame.winfo_reqwidth())
+                # self.frame.config(width=self.scrollable_frame.winfo_reqwidth())
 
         self.scrollable_frame.bind('<Configure>', _configure_scrollable_frame)
 
         def _configure_canvas(event):
             if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
                 self.canvas.itemconfigure(interior_id, width=self.canvas.winfo_width())
-                self.frame.config(width=self.canvas.winfo_width())
+                # self.frame.config(width=self.canvas.winfo_width())
 
 
         self.canvas.bind('<Configure>', _configure_canvas)
