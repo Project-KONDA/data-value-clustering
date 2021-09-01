@@ -89,24 +89,32 @@ class CostMapInput:
 
         # Frames and Canvas
 
-        self.frame = Frame(self.root, relief="groove", borderwidth=2)
+        self.frame = Frame(self.root, relief="groove", borderwidth=2, bg="white")
 
         self.frame.grid(sticky='nswe', row=3, column=1, columnspan=4)
 
         self.root.rowconfigure(3, weight=1)
-        self.root.columnconfigure(1, weight=1)
+        self.root.columnconfigure(4, weight=1)
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(2, weight=1)
 
         self.scrollbarE = Scrollbar(self.frame, orient='vertical')
         self.scrollbarS = Scrollbar(self.frame, orient='horizontal')
 
-        self.canvasNE = Canvas(self.frame, height=5, relief="groove", borderwidth=1,
+        def scrollbarSet(scrollbar, low, high):
+            if float(low) <= 0.0 and float(high) >= 1.0:
+                scrollbar.grid_remove()
+            else:
+                scrollbar.grid()
+            scrollbar.set(low, high)
+
+        self.canvasNE = Canvas(self.frame, height=5, highlightthickness=0,
                                yscrollcommand=self.scrollbarE.set)
-        self.canvasSW = Canvas(self.frame, width=100, relief="groove", borderwidth=1,
+        self.canvasSW = Canvas(self.frame, width=100, highlightthickness=0,
                                xscrollcommand=self.scrollbarS.set)
-        self.canvasSE = Canvas(self.frame, relief="groove", borderwidth=1,
-                               yscrollcommand=self.scrollbarE.set, xscrollcommand=self.scrollbarS.set)
+        self.canvasSE = Canvas(self.frame, highlightthickness=0,
+                               yscrollcommand=lambda l, h: scrollbarSet(self.scrollbarE, l, h),
+                               xscrollcommand=lambda l, h: scrollbarSet(self.scrollbarS, l, h))
 
         self.canvasNE.xview_moveto(0)
         self.canvasNE.yview_moveto(0)
@@ -115,9 +123,9 @@ class CostMapInput:
         self.canvasSE.xview_moveto(0)
         self.canvasSE.yview_moveto(0)
 
-        self.canvasNE.grid(sticky='nswe', row=0, column=2)
-        self.canvasSW.grid(sticky='nswe', row=1, column=0, columnspan=2)
-        self.canvasSE.grid(sticky='nswe', row=1, column=2)
+        self.canvasNE.grid(sticky='nswe', row=0, column=2, padx=3)
+        self.canvasSW.grid(sticky='nswe', row=1, column=0, columnspan=2, pady=3)
+        self.canvasSE.grid(sticky='nswe', row=1, column=2, padx=3, pady=3)
         self.scrollbarE.grid(sticky='nes', row=1, column=3)
         self.scrollbarS.grid(sticky='sew', row=2, column=2)
 
@@ -142,30 +150,34 @@ class CostMapInput:
         def _configure_scrollable_frame(event, scrollable_frame, canvas, outer_frame, w=False, h=False):
             size = (scrollable_frame.winfo_reqwidth(), scrollable_frame.winfo_reqheight())
             canvas.config(scrollregion="0 0 %s %s" % size)
-            # if w and scrollable_frame.winfo_reqwidth() != canvas.winfo_width():
-            #     canvas.config(width=scrollable_frame.winfo_reqwidth())
-            #     outer_frame.config(width=scrollable_frame.winfo_reqwidth())
-            #
-            # if h and scrollable_frame.winfo_reqheight() != canvas.winfo_height():
-            #     canvas.config(height=scrollable_frame.winfo_reqheight())
-            #     outer_frame.config(height=scrollable_frame.winfo_reqheight())
+            if w and scrollable_frame.winfo_reqwidth() != canvas.winfo_width():
+                canvas.config(width=scrollable_frame.winfo_reqwidth())
+                outer_frame.config(width=scrollable_frame.winfo_reqwidth())
+
+            if h and scrollable_frame.winfo_reqheight() != canvas.winfo_height():
+                canvas.config(height=scrollable_frame.winfo_reqheight())
+                outer_frame.config(height=scrollable_frame.winfo_reqheight())
 
         self.scrollableframeNE.bind('<Configure>',
-                              lambda event: _configure_scrollable_frame(event, self.scrollableframeNE, self.canvasNE, self.frame, h=True))
+                                    lambda event: _configure_scrollable_frame(event, self.scrollableframeNE,
+                                                                              self.canvasNE, self.frame))
 
         self.scrollableframeSW.bind('<Configure>',
-                              lambda event: _configure_scrollable_frame(event, self.scrollableframeSW, self.canvasSW, self.frame, w=True))
+                                    lambda event: _configure_scrollable_frame(event, self.scrollableframeSW,
+                                                                              self.canvasSW, self.frame))
 
         self.scrollableframeSE.bind('<Configure>',
-                              lambda event: _configure_scrollable_frame(event, self.scrollableframeSE, self.canvasSE, self.frame, h=True, w=True))
+                                    lambda event: _configure_scrollable_frame(event, self.scrollableframeSE,
+                                                                              self.canvasSE, self.frame, h=True,
+                                                                              w=True))
 
         # Labels and Entry Fields
 
-        case_change_label = Label(self.frame, text='Capitalization change:')
+        case_change_label = Label(self.frame, width=17, text='Capitalization change:')
         case_change_label.grid(sticky=NW, row=0, column=0)
         CreateToolTip(case_change_label,
                       "Weight for the substitution of any lower case letter by its upper case variant or vice versa.")
-        self.case_entry = Entry(self.frame, width=10, validate='key', justify=RIGHT,
+        self.case_entry = Entry(self.frame, width=10, validate='key', justify=RIGHT, borderwidth=2,
                                 validatecommand=(self.case_entry.register(validate_input_float), '%P'))
         if not self.empty and self.costmap is None:
             self.case_entry.insert(END, '.5')
@@ -175,9 +187,9 @@ class CostMapInput:
         self.case_entry.grid(sticky=NW, row=0, column=1)
 
         for i in range(self.n):
-            self.label[i] = Label(self.scrollableframeNE, width=7, bg='white', anchor=W)
+            self.label[i] = Label(self.scrollableframeNE, width=7, bg='ivory2', anchor=W, relief="groove", borderwidth=2)
             self.label[i].grid(sticky=NW, row=9, column=i, padx=(0, 1))
-            self.regex[i] = Entry(self.scrollableframeSW, width=20, bg='ivory2', validate=ALL, validatecommand=(
+            self.regex[i] = Entry(self.scrollableframeSW, width=20, bg='white', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
             self.regex_label[i] = Label(self.scrollableframeSW, anchor=W, justify="left", width=20)
             self.regex[i].grid(sticky=NW, row=i, column=1)
@@ -213,14 +225,14 @@ class CostMapInput:
         self.button_ok.grid(sticky="nswe", row=4, column=4, pady=2, padx=2)
 
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups,
-                                   justify=LEFT, background='snow')
-        self.button_reset.grid(sticky=E, row=4, column=1, pady=2, padx=2)
+                                   background='snow', width=16)
+        self.button_reset.grid(sticky="nswe", row=4, column=1, pady=2, padx=2)
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
-        self.button_minus.grid(sticky=E, row=4, column=2, pady=2, padx=2)
+        self.button_minus.grid(sticky="nswe", row=4, column=2, pady=2, padx=2)
 
         self.button_plus = Button(self.root, text='+', command=self.plus, justify=RIGHT, width=3, background='snow')
-        self.button_plus.grid(sticky=W, row=4, column=3, pady=2, padx=2)
+        self.button_plus.grid(sticky="nswe", row=4, column=3, pady=2, padx=2)
 
         # Center Window on Screen
         self.root.update_idletasks()
@@ -358,12 +370,12 @@ class CostMapInput:
         self.regex_label = regex_label
 
         # 3. add element n-1
-        self.regex[self.n - 1] = Entry(self.scrollableframeSW, width=20, bg='ivory2', validate=ALL)
+        self.regex[self.n - 1] = Entry(self.scrollableframeSW, width=20, bg='white', validate=ALL)
         self.regex[self.n - 1]['validatecommand'] = (
             self.regex[self.n - 1].register(lambda s, i2=self.n - 1: self.copy_to_column(i2, s)), '%P')
 
-        self.regex_label[self.n - 1] = Label(self.scrollableframeSW, anchor=W, bg="white")
-        self.label[self.n - 1] = Label(self.scrollableframeNE, width=7, bg='lightgrey', anchor=W)
+        self.regex_label[self.n - 1] = Label(self.scrollableframeSW, anchor=W)
+        self.label[self.n - 1] = Label(self.scrollableframeNE, width=7, bg='ivory2', anchor=W, relief="groove", borderwidth=2)
 
         for i in range(self.n + 1):
             for j in range(self.n + 1):
