@@ -1,14 +1,12 @@
 import os
-import sys
 from math import floor, sqrt
-from tkinter import Tk, Button, Label, Frame, messagebox, HORIZONTAL, ttk, Menu, Checkbutton, IntVar, LabelFrame, \
-    PhotoImage, OptionMenu, StringVar, Scrollbar, Canvas
+from tkinter import Tk, Button, Label, Frame, messagebox, Menu, Checkbutton, IntVar, LabelFrame, \
+    OptionMenu, StringVar
 from pathlib import Path
 from tkinter.messagebox import WARNING
-from tkinter.ttk import Progressbar
 import numpy as np
+import sys
 
-from distance.weighted_levenshtein_distance import get_costmap_num, split_cost_map
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_abstraction.abstraction_questions import abstraction_question_array
@@ -17,12 +15,12 @@ from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_sug
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
 from gui_distances.CostMapInput import input_costmap
-from gui_distances.blobinput_helper import get_blob_configuration
-from gui_distances.distance_choice import get_distance_choice, DistanceView
+from gui_distances.distance_choice import DistanceView
 from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_hub
 from gui_general.scrollable_frame import create_scrollable_frame
+from gui_general.window_size import set_window_size
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
@@ -89,6 +87,7 @@ class Hub:
 
         "initialisation"
         self.root = Tk()
+        self.root.attributes('-alpha', 0.0)
         self.root.title(TITLE)
         self.root.configure(background='white')
 
@@ -292,19 +291,14 @@ class Hub:
 
         self.root.update_idletasks()
 
-        # set windows size:
-        w_root = self.root.winfo_reqwidth()
+        # calculate and set window size:
         h_root = self.root.winfo_reqheight()
         h_scrollable = self.scrollable_frame.winfo_height()
         h_canvas_questionnaire = self.canvas.winfo_height()
         h_expanded = h_root - h_canvas_questionnaire + h_scrollable
-        h = min(self.root.winfo_screenheight(), h_expanded)
+        set_window_size(self.root, h_expanded)
 
-        x_shift = max(0, (self.root.winfo_screenwidth() - w_root) // 2)
-        y_shift = max(0, (self.root.winfo_screenheight() - h) // 2)
-
-        s = str(w_root) + 'x' + str(h) + '+' + str(x_shift) + '+' + str(y_shift)
-        self.root.geometry(s)
+        self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.mainloop()

@@ -8,6 +8,7 @@ from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
 from gui_general.scrollable_frame import create_scrollable_label_frame
+from gui_general.window_size import set_window_size
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
@@ -31,7 +32,7 @@ class ResultView:
     # def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
     def __init__(self, master, configuration):
         self.root = Toplevel(master)
-        self.root.withdraw()
+        self.root.attributes('-alpha', 0.0)
         self.root.title("Clustering Result & Evaluation")
         self.root.config(bg='white')
         self.root.resizable(False, True)
@@ -118,8 +119,6 @@ class ResultView:
         padx_questions = 5
         self.around_canvas_frame_questionnaire.grid(row=2, column=1, sticky='nwse', padx=padx_questions, pady=5)
 
-        self.root.update_idletasks()
-
         # calculate line break in pixels:
         padx_internal_questions = 10
         scrollbar_width = 17
@@ -175,34 +174,25 @@ class ResultView:
         self.button = Button(self.root, text='Close', command=self.close, bg='azure')
         self.button.grid(row=3, column=0, sticky='we', columnspan=3)
 
-        self.root.update_idletasks()
-
         # set windows size:
-        w_root = self.root.winfo_reqwidth()
+        self.root.update_idletasks()
         h_root = self.root.winfo_reqheight()
-
         h_scrollable_summary = self.scrollable_frame_summary.winfo_height()
         h_canvas_summary = self.canvas_summary.winfo_height()
         h_expanded_summary = h_root - h_canvas_summary + h_scrollable_summary
-
         h_scrollable_questionnaire = self.scrollable_frame_questionnaire.winfo_height()
         h_canvas_questionnaire = self.canvas_questionnaire.winfo_height()
         h_expanded_questionnaire = h_root - h_canvas_questionnaire + h_scrollable_questionnaire
-
         h_max = max(h_expanded_summary, h_expanded_questionnaire)
-        h = min(self.root.winfo_screenheight(), h_max)
+        set_window_size(self.root, h_max)
 
-        x_shift = max(0, (self.root.winfo_screenwidth() - w_root) // 2)
-        y_shift = max(0, (self.root.winfo_screenheight()- h) // 2)
-
-        s = str(w_root) + 'x' + str(h) + '+' + str(x_shift) + '+' + str(y_shift)
-        self.root.geometry(s)
+        self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
 
         self.update_suggestion()
-        self.root.deiconify()
+
         self.root.mainloop()
 
     def previous_cluster_file_names_to_labels(self, previous_cluster_names):
