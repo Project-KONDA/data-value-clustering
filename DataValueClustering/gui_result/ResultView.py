@@ -120,6 +120,9 @@ class ResultView:
         self.around_canvas_frame_questionnaire.grid(row=2, column=1, sticky='nwse', padx=padx_questions, pady=5)
 
         # calculate line break in pixels:
+        self.root.withdraw()
+        self.root.update_idletasks()
+        self.root.deiconify()
         padx_internal_questions = 10
         scrollbar_width = 17
         border = self.around_canvas_frame_questionnaire['borderwidth']
