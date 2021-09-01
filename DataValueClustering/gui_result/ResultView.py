@@ -1,6 +1,7 @@
 import os
-from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, LabelFrame
+from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, PhotoImage
 import numpy as np
+from tkinter.font import Font
 
 from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
@@ -15,8 +16,8 @@ from gui_result.validation_questionnaire import question_1_answers, question_2_a
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
-QUESTIONNAIRE_EXPLANATION = "Please answer the questions above so we can help you decide whether another iteration is necessary\nand how to modify the parameters correspondingly."
-NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration.\nPay attention to the advice given in the configuration views in blue text."
+QUESTIONNAIRE_EXPLANATION = "Please answer the questions above so we can help you decide whether another iteration is necessary and how to modify the parameters correspondingly."
+NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration. Pay attention to the advice given in the configuration views in blue text."
 SATISFIED = "According to your answers above, you are satisfied with the clustering.\nCongratulations, you are done!"
 
 
@@ -30,6 +31,7 @@ class ResultView:
     # def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
     def __init__(self, master, configuration):
         self.root = Toplevel(master)
+        self.root.withdraw()
         self.root.title("Clustering Result & Evaluation")
         self.root.config(bg='white')
         self.root.resizable(False, True)
@@ -69,7 +71,8 @@ class ResultView:
         # scrollable summary:
         self.around_canvas_frame_summary, self.canvas_summary, self.scrollable_frame_summary = create_scrollable_label_frame(self.root, " Clustering Result ")
         self.root.rowconfigure(2, weight=1)
-        self.around_canvas_frame_summary.grid(row=2, column=0, sticky='nwse', padx=5, pady=5)
+        padx_summary = 5
+        self.around_canvas_frame_summary.grid(row=2, column=0, sticky='nwse', padx=padx_summary, pady=5)
 
         # # caption left side:
         # self.summary_caption = StringVar()
@@ -112,7 +115,21 @@ class ResultView:
         # scrollable questionnaire:
         self.around_canvas_frame_questionnaire, self.canvas_questionnaire, self.scrollable_frame_questionnaire = create_scrollable_label_frame(self.root, " Clustering Evaluation ")
         self.root.rowconfigure(2, weight=1)
-        self.around_canvas_frame_questionnaire.grid(row=2, column=1, sticky='nwse', padx=5, pady=5)
+        padx_questions = 5
+        self.around_canvas_frame_questionnaire.grid(row=2, column=1, sticky='nwse', padx=padx_questions, pady=5)
+
+        self.root.update_idletasks()
+
+        # calculate line break in pixels:
+        padx_internal_questions = 10
+        scrollbar_width = 17
+        border = self.around_canvas_frame_questionnaire['borderwidth']
+        label_default_padx = 1
+        label_default_bd = 2
+        max_screen_space = self.root.winfo_screenwidth() - self.around_canvas_frame_summary.winfo_width() - 2 * padx_summary - 2 * padx_questions - 2 * padx_internal_questions - 2 * border - scrollbar_width - 2 * label_default_padx - 2 * label_default_bd
+        font = Font(family="TkDefaultFont", size=12, weight="bold")
+        q1_width = font.measure(question_1[0])
+        line_break = min(q1_width, max_screen_space)
 
         # # caption right side:
         # self.questionnaire_caption = StringVar()
@@ -125,34 +142,34 @@ class ResultView:
         # self.questionnaire_note_label = Label(self.questionnaire_frame, anchor='w', text="After having familiarized yourself with the clustering via the MDS Scatter Plot and the Excel file,\nanswer the following questions to perform the validation of the calculated clustering.", bg='white', justify='left')
         # self.questionnaire_note_label.grid(row=1, column=0, sticky='we', columnspan=2)
 
-        self.questions_frame = Frame(self.scrollable_frame_questionnaire, bg="white")
-        self.questions_frame.grid(row=1, column=0, sticky='nsew', padx=10)
+        self.questions_frame = Frame(self.scrollable_frame_questionnaire, bg="white", width=line_break)
+        self.questions_frame.grid(row=1, column=0, sticky='nsew', padx=padx_internal_questions)
 
-        self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion, self.configuration.get_validation_answer_1())
+        self.q1 = create_enum_validation_question(self.questions_frame, question_1, question_1_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_1())
         self.q1.frame.grid(row=0, column=0, sticky='nsew')
 
-        self.q2 = create_enum_validation_question(self.questions_frame, question_2, question_2_answers, self.update_suggestion, self.configuration.get_validation_answer_2())
+        self.q2 = create_enum_validation_question(self.questions_frame, question_2, question_2_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_2())
         self.q2.frame.grid(row=1, column=0, sticky='nsew')
 
         self.q3 = create_enum_validation_question(self.questions_frame,
-                                             question_3, question_3_answers, self.update_suggestion, self.configuration.get_validation_answer_3())
+                                             question_3, question_3_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_3())
         self.q3.frame.grid(row=2, column=0, sticky='nsew')
 
         cluster_range_plus = list(range(min(self.configuration.clusters_abstracted)+1, max(self.configuration.clusters_abstracted)+2))
         cluster_range_plus_noise = ["noise" if x==0 else x for x in cluster_range_plus]
         check_labels_per_answer = np.array([[], cluster_range_plus_noise], dtype=object)
         previosly_selected_check_labels = self.previous_cluster_file_names_to_labels(self.configuration.get_validation_answer_4()[1])
-        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, self.configuration.get_validation_answer_4()[0], [[], previosly_selected_check_labels], check_labels_per_answer)
+        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_4()[0], [[], previosly_selected_check_labels], check_labels_per_answer)
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
-        self.suggestion_frame = Frame(self.scrollable_frame_questionnaire, bg="white")
+        self.suggestion_frame = Frame(self.scrollable_frame_questionnaire, bg="white", width=line_break)
         self.suggestion_frame.grid(row=3, column=0, sticky='nw', columnspan=2, padx=10)
 
-        self.advice_label = Label(self.suggestion_frame, text=QUESTIONNAIRE_EXPLANATION, bg='white',
-                                  font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left')
-        self.advice_label.grid(row=0, column=0, sticky='nwes', columnspan=1)
+        pixelVirtual = PhotoImage(width=1, height=1)
 
-        # ...
+        self.advice_label = Label(self.suggestion_frame, text=QUESTIONNAIRE_EXPLANATION, bg='white',
+                                  font=('TkDefaultFont', 12, 'bold'), fg='blue', pady=10, justify='left', anchor='nw', wraplength=line_break, compound="c", width=line_break, image=pixelVirtual)
+        self.advice_label.grid(row=0, column=0, sticky='w', columnspan=1)
 
         # close button:
         self.button = Button(self.root, text='Close', command=self.close, bg='azure')
@@ -176,7 +193,7 @@ class ResultView:
         h = min(self.root.winfo_screenheight(), h_max)
 
         x_shift = max(0, (self.root.winfo_screenwidth() - w_root) // 2)
-        y_shift = max(0, (self.root.winfo_screenheight() - h) // 2)
+        y_shift = max(0, (self.root.winfo_screenheight()- h) // 2)
 
         s = str(w_root) + 'x' + str(h) + '+' + str(x_shift) + '+' + str(y_shift)
         self.root.geometry(s)
@@ -185,6 +202,7 @@ class ResultView:
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
 
         self.update_suggestion()
+        self.root.deiconify()
         self.root.mainloop()
 
     def previous_cluster_file_names_to_labels(self, previous_cluster_names):

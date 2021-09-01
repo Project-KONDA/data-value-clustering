@@ -1,4 +1,4 @@
-from tkinter import Entry, StringVar, Frame, Canvas, Scrollbar, Checkbutton, IntVar
+from tkinter import Entry, StringVar, Frame, Canvas, Scrollbar, Checkbutton, IntVar, PhotoImage
 import numpy as np
 import re
 
@@ -6,14 +6,14 @@ from gui_center.hub_configuration import cluster_label_from_txt_name
 from gui_result.validation_frames.EnumValidationQuestion import EnumValidationQuestion
 
 
-def create_enum_int_validation_question(parent, question_and_explanation, answers, result_view, previous=None, previous_cluster=None, check_labels=None):
-    return EnumIntValidationQuestion(parent, question_and_explanation, answers, result_view, previous, previous_cluster, check_labels)
+def create_enum_int_validation_question(parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
+    return EnumIntValidationQuestion(parent, question_and_explanation, answers, result_view, question_break, previous, previous_cluster, check_labels)
 
 
 class EnumIntValidationQuestion(EnumValidationQuestion):
-    def __init__(self, parent, question_and_explanation, answers, result_view, previous=None, previous_cluster=None, check_labels=None):
+    def __init__(self, parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
         assert (len(answers[0]) == 4)
-        super().__init__(parent, question_and_explanation, answers, result_view, previous)
+        super().__init__(parent, question_and_explanation, answers, result_view, question_break, previous)
 
         assert (previous_cluster is None or len(previous_cluster) == len(answers))
 
@@ -25,8 +25,10 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
             self.check_buttons_per_answer[i] = []
             self.check_vars_per_answer[i] = []
 
+        pixelVirtual = PhotoImage(width=1, height=1)
+
         for i, answer in enumerate(answers):
-            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j))
+            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j), wraplength=question_break-22, compound="c", width=question_break-22, image=pixelVirtual)
             if answer[3]:
                 assert self.check_labels_per_answer[i] is not None
                 assert self.check_labels_per_answer[i]
@@ -44,7 +46,7 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
                 )
                 self.canvas_frame = self.canvas.create_window((1, 1), window=self.scrollable_check_frame, anchor="nw")
                 self.canvas.configure(yscrollcommand=self.scrollbar.set)
-                self.around_canvas_frame.grid(row=i + 10, column=2, sticky='nsw', padx=5, pady=5)
+                self.around_canvas_frame.grid(row=i + 11, column=1, sticky='nsw', padx=60, pady=5)
                 self.canvas.grid(row=0, column=0, sticky='nsw', padx=5, pady=5)
                 self.scrollbar.grid(row=0, column=1, sticky='nsw')
 
