@@ -397,9 +397,6 @@ def menu_help_hub(master):
     menu_information_display(master, "Hub - Help", text)
 
 
-
-
-
 def menu_information_display(master, title, content):
     """
     Show window with text
@@ -417,20 +414,25 @@ def menu_information_display(master, title, content):
     # root.geometry("500x200")
     root.title("Help")
     root.configure(bg='white')
-    root.resizable(False, False)
-    Label(root, text=title, font='Arial 14 bold underline',
+    root.resizable(False, True)
+    Label(root, text=title, font='Arial 14 bold',
           anchor=W, justify=LEFT, fg="dark green", background='white'
           ).grid(row=1, column=1, sticky=W)
 
+    outer_frame, canvas, scrollable_frame = create_scrollable_frame(root)
+
+    root.rowconfigure(2, weight=1)
+    outer_frame.grid(sticky='nswe', row=2, column=1)
+
     for i, t in enumerate(content):
         if isinstance(t, str):
-            Label(root, text=t, font='Arial 10',
-                  anchor=W, justify=LEFT, fg="dark green", background='white'
-                  ).grid(row=i + 2, column=1, sticky=W + E)
+            l = Label(scrollable_frame, text=t, font='Arial 10',
+                  anchor=W, justify=LEFT, fg="dark green", background='white')
+            l.grid(row=i, column=1, sticky=W + E)
         else:
-            Label(root, text=t[0], font='Arial 12 bold',
-                  anchor=W, justify=LEFT, fg="dark green", background='white'
-                  ).grid(row=i + 2, column=1, sticky=W)
+            l = Label(scrollable_frame, text=t[0], font='Arial 12 bold',
+                  anchor=W, justify=LEFT, fg="dark green", background='white')
+            l.grid(row=i, column=1, sticky=W)
 
     def button_quit():
         root.quit()
@@ -438,7 +440,7 @@ def menu_information_display(master, title, content):
 
     Button(root, text='OK', command=button_quit,
            justify=RIGHT, width=15, background='snow'
-           ).grid(row=len(content) + 3, column=1, pady=(20,0))
+           ).grid(row=3, column=1)
 
     root.update()
     # root.geometry("500x" + str(root.winfo_height() + 10))
