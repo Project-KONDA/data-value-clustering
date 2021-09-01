@@ -115,7 +115,7 @@ class Hub:
         "scrollable canvas"
         self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
         self.root.rowconfigure(2, weight=1)
-        self.around_canvas_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.around_canvas_frame.grid(sticky='nswe', row=2, column=0, columnspan=2)
         self.around_canvas_frame.configure(borderwidth=0)
 
         "frames"
