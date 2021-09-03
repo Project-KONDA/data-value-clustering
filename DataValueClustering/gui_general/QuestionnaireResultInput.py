@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from tkinter import Label, Checkbutton, Button, IntVar, StringVar, NORMAL, DISABLED, Toplevel
+from tkinter.font import Font
 
 import numpy as np
 
@@ -47,12 +48,15 @@ class QuestionnaireResultInput(ABC):
         # caption:
         self.question_caption = StringVar()
         self.question_caption.set(self.caption_text)
+        font = Font(family="TkDefaultFont", size=12, weight="bold")
         self.question_caption_label = Label(self.root, anchor='c', justify="center", textvariable=self.question_caption, bg='white',
-                                            font=('TkDefaultFont', 12, 'bold'))
+                                            font=font)
+
+        self.caption_width = font.measure(self.caption_text)
 
         self.hint_var = StringVar()
         self.hint_var.set(self.hint_text)
-        self.hint_label = Label(self.root, anchor='c', justify="center", textvariable=self.hint_var, bg='white')
+        self.hint_label = Label(self.root, anchor='c', justify="center", textvariable=self.hint_var, bg='white', wraplength=self.caption_width)
 
         self.label_suggested = None
         if suggestion is not None:
@@ -66,8 +70,8 @@ class QuestionnaireResultInput(ABC):
 
         # scrollable question frame:
         self.around_canvas_frame_questions, self.canvas_questions, self.scrollable_questions_frame = create_scrollable_frame(self.root)
-        self.root.rowconfigure(3, weight=1)
-        self.around_canvas_frame_questions.grid(row=3, column=0, sticky='nsw', pady=5, padx=5)
+        self.root.rowconfigure(4, weight=1)
+        self.around_canvas_frame_questions.grid(row=4, column=0, sticky='nsw', pady=5, padx=5)
 
         # question checkboxes:
         for i, question in enumerate(self.config_question):
@@ -94,12 +98,12 @@ class QuestionnaireResultInput(ABC):
 
         # scrollable result frame:
         self.around_canvas_frame_result, self.canvas_result, self.scrollable_result_frame = create_scrollable_frame(self.root)
-        self.root.rowconfigure(3, weight=1)
-        self.around_canvas_frame_result.grid(row=3, column=2, sticky='nsw', pady=5, padx=5)
+        self.root.rowconfigure(4, weight=1)
+        self.around_canvas_frame_result.grid(row=4, column=2, sticky='nsw', pady=5, padx=5)
 
         # OK button:
         self.button = Button(self.root, text='OK', command=self.close, bg='white')
-        self.button.grid(row=4, column=0, sticky='nswe', columnspan=6)
+        self.button.grid(row=5, column=0, sticky='nswe', columnspan=6)
 
 
     def enter_scrollable_result_frame(self, *args):
