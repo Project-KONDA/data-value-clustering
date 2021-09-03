@@ -1,4 +1,4 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button, Canvas
 
 import gui_abstraction.abstraction_questions
 from gui_general import CreateToolTip
@@ -6,8 +6,8 @@ from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
 
-SHOW = "▶"
-HIDE = "◀"
+SHOW = "▼     Preview     ▼"
+HIDE = "▲     Preview     ▲"
 
 # CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
 CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details"
@@ -73,9 +73,28 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.predefined_option_menu = OptionMenu(self.scrollable_questions_frame, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
         self.predefined_option_menu.grid(sticky='ne', row=2, column=0, padx=10)
 
-        self.button_show_hide = Button(self.root, text=SHOW, command=self.toggle_show_hide, width=1)
-        self.button_show_hide.grid(row=3, column=1, sticky='ns', pady=5, padx=1)
-        CreateToolTip(self.button_show_hide, "Show/hide abstraction preview")
+        def canvas_preview_button_press(arg, press):
+            if press:
+                arg.widget.configure(relief="raised")
+                self.canvas_preview_button.delete('all')
+                if self.preview_shown:
+                    self.canvas_preview_button.create_text((4, 50), angle="90", anchor="ne", text=SHOW, fill="SystemButtonText")
+                    self.hide_preview()
+                else:
+                    self.canvas_preview_button.create_text((4, 50), angle="90", anchor="ne", text=HIDE, fill="SystemButtonText")
+                    self.show_preview()
+                self.preview_shown = not self.preview_shown
+            else:
+                arg.widget.configure(relief="sunken")
+
+        self.canvas_preview_button = Canvas(self.root, width=14, background="SystemButtonFace", borderwidth=2, relief="raised")
+        self.canvas_preview_button.grid(row=3, column=1, sticky='ns', pady=5, padx=1)
+        self.canvas_preview_button.create_text((4, 50), angle="90", anchor="ne", text=SHOW, fill="SystemButtonText")
+
+        self.canvas_preview_button.bind("<ButtonPress-1>", lambda ev: canvas_preview_button_press(ev, True))
+        self.canvas_preview_button.bind("<ButtonRelease-1>", lambda ev: canvas_preview_button_press(ev, False))
+
+        # CreateToolTip(self.button_show_hide, "Show/hide abstraction preview")
 
         self.data = data
         self.labels = []
@@ -149,14 +168,14 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             abstraction_source_content_label.grid(row=i + 10, column=0, sticky='nwse', pady=4)
             self.labels.append(abstraction_source_content_label)
 
-    def toggle_show_hide(self):
-        if self.preview_shown:
-            self.button_show_hide.configure(text=SHOW)
-            self.hide_preview()
-        else:
-            self.button_show_hide.configure(text=HIDE)
-            self.show_preview()
-        self.preview_shown = not self.preview_shown
+    # def toggle_show_hide(self):
+    #     if self.preview_shown:
+    #         self.button_show_hide.configure(text=SHOW)
+    #         self.hide_preview()
+    #     else:
+    #         self.button_show_hide.configure(text=HIDE)
+    #         self.show_preview()
+    #     self.preview_shown = not self.preview_shown
 
     def show_preview(self):
         self.around_canvas_frame_result.grid()
@@ -166,7 +185,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def destroy_preview(self):
         self.around_canvas_frame_result.destroy()
-        self.button_show_hide.destroy()
+        self.canvas_preview_button.destroy()
         self.root.grid_columnconfigure((1), minsize=0)
         if self.label_suggested is not None:
             self.label_suggested.configure(wraplengt=800)
