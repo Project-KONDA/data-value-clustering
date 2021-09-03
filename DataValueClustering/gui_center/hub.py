@@ -61,7 +61,8 @@ ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
 SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
-SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
+SIMPLE_CLUSTERING_HINT_2 = " clusters. You can finish here \nor continue below to achieve a coarser clustering."
+# SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
 
 NONE = "None"
 
@@ -114,7 +115,7 @@ class Hub:
         "scrollable canvas"
         self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
         self.root.rowconfigure(2, weight=1)
-        self.around_canvas_frame.grid(sticky='nswe', row=2, column=0, columnspan=2)
+        self.around_canvas_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
         self.around_canvas_frame.configure(borderwidth=0)
 
         "frames"
@@ -124,7 +125,7 @@ class Hub:
 
         self.data_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
         self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=5)
-        self.refined_clustering_frame.grid(sticky='nswe', row=4, column=0, columnspan=2, padx=5, pady=5)
+        self.refined_clustering_frame.grid(sticky='nswe', row=6, column=0, columnspan=2, padx=5, pady=5)
 
         "distance method choice"
         self.label_distance_choice = Label(self.refined_clustering_frame, text="Dissimilarities Configuration Method:", bg="white")
@@ -153,7 +154,7 @@ class Hub:
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
         self.button_abstraction.grid(sticky='nwe', row=8, column=1, columnspan=2, padx=10, pady=10)
         self.button_distance.grid(sticky='nwe', row=11, column=1, columnspan=2, padx=10, pady=10)
-        self.button_clustering.grid(sticky='ne', row=14, column=1, columnspan=2, padx=10, pady=10)
+        self.button_clustering.grid(sticky='nwe', row=15, column=1, columnspan=2, padx=10, pady=10)
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
         CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
@@ -165,11 +166,11 @@ class Hub:
         self.button_distance_play.grid(sticky='ne', row=12, column=2, padx=10, pady=10, rowspan=2)
         self.button_clustering_play = Button(self.refined_clustering_frame, text='▶', command=self.execute_clustering,
                                              width=4, height=2, state="disabled")
-        self.button_clustering_play.grid(sticky='ne', row=15, column=2, padx=10, pady=10, rowspan=2)
+        self.button_clustering_play.grid(sticky='ne', row=16, column=2, padx=10, pady=10, rowspan=2)
 
-        self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
+        self.button_show_result = Button(self.scrollable_frame, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'), width=45, height=2)
-        self.button_show_result.grid(sticky='nswe', row=17, column=0, columnspan=2, padx=10, pady=10)
+        self.button_show_result.grid(sticky='nswe', row=7, column=0, columnspan=2, padx=10, pady=10)
 
         # self.button_save_result = Button(self.root, text='Save', command=self.menu_save,
         #                                  font=('Sans', '10', 'bold')) #, height=2)
@@ -212,7 +213,7 @@ class Hub:
         self.label_data_progress.grid(sticky='nw', row=6, column=1, columnspan=2, padx=20, pady=2)
         self.label_abstraction_progress.grid(sticky='nw', row=9, column=1, columnspan=2, padx=20, pady=2)
         self.label_distance_progress.grid(sticky='nw', row=12, column=1, columnspan=2, padx=20, pady=2)
-        self.label_clustering_progress.grid(sticky='nw', row=15, column=1, columnspan=2, padx=20, pady=2)
+        self.label_clustering_progress.grid(sticky='nw', row=16, column=1, columnspan=2, padx=20, pady=2)
 
         CreateToolTip(self.label_data_progress, "Status of the data")
         CreateToolTip(self.label_abstraction_progress, "Status of the abstraction")
@@ -250,7 +251,7 @@ class Hub:
         self.preview_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
         self.preview_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
         self.preview_distance.grid(sticky='nswe', row=10, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
-        self.preview_clustering.grid(sticky='nswe', row=14, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_clustering.grid(sticky='nswe', row=14, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
 
         "labels in preview frames"
         label_width = 40
@@ -259,10 +260,10 @@ class Hub:
         self.label_distance_config_heading = Label(self.preview_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
         self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Algorithm Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
 
-        self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
-        self.label_abstraction_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
-        self.label_distance_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
-        self.label_clustering_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1, columnspan=2)
+        self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1)
+        self.label_abstraction_config_heading.grid(sticky='nwse', row=0, column=0)
+        self.label_distance_config_heading.grid(sticky='nwse', row=0, column=0)
+        self.label_clustering_config_heading.grid(sticky='nwse', row=0, column=0)
 
         # TODO: add scrollbars or use Text instead of Label
         self.label_data_config = Label(self.preview_data, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
@@ -281,10 +282,14 @@ class Hub:
         CreateToolTip(self.label_clustering_config, "Selected clustering algorithm and specified parameters.")
 
         "Simple Clustering Hint"
-        self.label_abstraction_hint = Label(self.simple_clustering_frame, text="\n", bg="white", justify="left")
-        self.label_abstraction_hint.grid(sticky='nw', row=11, column=1, columnspan=1, padx=20, pady=10)
-        self.button_abstraction_excel = Button(self.simple_clustering_frame, text="Open Simple Clustering", width=20, height=2, command=self.open_simple_clustering)
-        self.button_abstraction_excel.grid(sticky='nw', row=11, column=3, columnspan=1, padx=10, pady=10)
+        # self.label_abstraction_hint = Label(self.simple_clustering_frame, text="\n", bg="white", justify="left")
+        # self.label_abstraction_hint.grid(sticky='nw', row=11, column=1, columnspan=1, padx=20, pady=10)
+        # self.button_abstraction_excel = Button(self.simple_clustering_frame, text="Open Simple Clustering", width=20, height=2, command=self.open_simple_clustering)
+        # self.button_abstraction_excel.grid(sticky='nw', row=11, column=3, columnspan=1, padx=10, pady=10)
+        self.label_abstraction_hint = Label(self.scrollable_frame, text="\n", width=button_width_full, bg="white", justify="left")
+        self.label_abstraction_hint.grid(sticky='w', row=4, column=0, padx=10, pady=10)
+        self.button_abstraction_excel = Button(self.scrollable_frame, text="Open Simple Clustering", height=2, command=self.open_simple_clustering)
+        self.button_abstraction_excel.grid(sticky='we', row=4, column=1, padx=10, pady=10)
         self.hide_simple_clustering_hint()
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -461,13 +466,20 @@ class Hub:
         # self.configuration.save_as_json()
 
     def show_simple_clustering_hint(self, i):
-        self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
-        self.button_abstraction_excel.configure(state="normal", bg='pale green')
+        # self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
+        # self.button_abstraction_excel.configure(state="normal", bg='pale green')
+        if i and 0 < i:
+            self.label_abstraction_hint.grid()
+            self.button_abstraction_excel.grid()
+            self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
 
     def hide_simple_clustering_hint(self):
-        self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
-        self.button_abstraction_excel.configure(state="disabled")
-        self.button_abstraction_excel.configure(bg=self.original_button_color)
+        self.label_abstraction_hint.grid_remove()
+        self.button_abstraction_excel.grid_remove()
+
+        # self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
+        # self.button_abstraction_excel.configure(state="disabled")
+        # self.button_abstraction_excel.configure(bg=self.original_button_color)
 
     def configure_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
@@ -898,17 +910,12 @@ class Hub:
             if clustering_parameters is None:
                 self.label_clustering_config.configure(text=text)
             else:
-                text += "\nParameters:\n  "
+                text += "\nParameters:"
                 k = 0
                 for i, key in enumerate(clustering_parameters.keys()):
                     parameter_value = clustering_parameters[key]
                     if parameter_value is not None:
-                        if k > 0:
-                            text += ", "
-                            if k % 3 == 0:
-                                text += "\n  "
-                        text += key + "=" + str(parameter_value)
-                        k += 1
+                        text += "\n  " + key + " = " + str(parameter_value)
                 self.label_clustering_config.configure(text=text)
 
 
