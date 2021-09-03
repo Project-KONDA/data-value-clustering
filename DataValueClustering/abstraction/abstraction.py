@@ -98,14 +98,11 @@ def word_decimal_abstraction_function():
 def word_sequence_abstraction_function():
     # ["[a-z]", "l"], ["[A-Z]", "L"], ["l+", "w"], ["LL+", "M"], ["Lw", "W"], ["(w+ )+w+", "q"], ["(W+ )+W+", "U"],
     # ["[qU]+", "V"], ["[0-9]+", "1"]
-    # answers = [True, False, True, True, False, True, True, True, False,
-    #            True, True, False,
-    #            False, False, False, False, False, False,
-    #            True]
-    answers = [True, True, False, False, True, False, False, False, True,
-     True, True, False,
-     False, False, False, False, False, False,
-     True]
+
+    answers = [True, False, True, True, False, True, True, True, False,
+               True, True, False,
+               False, False, False, False, False, False,
+               True]
     return get_abstraction_method(answers), answers
 
 
