@@ -12,8 +12,8 @@ HIDE = "▲     Preview     ▲"
 # CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
 CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details"
 
-DEFAULT_CONFIG = "Default Configuration"
-MANUAL_CONFIG = "Manual Configuration"
+DEFAULT_CONFIG = "Letters & Digits (Default)"
+MANUAL_CONFIG = "Custom Configuration"
 
 def abstraction_configuration(master, data, predefined_answers=None, suggestion=None):
     answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers, suggestion)
@@ -47,18 +47,18 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
-            [DEFAULT_CONFIG, self.config[:, 3]],
-            ["Maximum Abstraction", max_abstraction_function()[1]],
+            # [DEFAULT_CONFIG, self.config[:, 3]],
             ["Duplicate Removal", duplicate_removal_function()[1]],
-            ["letters, digits", char_abstraction_function()[1]],
-            ["case-sensitive letters, digits", char_abstraction_case_sensitive_function()[1]],
-            ["letter sequences and digit sequences", sequence_abstraction_function()[1]],
-            ["case-sensitive letter sequences and digit sequences", sequence_abstraction_case_sensitive_function()[1]],
-            ["letter sequences, digits", letter_sequence_abstraction_function()[1]],
-            ["letters, number sequences", number_sequence_abstraction_function()[1]],
-            ["words", word_abstraction_function()[1]],
-            ["words and decimal", word_decimal_abstraction_function()[1]],
-            ["sentence", word_sequence_abstraction_function()[1]],
+            ["Case-Sensitive Letters & Digits", char_abstraction_case_sensitive_function()[1]],
+            [DEFAULT_CONFIG, char_abstraction_function()[1]],
+            ["Letter Sequences & Digits", letter_sequence_abstraction_function()[1]],
+            ["Letters & Digit Sequences", number_sequence_abstraction_function()[1]],
+            ["Case-Sensitive Letter Sequences & Digit Sequences", sequence_abstraction_case_sensitive_function()[1]],
+            ["Letter Sequences & Digit Sequences", sequence_abstraction_function()[1]],
+            ["Words & Digit Sequences", word_abstraction_function()[1]],
+            ["Words & Decimals", word_decimal_abstraction_function()[1]],
+            ["Sentences & Digit Sequences", word_sequence_abstraction_function()[1]],
+            ["Maximum Abstraction", max_abstraction_function()[1]],
 
             # ["Custom Dictionary", lambda data: custom_dictionary()],
             # ["Custom Full", lambda data: custom_full()]
