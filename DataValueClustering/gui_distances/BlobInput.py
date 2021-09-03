@@ -11,6 +11,11 @@ from gui_distances.blobinput_helper import get_blob_configuration, \
     create_coordinates_relative
 from gui_distances.costmapinput_helper import print_cost_map
 
+EXPLANATION = "Weight the influence of deletions/insertions and substitutions of certain characters and character sequences on the dissimilarity between data values"
+SUB_EXPLANATION = "Each blob represents a group of characters and character sequences. " \
+                  "Increase the distance between a blob and the 'x' blob to increase the influence of corresponding deletions/insertions. " \
+                  "Increase the distance between two blobs to increase the influence of corresponding substitutions. " \
+                  "Increase the size of a blob to increase the influence of substitutions within the corresponding group."
 
 def input_blobs(root, config, suggestion=None):
     blobs = BlobInput(root, config, suggestion)
@@ -108,18 +113,25 @@ class BlobInput:
         self.canvas.bind_all("<MouseWheel>", self.scale_a_blob)
 
         """Info"""
-        self.canvas.bind("<Motion>", self.canvas_blob_info)
-        self.canvas.text = self.canvas.create_text(10, 10, text="", anchor="nw")
-
-        text_x = self.canvas_w / 6
+        text_x = self.canvas_w / 12
         text_y = self.canvas_h / 30
-        text_w = self.canvas_w * 4 / 6
+        text_w = self.canvas_w * 10 / 12
+
+        # TODO: place texts dependent on character height/width
+
+        self.canvas.bind("<Motion>", self.canvas_blob_info)
+        self.canvas.text = self.canvas.create_text(10, self.canvas_h * 26/ 30, text="", anchor="nw")
+
+        self.canvas.advice = self.canvas.create_text(text_x, text_y,
+                                                     text=EXPLANATION,
+                                                     anchor="nw", font=('TkDefaultFont', 12, 'bold'), width=text_w)
+        self.canvas.advice = self.canvas.create_text(text_x, 2*text_y,
+                                                     text=SUB_EXPLANATION,
+                                                     anchor="nw", width=text_w)
+
         if suggestion is not None:
-            self.canvas.advice = self.canvas.create_text(text_x, text_y, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=text_w)
-        else:
-            self.canvas.advice = self.canvas.create_text(text_x, text_y,
-                                                         text="Weight the influence of character deletions/insertions and substitutions on the dissimilarity between data values",
-                                                         anchor="nw", font=('TkDefaultFont', 12, 'bold'), width=text_w)
+            self.canvas.advice = self.canvas.create_text(text_x, 3*text_y, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=text_w)
+
 
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)
