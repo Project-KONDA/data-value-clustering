@@ -1,4 +1,4 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button, Canvas
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button, Canvas, CENTER
 
 import gui_abstraction.abstraction_questions
 from gui_general import CreateToolTip
@@ -126,46 +126,25 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.canvas_result.yview_moveto(0)
 
         self.w = self.root.winfo_screenwidth() / 2
-        wrap_left = 2/3 * self.w
         wrap_right = 1/3 * self.w
 
-        s1 = StringVar()
-        s1.set("Abstracted Values")
-        abstraction_target_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1,
-                                         bg='ivory', font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
-        abstraction_target_label.grid(row=5, column=1, sticky='nwse', pady=4)
-        self.labels.append(abstraction_target_label)
-        CreateToolTip(abstraction_target_label,
-                      "Abstracted data values representing all original values shown on the left hand side")
-
-        # calculate wrap lengths:
-        # self.scrollable_result_frame.update()
-        # left_caption_width = abstraction_target_label.winfo_width()
-        # wrap_left = left_caption_width
-        # wrap_right = self.w - 1 - left_caption_width
-
-        s2 = StringVar()
-        s2.set("Preview of Simple Clustering")
-        abstraction_source_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='lemonchiffon',
-                                         wraplength=wrap_right, justify=LEFT, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
-        abstraction_source_label.grid(row=5, column=0, sticky='nwse', pady=4)
+        abstraction_source_label = Label(self.scrollable_result_frame, anchor='c', text="Preview of Simple Clustering", bg='lemonchiffon',
+                                         wraplength=wrap_right, justify=CENTER, font=('TkDefaultFont', 10, 'bold', 'underline'), padx=2)
+        abstraction_source_label.grid(row=5, column=0, sticky='nwse', pady=(0,4))
         self.labels.append(abstraction_source_label)
-        CreateToolTip(abstraction_source_label,
-                      "Clusters of the first 100 original data values represented by the abstracted value shown on the right hand side")
+
+        abstraction_source_explanation_label = Label(self.scrollable_result_frame, anchor='c', text="The application of the configured abstraction to the first 100 orginal data values resulted in " + str(len(abstraction_dict)) + " cluster" + ("s" if len(abstraction_dict) > 1 else "") + ".",
+                                         bg='lemonchiffon', wraplength=wrap_right, justify=CENTER, padx=2)
+        abstraction_source_explanation_label.grid(row=6, column=0, sticky='nwse', pady=(0, 4))
+        self.labels.append(abstraction_source_explanation_label)
+
+        delta = 7
 
         for i, key in enumerate(abstraction_dict):
-            s1 = StringVar()
-            s1.set(key)
-            abstraction_target_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s1, wraplength=wrap_left,
-                                             bg='ivory')
-            abstraction_target_content_label.grid(row=i + 10, column=1, sticky='nwse', pady=4)
-            self.labels.append(abstraction_target_content_label)
-
-            s2 = StringVar()
-            s2.set(str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1])
-            abstraction_source_content_label = Label(self.scrollable_result_frame, anchor='nw', textvariable=s2, bg='lemonchiffon',
+            text = str(abstraction_dict[key])[1:len(str(abstraction_dict[key])) - 1]
+            abstraction_source_content_label = Label(self.scrollable_result_frame, anchor='nw', text=text, bg='lemonchiffon',
                                              wraplength=wrap_right, justify=LEFT)
-            abstraction_source_content_label.grid(row=i + 10, column=0, sticky='nwse', pady=4)
+            abstraction_source_content_label.grid(row=i+delta, column=0, sticky='nwse', pady=4)
             self.labels.append(abstraction_source_content_label)
 
     # def toggle_show_hide(self):
