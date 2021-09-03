@@ -169,11 +169,12 @@ class Hub:
 
         self.button_show_result = Button(self.root, text='Show Result...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'), width=45, height=2)
-        self.button_show_result.grid(sticky='nswe', row=17, column=0, padx=10, pady=10)
+        self.button_show_result.grid(sticky='nswe', row=17, column=0, columnspan=2, padx=10, pady=10)
 
-        self.button_save_result = Button(self.root, text='Save', command=self.menu_save,
-                                         font=('Sans', '10', 'bold'), height=2)
-        self.button_save_result.grid(sticky='nswe', row=17, column=1, padx=10, pady=10)
+        # self.button_save_result = Button(self.root, text='Save', command=self.menu_save,
+        #                                  font=('Sans', '10', 'bold')) #, height=2)
+        # self.button_save_result.grid(sticky='nswe', row=17, column=1, padx=10, pady=10)
+        # self.button_save_result.grid(sticky='ne', row=0, column=1, padx=10, pady=10)
 
         self.checked_clustering = IntVar(value=1)
         self.checkbutton_clustering = Checkbutton(self.refined_clustering_frame, variable=self.checked_clustering, state="disabled",
@@ -185,7 +186,7 @@ class Hub:
         CreateToolTip(self.button_distance_play, "Execute dissimilarity calculation.")
         CreateToolTip(self.button_clustering_play, "Execute clustering algorithm.")
         CreateToolTip(self.button_show_result, "Show calculated clustering and evaluation questionnaire.")
-        CreateToolTip(self.button_save_result, "Save configuration.")
+        # CreateToolTip(self.button_save_result, "Save configuration.")
 
         # "progress bars"
         # self.path_progress = Progressbar(self.root, orient=HORIZONTAL, length=100, mode='determinate')
@@ -704,7 +705,7 @@ class Hub:
         self.button_distance_play.configure(state="disabled")
         self.button_clustering_play.configure(state="disabled")
         self.button_show_result.configure(state="disabled")
-        self.button_save_result.configure(state="disabled")
+        # self.button_save_result.configure(state="disabled")
 
     def reset_validation_answers(self):
         self.configuration.reset_validation_answers()
@@ -792,10 +793,10 @@ class Hub:
                     self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
                 self.button_clustering_play.configure(state="disabled", bg=self.original_button_color)
 
-        if self.configuration.json_saved:
-            self.button_save_result.configure(state="normal", bg=self.original_button_color) # state="disabled"
-        else:
-            self.button_save_result.configure(state="normal", bg='pale green')
+        # if self.configuration.json_saved:
+        #     self.button_save_result.configure(state="normal", bg=self.original_button_color) # state="disabled"
+        # else:
+        #     self.button_save_result.configure(state="normal", bg='pale green')
 
         self.update_frame_data()
         self.update_frame_abstraction()
