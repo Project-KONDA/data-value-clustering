@@ -1,27 +1,37 @@
 from tkinter import Frame, Canvas, Scrollbar, LabelFrame
 
 
-def create_scrollable_label_frame(root, text):
+def create_scrollable_label_frame(root, text, dynamic=False):
     outer_frame = LabelFrame(root, bg="white", relief="groove", borderwidth=2, text=text)
     outer_frame.grid_rowconfigure(0, weight=1)
-    return _create_scrollable_frame_in_outer_frame(outer_frame)
+    return _create_scrollable_frame_in_outer_frame(outer_frame, dynamic)
 
 
-def create_scrollable_frame(root):
+def create_scrollable_frame(root, dynamic=False):
     outer_frame = Frame(root, bg="white", relief="groove", borderwidth=2)
     outer_frame.grid_rowconfigure(0, weight=1)
-    return _create_scrollable_frame_in_outer_frame(outer_frame)
+    return _create_scrollable_frame_in_outer_frame(outer_frame, dynamic)
 
 
-def _create_scrollable_frame_in_outer_frame(outer_frame):
-    canvas = Canvas(outer_frame, bg="white", highlightthickness=0)
+def _create_scrollable_frame_in_outer_frame(outer_frame, dynamic=False):
+    canvas = Canvas(outer_frame, highlightthickness=0)
     canvas.grid(row=0, column=0, sticky='nswe')
 
     scrollbar = Scrollbar(outer_frame, orient="vertical",
                                          command=canvas.yview)
     scrollbar.grid(row=0, column=1, sticky='nswe')
 
-    canvas.configure(yscrollcommand=scrollbar.set)
+    def scrollbarSet(low, high):
+        if float(low) <= 0.0 and float(high) >= 1.0:
+            scrollbar.grid_remove()
+        else:
+            scrollbar.grid()
+        scrollbar.set(low, high)
+
+    if dynamic:
+        canvas.configure(yscrollcommand=scrollbarSet)
+    else:
+        canvas.configure(yscrollcommand=scrollbar.set)
     canvas.xview_moveto(0)
     canvas.yview_moveto(0)
 
