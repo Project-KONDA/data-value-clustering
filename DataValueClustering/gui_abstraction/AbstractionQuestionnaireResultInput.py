@@ -76,8 +76,8 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.predefined_options = list(self.predefined_abstractions[:, 0])
         self.selected_predefined_option = StringVar()
         self.selected_predefined_option.set(DEFAULT_CONFIG)
-        self.predefined_option_menu = OptionMenu(self.scrollable_questions_frame, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
-        self.predefined_option_menu.grid(sticky='ne', row=2, column=0, padx=10)
+        self.predefined_option_menu = OptionMenu(self.root, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
+        self.predefined_option_menu.grid(sticky='nw', row=3, column=0, columnspan=3, padx=5)
 
         def canvas_preview_button_press(arg, press):
             if press:
@@ -94,7 +94,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
                 arg.widget.configure(relief="sunken")
 
         self.canvas_preview_button = Canvas(self.root, width=14, background="SystemButtonFace", borderwidth=2, relief="raised")
-        self.canvas_preview_button.grid(row=3, column=1, sticky='ns', pady=5, padx=1)
+        self.canvas_preview_button.grid(row=4, column=1, sticky='ns', pady=5, padx=1)
         self.canvas_preview_button.create_text((4, 50), angle="90", anchor="ne", text=SHOW, fill="SystemButtonText")
 
         self.canvas_preview_button.bind("<ButtonPress-1>", lambda ev: canvas_preview_button_press(ev, True))
