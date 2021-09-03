@@ -34,7 +34,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
         self.caption_text = CAPTION_PART_ONE
-        self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values\nand that do not alter the values’ meaning significantly.\nA preview of the simple clustering achieved through the abstraction is shown on demand."
+        self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values " \
+                         "and that do not alter the values’ meaning significantly. " \
+                         "Each question is explained in detail in the corresponding tool tip. " \
+                         "You can start with one of the predefined configurations. " \
+                         "A preview of the simple clustering achieved through the abstraction is shown on demand."
         if suggestion is not None:
             suggestion = "Advice based on the clustering evaluation:" + suggestion
         super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion)
@@ -64,8 +68,10 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             # ["Custom Full", lambda data: custom_full()]
         ], dtype=object)
 
-        self.label = Label(self.scrollable_questions_frame, text="You can start with one of the following predefined configurations:", bg="white")
-        self.label.grid(sticky='nw', row=2, column=0)
+        # self.label = Label(self.scrollable_questions_frame, justify='left', wraplength=self.caption_width,
+        #                    text="You can start with one of the predefined configurations and selectively adapt the answers to your usecase. "
+        #                         "Each question is explained in detail in the corresponding tool tip.", bg="white")
+        # self.label.grid(sticky='nw', row=2, column=0)
 
         self.predefined_options = list(self.predefined_abstractions[:, 0])
         self.selected_predefined_option = StringVar()
