@@ -30,15 +30,15 @@ class EnumValidationQuestion(ValidationQuestion):
         else:
             self.choice.set(-1)
 
-        pixelVirtual = PhotoImage(width=1, height=1)
+        circle_size = 22
+        width_pixels = question_break - circle_size
 
         for i, answer in enumerate(answers):
-            circle_size = 22
             self.radio_buttons[i] = Radiobutton(self.frame, text=answer[1], variable=self.choice, value=i,
                                                 command=self.update_advice, justify='left', anchor='w',
-                                                bg='white', wraplength=question_break - circle_size, compound="c", width=question_break - circle_size, image=pixelVirtual)
+                                                bg='white', wraplength=width_pixels)
             CreateToolTip(self.radio_buttons[i], answer[2])
-            self.radio_buttons[i].grid(row=i + 10, column=1, sticky='nsw' )
+            self.radio_buttons[i].grid(row=i + 10, column=1, sticky='nswe')
 
     def get_result(self):
         if self.choice.get() == -1:
