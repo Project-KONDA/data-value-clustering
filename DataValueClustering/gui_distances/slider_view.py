@@ -343,8 +343,8 @@ class SliderInput:
     def set_tool_tips(self, tool_tips_abstraction_info, tool_tips_warning):
         self.hide_all_tool_tips()
         for i in range(0, self.n):
-            self.tooltips[i] = CreateToolTip(self.entrylist[i], tool_tips_warning[i])
-            self.tooltips[2 * i + 1] = CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i])
+            self.tooltips[i] = CreateToolTip(self.entrylist[i], tool_tips_warning[i], color=warning_color)
+            self.tooltips[2 * i + 1] = CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i], color=warning_color)
 
     def get(self):
         if self.canceled:

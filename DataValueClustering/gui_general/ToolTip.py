@@ -7,11 +7,12 @@ class ToolTip(object):
     binds text to objects, that are shown when hovering
     """
 
-    def __init__(self, widget):
+    def __init__(self, widget, color="#ffffe0"):
         self.widget = widget
         self.tipwindow = None
         self.id = None
         self.x = self.y = 0
+        self.color = color
 
     def showtip(self, text):
         "Display text in tooltip window"
@@ -24,12 +25,12 @@ class ToolTip(object):
         self.tipwindow = tw = Toplevel(self.widget)
         tw.wm_overrideredirect(1)
         tw.wm_geometry("+%d+%d" % (x, y))
-        if self.text.startswith("Warning"):
-            bg = "tomato"
-        else:
-            bg="#ffffe0"
+        # if self.text.startswith("Warning"):
+        #     bg = "tomato"
+        # else:
+        #     bg="#ffffe0"
         label = Label(tw, text=self.text, justify=LEFT,
-                      background=bg, relief=SOLID, borderwidth=1,
+                      background=self.color, relief=SOLID, borderwidth=1,
                       font=("tahoma", "8", "normal"))
         label.pack(ipadx=1)
 
@@ -40,8 +41,8 @@ class ToolTip(object):
             tw.destroy()
 
 
-def CreateToolTip(widget, text="", textfunction=None):
-    toolTip = ToolTip(widget)
+def CreateToolTip(widget, text="", textfunction=None, color="#ffffe0"):
+    toolTip = ToolTip(widget, color)
     if textfunction is None:
         textfunction = lambda: text
 
