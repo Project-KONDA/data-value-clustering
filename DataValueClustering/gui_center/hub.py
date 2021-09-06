@@ -289,7 +289,7 @@ class Hub:
         self.label_abstraction_hint = Label(self.scrollable_frame, text="\n", width=button_width_full, bg="white", justify="left")
         self.label_abstraction_hint.grid(sticky='w', row=4, column=0, padx=10, pady=10)
         self.button_abstraction_excel = Button(self.scrollable_frame, text="Open Simple Clustering", height=2, command=self.open_simple_clustering)
-        self.button_abstraction_excel.grid(sticky='we', row=4, column=1, padx=10, pady=10)
+        self.button_abstraction_excel.grid(sticky='w', row=4, column=1, padx=10, pady=10)
         self.hide_simple_clustering_hint()
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -466,20 +466,19 @@ class Hub:
         # self.configuration.save_as_json()
 
     def show_simple_clustering_hint(self, i):
-        # self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
-        # self.button_abstraction_excel.configure(state="normal", bg='pale green')
-        if i and 0 < i:
-            self.label_abstraction_hint.grid()
-            self.button_abstraction_excel.grid()
-            self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
+        self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
+        self.button_abstraction_excel.configure(state="normal", bg='pale green')
+        # if i and 0 < i:
+        #     self.label_abstraction_hint.grid()
+        #     self.button_abstraction_excel.grid()
+        #     self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
 
     def hide_simple_clustering_hint(self):
-        self.label_abstraction_hint.grid_remove()
-        self.button_abstraction_excel.grid_remove()
-
-        # self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
-        # self.button_abstraction_excel.configure(state="disabled")
-        # self.button_abstraction_excel.configure(bg=self.original_button_color)
+        # self.label_abstraction_hint.grid_remove()
+        # self.button_abstraction_excel.grid_remove()
+        self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
+        self.button_abstraction_excel.configure(state="disabled")
+        self.button_abstraction_excel.configure(bg=self.original_button_color)
 
     def configure_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
