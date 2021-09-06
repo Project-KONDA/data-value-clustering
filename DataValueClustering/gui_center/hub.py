@@ -251,7 +251,7 @@ class Hub:
         self.preview_data_canvas.config(height=0, bg="grey90")
         self.preview_abstraction_canvas.config(height=0, bg="grey90")
         self.preview_distance_canvas.config(height=0, bg="grey90")
-        self.preview_clustering_canvas.config(bg="grey90")
+        self.preview_clustering_canvas.config(height=0, bg="grey90")
 
         self.preview_data.config(bg="grey90")
         self.preview_abstraction.config(bg="grey90")
