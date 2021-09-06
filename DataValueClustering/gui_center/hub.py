@@ -123,11 +123,9 @@ class Hub:
         self.simple_clustering_frame = LabelFrame(self.scrollable_frame, text=' Simple Clustering ', bg="white")
         self.refined_clustering_frame = LabelFrame(self.scrollable_frame, text=' Refined Clustering ', bg="white")
 
-        self.label_frame_pady = 5
-
-        self.data_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=self.label_frame_pady)
-        self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=self.label_frame_pady)
-        self.refined_clustering_frame.grid(sticky='nswe', row=6, column=0, columnspan=2, padx=5, pady=self.label_frame_pady)
+        self.data_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=5)
+        self.refined_clustering_frame.grid(sticky='nswe', row=6, column=0, columnspan=2, padx=5, pady=5)
 
         "distance method choice"
         self.label_distance_choice = Label(self.refined_clustering_frame, text="Dissimilarities Configuration Method:", bg="white")
@@ -288,11 +286,10 @@ class Hub:
         # self.label_abstraction_hint.grid(sticky='nw', row=11, column=1, columnspan=1, padx=20, pady=10)
         # self.button_abstraction_excel = Button(self.simple_clustering_frame, text="Open Simple Clustering", width=20, height=2, command=self.open_simple_clustering)
         # self.button_abstraction_excel.grid(sticky='nw', row=11, column=3, columnspan=1, padx=10, pady=10)
-        self.abstaction_hint_pady = 10
         self.label_abstraction_hint = Label(self.scrollable_frame, text="\n", width=button_width_full, bg="white", justify="left")
-        self.label_abstraction_hint.grid(sticky='w', row=4, column=0, padx=10, pady=self.abstaction_hint_pady)
+        self.label_abstraction_hint.grid(sticky='w', row=4, column=0, padx=10, pady=10)
         self.button_abstraction_excel = Button(self.scrollable_frame, text="Open Simple Clustering", height=2, command=self.open_simple_clustering)
-        self.button_abstraction_excel.grid(sticky='w', row=4, column=1, padx=10, pady=self.abstaction_hint_pady)
+        self.button_abstraction_excel.grid(sticky='we', row=4, column=1, padx=10, pady=10)
         self.hide_simple_clustering_hint()
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -304,8 +301,8 @@ class Hub:
         h_root = self.root.winfo_reqheight()
         h_scrollable = self.scrollable_frame.winfo_height()
         h_canvas_questionnaire = self.canvas.winfo_height()
-        self.h_expanded = h_root - h_canvas_questionnaire + h_scrollable
-        set_window_size(self.root, self.h_expanded)
+        h_expanded = h_root - h_canvas_questionnaire + h_scrollable
+        set_window_size(self.root, h_expanded)
 
         self.root.attributes('-alpha', 1.0)
 
@@ -475,21 +472,6 @@ class Hub:
             self.label_abstraction_hint.grid()
             self.button_abstraction_excel.grid()
             self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
-
-            # self.root.attributes('-alpha', 0.0)
-            # self.root.update_idletasks()
-            # calculate and set window size:
-            # h_root = self.root.winfo_reqheight()
-            # h_scrollable = self.scrollable_frame.winfo_height()
-            # h_canvas_questionnaire = self.canvas.winfo_height()
-            label_height = self.label_abstraction_hint['height']
-            button_height = self.button_abstraction_excel['height']
-            max_height = max(label_height,button_height)
-            self.h_expanded = self.h_expanded + max_height + 2 * self.abstaction_hint_pady + 2 * self.label_frame_pady
-            # print("2: ", h_expanded, h_canvas_questionnaire, h_scrollable)
-            set_window_size(self.root, self.h_expanded)
-
-            # self.root.attributes('-alpha', 1.0)
 
     def hide_simple_clustering_hint(self):
         self.label_abstraction_hint.grid_remove()
