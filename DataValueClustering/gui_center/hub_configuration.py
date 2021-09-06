@@ -337,7 +337,8 @@ class HubConfiguration():
         return self.abstraction_answers
 
     def get_distance_configuration(self):
-        return self.cost_map, self.blob_configuration
+        blobconfig = self.create_blob_configuration() if self.blob_configuration is None else self.blob_configuration
+        return self.cost_map, blobconfig
 
     def get_clustering_selection(self):
         return self.clustering_algorithm, self.clustering_answers
