@@ -499,23 +499,17 @@ class Hub:
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
         self.root.update()
         self.disable()
-        previous_cost_map, previous_blob_configuration = self.configuration.get_distance_configuration()
+        previous_cost_map, blob_configuration = self.configuration.get_distance_configuration()
 
         self.set_saved(False)
 
         if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
-            blob_configuration = self.configuration.create_blob_configuration()
             config_method, cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:4],
                                    texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
         elif self.selected_distance_option.get() == DISTANCE_OPTION_BLOBS:
-            if previous_blob_configuration is None:
-                blob_configuration = self.configuration.create_blob_configuration()
-            else:
-                blob_configuration = previous_blob_configuration
             config_method, cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
         else:
-            blob_configuration = self.configuration.create_blob_configuration()
             cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
                                          abstraction=blob_configuration[1:, 0:4], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
             blob_configuration = None
@@ -524,7 +518,7 @@ class Hub:
         self.reset_validation_answers()
 
         if cost_map is None or previous_cost_map == cost_map:
-            self.configuration.blob_configuration = previous_blob_configuration
+            self.configuration.blob_configuration = blob_configuration
         else:
             self.configuration.set_distance_configuration(cost_map, blob_configuration)
 

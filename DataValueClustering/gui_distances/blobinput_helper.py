@@ -111,6 +111,8 @@ blob_configuration_array = [
 
 
 def get_blob_configuration(answers):
+    if answers == None:
+        return None
     blob_info = get_array_part(blob_configuration_array, abstraction_question_array, answers)  # [label, regex, resizable, info]
     n = len(blob_info)
     coordinates = create_coordinates_relative(n)  # [x, y, size]
