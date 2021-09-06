@@ -179,7 +179,7 @@ class Hub:
 
         self.checked_clustering = IntVar(value=1)
         self.checkbutton_clustering = Checkbutton(self.refined_clustering_frame, variable=self.checked_clustering, state="disabled",
-                                                  bg="white", command=self.check_default_clustering, text="Default")
+                                                  bg="white", command=self.check_default_clustering, text="Default Algorithm Configuration")
         self.checkbutton_clustering.grid(sticky='nsw', row=14, column=1, columnspan=1, padx=(10,0), pady=10)
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
         # self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
