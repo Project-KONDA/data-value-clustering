@@ -72,8 +72,8 @@ class SliderInput:
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view)
         CreateToolTip(self.button_expert, "Open Matrix view, which allows setting the weights entirely flexible.")
         self.extended = IntVar(self.root, 0)
-        self.checkbutton_extend = Checkbutton(self.root, text="Advanced Mode", bg="white", variable=self.extended, command=self.trigger_extend)
-        CreateToolTip(self.checkbutton_extend, "Enable/disable modification of structures groups.")
+        self.checkbutton_extend = Checkbutton(self.root, text="Custom Character Groups", bg="white", variable=self.extended, command=self.trigger_extend)
+        CreateToolTip(self.checkbutton_extend, "Enable/disable modification of character groups.")
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
@@ -116,18 +116,14 @@ class SliderInput:
 
         # headings:
         self.label_head_characters = Label(self.root, text="Character Groups", bg="white", font=('Sans', '10', 'bold'))
-        self.label_head_mapping = Label(self.root, text="Mapping", bg="white", font=('Sans', '10', 'bold'), width=25)
-        self.label_head_weights = Label(self.root, text="Weights", bg="white", font=('Sans', '10', 'bold'))
+        self.label_head_weights = Label(self.root, text="Weights of Influence", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_head_characters, "Enumerate all characters of this group. Only the first occurrence of a "
-                                           "character in one of the groups is relevant. Note that some characters may "
+                                           "character in one of the groups is relevant.\nNote that some characters may "
                                            "represent abstracted details. This mapping is provided in the column "
-                                           "'Abstraction Mapping'.")
-        CreateToolTip(self.label_head_mapping, "Mapping between characters of the column 'Characters' and the abstracted "
-                                           "aspects they represent.")
-        CreateToolTip(self.label_head_weights, "Weights for the given character groups.")
-        self.label_head_characters.grid(sticky='nswe', row=5, column=1, columnspan=2)
-        self.label_head_mapping.grid(sticky='ns', row=5, column=3, columnspan=2)
-        self.label_head_weights.grid(sticky='nswe', row=5, column=5, columnspan=2)
+                                           "to the right.")
+        CreateToolTip(self.label_head_weights, "Weights indicating the influence of the given character groups on the dissimilarity between data values.")
+        self.label_head_characters.grid(sticky='nswe', row=5, column=1, columnspan=3)
+        self.label_head_weights.grid(sticky='nswe', row=5, column=4, columnspan=4)
 
         self.row_offset = 6
 
@@ -400,9 +396,7 @@ class SliderInput:
 
     def trigger_extend(self):
         if self.extended.get() == 1:
-            self.label_head_characters.grid() # sticky='nswe', row=5, column=1, columnspan=2
-            self.label_head_mapping.configure(width=25, text="Mapping")
-            self.label_head_mapping.grid(column=3, columnspan=2)
+            self.label_head_characters.configure(text="Custom Character Groups")
             if not self.fixed:
                 self.button_plus.configure(state="normal")
                 self.button_minus.configure(state="normal")
@@ -411,10 +405,7 @@ class SliderInput:
                 self.label_list[i].grid(column=3, columnspan=1, padx=2)
                 self.label_list[i].configure(width=25)
         else:
-            self.label_head_characters.grid_remove()
-            # self.label_head_mapping.configure(width=58)
-            self.label_head_mapping.grid(column=1, columnspan=4)
-            self.label_head_mapping.configure(text="Structure Groups")
+            self.label_head_characters.configure(text="Character Groups")
             self.button_plus.configure(state="disabled")
             self.button_minus.configure(state="disabled")
             for i, e in enumerate(self.entrylist):
