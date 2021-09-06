@@ -15,6 +15,7 @@ from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_sug
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
 from gui_distances.CostMapInput import input_costmap
+from gui_distances.costmapinput_helper import string_simplified_cost_map_split
 from gui_distances.distance_choice import DistanceView
 from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
@@ -284,11 +285,13 @@ class Hub:
         self.label_data_config = Label(self.preview_data, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
         self.label_abstraction_config = Label(self.preview_abstraction, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
         self.label_distance_config = Label(self.preview_distance, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
+        self.label_distance_config2 = Label(self.preview_distance, text=NONE, bg="grey90", anchor="nw", justify="right", padx=10, width=0)
         self.label_clustering_config = Label(self.preview_clustering, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
 
         self.label_data_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
         self.label_abstraction_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
-        self.label_distance_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
+        self.label_distance_config.grid(sticky='nwse', row=1, column=0, rowspan=1)
+        self.label_distance_config2.grid(sticky='nse', row=1, column=0, rowspan=1)
         self.label_clustering_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
 
         CreateToolTip(self.label_data_config, "Name of the selected data set.")
@@ -872,40 +875,14 @@ class Hub:
             font = ImageFont.truetype('arial', 12)
             return font.getsize(string)[0]
 
-
         cost_map, blob_configuration = self.configuration.get_distance_configuration()
         if cost_map is None:
             self.label_distance_config.configure(text=NONE)
+            self.label_distance_config2.configure(text="")
         else:
-            n = int(floor(sqrt(len(cost_map))))
-            text = ""
-            for i in range(n):
-                # if type(cost_map[i])
-                s = "[" + str(cost_map[i]) + "]:\t"
-                if calculateFontSize(s) < 53:
-                    s += "\t"
-                for j in range(n):
-                    s2 = str(cost_map[(j, i)]) + "  "
-                    while calculateFontSize(s2) < 35:
-                        s2 += " "
-                    s += s2
-                if text == "":
-                    text = s
-                else:
-                    text += "\n" + s
-
-            # costmap_case, regex_np, costmap_weights = split_cost_map(cost_map)
-            # text = "["
-            # for i, v in enumerate(regex_np):
-            #     if i > 0:
-            #         text += ", "
-            #     s = ""
-            #     for j, c in enumerate(v):
-            #         s += c
-            #     text += str(s)
-            # text += "]"
-            # text += "\n" + str(costmap_weights)
-            self.label_distance_config.configure(text=text)
+            labels, numbers = string_simplified_cost_map_split(cost_map, blob_configuration[0:4])
+            self.label_distance_config.configure(text=labels)
+            self.label_distance_config2.configure(text=numbers)
 
     def update_frame_clustering(self):
 

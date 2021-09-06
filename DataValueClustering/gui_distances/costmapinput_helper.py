@@ -112,29 +112,53 @@ def costmap_is_valid(map, n=None):
 
 
 def print_cost_map(map):
+    print(string_cost_map(map))
+
+def string_cost_map(map):
     if not costmap_is_valid(map):
-        print("{}")
-        return
+        return "{}"
+
     n = int(floor(sqrt(len(map))))
-    s = "{"
-    # s += "(): "
-    s += str(map[()])
-    # s += ","
-    print(s)
-    s = ""
+    text = "{"
+    text += str(map[()]) + "\n"
     for i in range(n):
-        # s += str(i) + ": "
-        s += map[i] + "  "
-    print(s)
-    # print()
+        text += map[i] + "  "
     for i in range(n):
-        s = ""
+        text += "\n"
         for j in range(n):
             # s += "(" + str(i) + ", " + str(j) + "): "
-            s += str(map[(j, i)]) + "  "
-        print(s)
+            text += str(map[(j, i)]) + "  "
+    return text
 
-    print("}")
+
+def string_simplified_cost_map_split(map, abstraction):
+    def translate(i):
+        s = map[i]
+        t = ""
+        for ab in abstraction:
+            if len(ab[1]) == 1:
+                if ab[1] in s:
+                    s = s.replace(ab[1], "")
+                    t += "<" + ab[0] + "> "
+        if s != "":
+            s += " "
+        return s + t
+
+    try:
+        costmap_is_valid(map)
+    except ValueError:
+        return "/"
+    n = int(floor(sqrt(len(map))))
+    text1 = ""
+    for i in range(1, n-1):
+        text1 += translate(i) + "\n"
+    text1 += "<rest>"
+    text2 = ""
+    for i in range(1, n):
+        text2 += str(map[0, i]) + "\n"
+    return text1, text2
+
+
 
 
 def preprocess_regexes(regexlist):
@@ -157,6 +181,7 @@ def example_costmap():
         for j in range(5):
             example_map[(i, j)] = float(int(i != j) + 1)
     return example_map
+
 
 if __name__ == "__main__":
     print_cost_map(example_costmap())
