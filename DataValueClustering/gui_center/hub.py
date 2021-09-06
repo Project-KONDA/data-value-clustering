@@ -61,7 +61,7 @@ ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
 SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
-SIMPLE_CLUSTERING_HINT_2 = " clusters. You can finish here \nor continue below to achieve a coarser clustering."
+SIMPLE_CLUSTERING_HINT_2 = " clusters. You can stop here \nor continue below to achieve a coarser clustering."
 # SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
 
 NONE = "None"
@@ -168,7 +168,7 @@ class Hub:
                                              width=4, height=2, state="disabled")
         self.button_clustering_play.grid(sticky='ne', row=16, column=2, padx=10, pady=10, rowspan=2)
 
-        self.button_show_result = Button(self.scrollable_frame, text='Show Result...', command=self.show_result, state="disabled",
+        self.button_show_result = Button(self.scrollable_frame, text='Open Refined Clustering...', command=self.show_result, state="disabled",
                                          font=('Sans', '10', 'bold'), width=45, height=2)
         self.button_show_result.grid(sticky='nswe', row=7, column=0, columnspan=2, padx=10, pady=10)
 
