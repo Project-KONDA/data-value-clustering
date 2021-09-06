@@ -66,9 +66,9 @@ class SliderInput:
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root))
         self.root.config(menu=self.menu)
 
-        self.title = Label(self.root, text="Weight the influence of certain structures on the dissimilarity between data values", bg="white",
+        self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
-        self.hint = Label(self.root, text="Choose heigher weights for structures that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
+        self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view)
         CreateToolTip(self.button_expert, "Open Matrix view, which allows setting the weights entirely flexible.")
         self.extended = IntVar(self.root, 0)
@@ -79,10 +79,10 @@ class SliderInput:
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
         self.button_ok = Button(self.root, text='OK', command=self.quit)
 
-        self.button_minus.grid(sticky='nse', row=7, column=0, pady=2, padx=10)
-        self.button_plus.grid(sticky='nsw', row=7, column=1, pady=2, padx=10)
-        self.button_reset.grid(sticky='nsw', row=7, column=2, columnspan=1, pady=2, padx=2)
-        self.button_ok.grid(sticky='nswe', row=7, column=3, columnspan=6, pady=2, padx=2)
+        self.button_minus.grid(sticky='nse', row=8, column=0, pady=2, padx=10)
+        self.button_plus.grid(sticky='nsw', row=8, column=1, pady=2, padx=10)
+        self.button_reset.grid(sticky='nsw', row=8, column=2, columnspan=1, pady=2, padx=2)
+        self.button_ok.grid(sticky='nswe', row=8, column=3, columnspan=6, pady=2, padx=2)
 
         if self.fixed:
             self.button_minus.grid_remove()
@@ -113,21 +113,25 @@ class SliderInput:
 
         # scrollable frame:
         self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
-        self.root.rowconfigure(6, weight=1)
-        self.around_canvas_frame.grid(sticky='nswe', row=6, column=0, columnspan=8, pady=1, padx=1)
+        self.root.rowconfigure(7, weight=1)
+        self.around_canvas_frame.grid(sticky='nswe', row=7, column=0, columnspan=8, pady=1, padx=1)
         self.canvas.configure(bg='SystemButtonFace')
         self.scrollable_frame.configure(highlightbackground='grey', highlightthickness=1)
 
         # headings:
         self.label_head_characters = Label(self.root, text="Character Groups", bg="white", font=('Sans', '10', 'bold'))
+        self.label_head_weights_sub = Label(self.root, text="ᐊ low influence    ......    high influence ᐅ", bg="white")
         self.label_head_weights = Label(self.root, text="Weights of Influence", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_head_characters, "Enumerate all characters of this group. Only the first occurrence of a "
                                            "character in one of the groups is relevant.\nNote that some characters may "
                                            "represent abstracted details. This mapping is provided in the column "
                                            "to the right.")
         CreateToolTip(self.label_head_weights, "Weights indicating the influence of the given character groups on the dissimilarity between data values.")
-        self.label_head_characters.grid(sticky='nswe', row=5, column=0, columnspan=4)
-        self.label_head_weights.grid(sticky='nswe', row=5, column=4, columnspan=4)
+        self.label_head_characters.grid(sticky='nswe', row=5, column=0, columnspan=3, pady=(20,0))
+        self.label_head_weights.grid(sticky='nswe', row=5, column=4, columnspan=4, pady=(20,0))
+        self.label_head_weights_sub.grid(sticky='ns', row=6, column=4, columnspan=4)
+
+
 
         self.row_offset = 6
 
