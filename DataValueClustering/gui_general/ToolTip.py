@@ -53,3 +53,5 @@ def CreateToolTip(widget, text="", textfunction=None):
 
     widget.bind('<Enter>', enter)
     widget.bind('<Leave>', leave)
+
+    return toolTip
