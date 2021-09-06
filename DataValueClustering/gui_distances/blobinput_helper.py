@@ -67,7 +67,7 @@ blob_configuration_array = [
      "'a' represents all lower and upper case letters, e.g. 'a' and 'A'."],
     [[0, 1, 4],    [8],                      "letter_sequences",            "b",                                                       False,
      "'b' represents all sequences of lower and upper case letters, e.g. 'Portrait', 'red' and 'USA'."],
-    [[0, 1, 4, 8], [],                       "letter_sequence_sequences",   "Q",                                                       False,
+    [[0, 1, 4, 8], [],                       "sequence_of_letter_sequences",   "Q",                                                       False,
      "'Q' represents all sequences of sequences of lower and upper case letters separated by a blank space, e.g. 'in USA' and 'around or in Marburg'."],
     [[2],          [1, 5],                   "upper_case_letters",          "L",                                                       False,
      "'L' represents all upper case letters, e.g. 'A', 'B' and 'C'."],
