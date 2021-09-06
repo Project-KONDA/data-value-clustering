@@ -74,10 +74,16 @@ class SliderInput:
         self.extended = IntVar(self.root, 0)
         self.checkbutton_extend = Checkbutton(self.root, text="Custom Character Groups", bg="white", variable=self.extended, command=self.trigger_extend)
         CreateToolTip(self.checkbutton_extend, "Enable/disable modification of character groups.")
-        self.button_reset = Button(self.root, text='Reset', command=self.reset_groups, width=5)
+        self.button_reset = Button(self.root, text='Reset', command=self.reset_groups)
         self.button_plus = Button(self.root, text='+', command=self.plus, width=3)
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
         self.button_ok = Button(self.root, text='OK', command=self.quit)
+
+        self.button_minus.grid(sticky='nse', row=7, column=0, pady=2, padx=10)
+        self.button_plus.grid(sticky='nsw', row=7, column=1, pady=2, padx=10)
+        self.button_reset.grid(sticky='nsw', row=7, column=2, columnspan=1, pady=2, padx=2)
+        self.button_ok.grid(sticky='nswe', row=7, column=3, columnspan=6, pady=2, padx=2)
+
         if self.fixed:
             self.button_minus.grid_remove()
             self.button_plus.grid_remove()
@@ -86,32 +92,29 @@ class SliderInput:
         self.button_expert.grid(sticky='ne', row=4, column=7, padx=10)
         if suggestion is not None:
             self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800, bg="white", anchor='w', fg='blue', justify='left')
-            self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
-            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 0))
-            self.label_suggested.grid(row=2, column=1, sticky='senw', columnspan=7, pady=(0,10), padx=10)
+            self.title.grid(sticky='nswe', row=0, column=0, columnspan=8, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=0, columnspan=8, pady=(0, 0))
+            self.label_suggested.grid(row=2, column=0, sticky='senw', columnspan=8, pady=(0,10), padx=10)
         else:
-            self.title.grid(sticky='nswe', row=0, column=1, columnspan=7, pady=(10, 0))
-            self.hint.grid(sticky='nswe', row=1, column=1, columnspan=7, pady=(0, 10))
+            self.title.grid(sticky='nswe', row=0, column=0, columnspan=8, pady=(10, 0))
+            self.hint.grid(sticky='nswe', row=1, column=0, columnspan=8, pady=(0, 10))
 
         self.label_warning = Label(self.root, text="", wraplengt=800,
                                      bg="white", anchor='center', fg='red', justify='center')
-        self.label_warning.grid(row=3, column=1, sticky='senw', columnspan=7, pady=(0, 10), padx=10)
+        self.label_warning.grid(row=3, column=0, sticky='senw', columnspan=8, pady=(0, 10), padx=10)
 
-        self.button_minus.grid(sticky='ns', row=7, column=1, pady=2, padx=10)
-        self.button_plus.grid(sticky='ns', row=7, column=2, pady=2, padx=10)
-        self.button_reset.grid(sticky='ns', row=7, column=3, columnspan=2, pady=2, padx=100)
-        self.button_ok.grid(sticky='nswe', row=7, column=5, columnspan=3, pady=2, padx=2)
 
-        CreateToolTip(self.button_reset, "Reset structures groups to original groups derived from abstraction and reset values.")
+
+        CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
         CreateToolTip(self.button_plus, "Add line.")
 
-        self.checkbutton_extend.grid(sticky="nw", row=4, column=1, padx=10)
+        self.checkbutton_extend.grid(sticky="nw", row=4, column=0, padx=10, columnspan=2)
 
         # scrollable frame:
         self.around_canvas_frame, self.canvas, self.scrollable_frame = create_scrollable_frame(self.root)
         self.root.rowconfigure(6, weight=1)
-        self.around_canvas_frame.grid(sticky='nswe', row=6, column=1, columnspan=7, pady=1, padx=1)
+        self.around_canvas_frame.grid(sticky='nswe', row=6, column=0, columnspan=8, pady=1, padx=1)
         self.canvas.configure(bg='SystemButtonFace')
         self.scrollable_frame.configure(highlightbackground='grey', highlightthickness=1)
 
@@ -123,7 +126,7 @@ class SliderInput:
                                            "represent abstracted details. This mapping is provided in the column "
                                            "to the right.")
         CreateToolTip(self.label_head_weights, "Weights indicating the influence of the given character groups on the dissimilarity between data values.")
-        self.label_head_characters.grid(sticky='nswe', row=5, column=1, columnspan=3)
+        self.label_head_characters.grid(sticky='nswe', row=5, column=0, columnspan=4)
         self.label_head_weights.grid(sticky='nswe', row=5, column=4, columnspan=4)
 
         self.row_offset = 6
