@@ -79,8 +79,9 @@ class SliderInput:
         self.button_minus = Button(self.root, text='-', command=self.minus, width=3)
         self.button_ok = Button(self.root, text='OK', command=self.quit)
         if self.fixed:
-            self.button_minus.configure(state="disabled")
-            self.button_plus.configure(state="disabled")
+            self.button_minus.grid_remove()
+            self.button_plus.grid_remove()
+            self.button_reset.grid_remove()
 
         self.button_expert.grid(sticky='ne', row=4, column=7, padx=10)
         if suggestion is not None:
@@ -398,16 +399,18 @@ class SliderInput:
         if self.extended.get() == 1:
             self.label_head_characters.configure(text="Custom Character Groups")
             if not self.fixed:
-                self.button_plus.configure(state="normal")
-                self.button_minus.configure(state="normal")
+                self.button_plus.grid()
+                self.button_minus.grid()
+                self.button_reset.grid()
             for i, e in enumerate(self.entrylist):
                 e.grid()
                 self.label_list[i].grid(column=3, columnspan=1, padx=2)
                 self.label_list[i].configure(width=25)
         else:
             self.label_head_characters.configure(text="Character Groups")
-            self.button_plus.configure(state="disabled")
-            self.button_minus.configure(state="disabled")
+            self.button_plus.grid_remove()
+            self.button_minus.grid_remove()
+            self.button_reset.grid_remove()
             for i, e in enumerate(self.entrylist):
                 e.grid_remove()
                 self.label_list[i].grid(column=2, columnspan=2, padx=2)
