@@ -16,6 +16,7 @@ WARNING_REDUNDANT_2 = ". Only their first occurrence will have an impact on the 
 WARNING_UNDEFINED_1 = "Warning: The following characters do not occur in the abstracted data values: "
 WARNING_UNDEFINED_2 = ". Thus, their weights will have no impact on the dissimilarities."
 
+warning_color = "#ffbb00"
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
     view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration)
@@ -109,9 +110,8 @@ class SliderInput:
             self.title.grid(sticky='nswe', row=0, column=0, columnspan=8, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=0, columnspan=8, pady=(0, 10))
 
-        self.label_warning = Label(self.root, text="", wraplengt=800,
-                                     bg="white", anchor='center', fg='red', justify='center')
-        self.label_warning.grid(row=3, column=0, sticky='senw', columnspan=8, pady=(0, 10), padx=10)
+        self.label_warning = Label(self.root, text="", wraplengt=800, bg=warning_color, anchor='center', justify='center', borderwidth=1, relief="solid")
+        self.label_warning.grid(sticky='ns', row=3, column=0, columnspan=8, pady=(0, 10), padx=10)
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")
         CreateToolTip(self.button_minus, "Remove the second to last line.")
@@ -186,31 +186,31 @@ class SliderInput:
         self.root.unbind_all("<MouseWheel>")
 
     def redundant_char_warning(self, entry):
-        entry.configure(highlightbackground="red", highlightcolor="red")
+        entry.configure(highlightbackground=warning_color, highlightcolor=warning_color)
 
     def redundant_char_warning_global(self, redundant_chars):
         warning_text = self.label_warning["text"]
         new_warning = "Warning: The following characters are specified multiple times: " + str(redundant_chars) + ". Only their first occurrence will have an impact on the dissimilarities."
         if warning_text is not None and warning_text != "":
-            self.label_warning.configure(text=warning_text + "\n" + new_warning)
+            self.label_warning.configure(text=warning_text + "\n" + new_warning, bg=warning_color, borderwidth=1)
         else:
-            self.label_warning.configure(text=new_warning)
+            self.label_warning.configure(text=new_warning, bg=warning_color, borderwidth=1)
 
     def undefined_char_warning(self, entry):
-        entry.configure(highlightbackground="red", highlightcolor="red")
+        entry.configure(highlightbackground=warning_color, highlightcolor=warning_color)
 
     def undefined_char_warning_global(self, undefined_chars):
         warning_text = self.label_warning["text"]
         new_warning = "Warning: The following characters do not occur in the abstracted data values: " + str(undefined_chars) +". Thus, their weights will have no impact on the dissimilarities."
         if warning_text is not None and warning_text != "":
-            self.label_warning.configure(text=warning_text + "\n" + new_warning)
+            self.label_warning.configure(text=warning_text + "\n" + new_warning, bg=warning_color, borderwidth=1)
         else:
-            self.label_warning.configure(text=new_warning)
+            self.label_warning.configure(text=new_warning, bg=warning_color, borderwidth=1)
 
     def undo_highlight_entries(self):
         for i, entry in enumerate(self.entrylist):
             entry.configure(highlightbackground="white", highlightcolor="white")
-        self.label_warning.configure(text="")
+        self.label_warning.configure(text="", bg="white", borderwidth=0)
 
     def remove_duplicate_chars(self):
         for i, entry in enumerate(self.entrylist):
