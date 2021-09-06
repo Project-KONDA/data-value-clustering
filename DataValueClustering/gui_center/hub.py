@@ -851,21 +851,9 @@ class Hub:
         else:
             abbreviations = np.array(abstraction_question_array, dtype=object)[:, 2]
             text = ""
-            count = 0
             for i, abb in enumerate(abbreviations):
-                # if i > 0:
-                #     text += ", "
-                #     if i % 3 == 0:
-                #         text += "\n"
-                # text += abb + "=" + str(answers[i])
                 if answers[i]:
-                    count += 1
-                    if count > 1:
-                        if count % 5 == 1:
-                            text += ",\n"
-                        else:
-                            text += ",  "
-                    text += abb
+                    text += abb + "\n"
             self.label_abstraction_config.configure(text=text)
 
     def update_frame_distance(self):
