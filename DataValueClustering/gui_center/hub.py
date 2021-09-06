@@ -180,7 +180,7 @@ class Hub:
         self.checked_clustering = IntVar(value=1)
         self.checkbutton_clustering = Checkbutton(self.refined_clustering_frame, variable=self.checked_clustering, state="disabled",
                                                   bg="white", command=self.check_default_clustering, text="Default Algorithm Configuration")
-        self.checkbutton_clustering.grid(sticky='nsw', row=14, column=1, columnspan=1, padx=(10,0), pady=10)
+        self.checkbutton_clustering.grid(sticky='nw', row=14, column=1, columnspan=1, padx=(10,0), pady=10)
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
         # self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
 
@@ -229,7 +229,7 @@ class Hub:
         self.label_data_advice.grid(sticky='nw', row=7, column=1, columnspan=1, padx=20, pady=2)
         self.label_abstraction_advice.grid(sticky='nw', row=10, column=1, columnspan=1, padx=20, pady=2)
         self.label_distance_advice.grid(sticky='nw', row=13, column=1, columnspan=1, padx=20, pady=2)
-        self.label_clustering_advice.grid(sticky='nw', row=16, column=1, columnspan=1, padx=20, pady=2)
+        self.label_clustering_advice.grid(sticky='nw', row=17, column=1, columnspan=1, padx=20, pady=2)
 
         # CreateToolTip(self.label_data_advice, "Status of the data")
         # CreateToolTip(self.label_abstraction_advice, "Status of the abstraction")
@@ -238,20 +238,35 @@ class Hub:
 
         "preview frames"
         frame_width = button_width_full
-        self.preview_data = Frame(self.data_frame, bg="grey90", width=frame_width, height=100)
-        self.preview_abstraction = Frame(self.simple_clustering_frame, bg="grey90", width=frame_width, height=100)
-        self.preview_distance = Frame(self.refined_clustering_frame, bg="grey90", width=frame_width, height=100)
-        self.preview_clustering = Frame(self.refined_clustering_frame, bg="grey90", width=frame_width, height=100)
 
-        self.preview_data.configure(highlightbackground="grey", highlightthickness=1)
-        self.preview_abstraction.configure(highlightbackground="grey", highlightthickness=1)
-        self.preview_distance.configure(highlightbackground="grey", highlightthickness=1)
-        self.preview_clustering.configure(highlightbackground="grey", highlightthickness=1)
+        self.preview_data_outer, self.preview_data_canvas, self.preview_data = \
+            create_scrollable_frame(self.data_frame)
+        self.preview_abstraction_outer, self.preview_abstraction_canvas, self.preview_abstraction = \
+            create_scrollable_frame(self.simple_clustering_frame)
+        self.preview_distance_outer, self.preview_distance_canvas, self.preview_distance = \
+            create_scrollable_frame(self.refined_clustering_frame)
+        self.preview_clustering_outer, self.preview_clustering_canvas, self.preview_clustering = \
+            create_scrollable_frame(self.refined_clustering_frame)
 
-        self.preview_data.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.preview_abstraction.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.preview_distance.grid(sticky='nswe', row=10, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
-        self.preview_clustering.grid(sticky='nswe', row=14, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
+        self.preview_data_canvas.config(height=0, bg="grey90")
+        self.preview_abstraction_canvas.config(height=0, bg="grey90")
+        self.preview_distance_canvas.config(height=0, bg="grey90")
+        self.preview_clustering_canvas.config(bg="grey90")
+
+        self.preview_data.config(bg="grey90")
+        self.preview_abstraction.config(bg="grey90")
+        self.preview_distance.config(bg="grey90")
+        self.preview_clustering.config(bg="grey90")
+
+        self.preview_data_outer.config(bg="grey90")
+        self.preview_abstraction_outer.config(bg="grey90")
+        self.preview_distance_outer.config(bg="grey90")
+        self.preview_clustering_outer.config(bg="grey90")
+
+        self.preview_data_outer.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_abstraction_outer.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_distance_outer.grid(sticky='nswe', row=10, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
+        self.preview_clustering_outer.grid(sticky='nswe', row=14, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
 
         "labels in preview frames"
         label_width = 40
@@ -260,16 +275,16 @@ class Hub:
         self.label_distance_config_heading = Label(self.preview_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
         self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Algorithm Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
 
-        self.label_data_config_heading.grid(sticky='nwse', row=0, column=0, rowspan=1)
-        self.label_abstraction_config_heading.grid(sticky='nwse', row=0, column=0)
-        self.label_distance_config_heading.grid(sticky='nwse', row=0, column=0)
-        self.label_clustering_config_heading.grid(sticky='nwse', row=0, column=0)
+        self.label_data_config_heading.grid(sticky='nw', row=0, column=0, rowspan=1)
+        self.label_abstraction_config_heading.grid(sticky='nw', row=0, column=0)
+        self.label_distance_config_heading.grid(sticky='nw', row=0, column=0)
+        self.label_clustering_config_heading.grid(sticky='nw', row=0, column=0)
 
         # TODO: add scrollbars or use Text instead of Label
-        self.label_data_config = Label(self.preview_data, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
-        self.label_abstraction_config = Label(self.preview_abstraction, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
-        self.label_distance_config = Label(self.preview_distance, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
-        self.label_clustering_config = Label(self.preview_clustering, text=NONE, bg="grey90", anchor="w", justify="left", padx=10, width=label_width)
+        self.label_data_config = Label(self.preview_data, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
+        self.label_abstraction_config = Label(self.preview_abstraction, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
+        self.label_distance_config = Label(self.preview_distance, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
+        self.label_clustering_config = Label(self.preview_clustering, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
 
         self.label_data_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
         self.label_abstraction_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
