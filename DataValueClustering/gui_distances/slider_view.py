@@ -157,7 +157,7 @@ class SliderInput:
             if self.values and len(self.values) > i:
                 v = self.values[i]
 
-            self.label_list[i] = Label(self.scrollable_frame, width=25, bg="white", anchor=W, justify=LEFT)
+            self.label_list[i] = Label(self.scrollable_frame, width=27, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
@@ -497,7 +497,7 @@ class SliderInput:
             for i, e in enumerate(self.entrylist):
                 e.grid()
                 self.label_list[i].grid(column=3, columnspan=1, padx=2)
-                self.label_list[i].configure(width=25)
+                self.label_list[i].configure(width=27)
         else:
             self.label_head_characters.configure(text="Character Groups")
             self.button_plus.grid_remove()
@@ -506,7 +506,7 @@ class SliderInput:
             for i, e in enumerate(self.entrylist):
                 e.grid_remove()
                 self.label_list[i].grid(column=2, columnspan=2, padx=2)
-                self.label_list[i].configure(width=58)
+                self.label_list[i].configure(width=61)
         self.root.update()
         self.update_labels()
 
