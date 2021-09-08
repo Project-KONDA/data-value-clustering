@@ -190,7 +190,9 @@ class HubConfiguration():
         self.no_noise = len(self.noise)
 
     def save_simple_as_excel(self):
-        cluster_to_excel(self.excel_simple_save_path, self.fancy_simple_cluster_list, [], None, self.noise_abstracted, None, None, None)
+        if self.excel_simple_save_path is not None:
+            cluster_to_excel(self.excel_simple_save_path, self.fancy_simple_cluster_list, [], None,
+                             self.noise_abstracted, None, None, None)
 
     def save_as_excel(self):
         # TODO: add the following to json exports?

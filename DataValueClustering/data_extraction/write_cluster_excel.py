@@ -7,10 +7,12 @@ from data_extraction.representants import get_repr_list
 def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map,
                      average_intra_cluster_distances_per_cluster_per_value,
                      intra_cluster_distances):
-    aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
-
+    if path is None:
+        return
     if not (path.endswith('.xlsx')):
         path += '.xlsx'
+
+    aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
 
     workbook = xlsxwriter.Workbook(path)
     style_caption = workbook.add_format({'bold': True, 'font_color': 'red', 'left': 2, 'bottom': 1, 'font_size': 15, 'bg_color': '#DDDDDD'})
