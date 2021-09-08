@@ -416,8 +416,6 @@ class Hub:
 
     def configure_data(self):
         self.label_data_progress.configure(text=DATA_CONFIG_IN_PROGRESS, fg='magenta2')
-        self.root.update()
-        self.disable()
         previous_data_path = self.configuration.get_data_configuration()[0]
         previous_data_name = data_name_from_path(previous_data_path)
 
@@ -452,9 +450,7 @@ class Hub:
 
     def configure_abstraction(self):
         self.label_abstraction_progress.configure(text=ABSTRACTION_CONFIG_IN_PROGRESS, fg='magenta2')
-        self.root.update()
         # 1. get data from config
-        self.disable()
         previous_abstraction_answers = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
@@ -500,8 +496,6 @@ class Hub:
 
     def configure_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
-        self.root.update()
-        self.disable()
         previous_cost_map, blob_configuration = self.configuration.get_distance_configuration()
 
         self.set_saved(False)
@@ -570,8 +564,6 @@ class Hub:
 
     def configure_clustering(self):
         self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_IN_PROGRESS, fg='magenta2')
-        self.root.update()
-        self.disable()
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
         suggested_algorithms = get_suggested_algorithms(self.get_validation_answers())
@@ -643,7 +635,6 @@ class Hub:
         self.update()
 
     def show_result(self):
-        self.disable()
         # validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
         #             self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
         #             self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
@@ -678,7 +669,6 @@ class Hub:
     #     self.root.update()
 
     def menu_load(self):
-        self.disable()
         load_path = getJsonLoadPath(self.configuration.json_save_path)
         if not load_path:
             self.update()
@@ -686,7 +676,6 @@ class Hub:
             self.load(load_path)
 
     def load(self, load_path):
-        self.disable()
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.root.title(self.configuration.json_save_path)
@@ -706,7 +695,6 @@ class Hub:
 
     def menu_save(self):
         if not self.configuration.json_saved:
-            self.disable()
             if self.configuration.json_save_path:
                 self.configuration.save_as_json()
                 self.set_saved(True)
@@ -720,25 +708,12 @@ class Hub:
         if self.configuration.json_save_path:
             self.menu_save()
 
-    def disable(self):
-        self.button_data.configure(state="disabled")
-        self.button_abstraction.configure(state="disabled")
-        self.button_distance.configure(state="disabled")
-        self.button_clustering.configure(state="disabled")
-        self.button_distance_play.configure(state="disabled")
-        self.button_clustering_play.configure(state="disabled")
-        self.button_show_result.configure(state="disabled")
-        # self.button_save_result.configure(state="disabled")
-
     def reset_validation_answers(self):
         self.configuration.reset_validation_answers()
 
     def update(self):
         self.update_option_menu()
 
-        self.button_data.configure(state="normal")
-        self.button_abstraction.configure(state="normal")
-        self.hide_simple_clustering_hint()
 
         if self.configuration.data_configuration_valid():
             self.label_data_progress.configure(text=DATA_DONE, fg='green')

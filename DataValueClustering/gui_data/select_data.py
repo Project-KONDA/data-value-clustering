@@ -66,6 +66,8 @@ class SelectData:
 
         self.load()
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+        self.root.grab_set()
+        self.root.focus_force()
         self.root.mainloop()
 
     def load(self):
@@ -78,8 +80,6 @@ class SelectData:
         if self.previous is not None:
             index = np.where(self.datalist == self.previous)[0][0]
             self.listbox.select_set(index)
-        self.root.grab_set()
-        self.root.focus_force()
 
     def add(self):
         add_data(self.root, self.path)

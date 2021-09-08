@@ -196,6 +196,8 @@ class ResultView:
 
         self.update_suggestion()
 
+        self.root.focus_force()
+        self.root.grab_set()
         self.root.mainloop()
 
     def previous_cluster_file_names_to_labels(self, previous_cluster_names):
