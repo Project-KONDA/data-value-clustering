@@ -195,20 +195,21 @@ class HubConfiguration():
                              self.noise_abstracted, None, None, None)
 
     def save_as_excel(self):
-        # TODO: add the following to json exports?
-        comp_to_normal_map = [list(elem) for elem in self.abstraction_dict.items()]
-        map = dict([tuple(l) for l in comp_to_normal_map])
-        lines = np.where(self.clusters_abstracted != -1)[0]
-        distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
-        filtered_distance_matrix = distance_matrix_lines[:, lines]
-        index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix
-        intra_cluster_distances = max_intra_cluster_distances(*index_parameters).tolist()
-        intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(
-            *index_parameters)
-        cluster_to_excel(self.excel_save_path, self.fancy_cluster_list, self.noise, self.fancy_cluster_list_abstracted,
-                         self.noise_abstracted, map,
-                         intra_cluster_distances_per_cluster_per_value,
-                         intra_cluster_distances)
+        if self.excel_save_path is not None:
+            # TODO: add the following to json exports?
+            comp_to_normal_map = [list(elem) for elem in self.abstraction_dict.items()]
+            map = dict([tuple(l) for l in comp_to_normal_map])
+            lines = np.where(self.clusters_abstracted != -1)[0]
+            distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
+            filtered_distance_matrix = distance_matrix_lines[:, lines]
+            index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix
+            intra_cluster_distances = max_intra_cluster_distances(*index_parameters).tolist()
+            intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(
+                *index_parameters)
+            cluster_to_excel(self.excel_save_path, self.fancy_cluster_list, self.noise, self.fancy_cluster_list_abstracted,
+                             self.noise_abstracted, map,
+                             intra_cluster_distances_per_cluster_per_value,
+                             intra_cluster_distances)
 
     "Get functions"
 
