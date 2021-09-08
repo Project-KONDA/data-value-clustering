@@ -23,8 +23,10 @@ def getJsonSavePath(initial_dir=None):
         filetypes=(("Json Files", "*.json"),
                    ("All Files", "*.*"))
     )
-    if file_name and not file_name.endswith(".json"):
+    if file_name is not None and file_name != ""and not file_name.endswith(".json"):
         file_name = file_name + ".json"
+    if file_name == "":
+        file_name = None
     return file_name
 
 

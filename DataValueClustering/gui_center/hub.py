@@ -700,8 +700,8 @@ class Hub:
     def menu_new(self):
         if self.configuration.json_saved or \
             messagebox.askokcancel("New Configuration",
-                                   "Creating a new configuration without prior saving the configuration will delete the configuration."
-                                   "\nDo you want to restart?",
+                                   "Creating a new configuration without prior saving the current configuration will delete it."
+                                   "\nDo you want to proceed?",
                                    icon=WARNING):
             self.configuration = HubConfiguration()
             self.set_clustering_config_default()
@@ -710,7 +710,7 @@ class Hub:
 
     def menu_save(self):
         if not self.configuration.json_saved:
-            if self.configuration.json_save_path:
+            if self.configuration.json_save_path is not None:
                 self.configuration.save_as_json()
                 self.set_saved(True)
             else:
@@ -720,7 +720,7 @@ class Hub:
     def menu_saveas(self):
         self.configuration.json_save_path = getJsonSavePath()
         self.root.title(self.configuration.json_save_path)
-        if self.configuration.json_save_path:
+        if self.configuration.json_save_path is not None:
             self.menu_save()
 
     def reset_validation_answers(self):
