@@ -1,11 +1,14 @@
 import os
+import subprocess
 from math import floor, sqrt
 from tkinter import Tk, Button, Label, Frame, messagebox, Menu, Checkbutton, IntVar, LabelFrame, \
     OptionMenu, StringVar
 from pathlib import Path
-from tkinter.messagebox import WARNING
+from tkinter.messagebox import WARNING, ERROR
 import numpy as np
 import sys
+
+import xlsxwriter
 
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
@@ -397,15 +400,23 @@ class Hub:
             self.configuration.excel_simple_save_path = getExcelSavePath()
 
         if self.configuration.excel_simple_save_path is not None:
-            if not self.configuration.excel_simple_saved:
-                self.configuration.save_simple_as_excel()
-                self.configuration.excel_simple_saved = True
-
-            # os.system(self.excel_path)
-            os.system('"' + self.configuration.excel_simple_save_path + '"')
-            # subprocess.call([self.excel_path])
-            # subprocess.run(['open', self.excel_path], check=True)
-
+            try:
+                if not self.configuration.excel_simple_saved:
+                    self.configuration.save_simple_as_excel()
+                    self.configuration.excel_simple_saved = True
+                subprocess.check_output('"' + self.configuration.excel_simple_save_path + '"', shell=True,
+                                        stderr=subprocess.STDOUT)
+            except (PermissionError, xlsxwriter.exceptions.FileCreateError) as e:
+                messagebox.showerror("Error",
+                                       "Cannot save file at selected path since the file exists already and is currently open."
+                                       "Please close the file first or select a different path.",
+                                       icon=ERROR)
+                self.configuration.excel_simple_save_path = None
+            except subprocess.CalledProcessError as e:
+                messagebox.showerror("Error",
+                                     "File is already open.",
+                                     icon=ERROR)
+            # os.system('"' + self.configuration.excel_simple_save_path + '"')
 
     def data_path_from_name(self, data_name):
         if data_name is None:

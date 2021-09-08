@@ -1,7 +1,12 @@
 import os
-from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, PhotoImage
+import subprocess
+from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, PhotoImage, messagebox
+from tkinter.messagebox import ERROR
+
 import numpy as np
 from tkinter.font import Font
+
+import xlsxwriter
 
 from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
@@ -226,12 +231,24 @@ class ResultView:
             self.configuration.excel_save_path = getExcelSavePath()
 
         if self.configuration.excel_save_path is not None:
-            if not self.configuration.excel_saved:
-                self.configuration.save_as_excel()
-                self.configuration.excel_saved = True
+            try:
+                if not self.configuration.excel_saved:
+                    self.configuration.save_as_excel()
+                    self.configuration.excel_saved = True
+                subprocess.check_output('"' + self.configuration.excel_save_path + '"', shell=True,
+                                        stderr=subprocess.STDOUT)
+            except (PermissionError, xlsxwriter.exceptions.FileCreateError) as e:
+                messagebox.showerror("Error",
+                                       "Cannot save file at selected path since the file exists already and is currently open."
+                                       "Please close the file first or select a different path.",
+                                       icon=ERROR)
+                self.configuration.excel_save_path = None
+            except subprocess.CalledProcessError as e:
+                messagebox.showerror("Error",
+                                     "File is already open.",
+                                     icon=ERROR)
 
-            # os.system(self.excel_path)
-            os.system('"' + self.configuration.excel_save_path + '"')
+            # os.system('"' + self.configuration.excel_save_path + '"')
 
     def get_info(self):
         s = "Number of Data Values: " + str(self.configuration.num_data)
