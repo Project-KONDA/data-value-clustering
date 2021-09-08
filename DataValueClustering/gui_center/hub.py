@@ -394,14 +394,17 @@ class Hub:
     def open_simple_clustering(self):
         if self.configuration.excel_simple_save_path is None:
             self.configuration.excel_simple_save_path = getExcelSavePath()
-        if not self.configuration.excel_simple_saved:
-            self.configuration.save_simple_as_excel()
-        if self.configuration.excel_simple_save_path:
+
+        if self.configuration.excel_simple_save_path is not None:
+            if not self.configuration.excel_simple_saved:
+                self.configuration.save_simple_as_excel()
+                self.configuration.excel_simple_saved = True
+
             # os.system(self.excel_path)
             os.system('"' + self.configuration.excel_simple_save_path + '"')
             # subprocess.call([self.excel_path])
             # subprocess.run(['open', self.excel_path], check=True)
-            self.configuration.excel_simple_saved = True
+
 
     def data_path_from_name(self, data_name):
         if data_name is None:

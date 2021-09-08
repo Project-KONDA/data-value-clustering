@@ -35,8 +35,10 @@ def getExcelSavePath():
         filetypes=(("Excel Files", "*.xlsx"),
                    ("All Files", "*.*"))
     )
-    if file_name and not file_name.endswith(".xlsx"):
+    if file_name is not None and file_name != "" and not file_name.endswith(".xlsx"):
         file_name = file_name + ".xlsx"
+    if file_name == "":
+        file_name = None
     return file_name
 
 def getOpenFilePath(title):
