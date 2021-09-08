@@ -719,8 +719,8 @@ class Hub:
 
     def menu_saveas(self):
         self.configuration.json_save_path = getJsonSavePath()
-        self.root.title(self.configuration.json_save_path)
         if self.configuration.json_save_path is not None:
+            self.root.title(self.configuration.json_save_path)
             self.menu_save()
 
     def reset_validation_answers(self):
