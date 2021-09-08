@@ -386,6 +386,8 @@ class Hub:
         self.configuration.json_saved = saved
         if not saved and self.root.title() != TITLE and not self.root.title().endswith("*"):
             self.root.title(self.root.title() + "*")
+        if saved:
+            self.root.title(self.configuration.json_save_path)
 
     def on_closing(self):
         if self.configuration.json_saved or \
@@ -693,7 +695,6 @@ class Hub:
     def load(self, load_path):
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
-        self.root.title(self.configuration.json_save_path)
         self.set_saved(True)
         self.update()
 
@@ -720,7 +721,6 @@ class Hub:
     def menu_saveas(self):
         self.configuration.json_save_path = getJsonSavePath()
         if self.configuration.json_save_path is not None:
-            self.root.title(self.configuration.json_save_path)
             self.menu_save()
 
     def reset_validation_answers(self):
