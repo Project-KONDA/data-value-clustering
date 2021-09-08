@@ -308,6 +308,7 @@ class Hub:
         self.label_abstraction_hint.grid(sticky='w', row=4, column=0, padx=10, pady=10)
         self.button_abstraction_excel = Button(self.scrollable_frame, text="Open Simple Clustering", height=2, command=self.open_simple_clustering)
         self.button_abstraction_excel.grid(sticky='w', row=4, column=1, padx=10, pady=10)
+        CreateToolTip(self.button_abstraction_excel, "Open Excel file showing simple clustering resulting from the abstraction.")
         self.hide_simple_clustering_hint()
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
