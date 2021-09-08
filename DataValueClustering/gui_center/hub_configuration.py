@@ -133,7 +133,7 @@ class HubConfiguration():
         self.timedelta_cluster = None
 
         self.json_save_path = None
-        self.json_saved = True
+        self.json_saved = False
         self.excel_save_path = None
         self.excel_saved = False
         self.excel_simple_save_path = None
