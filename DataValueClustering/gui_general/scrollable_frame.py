@@ -14,7 +14,7 @@ def create_scrollable_frame(root, dynamic=False):
 
 
 def _create_scrollable_frame_in_outer_frame(outer_frame, dynamic=False):
-    canvas = Canvas(outer_frame, highlightthickness=0)
+    canvas = Canvas(outer_frame, bg="white", highlightthickness=0)
     canvas.grid(row=0, column=0, sticky='nswe')
 
     scrollbar = Scrollbar(outer_frame, orient="vertical",
