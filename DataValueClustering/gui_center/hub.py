@@ -330,7 +330,7 @@ class Hub:
 
         self.root.after(1, lambda: self.root.focus_force())
         if loadpath is not None:
-            self.load(,loadpath)
+            self.load(loadpath)
         self.root.mainloop()
 
     def set_selected_distance_option(self, value):
