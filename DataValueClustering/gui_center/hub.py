@@ -88,7 +88,7 @@ def data_name_from_path(data_path):
 
 class Hub:
 
-    def __init__(self):
+    def __init__(self, loadpath=None):
 
         "initialisation"
         self.root = Tk()
@@ -329,6 +329,8 @@ class Hub:
         self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
+        if loadpath is not None:
+            self.load(,loadpath)
         self.root.mainloop()
 
     def set_selected_distance_option(self, value):
@@ -880,7 +882,6 @@ class Hub:
                     if parameter_value is not None:
                         text += "\n  " + key + " = " + str(parameter_value)
                 self.label_clustering_config.configure(text=text)
-
 
 
 if __name__ == "__main__":
