@@ -149,22 +149,24 @@ def cluster_dbscan(master, cluster_answers, distance_matrix_map, values, previou
 
 
 def cluster_optics(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+    n_values = len(values)
+
     # min_samples = 2
     min_samples_info = optics_min_samples_config(len(values), cluster_answers)
     min_samples_frame = create_slider_frame(*min_samples_info, previous_value=None if previous_parameters is None else previous_parameters[min_samples_info[0]], suggestion=suggestion)
 
     # max_eps = np.inf
     distance_matrix = distance_matrix_map["distance_matrix"]
-    max_eps_info = optics_max_eps_config(distance_matrix)
+    max_eps_info = optics_max_eps_config(distance_matrix, distance_matrix_map["min_distance"], n_values)
     max_eps_frame = create_slider_frame(*max_eps_info, previous_value=None if previous_parameters is None else previous_parameters[max_eps_info[0]], suggestion=suggestion)
 
-    # cluster_method = 'xi'
-    cluster_method_info = optics_cluster_method_config()
-    cluster_method_frame = create_enum_frame(*cluster_method_info, previous_value=None if previous_parameters is None else previous_parameters[cluster_method_info[0]], suggestion=suggestion)
+    # # cluster_method = 'xi'
+    # cluster_method_info = optics_cluster_method_config()
+    # cluster_method_frame = create_enum_frame(*cluster_method_info, previous_value=None if previous_parameters is None else previous_parameters[cluster_method_info[0]], suggestion=suggestion)
 
-    # eps = None
-    eps_info = optics_eps_config(distance_matrix)
-    eps_frame = create_slider_frame(*eps_info, previous_value=None if previous_parameters is None else previous_parameters[eps_info[0]], suggestion=suggestion)
+    # # eps = None
+    # eps_info = optics_eps_config(distance_matrix)
+    # eps_frame = create_slider_frame(*eps_info, previous_value=None if previous_parameters is None else previous_parameters[eps_info[0]], suggestion=suggestion)
 
     # xi = 0.05
     xi_info = optics_xi_config()
@@ -175,25 +177,25 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     predecessor_correction_frame = create_boolean_frame(*predecessor_correction_info, previous_value=None if previous_parameters is None else previous_parameters[predecessor_correction_info[0]], suggestion=suggestion)
 
     # min_cluster_size = None
-    min_cluster_size_info = optics_min_cluster_size_config()
+    min_cluster_size_info = optics_min_cluster_size_config(n_values)
     min_cluster_size_frame = create_slider_frame(*min_cluster_size_info, previous_value=None if previous_parameters is None else previous_parameters[min_cluster_size_info[0]], suggestion=suggestion)
 
-    # n_jobs = None
-    n_jobs_info = optics_n_jobs_config()
-    n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]], suggestion=suggestion)
+    # # n_jobs = None
+    # n_jobs_info = optics_n_jobs_config()
+    # n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]], suggestion=suggestion)
 
-    frames = [min_samples_frame, max_eps_frame, cluster_method_frame, eps_frame, xi_frame,
-              predecessor_correction_frame, min_cluster_size_frame,
-              n_jobs_frame]
+    frames = [min_samples_frame, max_eps_frame, xi_frame,
+              predecessor_correction_frame, min_cluster_size_frame]
     dependencies = [
-        [optics_clustering.CLUSTER_METHOD, optics_clustering.EPS, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
-        [optics_clustering.CLUSTER_METHOD, optics_clustering.XI, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
-        [optics_clustering.CLUSTER_METHOD, optics_clustering.PREDECESSOR_CORRECTION, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
-        [optics_clustering.CLUSTER_METHOD, optics_clustering.MIN_CLUSTER_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
-        [optics_clustering.MAX_EPS, optics_clustering.EPS, DEPENDENCY_VALUE_SLIDER_MAX, lambda max_eps: max_eps]
+        # [optics_clustering.CLUSTER_METHOD, optics_clustering.EPS, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
+        # [optics_clustering.CLUSTER_METHOD, optics_clustering.XI, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        # [optics_clustering.CLUSTER_METHOD, optics_clustering.PREDECESSOR_CORRECTION, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        # [optics_clustering.CLUSTER_METHOD, optics_clustering.MIN_CLUSTER_SIZE, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
+        [dbscan_clustering.MIN_SAMPLES, optics_clustering.MAX_EPS, DEPENDENCY_VALUE_SLIDER_MAX,
+         lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
+        # [optics_clustering.MAX_EPS, optics_clustering.EPS, DEPENDENCY_VALUE_SLIDER_MAX, lambda max_eps: max_eps]
     ]
-    min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size, \
-    n_jobs \
+    min_samples, max_eps, xi, predecessor_correction, min_cluster_size \
         = get_configuration_parameters(master, "OPTICS Parameter Configuration", frames, dependencies, suggestion)
 
     if not max_eps:
@@ -202,7 +204,7 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     if min_samples is None:
         return None
 
-    return {"min_samples": min_samples, "max_eps": max_eps, "cluster_method": cluster_method, "eps": eps, "xi": xi, "predecessor_correction": predecessor_correction, "min_cluster_size": min_cluster_size, "n_jobs": n_jobs}
+    return {"min_samples": min_samples, "max_eps": max_eps, "xi": xi, "predecessor_correction": predecessor_correction, "min_cluster_size": min_cluster_size}
     # return optics_args(min_samples, max_eps, cluster_method,
     #                       eps, xi, predecessor_correction, min_cluster_size,
     #                       n_jobs)
