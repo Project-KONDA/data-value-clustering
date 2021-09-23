@@ -1,4 +1,6 @@
 '''Apply hierarchical clustering algorithm.'''
+from math import log
+
 from scipy.cluster.hierarchy import linkage, fcluster
 
 from gui_cluster_configuration.dendrogram import show_dendrogram
@@ -90,10 +92,14 @@ def hierarchical_n_clusters_config(no_values):
     # int or range
     # activation xor with distance_threshold
     name = N_CLUSTERS
-    explanation = "Maximum number of clusters created. Higher values will yield more clusters. Increase if there is one giant cluster that you want being split up into smaller clusters."
+    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
     min_n_clusters = 2
-    max_n_clusters = no_values
-    suggestion_value = 7 if no_values is None else min(7, no_values // 2)
+    if no_values is None:
+        max_n_clusters = 100
+        suggestion_value = 7
+    else:
+        max_n_clusters = round(no_values*0.9)
+        suggestion_value = min(max_n_clusters//3, round(log(no_values,2)*3))
     resolution = 1
     deactivatable = True
     default_active = True
