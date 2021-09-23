@@ -32,7 +32,6 @@ initialization_array = np.array([
 
 def kmedoids(distance_matrix, values, n_clusters=8, init='heuristic', max_iter=200):  # method not supported anymore
     clusters = KMedoids(metric='precomputed', n_clusters=n_clusters, init=init, max_iter=max_iter).fit_predict(distance_matrix)
-    # TODO: method=method is unexpected keyword argument ...
     return clusters
 
 
@@ -53,6 +52,7 @@ def kmedoids_n_clusters_config(no_values):
 
 def kmedoids_init_config(answers):
     # enum
+    # expert
     name = HEURISTIC
     explanation = "Initialization method for medoids."
     options = initialization_array[:, (2, 3)]
@@ -66,11 +66,12 @@ def kmedoids_init_config(answers):
 
 def kmedoids_max_iter_config():
     # int
-    name = MAX_ITER  # TODO
+    # expert
+    name = MAX_ITER
     explanation = "Maximum number of iterations. Higher values will yield longer runtimes. In case of zero, only the initialization is computed."
     mini = 0
     maxi = 1000  # TODO
-    default = 200  # TODO
+    default = 300
     resolution = 1
     deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
