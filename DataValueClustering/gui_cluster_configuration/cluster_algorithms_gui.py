@@ -45,7 +45,7 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
 
     # n_clusters = None  # TODO: support elbow method & Co.
     n_clusters_info = hierarchical_n_clusters_config(len(values))
-    n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, values), suggestion=suggestion)
+    n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]], suggestion=suggestion)
     # https://towardsdatascience.com/10-tips-for-choosing-the-optimal-number-of-clusters-277e93d72d92
     # https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
 
