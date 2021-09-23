@@ -29,15 +29,28 @@ method_array = np.array([
     # dependencies, not-dependencies, value
     # suggest value if none of the 'not-dependencies' questions were answered with True
 
-    [[], [], "single", "The minimum distance between contained samples. Will yield long chain-like clusters."],
-    [[], [4], "complete", "The minimum distance between contained samples. Will yield small globular clusters."],
-    [[], [4, 5], "ward",
-     "The sum of squared deviations from samples to centroids. Will yield globular clusters of similar size."],
+    # https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
+    # "Methods ‘centroid’, ‘median’, and ‘ward’ are correctly defined only if Euclidean pairwise metric is used."
+
+    [[], [4], "single", "The minimum distance between contained samples.\n"
+                       "Two most dissimilar cluster members can happen to be very much dissimilar in comparison to two most similar.\n"
+                       "Will yield long chain-like clusters."],
+    [[], [4], "complete", "The maximum distance between contained samples.\n"
+                          "Two most distant from each other members cannot be much more dissimilar than other quite dissimilar pairs.\n"
+                          "Will yield small globular (circle or blob) clusters."],
+    # [[], [4, 5], "ward",
+    #  "The sum of squared deviations from samples to centroids.\n"
+    #  "Clusters are type, i.e. clouds more dense and more concentric towards their middle, whereas marginal points are few and could be scattered relatively freely.\n"
+    #  "Will yield globular clusters of similar size."],
     [[], [], "average",
-     "The average distance between contained samples. Will yield globular clusters of similar variance."],
-    [[], [], "weighted", "The arithmetic mean of the average distances between contained samples."],  # 4
-    [[], [], "centroid", "The distance between centroids."],
-    [[], [], "median", "The distance between centroids calculated as the average of the old centroids."],  # 4
+     "The average distance between contained samples.\n"
+     "Clusters are generic united classes or close-knit collectives.\n"
+     "Clusters of miscellaneous shapes and outlines can be produced."], # sometimes default
+    [[], [], "weighted", "The arithmetic mean of the average distances between members of the subclusters."],  # 4
+    # [[], [], "centroid", "The distance between geometric centroids.\n"
+    #                      "Clusters can have fractions.\n"
+    #                      "Clusters can be various by outline."],
+    # [[], [], "median", "The distance between centroids calculated as the average of the old centroids."],  # 4
 
 ], dtype=object)
 
@@ -64,10 +77,10 @@ def decrease_by_one(clusters):
 def hierarchical_method_config(answers):
     # enum
     name = METHOD
-    explanation = "Method for calculating the distance between clusters."
+    explanation = "Method for calculating the distance between clusters. The two clusters with the minimum distance are merged at each step."
     options = method_array[:, (2, 3)]
     if answers is None:
-        suggestion_values = ["single"]  # TODO
+        suggestion_values = ["complete"]  # or average?
     else:
         suggestion_values = get_array_part(method_array, clustering_question_array, answers)[:,0]
     return name, explanation, options, suggestion_values
