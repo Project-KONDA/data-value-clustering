@@ -70,7 +70,7 @@ def calculate_distance_matrix_map_jit(distance_function, values):
             vy = str(values[y])  # numba needs str
             distance_x_y = distance_function(vx, vy)
 
-            if distance_x_y < min_distance:
+            if x != y and distance_x_y < min_distance:
                 min_distance = float(distance_x_y)
             if distance_x_y > max_distance:
                 max_distance = distance_x_y
