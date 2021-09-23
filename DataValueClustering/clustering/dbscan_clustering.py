@@ -53,7 +53,7 @@ def dbscan_eps_config(distance_matrix, min_distance, no_values):
 
     # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
-    max_eps = calculate_eps_max(distance_matrix, max(1, min(3, no_values)))  # default min_samples, udapted dynamically
+    max_eps = calculate_eps_max(distance_matrix, max(1, min(3, no_values)))  # default min_samples, updated dynamically
     min_eps = max(min_distance, 0.01)
     suggestion_value = min_eps
     resolution = 0.01
@@ -64,7 +64,6 @@ def calculate_eps_max(distance_matrix, min_samples):
     distances = get_sorted_k_distances(distance_matrix, min_samples)
     max_eps = max(distances)
     return float(max_eps)
-    # return float(distance_matrix.max()) TODO ?
 
 
 # def dbscan_algorithm_config():
