@@ -130,7 +130,8 @@ def hierarchical_criterion_config():
     options = np.array([
         ["maxclust", "Maximum number of clusters is " + N_CLUSTERS + "."],
         ["distance", "The intra-cluster distance is below " + THRESHOLD + "."],
-        ["inconsistent", "Compares each link in the cluster hierarchy with adjacent links a few levels below it in the cluster hierarchy."],
+        ["inconsistent", "If a cluster node and all its descendants have an inconsistent value less than or equal to " + THRESHOLD + ", "
+                         "then all its leaf descendants belong to the same flat cluster."],
         # ["monocrit", ""],
         # ["maxclust_monocrit", ""],
     ], dtype=object)
@@ -145,7 +146,7 @@ def hierarchical_depth_config():
     # int slider
     # expert
     name = DEPTH
-    explanation = "Amount of levels the inconsistency function compares links."  # TODO
+    explanation = "The maximum depth to perform the inconsistency calculation."  # TODO
     mini = 1  # TODO
     maxi = 5  # TODO
     default = 2
