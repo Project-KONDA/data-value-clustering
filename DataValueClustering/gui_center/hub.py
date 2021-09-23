@@ -463,6 +463,7 @@ class Hub:
             self.label_abstraction_progress.configure(text=ABSTRACTION_IN_PROGRESS, fg='RoyalBlue1')
             self.root.update()
             self.configuration.execute_abstraction()
+            self.set_clustering_config_default()
             self.update()
 
         # self.configuration.save_as_json()
@@ -494,6 +495,7 @@ class Hub:
 
         if self.configuration.data_configuration_valid():
             self.configuration.execute_abstraction()
+            self.set_clustering_config_default()
 
         self.update()
         # self.configuration.save_as_json()
@@ -697,6 +699,7 @@ class Hub:
     def load(self, load_path):
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
+        self.set_clustering_config_default()
         self.set_saved(True)
         self.update()
 
