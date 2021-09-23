@@ -10,6 +10,7 @@ import sys
 
 import xlsxwriter
 
+from clustering.hierarchical_clustering import hierarchical_method_config
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_abstraction.abstraction_questions import abstraction_question_array
@@ -627,7 +628,8 @@ class Hub:
         clustering_algorithm = "Hierarchical"
         answers = [False, False, False, True, True, True]
         n_clusters_new = hierarchical_n_clusters_config(self.configuration.num_abstracted_data)[4]
-        parameters = {'method': 'single',
+        method = hierarchical_method_config(answers)[3][0]
+        parameters = {'method': method,
                       'n_clusters': n_clusters_new,
                       'distance_threshold': None,
                       'criterion': 'maxclust',
