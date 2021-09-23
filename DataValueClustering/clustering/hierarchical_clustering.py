@@ -34,9 +34,6 @@ method_array = np.array([
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
     # "Methods ‘centroid’, ‘median’, and ‘ward’ are correctly defined only if Euclidean pairwise metric is used."
 
-    [[], [4], "single", "The minimum distance between contained samples.\n"
-                       "Two most dissimilar cluster members can happen to be very much dissimilar in comparison to two most similar.\n"
-                       "Will yield long chain-like clusters."],
     [[], [4], "complete", "The maximum distance between contained samples.\n"
                           "Two most distant from each other members cannot be much more dissimilar than other quite dissimilar pairs.\n"
                           "Will yield small globular (circle or blob) clusters."],
@@ -49,6 +46,9 @@ method_array = np.array([
      "Clusters are generic united classes or close-knit collectives.\n"
      "Clusters of miscellaneous shapes and outlines can be produced."], # sometimes default
     [[], [], "weighted", "The arithmetic mean of the average distances between members of the subclusters."],  # 4
+    [[], [4], "single", "The minimum distance between contained samples.\n"
+                       "Two most dissimilar cluster members can happen to be very much dissimilar in comparison to two most similar.\n"
+                       "Will yield long chain-like clusters."],
     # [[], [], "centroid", "The distance between geometric centroids.\n"
     #                      "Clusters can have fractions.\n"
     #                      "Clusters can be various by outline."],
@@ -109,8 +109,9 @@ def hierarchical_n_clusters_config(no_values):
 def hierarchical_distance_threshold_config(linkage_matrix, min_distance):
     # float
     # activation xor with n_clusters
+    # expert
     name = THRESHOLD
-    explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters. Decrease if there is one giant cluster that you want being split up into smaller clusters."
+    explanation = "Threshold for distances of values in the same cluster. Higher values will yield less clusters."
     min_distance_threshold = min_distance
     max_distance_threshold = float(linkage_matrix[len(linkage_matrix) - 1, 2] - 0.01)
     suggestion_value = (max_distance_threshold - min_distance_threshold) / 2
@@ -123,16 +124,17 @@ def hierarchical_criterion_config():
     # enum
     # if n_clusters then 'maxclust' or 'maxclust_monocrit'
     # if distance_threshold then 'inconsistent’, ‘distance’ or ‘monocrit'
+    # expert
     name = CRITERION
     explanation = "The criterion to use in forming flat clusters from the hierarchical clustering tree."
     options = np.array([
-        ["inconsistent", "The inconsistent function compares each link in the cluster hierarchy with adjacent links a few levels below it in the cluster hierarchy."],
-        ["distance", ""],
-        ["maxclust", "Finds minimum threshold to form a maximum of n_clusters."],
-        ["monocrit", ""],
-        ["maxclust_monocrit", ""],
-    ], dtype=object)  # TODO
-    suggestions = ["maxclust", "distance"]  # TODO
+        ["maxclust", "Maximum number of clusters is " + N_CLUSTERS + "."],
+        ["distance", "The intra-cluster distance is below " + THRESHOLD + "."],
+        ["inconsistent", "Compares each link in the cluster hierarchy with adjacent links a few levels below it in the cluster hierarchy."],
+        # ["monocrit", ""],
+        # ["maxclust_monocrit", ""],
+    ], dtype=object)
+    suggestions = ["maxclust", "distance"]
     deactivatable = False
 
     return name, explanation, options, suggestions, deactivatable
@@ -141,7 +143,8 @@ def hierarchical_criterion_config():
 def hierarchical_depth_config():
     # only activated if criterion = 'inconsistent', then mandatory
     # int slider
-    name = DEPTH  # TODO
+    # expert
+    name = DEPTH
     explanation = "Amount of levels the inconsistency function compares links."  # TODO
     mini = 1  # TODO
     maxi = 5  # TODO
@@ -151,12 +154,12 @@ def hierarchical_depth_config():
     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
-def hierarchical_monocrit_config():
-    name = MONOCRIT
-    # only activated if criterion = 'monocrit' or 'maxclust_monocrit'
-    # vector
-    # return ??
-    pass
+# def hierarchical_monocrit_config():
+#     name = MONOCRIT
+#     # only activated if criterion = 'monocrit' or 'maxclust_monocrit'
+#     # vector
+#     # return ??
+#     pass
 
 
 if __name__ == '__main__':

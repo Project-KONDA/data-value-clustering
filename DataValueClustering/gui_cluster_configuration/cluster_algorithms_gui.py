@@ -72,9 +72,9 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     dependencies2 = [
         [hierarchical_clustering.N_CLUSTERS, hierarchical_clustering.THRESHOLD, DEPENDENCY_ACTIVATION_ACTIVATION, False],
         [hierarchical_clustering.THRESHOLD, hierarchical_clustering.N_CLUSTERS, DEPENDENCY_ACTIVATION_ACTIVATION, False],
-        [hierarchical_clustering.N_CLUSTERS, hierarchical_clustering.CRITERION, DEPENDENCY_ACTIVATION_ENUM, {True: ['maxclust', 'maxclust_monocrit'], False: ['distance', 'inconsistent', 'monocrit']}],
-        [hierarchical_clustering.THRESHOLD, hierarchical_clustering.CRITERION, DEPENDENCY_ACTIVATION_ENUM, {True: ['distance', 'inconsistent', 'monocrit'], False: ['maxclust', 'maxclust_monocrit']}],
-        [hierarchical_clustering.CRITERION, hierarchical_clustering.DEPTH, DEPENDENCY_ENUM_ACTIVATION, {'inconsistent': True, 'maxclust': False, 'maxclust_monocrit': False, 'distance': False, 'monocrit': False}],
+        [hierarchical_clustering.N_CLUSTERS, hierarchical_clustering.CRITERION, DEPENDENCY_ACTIVATION_ENUM, {True: ['maxclust'], False: ['distance', 'inconsistent']}],
+        [hierarchical_clustering.THRESHOLD, hierarchical_clustering.CRITERION, DEPENDENCY_ACTIVATION_ENUM, {True: ['distance', 'inconsistent'], False: ['maxclust']}],
+        [hierarchical_clustering.CRITERION, hierarchical_clustering.DEPTH, DEPENDENCY_ENUM_ACTIVATION, {'inconsistent': True, 'maxclust': False, 'distance': False}],
         # [hierarchical.CRITERION, hierarchical.MONOCRIT, 'enum_value_activation', {'inconsistent': False, 'maxclust': False, 'maxclust_monocrit': True, 'distance': False, 'monocrit': True}]
     ]
     n_clusters, distance_threshold, criterion, depth = \
