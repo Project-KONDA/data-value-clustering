@@ -130,21 +130,21 @@ def cluster_dbscan(master, cluster_answers, distance_matrix_map, values, previou
     eps_info = dbscan_eps_config(distance_matrix_map["distance_matrix"], distance_matrix_map["min_distance"], n_values)
     eps_frame = create_slider_frame(*eps_info, previous_value=None if previous_parameters is None else previous_parameters[eps_info[0]], suggestion=suggestion)
 
-    # n_jobs = None
-    n_jobs_info = dbscan_n_jobs_config()
-    n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]], suggestion=suggestion)
+    # # n_jobs = None
+    # n_jobs_info = dbscan_n_jobs_config()
+    # n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]], suggestion=suggestion)
 
-    frames = [min_samples_frame, eps_frame, n_jobs_frame]
+    frames = [min_samples_frame, eps_frame]
     dependencies = [
         [dbscan_clustering.MIN_SAMPLES, dbscan_clustering.EPS, DEPENDENCY_VALUE_SLIDER_MAX,
          lambda min_samples: calculate_eps_max(distance_matrix_map["distance_matrix"], min_samples)],
     ]
-    min_samples, eps, n_jobs = get_configuration_parameters(master, "DBSCAN Parameter Configuration", frames, dependencies, suggestion)
+    min_samples, eps = get_configuration_parameters(master, "DBSCAN Parameter Configuration", frames, dependencies, suggestion)
 
     if min_samples is None:
         return None
 
-    return {"min_samples": min_samples, "eps": eps, "n_jobs": n_jobs}
+    return {"min_samples": min_samples, "eps": eps}
     # return dbscan_args(eps, min_samples, n_jobs)
 
 
