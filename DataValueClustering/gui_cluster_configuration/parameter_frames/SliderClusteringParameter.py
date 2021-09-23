@@ -58,6 +58,11 @@ class SliderClusteringParameter(ClusteringParameter):
 
         # self.update_active()
 
+    def adopt_previous_activation(self):
+        if self.previous is not None and self.deactivatable:
+            self.is_activated.set(int(1))
+            self.update_active()
+
     def check_suggestion_in_bounds(self):
         too_high = self.validation_suggestion == '⬇' and self.start_value == self.mini
         too_low = self.validation_suggestion == '⬆' and self.start_value == self.maxi

@@ -72,6 +72,9 @@ class ClusterConfigurationInput:
             param1.add_dependency(param2, dep[2], dep[3])
 
         for i, p in enumerate(self.parameters):
+            p.adopt_previous_activation()
+
+        for i, p in enumerate(self.parameters):
             p.update_active()
 
         self.record_parameters()

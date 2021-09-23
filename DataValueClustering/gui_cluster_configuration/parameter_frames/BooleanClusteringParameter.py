@@ -42,6 +42,11 @@ class BooleanClusteringParameter(ClusteringParameter):
 
         self.update_active()
 
+    def adopt_previous_activation(self):
+        if self.previous is not None and self.deactivatable:
+            self.is_activated.set(int(1))
+            self.update_active()
+
     def activate(self):
         super().activate()
         self.check_boolean.config(state='normal', bg='white')

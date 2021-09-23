@@ -76,6 +76,11 @@ class EnumClusteringParameter(ClusteringParameter):
     # def get_current_index(self):
     #     return list(self.options).index(self.value_var.get())
 
+    def adopt_previous_activation(self):
+        if self.previous is not None and self.deactivatable:
+            self.is_activated.set(int(1))
+            self.update_active()
+
     def update_options(self, new_options):
         self.option_labels_activated = new_options
         assert len(new_options) > 0

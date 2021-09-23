@@ -129,5 +129,9 @@ class ClusteringParameter(ABC):
             self.check_active.config(bg='white')
 
     @abstractmethod
+    def adopt_previous_activation(self):
+        pass
+
+    @abstractmethod
     def get_result(self):
         pass
