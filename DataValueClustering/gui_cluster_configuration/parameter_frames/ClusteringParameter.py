@@ -61,6 +61,7 @@ class ClusteringParameter(ABC):
         if plot_function:
             self.plot_button = Button(self.frame, anchor='nw', text="Show plot", command=self.plot_button_pressed)
             self.plot_button.grid(row=0, column=2, sticky='ne', padx=5, pady=5)
+            self.reset_button.grid(row=1, column=2, sticky='nw', padx=5, pady=5)
 
     def reset(self):
         self.update_dependency(DEPENDENCY_ACTIVATION_ACTIVATION)
