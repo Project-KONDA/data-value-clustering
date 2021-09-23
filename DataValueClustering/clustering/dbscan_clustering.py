@@ -4,6 +4,7 @@ import numpy as np
 
 from gui_center.cluster_representation import fancy_cluster_representation
 # from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
+from gui_cluster_configuration.k_distance_graph import get_sorted_k_distances
 
 N_JOBS = "n_jobs"
 LEAF_SIZE = "leaf_size"
@@ -25,28 +26,34 @@ def dbscan_args(eps, min_samples, n_jobs):
 def dbscan_min_samples_config(no_values, answers):
     # int
     name = MIN_SAMPLES
-    explanation = "Minimum number of samples per cluster. Higher values will yield less clusters and more noise. The larger or noiser the data, the larger the value should be."
+    explanation = "The number of samples in a neighborhood for a point to be considered as a core point." \
+                  "The minimum number of samples per cluster. Higher values will yield less clusters and more noise. " \
+                  "The larger or noiser the data, the larger the value should be."
     min_min_samples = max(1, min(3, no_values))
     max_min_samples = max(3, no_values-2)
     suggestion_value = min_min_samples
+    resolution = 1
 
     # However, larger values are usually better for data sets with noise and will yield more significant clusters
     # increase if a) noisy , b) large data set set or c) data contains many duplicates
 
-    return name, explanation, min_min_samples, max_min_samples, suggestion_value
+    return name, explanation, min_min_samples, max_min_samples, suggestion_value, resolution
 
 
 def dbscan_eps_config(distance_matrix, min_distance, no_values):
     # float
     name = EPS
-    explanation = "The maximum distance between two samples belonging to the same cluster." \
-                  "In general, small values of eps are preferable. If chosen much too small, a large part of the data will not be clustered, thus be interpreted as " \
-                  "noise. Whereas for a too high value, clusters will merge and the majority of objects will be in " \
-                  "the same cluster."
+    explanation = "The maximum distance between two samples for one to be considered as in the neighborhood of the other. " \
+                  "In general, small values are preferable. If chosen much too small, a large part of the data will be interpreted as " \
+                  "noise. Whereas for a too high value, the majority of objects will be in the same cluster. " \
+                  "Good values are the y-coordinates where the plot of " + MIN_SAMPLES + " shows an 'elbow', i.e. " \
+                  "where the graph has the greatest slope."
+
+    # "The maximum distance of the two samples per cluster that have the lowest distance between each other."
 
     # as a rule of thumb, only a small fraction of points should be within this distance of each other
 
-    max_eps = calculate_eps_max(distance_matrix, max(1, min(3, no_values)))  # 3 is min_min_samples
+    max_eps = calculate_eps_max(distance_matrix, max(1, min(3, no_values)))  # default min_samples, udapted dynamically
     min_eps = max(min_distance, 0.01)
     suggestion_value = min_eps
     resolution = 0.01
@@ -54,12 +61,7 @@ def dbscan_eps_config(distance_matrix, min_distance, no_values):
 
 
 def calculate_eps_max(distance_matrix, min_samples):
-    k = min_samples
-    distances = np.empty(len(distance_matrix), dtype=float)
-    for i in range(len(distance_matrix)):
-        d = distance_matrix[i, :]
-        sorted = np.sort(d)
-        distances[i] = sorted[k + 1]
+    distances = get_sorted_k_distances(distance_matrix, min_samples)
     max_eps = max(distances)
     return float(max_eps)
     # return float(distance_matrix.max()) TODO ?
@@ -67,6 +69,7 @@ def calculate_eps_max(distance_matrix, min_samples):
 
 # def dbscan_algorithm_config():
 #     # enum
+#     # default 'auto' will attempt to decide the most appropriate algorithm based on the values passed to fit method
 #     name = ALGORITHM  # TODO
 #     explanation = ""  # TODO
 #     options = np.array([['auto', ""],
@@ -78,29 +81,29 @@ def calculate_eps_max(distance_matrix, min_samples):
 #     return name, explanation, options, suggestions, deactivatable
 
 
-def dbscan_leaf_size_config():
-    # only activated if algorithm='ball_tree' or 'kd_tree'
-    # int slider
-    name = LEAF_SIZE  # TODO
-    explanation = ""  # TODO
-    mini = 0  # TODO
-    maxi = 100  # TODO
-    default = 30
-    resolution = 1
-    deactivatable = False
-    return name, explanation, mini, maxi, default, resolution, deactivatable
+# def dbscan_leaf_size_config():
+#     # only activated if algorithm='ball_tree' or 'kd_tree'
+#     # int slider
+#     name = LEAF_SIZE  # TODO
+#     explanation = ""  # TODO
+#     mini = 0  # TODO
+#     maxi = 100  # TODO
+#     default = 30
+#     resolution = 1
+#     deactivatable = False
+#     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
-def dbscan_n_jobs_config():
-    # int slider
-    name = N_JOBS  # TODO
-    explanation = ""  # TODO
-    mini = 0  # TODO
-    maxi = 2  # TODO
-    default = 1  # TODO
-    resolution = 1  # TODO
-    deactivatable = True  # TODO
-    return name, explanation, mini, maxi, default, resolution, deactivatable
+# def dbscan_n_jobs_config():
+#     # int slider
+#     name = N_JOBS  # TODO
+#     explanation = ""  # TODO
+#     mini = 0  # TODO
+#     maxi = 2  # TODO
+#     default = 1  # TODO
+#     resolution = 1  # TODO
+#     deactivatable = True  # TODO
+#     return name, explanation, mini, maxi, default, resolution, deactivatable
 
 
 if __name__ == '__main__':
