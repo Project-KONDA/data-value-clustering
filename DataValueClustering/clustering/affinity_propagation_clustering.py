@@ -16,7 +16,7 @@ def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_ite
     # affinity_matrix = calculate_affinity_matrix_from_distance_matrix(distance_matrix)
     clusters = AffinityPropagation(
         affinity='precomputed', damping=damping, max_iter=max_iter, convergence_iter=convergence_iter,
-        preference=preference).fit_predict(affinity_matrix)
+        preference=preference, random_state=None).fit_predict(affinity_matrix)
     return clusters
 
 
