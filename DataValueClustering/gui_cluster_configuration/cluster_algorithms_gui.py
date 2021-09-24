@@ -17,13 +17,34 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPEN
     DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX
 
 
+def simple_cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+    linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, "average")
+
+    n_clusters_info = hierarchical_n_clusters_config(len(values))
+    n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]], suggestion=suggestion)
+
+    # distance_threshold = 3.8  # 15  # 3.8  # depends on distances
+    distance_threshold_info = hierarchical_distance_threshold_config(linkage_matrix,
+                                                                     distance_matrix_map["min_distance"])
+    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, values), suggestion=suggestion)
+
+    frames = [n_clusters_frame, distance_threshold_frame]
+    dependencies2 = [
+        [hierarchical_clustering.N_CLUSTERS, hierarchical_clustering.THRESHOLD, DEPENDENCY_ACTIVATION_ACTIVATION, False],
+        [hierarchical_clustering.THRESHOLD, hierarchical_clustering.N_CLUSTERS, DEPENDENCY_ACTIVATION_ACTIVATION, False],
+    ]
+    n_clusters, distance_threshold = \
+        get_configuration_parameters(master, "Simple Hierarchical Clustering Parameter Configuration ", frames, dependencies2, suggestion)
+
+    if n_clusters is None and distance_threshold is None:
+        return None
+
+    return {"method": "average", "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": "maxclust", "depth": None}
+
+
 def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     if cluster_answers is None:
         cluster_answers = None
-        # cluster_answers = not None
-        # TODO: show questionnaire if not shown already
-        # somewhat similar to:
-        # answers, cluster_f = input_questionnaire_clustering(clustering_question_array, predefined_answers)
 
     # ask user for 'method' argument
     # method = 'single'

@@ -15,6 +15,7 @@ from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
+from gui_cluster_configuration.cluster_algorithms_gui import simple_cluster_hierarchical
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
@@ -153,7 +154,7 @@ class Hub:
                                          width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_distance = Button(self.refined_clustering_frame, text=CONFIG_DISSIMILARITIES_SLIDERS, command=self.configure_distance,
                                       width=button_width_full, height=button_height, state="disabled")
-        self.button_clustering = Button(self.refined_clustering_frame, text='Configure Algorithm...', command=self.configure_clustering,
+        self.button_clustering = Button(self.refined_clustering_frame, text='Configure Algorithm... (simple)', command=self.configure_clustering,
                                         width=button_width_part, height=button_height, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
@@ -585,24 +586,31 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_clustering(self):
+        print("Configure Clustering")
         self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_IN_PROGRESS, fg='magenta2')
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
         suggested_algorithms = get_suggested_algorithms(self.get_validation_answers())
-        answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm,
+
+        if self.checked_expert_clustering.get() == 1:
+            answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm,
                                                                           suggested_algorithms)
-        if clustering_algorithm is None:
-            self.update()
-            self.root.update()
-            return
 
-        if prev_clustering_algorithm != clustering_algorithm:
-            prev_parameters = None
-            suggested_parameter_modifications = None
+            if clustering_algorithm is None:
+                self.update()
+                self.root.update()
+                return
+
+            if prev_clustering_algorithm != clustering_algorithm:
+                prev_parameters = None
+                suggested_parameter_modifications = None
+            else:
+                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
+            parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
         else:
-            suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
-
-        parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
+            clustering_algorithm = "Hierarchical"
+            answers = prev_answers
+            parameters = simple_cluster_hierarchical(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=None)
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
             self.root.update()
@@ -618,7 +626,11 @@ class Hub:
         self.root.update()
 
     def trigger_expert_clustering(self):
-        self.configuration.clustering_expert_mode = bool(self.checked_expert_clustering)
+        self.configuration.clustering_expert_mode = bool(self.checked_expert_clustering.get())
+        if self.configuration.clustering_expert_mode:
+            self.button_clustering.configure(text='Configure Algorithm... (expert)')
+        else:
+            self.button_clustering.configure(text='Configure Algorithm... (simple)')
 
     def get_validation_answers(self):
         return self.configuration.get_validation_answer_1(), self.configuration.get_validation_answer_2(), self.configuration.get_validation_answer_3(), self.configuration.get_validation_answer_4(),
