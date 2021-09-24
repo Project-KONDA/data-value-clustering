@@ -2,6 +2,7 @@
 import numpy as np
 from sklearn.cluster import SpectralClustering
 
+from clustering import hierarchical_clustering
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
 
 ASSIGN_LABELS = "assign_labels"
@@ -28,50 +29,43 @@ def spectral_args(n_clusters, eigen_solver, n_components, n_init, eigen_tol, ass
 
 def spectral_n_clusters_config(no_values):
     # int or range
-    name = N_CLUSTERS
-    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
-    min_n_clusters = 2
-    max_n_clusters = no_values
-    suggestion_value = min(7, no_values // 2)
-    resolution = 1
-    deactivatable = False
-    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable
+    name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable, default_active = hierarchical_clustering.hierarchical_n_clusters_config(no_values)
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution
 
 
 def spectral_eigen_solver_config():
     # enum
+    # expert
     name = EIGEN_SOLVER  # TODO
     explanation = "Eigenvalue decomposition strategy."  # TODO
     options = np.array([
-        ['arpack', "Default Value."],
+        ['arpack', "Default value."],
         ['lobpcg', ""],
         ['amg', "Faster, but partially instable."]
     ], dtype=str)  # TODO
-    suggestions = ['arpack']  # TODO
+    suggestions = ['arpack']
     deactivatable = False  # If None 'arpack' is used
     return name, explanation, options, suggestions, deactivatable
 
 
 def spectral_n_components_config(no_values):
     # int
+    # expert
     name = N_COMPONENTS  # TODO
-    explanation = ""  # TODO
-    mini = 0  # TODO
-    maxi = 2  # TODO
-    default = min(7, no_values // 2)  # TODO : n.clusters
-    resolution = 1  # TODO
-    deactivatable = False
-    return name, explanation, mini, maxi, default, resolution, deactivatable
+    explanation = "Number of eigenvectors to use for the spectral embedding. If deactivated, the value of " + N_CLUSTERS + " is used."  # TODO
+    other_name, other_explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable, default_active = hierarchical_clustering.hierarchical_n_clusters_config(no_values)
+    deactivatable = True
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable
 
 
 def spectral_n_init_config(no_values):
     # int
+    # expert
     name = N_INIT  # TODO
-    explanation = "Number of iterations of the algorithm."
-    explanation += "The final result will be the best result of the single iterations."
+    explanation = "Number of iterations of the algorithm. The final result will be the best result of the single iterations."
     mini = 1
     maxi = no_values
-    default = 10  # TODO
+    default = 10
     resolution = 1  # TODO
     deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
@@ -79,12 +73,13 @@ def spectral_n_init_config(no_values):
 
 def spectral_eigen_tol_config():
     # float
+    # expert
     # when eigen_solver='arpack' = default
     name = EIGEN_TOL  # TODO
     explanation = ""  # TODO
     mini = 0.  # TODO
     maxi = 2.  # TODO
-    default = 1.  # TODO
+    default = 0.  # TODO
     resolution = 0.01
     deactivatable = False
     return name, explanation, mini, maxi, default, resolution, deactivatable
@@ -101,7 +96,7 @@ def spectral_assign_labels_config():
         ['kmeans', ""],
         ['discretize', ""]
     ], dtype=str)  # TODO
-    suggestions = ['kmeans']  # TODO
+    suggestions = ['kmeans']
     deactivatable = False
     return name, explanation, options, suggestions, deactivatable
 
