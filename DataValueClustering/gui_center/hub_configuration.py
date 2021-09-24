@@ -109,12 +109,14 @@ class HubConfiguration():
         self.timedelta_distance = None
 
         self.clustering_expert_mode = False
-        self.clustering_algorithm = "Hierarchical"  # string
-        self.clustering_parameters = {'method': 'single',
-                      'n_clusters': 7,
-                      'distance_threshold': None,
-                      'criterion': 'maxclust',
-                      'depth': None}  # dict
+        self.clustering_algorithm = None  # string
+        # self.clustering_algorithm = "Hierarchical"  # string
+        self.clustering_parameters = None  # dict
+        # self.clustering_parameters = {'method': 'single',
+        #               'n_clusters': 7,
+        #               'distance_threshold': None,
+        #               'criterion': 'maxclust',
+        #               'depth': None}  # dict
         self.clustering_answers = [False, False, False, True, True, True]  # list
         # self.cluster_config_f = None
         # self.cluster_f = None
