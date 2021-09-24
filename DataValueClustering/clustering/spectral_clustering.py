@@ -87,6 +87,7 @@ def spectral_eigen_tol_config():
 
 def spectral_assign_labels_config():
     # enum
+    # expert
     #  k-means can be applied and is a popular choice. But it can also be sensitive to initialization.
     #  Discretization is another approach which is less sensitive to random initialization.
     name = ASSIGN_LABELS  # TODO

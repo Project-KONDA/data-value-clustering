@@ -29,9 +29,9 @@ def dbscan_min_samples_config(no_values, answers):
     explanation = "The number of samples in a neighborhood for a point to be considered as a core point." \
                   "The minimum number of samples per cluster. Higher values will yield less clusters and more noise. " \
                   "The larger or noiser the data, the larger the value should be."
-    min_min_samples = max(1, min(3, no_values))
+    min_min_samples = 1
     max_min_samples = max(3, no_values-2)
-    suggestion_value = min_min_samples
+    suggestion_value = max(1, min(3, no_values))
     resolution = 1
 
     # However, larger values are usually better for data sets with noise and will yield more significant clusters

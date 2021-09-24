@@ -78,6 +78,7 @@ def decrease_by_one(clusters):
 
 def hierarchical_method_config(answers):
     # enum
+    # expert!?
     name = METHOD
     explanation = "Method for calculating the distance between clusters. The two clusters with the minimum distance are merged at each step."
     options = method_array[:, (2, 3)]
