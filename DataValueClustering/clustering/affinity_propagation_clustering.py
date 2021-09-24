@@ -27,9 +27,9 @@ def affinity_args(damping, max_iter, convergence_iter, preference):
 
 def affinity_damping_config():
     # float
+    # expert
     name = DAMPING
-    explanation = "Extent to which the current value is maintained relative to incoming values:\n"
-    explanation += "Higher values will yield less clusters."
+    explanation = "Extent to which the current value is maintained relative to incoming values. Higher values will yield less clusters."
     min_damping = 0.5
     max_damping = 0.99
     suggestion_value = 0.5
@@ -40,9 +40,14 @@ def affinity_damping_config():
 
 def affinity_preference_config(affinity_matrix):
     # float
+    # expert
     # it is advised to start with a preference equal to the median of the input similarities (= default)
+    # If the preferences are not passed as arguments, they will be set to the median of the input similarities
+    # Wikipedia: When it is set to the same value for all inputs, it controls how many classes the algorithm produces.
+    # ...A value close to the minimum possible similarity produces fewer classes, while a value close to or larger than the maximum possible similarity produces many classes.
     name = PREFERENCE
-    explanation = "Lower values will yield less clusters."
+    explanation = "Controls the number of clusters. Lower values will yield less clusters. If deactivated, the default value, which is automatically calculated and " \
+                  "should be appropriate in most cases, is used."
     min_preference = 0.0
     max_preference = 100.0
     suggestion_value = float(np.median(affinity_matrix))
@@ -53,10 +58,10 @@ def affinity_preference_config(affinity_matrix):
 
 def affinity_max_iter_config(answers):
     # int
+    # expert
     name = MAX_ITER
-    explanation = "The algorithm runs multiple times and improves with every iteration.\n"
-    explanation += "This parameter determines the maximum number of iterations the algorithm will perform.\n"
-    explanation += "The default value is 200."
+    explanation = "The algorithm runs multiple times and improves with every iteration. " \
+                  "This parameter determines the maximum number of iterations the algorithm will perform."
     mini = 1
     maxi = 500
     default = 200
@@ -67,10 +72,10 @@ def affinity_max_iter_config(answers):
 
 def affinity_convergence_iter_config():
     # int
+    # expert
     # increase for more clusters?
     name = CONVERGENCE_ITER
-    explanation = "Terminate the algorithm if for the given amount of iterations there is no difference between the results.\n"
-    explanation += "The default value is 15"
+    explanation = "Terminate the algorithm if for the given amount of iterations there is no difference between the results."
     mini = 2
     maxi = 100
     default = 15
