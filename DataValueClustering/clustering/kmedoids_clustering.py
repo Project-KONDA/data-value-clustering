@@ -42,7 +42,8 @@ def kmedoids_args(n_clusters=8, init='heuristic', max_iter=200):
 
 def kmedoids_n_clusters_config(no_values):
     # int or range
-    return hierarchical_clustering.hierarchical_n_clusters_config(no_values)
+    name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable, default_active = hierarchical_clustering.hierarchical_n_clusters_config(no_values)
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution
 
 
 # def kmedoids_method_config(answers):
