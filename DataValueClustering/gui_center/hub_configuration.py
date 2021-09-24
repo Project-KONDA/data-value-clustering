@@ -108,6 +108,7 @@ class HubConfiguration():
         self.distance_matrix_map = None
         self.timedelta_distance = None
 
+        self.clustering_expert_mode = False
         self.clustering_algorithm = "Hierarchical"  # string
         self.clustering_parameters = {'method': 'single',
                       'n_clusters': 7,
@@ -315,17 +316,6 @@ class HubConfiguration():
     def clustering_execution_possible(self):
         return self.clustering_configuration_possible() \
             and self.clustering_configuration_valid()
-
-    def clustering_configuration_is_default(self):
-        from clustering.hierarchical_clustering import hierarchical_n_clusters_config
-        n_clusters = hierarchical_n_clusters_config(self.num_abstracted_data)[4]
-        return self.clustering_algorithm == "Hierarchical" \
-               and self.clustering_parameters == {'method': 'single',
-                                           'n_clusters': n_clusters,
-                                           'distance_threshold': None,
-                                           'criterion': 'maxclust',
-                                           'depth': None} \
-        and self.clustering_answers == [False, False, False, True, True, True]
 
     def result_is_ready(self):
         return self.clustering_execution_possible() \

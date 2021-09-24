@@ -182,10 +182,13 @@ class Hub:
         # self.button_save_result.grid(sticky='nswe', row=17, column=1, padx=10, pady=10)
         # self.button_save_result.grid(sticky='ne', row=0, column=1, padx=10, pady=10)
 
-        self.checked_clustering = IntVar(value=1)
-        self.checkbutton_clustering = Checkbutton(self.refined_clustering_frame, variable=self.checked_clustering, state="disabled",
-                                                  bg="white", command=self.check_default_clustering, text="Default Algorithm Configuration")
-        self.checkbutton_clustering.grid(sticky='nw', row=14, column=1, columnspan=1, padx=(10,0), pady=10)
+        self.label_expert_configuration = Label(self.refined_clustering_frame, text="Expert Algorithm Configuration:", bg="white")
+        self.label_expert_configuration.grid(sticky='w', row=14, column=1, padx=(10,0), pady=10)
+        self.checked_expert_clustering = IntVar(value=1)
+        self.checkbutton_expert_clustering = Checkbutton(self.refined_clustering_frame,
+            variable=self.checked_expert_clustering, bg="white", command=self.trigger_expert_clustering)
+        self.checkbutton_expert_clustering.grid(sticky='ws', row=14, column=2, pady=10)
+
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
         # self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
 
@@ -464,7 +467,6 @@ class Hub:
             self.label_abstraction_progress.configure(text=ABSTRACTION_IN_PROGRESS, fg='RoyalBlue1')
             self.root.update()
             self.configuration.execute_abstraction()
-            self.set_clustering_config_default()
             self.update()
 
         # self.configuration.save_as_json()
@@ -496,7 +498,6 @@ class Hub:
 
         if self.configuration.data_configuration_valid():
             self.configuration.execute_abstraction()
-            self.set_clustering_config_default()
 
         self.update()
         # self.configuration.save_as_json()
@@ -573,7 +574,6 @@ class Hub:
             else:
                 self.set_selected_distance_option(DISTANCE_OPTION_BLOBS)
 
-
     def execute_distance(self):
         self.label_distance_progress.configure(text=DISTANCE_CALC_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
@@ -617,25 +617,8 @@ class Hub:
         self.update()
         self.root.update()
 
-    def check_default_clustering(self):
-        self.set_clustering_config_default()
-        self.update()
-        self.root.update()
-
-    def set_clustering_config_default(self):
-        from clustering.hierarchical_clustering import hierarchical_n_clusters_config
-        self.checked_clustering.set(1)
-        clustering_algorithm = "Hierarchical"
-        answers = [False, False, False, True, True, True]
-        n_clusters_new = hierarchical_n_clusters_config(self.configuration.num_abstracted_data)[4]
-        method = hierarchical_method_config(answers)[3][0]
-        parameters = {'method': method,
-                      'n_clusters': n_clusters_new,
-                      'distance_threshold': None,
-                      'criterion': 'maxclust',
-                      'depth': None}
-        self.configuration.set_clustering_selection(clustering_algorithm, answers)
-        self.configuration.set_clustering_configuration(parameters)
+    def trigger_expert_clustering(self):
+        self.configuration.clustering_expert_mode = bool(self.checked_expert_clustering)
 
     def get_validation_answers(self):
         return self.configuration.get_validation_answer_1(), self.configuration.get_validation_answer_2(), self.configuration.get_validation_answer_3(), self.configuration.get_validation_answer_4(),
@@ -701,7 +684,6 @@ class Hub:
     def load(self, load_path):
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
-        self.set_clustering_config_default()
         self.set_saved(True)
         self.update()
 
@@ -712,7 +694,6 @@ class Hub:
                                    "\nDo you want to proceed?",
                                    icon=WARNING):
             self.configuration = HubConfiguration()
-            self.set_clustering_config_default()
             self.update()
             self.root.title(TITLE)
 
@@ -788,12 +769,7 @@ class Hub:
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
                 self.button_distance_play.configure(state="disabled", bg=self.original_button_color)
 
-        if self.configuration.clustering_configuration_is_default():
-            self.checked_clustering.set(1)
-            self.checkbutton_clustering.configure(state="disabled")
-        else:
-            self.checkbutton_clustering.configure(state="normal")
-            self.checked_clustering.set(0)
+        self.checked_expert_clustering.set(int(self.configuration.clustering_expert_mode))
 
         if self.configuration.result_is_ready():
             self.button_show_result.configure(state="normal", bg='pale green')
