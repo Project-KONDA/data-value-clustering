@@ -5,11 +5,11 @@ from gui_center.cluster_representation import fancy_cluster_representation
 from distance.distance_matrix import calculate_affinity_matrix, calculate_affinity_matrix_from_distance_matrix
 import numpy as np
 
-COPY = "affinity_copy"
-CONVERGENCE_ITER = "affinity_convergence_iter"
-MAX_ITER = "affinity_max_iter"
-PREFERENCE = "affinity_preference"
-DAMPING = "affinity_damping"
+COPY = "copy"
+CONVERGENCE_ITER = "convergence_iter"
+MAX_ITER = "max_iter"
+PREFERENCE = "preference"
+DAMPING = "damping"
 
 
 def affinity(affinity_matrix, values, damping=0.5, max_iter=200, convergence_iter=15, preference=None):
