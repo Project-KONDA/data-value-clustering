@@ -9,12 +9,14 @@ from clustering.spectral_clustering import *
 from gui_cluster_configuration.ClusteringParameterInput import get_configuration_parameters
 from gui_cluster_configuration.dendrogram import show_dendrogram
 from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
-from gui_cluster_configuration.parameter_frames import create_enum_frame, create_slider_frame, create_boolean_frame
+from gui_cluster_configuration.parameter_frames import create_enum_frame, create_slider_frame, create_boolean_frame, create_parameter_caption
 
 
 # pass method of this module as cluster_function to clustering.clustering.cluster
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPENDENCY_ACTIVATION_ACTIVATION, \
     DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX
+
+EXPERT_CAPTION = create_parameter_caption("Expert Parameters")
 
 
 def simple_cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
@@ -89,7 +91,11 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     # monocrit_info = hierarchical_monocrit_config()
     # monocrit_frame = create_vector_input(*monocrit_info)
 
-    frames = [n_clusters_frame, distance_threshold_frame, criterion_frame, depth_frame]
+    frames = [n_clusters_frame,
+              distance_threshold_frame,
+              EXPERT_CAPTION,
+              criterion_frame,
+              depth_frame]
     dependencies2 = [
         [hierarchical_clustering.N_CLUSTERS, hierarchical_clustering.THRESHOLD, DEPENDENCY_ACTIVATION_ACTIVATION, False],
         [hierarchical_clustering.THRESHOLD, hierarchical_clustering.N_CLUSTERS, DEPENDENCY_ACTIVATION_ACTIVATION, False],
@@ -127,8 +133,10 @@ def cluster_kmedoids(master, cluster_answers, distance_matrix_map, values, previ
     max_iter_info = kmedoids_max_iter_config()
     max_iter_frame = create_slider_frame(*max_iter_info, previous_value=None if previous_parameters is None else previous_parameters[max_iter_info[0]], suggestion=suggestion)
 
-    frames = [n_clusters_frame, init_frame, max_iter_frame]
-
+    frames = [n_clusters_frame,
+              EXPERT_CAPTION,
+              init_frame,
+              max_iter_frame]
     n_clusters, init, max_iter = \
         get_configuration_parameters(master, "KMedoids Parameter Configuration", frames, [], suggestion)
 
@@ -205,8 +213,12 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     # n_jobs_info = optics_n_jobs_config()
     # n_jobs_frame = create_slider_frame(*n_jobs_info, previous_value=None if previous_parameters is None else previous_parameters[n_jobs_info[0]], suggestion=suggestion)
 
-    frames = [min_samples_frame, max_eps_frame, xi_frame,
-              predecessor_correction_frame, min_cluster_size_frame]
+    frames = [min_samples_frame,
+              EXPERT_CAPTION,
+              max_eps_frame,
+              xi_frame,
+              predecessor_correction_frame,
+              min_cluster_size_frame]
     dependencies = [
         # [optics_clustering.CLUSTER_METHOD, optics_clustering.EPS, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': True, 'xi': False}],
         # [optics_clustering.CLUSTER_METHOD, optics_clustering.XI, DEPENDENCY_ENUM_ACTIVATION, {'dbscan': False, 'xi': True}],
@@ -287,8 +299,13 @@ def cluster_spectral(master, cluster_answers, distance_matrix_map, values, previ
     assign_labels_info = spectral_assign_labels_config()
     assign_labels_frame = create_enum_frame(*assign_labels_info, previous_value=None if previous_parameters is None else previous_parameters[assign_labels_info[0]], suggestion=suggestion)
 
-    frames = [n_clusters_frame, eigen_solver_frame, n_components_frame, n_init_frame,
-              eigen_tol_frame, assign_labels_frame]
+    frames = [n_clusters_frame,
+              EXPERT_CAPTION,
+              eigen_solver_frame,
+              n_components_frame,
+              n_init_frame,
+              eigen_tol_frame,
+              assign_labels_frame]
     dependencies = [
         [spectral_clustering.EIGEN_SOLVER, spectral_clustering.EIGEN_TOL, DEPENDENCY_ENUM_ACTIVATION, {'lobpcg': False, 'amg': False, 'arpack': True}],
     ]
