@@ -72,10 +72,10 @@ class ClusterConfigurationInput:
             param1.add_dependency(param2, dep[2], dep[3])
 
         for i, p in enumerate(self.parameters):
-            p.adopt_previous_activation()
+            if isinstance(p, ClusteringParameter):
+                p.adopt_previous_activation()
+                p.update_active()
 
-        for i, p in enumerate(self.parameters):
-            p.update_active()
 
         self.record_parameters()
 
@@ -123,10 +123,11 @@ class ClusterConfigurationInput:
     def get(self):
         parameter_values = ()
         for i, param in enumerate(self.parameters):
-            if self.canceled:
-                parameter_values += (None, )
-            else:
-                parameter_values += (param.get_result(),)
+            if isinstance(param, ClusteringParameter):
+                if self.canceled:
+                    parameter_values += (None, )
+                else:
+                    parameter_values += (param.get_result(),)
         return parameter_values
 
 

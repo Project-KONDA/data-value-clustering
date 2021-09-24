@@ -586,7 +586,6 @@ class Hub:
         # self.configuration.save_as_json()
 
     def configure_clustering(self):
-        print("Configure Clustering")
         self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_IN_PROGRESS, fg='magenta2')
         prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
