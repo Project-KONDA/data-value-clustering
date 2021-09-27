@@ -38,9 +38,12 @@ DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
 
 
 CONFIG_DISSIMILARITIES = 'Configure Dissimilarities...'
-CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Dissimilarities via Sliders...'
-CONFIG_DISSIMILARITIES_BLOBS = 'Configure Dissimilarities via Blobs...'
-CONFIG_DISSIMILARITIES_MATRIX = 'Configure Dissimilarities via Matrix...'
+CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Dissimilarities... (Sliders)'
+CONFIG_DISSIMILARITIES_BLOBS = 'Configure Dissimilarities... (Blobs)'
+CONFIG_DISSIMILARITIES_MATRIX = 'Configure Dissimilarities... (Matrix)'
+
+CONFIG_CLUSTERING_SIMPLE = 'Configure Algorithm... (simple)'
+CONFIG_CLUSTERING_EXPERT = 'Configure Algorithm... (expert)'
 
 
 TITLE = "Clustering Configuration Hub"
@@ -154,7 +157,7 @@ class Hub:
                                          width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_distance = Button(self.refined_clustering_frame, text=CONFIG_DISSIMILARITIES_SLIDERS, command=self.configure_distance,
                                       width=button_width_full, height=button_height, state="disabled")
-        self.button_clustering = Button(self.refined_clustering_frame, text='Configure Algorithm... (simple)', command=self.configure_clustering,
+        self.button_clustering = Button(self.refined_clustering_frame, text=CONFIG_CLUSTERING_SIMPLE, command=self.configure_clustering,
                                         width=button_width_part, height=button_height, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
@@ -634,9 +637,9 @@ class Hub:
     def trigger_expert_clustering(self):
         self.configuration.clustering_expert_mode = bool(self.checked_expert_clustering.get())
         if self.configuration.clustering_expert_mode:
-            self.button_clustering.configure(text='Configure Algorithm... (expert)')
+            self.button_clustering.configure(text=CONFIG_CLUSTERING_EXPERT)
         else:
-            self.button_clustering.configure(text='Configure Algorithm... (simple)')
+            self.button_clustering.configure(text=CONFIG_CLUSTERING_SIMPLE)
 
     def get_validation_answers(self):
         return self.configuration.get_validation_answer_1(), self.configuration.get_validation_answer_2(), self.configuration.get_validation_answer_3(), self.configuration.get_validation_answer_4(),
