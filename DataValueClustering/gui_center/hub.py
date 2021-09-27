@@ -17,6 +17,7 @@ from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_configuration.cluster_algorithms_gui import simple_cluster_hierarchical
 from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
+from gui_cluster_selection.select_algorithm import select_algorithm
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
 from gui_distances.CostMapInput import input_costmap
@@ -595,8 +596,10 @@ class Hub:
         suggested_algorithms = get_suggested_algorithms(self.get_validation_answers())
 
         if self.checked_expert_clustering.get() == 1:
-            answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm,
-                                                                          suggested_algorithms)
+            answers = None
+            cluster_config_f, clustering_algorithm = select_algorithm(self.root, prev_clustering_algorithm, suggested_algorithms)
+            # answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm,
+            #                                                               suggested_algorithms)
 
             if clustering_algorithm is None:
                 self.update()
