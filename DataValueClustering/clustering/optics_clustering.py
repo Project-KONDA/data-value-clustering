@@ -100,7 +100,7 @@ def optics_predecessor_correction_config():
     # This parameter has minimal effect on most datasets.
     # Used only when cluster_method='xi'.
     name = PREDECESSOR_CORRECTION
-    explanation = "Correct clusters according to the predecessors calculated."
+    explanation = "Correct clusters according to the predecessors calculated. This parameter has minimal effect on most datasets."
     default = True
     deactivatable = False
     return name, explanation, default, deactivatable

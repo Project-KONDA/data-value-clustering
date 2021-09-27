@@ -76,7 +76,7 @@ def spectral_eigen_tol_config():
     # expert
     # when eigen_solver='arpack' = default
     name = EIGEN_TOL  # TODO
-    explanation = ""  # TODO
+    explanation = "Stopping criterion for eigendecomposition of the Laplacian matrix when eigen_solver='arpack'."  # TODO
     mini = 0.  # TODO
     maxi = 2.  # TODO
     default = 0.  # TODO
@@ -94,8 +94,8 @@ def spectral_assign_labels_config():
     explanation = "Strategy to use to assign labels in the embedding space."  # TODO
 
     options = np.array([
-        ['kmeans', ""],
-        ['discretize', ""]
+        ['kmeans', "A popular choice, but can be sensitive to initialization."],
+        ['discretize', "Another approach which is less sensitive to random initialization."]
     ], dtype=str)  # TODO
     suggestions = ['kmeans']
     deactivatable = False
