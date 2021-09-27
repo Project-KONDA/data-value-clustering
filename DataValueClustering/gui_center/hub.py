@@ -186,11 +186,11 @@ class Hub:
         # self.button_save_result.grid(sticky='nswe', row=17, column=1, padx=10, pady=10)
         # self.button_save_result.grid(sticky='ne', row=0, column=1, padx=10, pady=10)
 
-        self.label_expert_configuration = Label(self.refined_clustering_frame, text="Expert Algorithm Configuration:", bg="white")
+        self.label_expert_configuration = Label(self.refined_clustering_frame, text="Algorithm Configuration Method:", bg="white")
         self.label_expert_configuration.grid(sticky='w', row=14, column=1, padx=(10,0), pady=10)
         self.checked_expert_clustering = IntVar(value=1)
         self.checkbutton_expert_clustering = Checkbutton(self.refined_clustering_frame,
-            variable=self.checked_expert_clustering, bg="white", command=self.trigger_expert_clustering)
+            variable=self.checked_expert_clustering, bg="white", command=self.trigger_expert_clustering, text="Expert")
         self.checkbutton_expert_clustering.grid(sticky='ws', row=14, column=2, pady=10)
 
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
