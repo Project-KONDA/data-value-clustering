@@ -16,7 +16,7 @@ from gui_cluster_configuration.parameter_frames import create_enum_frame, create
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPENDENCY_ACTIVATION_ACTIVATION, \
     DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX
 
-EXPERT_CAPTION = create_parameter_caption("Expert Parameters")
+EXPERT_CAPTION = create_parameter_caption("\n⬇ Expert Parameters ⬇")
 
 
 def simple_cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
@@ -260,7 +260,7 @@ def cluster_affinity(master, cluster_answers, distance_matrix_map, values, previ
     preference_info = affinity_preference_config(distance_matrix_map["affinity_matrix"])
     preference_frame = create_slider_frame(*preference_info, previous_value=None if previous_parameters is None else previous_parameters[preference_info[0]], suggestion=suggestion)
 
-    frames = [damping_frame, max_iter_frames, convergence_iter_frame, preference_frame]
+    frames = [EXPERT_CAPTION, damping_frame, max_iter_frames, convergence_iter_frame, preference_frame]
     dependencies = [
         [affinity_propagation_clustering.MAX_ITER, affinity_propagation_clustering.CONVERGENCE_ITER, DEPENDENCY_VALUE_SLIDER_MAX, lambda new_max_iter: new_max_iter],
     ]
