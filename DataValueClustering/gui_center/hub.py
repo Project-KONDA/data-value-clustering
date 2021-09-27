@@ -772,6 +772,8 @@ class Hub:
         if self.configuration.clustering_configuration_possible():
             self.label_distance_progress.configure(text=DISTANCE_DONE, fg='green')
             self.button_distance_play.configure(state="normal", bg=self.original_button_color)
+            self.label_expert_configuration.configure(state="normal")
+            self.checkbutton_expert_clustering.configure(state="normal")
             if self.configuration.clustering_configuration_valid():
                 self.button_clustering.configure(state="normal", bg=self.original_button_color)
             else:
@@ -779,6 +781,8 @@ class Hub:
         else:
             self.button_clustering.configure(state="disabled", bg=self.original_button_color)
             self.label_clustering_progress.configure(fg='red')
+            self.label_expert_configuration.configure(state="disabled")
+            self.checkbutton_expert_clustering.configure(state="disabled")
 
             if self.configuration.distance_configuration_valid():
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CALC, fg='orange')
