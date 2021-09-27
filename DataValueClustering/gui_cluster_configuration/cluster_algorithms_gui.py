@@ -19,7 +19,7 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPEN
 EXPERT_CAPTION = create_parameter_caption("\n⬇ Expert Parameters ⬇")
 
 
-def simple_cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def simple_cluster_hierarchical(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, "average")
 
     n_clusters_info = hierarchical_n_clusters_config(len(values))
@@ -44,13 +44,11 @@ def simple_cluster_hierarchical(master, cluster_answers, distance_matrix_map, va
     return {"method": "average", "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": "maxclust", "depth": None}
 
 
-def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
-    if cluster_answers is None:
-        cluster_answers = None
+def cluster_hierarchical(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
 
     # ask user for 'method' argument
     # method = 'single'
-    method_info = hierarchical_method_config(cluster_answers)
+    method_info = hierarchical_method_config()
     method_frame = create_enum_frame(*method_info, previous_value=None if previous_parameters is None else previous_parameters[method_info[0]], suggestion=suggestion)
 
     suggestion_contains_method = False
@@ -114,7 +112,7 @@ def cluster_hierarchical(master, cluster_answers, distance_matrix_map, values, p
     # return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
 
-def cluster_kmedoids(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_kmedoids(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     # TODO: show questionnaire if not shown already
 
     # n_clusters = 7  # TODO: support elbow method
@@ -126,7 +124,7 @@ def cluster_kmedoids(master, cluster_answers, distance_matrix_map, values, previ
     # method_frame = create_enum_frame(*method_info)
 
     # init = 'heuristic'  # "if there are outliers in the dataset, use another initialization than build"
-    init_info = kmedoids_init_config(cluster_answers)
+    init_info = kmedoids_init_config()
     init_frame = create_enum_frame(*init_info, previous_value=None if previous_parameters is None else previous_parameters[init_info[0]], suggestion=suggestion)
 
     # max_iter = 300  # depends on efficiency vs. quality preference
@@ -147,12 +145,12 @@ def cluster_kmedoids(master, cluster_answers, distance_matrix_map, values, previ
     # return kmedoids_args(n_clusters, init, max_iter)
 
 
-def cluster_dbscan(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_dbscan(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     # TODO: and https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
     n_values = len(values)
     # min_samples = 3  # depends on number of values
-    min_samples_info = dbscan_min_samples_config(n_values, cluster_answers)
+    min_samples_info = dbscan_min_samples_config(n_values)
     min_samples_frame = create_slider_frame(*min_samples_info, previous_value=None if previous_parameters is None else previous_parameters[min_samples_info[0]], plot_function=lambda current_value: show_k_distance_graph(distance_matrix_map["distance_matrix"], current_value), suggestion=suggestion)
 
     # eps = 4.8  # depends on distances
@@ -177,11 +175,11 @@ def cluster_dbscan(master, cluster_answers, distance_matrix_map, values, previou
     # return dbscan_args(eps, min_samples, n_jobs)
 
 
-def cluster_optics(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_optics(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     n_values = len(values)
 
     # min_samples = 2
-    min_samples_info = optics_min_samples_config(len(values), cluster_answers)
+    min_samples_info = optics_min_samples_config(len(values))
     min_samples_frame = create_slider_frame(*min_samples_info, previous_value=None if previous_parameters is None else previous_parameters[min_samples_info[0]], suggestion=suggestion)
 
     # max_eps = np.inf
@@ -243,13 +241,13 @@ def cluster_optics(master, cluster_answers, distance_matrix_map, values, previou
     #                       n_jobs)
 
 
-def cluster_affinity(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_affinity(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     # damping = 0.99
     damping_info = affinity_damping_config()
     damping_frame = create_slider_frame(*damping_info, previous_value=None if previous_parameters is None else previous_parameters[damping_info[0]], suggestion=suggestion)
 
     # max_iter = 200
-    max_iter_info = affinity_max_iter_config(cluster_answers)
+    max_iter_info = affinity_max_iter_config()
     max_iter_frames = create_slider_frame(*max_iter_info, previous_value=None if previous_parameters is None else previous_parameters[max_iter_info[0]], suggestion=suggestion)
 
     # convergence_iter = 15
@@ -273,7 +271,7 @@ def cluster_affinity(master, cluster_answers, distance_matrix_map, values, previ
     # return affinity_args(damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, preference=preference)
 
 
-def cluster_spectral(master, cluster_answers, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_spectral(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
     num_values = len(values)
     # n_clusters = 5
     n_clusters_info = spectral_n_clusters_config(num_values)
@@ -323,5 +321,5 @@ def cluster_spectral(master, cluster_answers, distance_matrix_map, values, previ
     # return spectral_args(n_clusters, eigen_solver, n_components, n_init, eigen_tol, assign_labels)
 
 
-def clusters_from_compressed_values(cluster_answers, distance_matrix_map, values, suggestion=None):
+def clusters_from_compressed_values(distance_matrix_map, values, suggestion=None):
     return lambda distance_matrix_map, values: list(range(0, len(values)))

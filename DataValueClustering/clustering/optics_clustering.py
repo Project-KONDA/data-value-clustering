@@ -31,9 +31,9 @@ def optics_args(min_samples, max_eps, cluster_method, eps, xi, predecessor_corre
                           eps, xi, predecessor_correction, min_cluster_size, n_jobs)
 
 
-def optics_min_samples_config(no_values, answers):
+def optics_min_samples_config(no_values):
     # int
-    return dbscan_clustering.dbscan_min_samples_config(no_values, answers)
+    return dbscan_clustering.dbscan_min_samples_config(no_values)
 
 
 def optics_max_eps_config(distance_matrix, min_distance, no_values):

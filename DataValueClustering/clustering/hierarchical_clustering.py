@@ -34,9 +34,7 @@ method_array = np.array([
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html
     # "Methods ‘centroid’, ‘median’, and ‘ward’ are correctly defined only if Euclidean pairwise metric is used."
 
-    [[], [4], "complete", "The maximum distance between contained samples.\n"
-                          "Two most distant from each other members cannot be much more dissimilar than other quite dissimilar pairs.\n"
-                          "Will yield small globular (circle or blob) clusters."],
+
     # [[], [4, 5], "ward",
     #  "The sum of squared deviations from samples to centroids.\n"
     #  "Clusters are type, i.e. clouds more dense and more concentric towards their middle, whereas marginal points are few and could be scattered relatively freely.\n"
@@ -46,6 +44,9 @@ method_array = np.array([
      "Clusters are generic united classes or close-knit collectives.\n"
      "Clusters of miscellaneous shapes and outlines can be produced."], # sometimes default
     [[], [], "weighted", "The arithmetic mean of the average distances between members of the subclusters."],  # 4
+    [[], [4], "complete", "The maximum distance between contained samples.\n"
+                          "Two most distant from each other members cannot be much more dissimilar than other quite dissimilar pairs.\n"
+                          "Will yield small globular (circle or blob) clusters."],
     [[], [4], "single", "The minimum distance between contained samples.\n"
                        "Two most dissimilar cluster members can happen to be very much dissimilar in comparison to two most similar.\n"
                        "Will yield long chain-like clusters."],
@@ -76,16 +77,13 @@ def decrease_by_one(clusters):
     return clusters
 
 
-def hierarchical_method_config(answers):
+def hierarchical_method_config():
     # enum
     # expert!?
     name = METHOD
     explanation = "Method for calculating the distance between clusters. The two clusters with the minimum distance are merged at each step."
     options = method_array[:, (2, 3)]
-    if answers is None:
-        suggestion_values = ["complete"]  # or average?
-    else:
-        suggestion_values = get_array_part(method_array, clustering_question_array, answers)[:,0]
+    suggestion_values = ["average"]
     return name, explanation, options, suggestion_values
 
 

@@ -46,21 +46,18 @@ def kmedoids_n_clusters_config(no_values):
     return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution
 
 
-# def kmedoids_method_config(answers):
+# def kmedoids_method_config():
 #     # not supported by KMedoids anymore
 #     pass
 
 
-def kmedoids_init_config(answers):
+def kmedoids_init_config():
     # enum
     # expert
     name = HEURISTIC
     explanation = "Initialization method for medoids."
     options = initialization_array[:, (2, 3)]
-    if answers is None:
-        suggestion_values = ["heuristic"]
-    else:
-        suggestion_values = get_array_part(initialization_array, clustering_question_array, answers)[:, 0]
+    suggestion_values = ["heuristic"]
 
     return name, explanation, options, suggestion_values
 

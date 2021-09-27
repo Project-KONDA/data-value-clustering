@@ -117,7 +117,6 @@ class HubConfiguration():
         #               'distance_threshold': None,
         #               'criterion': 'maxclust',
         #               'depth': None}  # dict
-        self.clustering_answers = [False, False, False, True, True, True]  # list
         # self.cluster_config_f = None
         # self.cluster_f = None
         self.clusters_abstracted = None
@@ -294,7 +293,6 @@ class HubConfiguration():
 
     def clustering_configuration_valid(self):
         return self.clustering_algorithm is not None \
-               and self.clustering_answers is not None \
                and self.clustering_parameters is not None
 
     def clustering_result_valid(self):
@@ -336,7 +334,7 @@ class HubConfiguration():
         return self.cost_map, blobconfig
 
     def get_clustering_selection(self):
-        return self.clustering_algorithm, self.clustering_answers
+        return self.clustering_algorithm
 
     def get_clustering_configuration(self):
         return self.clustering_parameters
@@ -375,10 +373,9 @@ class HubConfiguration():
             self.reset_distances()
             self.reset_clustering()
 
-    def set_clustering_selection(self, clustering_algorithm, clustering_answers=None):
-        if not self.clustering_algorithm == clustering_algorithm or not self.clustering_answers == clustering_answers:
+    def set_clustering_selection(self, clustering_algorithm):
+        if not self.clustering_algorithm == clustering_algorithm:
             self.clustering_algorithm = clustering_algorithm
-            self.clustering_answers = clustering_answers
             self.reset_clustering()
 
     def set_clustering_configuration(self, clustering_parameters):

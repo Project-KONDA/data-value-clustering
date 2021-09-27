@@ -591,15 +591,12 @@ class Hub:
 
     def configure_clustering(self):
         self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_IN_PROGRESS, fg='magenta2')
-        prev_clustering_algorithm, prev_answers = self.configuration.get_clustering_selection()
+        prev_clustering_algorithm = self.configuration.get_clustering_selection()
         prev_parameters = self.configuration.get_clustering_configuration()
         suggested_algorithms = get_suggested_algorithms(self.get_validation_answers())
 
         if self.checked_expert_clustering.get() == 1:
-            answers = None
             cluster_config_f, clustering_algorithm = select_algorithm(self.root, prev_clustering_algorithm, suggested_algorithms)
-            # answers, cluster_config_f, clustering_algorithm = cluster_suggest(self.root, prev_answers, prev_clustering_algorithm,
-            #                                                               suggested_algorithms)
 
             if clustering_algorithm is None:
                 self.update()
@@ -611,17 +608,16 @@ class Hub:
                 suggested_parameter_modifications = None
             else:
                 suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
-            parameters = cluster_config_f(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
+            parameters = cluster_config_f(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
         else:
             clustering_algorithm = "Hierarchical"
-            answers = prev_answers
 
             if prev_clustering_algorithm != clustering_algorithm:
                 prev_parameters = None
                 suggested_parameter_modifications = None
             else:
                 suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
-            parameters = simple_cluster_hierarchical(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
+            parameters = simple_cluster_hierarchical(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
 
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
@@ -631,7 +627,7 @@ class Hub:
         self.set_saved(False)
         self.configuration.excel_saved = False
         self.reset_validation_answers()
-        self.configuration.set_clustering_selection(clustering_algorithm, answers)
+        self.configuration.set_clustering_selection(clustering_algorithm)
         self.configuration.set_clustering_configuration(parameters)
 
         self.update()
@@ -875,7 +871,7 @@ class Hub:
 
     def update_frame_clustering(self):
 
-        clustering_algorithm, clustering_answers = self.configuration.get_clustering_selection()
+        clustering_algorithm = self.configuration.get_clustering_selection()
         if clustering_algorithm is None:
             self.label_clustering_config.configure(text=NONE)
         else:

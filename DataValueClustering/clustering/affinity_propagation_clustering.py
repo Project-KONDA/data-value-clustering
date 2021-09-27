@@ -56,7 +56,7 @@ def affinity_preference_config(affinity_matrix):
     return name, explanation, min_preference, max_preference, suggestion_value, resolution, deactivatable
 
 
-def affinity_max_iter_config(answers):
+def affinity_max_iter_config():
     # int
     # expert
     name = MAX_ITER

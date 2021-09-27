@@ -23,7 +23,7 @@ def dbscan_args(eps, min_samples, n_jobs):
     return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, n_jobs)
 
 
-def dbscan_min_samples_config(no_values, answers):
+def dbscan_min_samples_config(no_values):
     # int
     name = MIN_SAMPLES
     explanation = "The number of samples in a neighborhood for a point to be considered as a core point." \
