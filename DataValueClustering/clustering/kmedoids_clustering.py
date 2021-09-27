@@ -3,9 +3,7 @@ from sklearn_extra.cluster import KMedoids
 
 from clustering import hierarchical_clustering
 import numpy as np
-from distance.distance_matrix import calculate_distance_matrix
-from gui_cluster_selection.clustering_questions import clustering_question_array
-from util.question_result_array_util import get_array_part
+
 
 # method_array = [ # not supported by KMedoids anymore
 #     # dependencies, not-dependencies, value

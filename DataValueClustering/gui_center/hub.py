@@ -16,7 +16,6 @@ from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_conf
 from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_configuration.cluster_algorithms_gui import simple_cluster_hierarchical
-from gui_cluster_selection.ClusteringQuestionnaireResultInput import cluster_suggest
 from gui_cluster_selection.select_algorithm import select_algorithm
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
