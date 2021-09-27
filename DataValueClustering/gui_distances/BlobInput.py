@@ -110,7 +110,7 @@ class BlobInput:
 
         """Scale"""
         self.canvas.bind_all("<n>", self.scale_blob_normal)
-        self.canvas.bind_all("<MouseWheel>", self.scale_a_blob)
+        self.canvas.bind("<MouseWheel>", self.scale_a_blob)
 
         """Info"""
         text_x = self.canvas_w / 12
