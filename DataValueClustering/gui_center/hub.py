@@ -609,7 +609,14 @@ class Hub:
         else:
             clustering_algorithm = "Hierarchical"
             answers = prev_answers
-            parameters = simple_cluster_hierarchical(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=None)
+
+            if prev_clustering_algorithm != clustering_algorithm:
+                prev_parameters = None
+                suggested_parameter_modifications = None
+            else:
+                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
+            parameters = simple_cluster_hierarchical(self.root, answers, self.configuration.distance_matrix_map, self.configuration.values_abstracted, prev_parameters, suggestion=suggested_parameter_modifications)
+
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
             self.root.update()
