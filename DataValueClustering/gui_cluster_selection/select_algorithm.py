@@ -30,14 +30,14 @@ class SelectAlgorithm:
                                             font=font)
         self.caption_width = font.measure(heading)
 
-        self.hint_label = Label(self.root, anchor='c', justify="center", text="Typically the highlighted algorithm achieves good results.", bg='white', wraplength=self.caption_width)
+        self.hint_label = Label(self.root, anchor='c', justify="center", text="Typically the highlighted algorithm achieves good results.", bg='white', padx=10)
 
         self.label_suggested = None
         if suggested_algorithms is not None:
-            self.label_suggested = Label(self.root, text="Algorithms suggested based on the evaluation are highlighted in green.", bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text="Algorithms suggested based on the evaluation are highlighted in green.", bg="white", anchor='w', padx=10, fg='blue', justify='left')
             self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=6)
             self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=6, pady=(0, 0))
-            self.label_suggested.grid(row=2, column=0, sticky='senw', columnspan=6, padx=10)
+            self.label_suggested.grid(row=2, column=0, sticky='senw', columnspan=6)
         else:
             self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=6)
             self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=6)
