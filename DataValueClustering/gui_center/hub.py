@@ -10,12 +10,13 @@ import sys
 
 import xlsxwriter
 
-from clustering.hierarchical_clustering import hierarchical_method_config
+from clustering.hierarchical_clustering import hierarchical_method_config, METHOD
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_configuration.cluster_algorithms_gui import simple_cluster_hierarchical
+from gui_cluster_selection.algorithm_selection import HIERARCHICAL, OPTICS, DBSCAN
 from gui_cluster_selection.select_algorithm import select_algorithm
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
@@ -76,6 +77,9 @@ SIMPLE_CLUSTERING_HINT_2 = " clusters. You can stop here \nor continue below to 
 NONE = "None"
 
 CLUSTERING_ADVICE = "Advice: reconfigure algorithm"
+CLUSTERING_ADVICE_SIMPLE = "Advice: consider simple mode"
+CLUSTERING_ADVICE_EXPERT = "Advice: consider expert mode"
+
 DISTANCE_ADVICE = "Advice: reconfigure dissimilarities"
 ABSTRACTION_ADVICE = "Advice: reconfigure abstraction"
 DATA_ADVICE = "Advice: reconfigure data"
@@ -638,6 +642,7 @@ class Hub:
             self.button_clustering.configure(text=CONFIG_CLUSTERING_EXPERT)
         else:
             self.button_clustering.configure(text=CONFIG_CLUSTERING_SIMPLE)
+        self.update_advice()
 
     def get_validation_answers(self):
         return self.configuration.get_validation_answer_1(), self.configuration.get_validation_answer_2(), self.configuration.get_validation_answer_3(), self.configuration.get_validation_answer_4(),
@@ -675,9 +680,17 @@ class Hub:
         if answers[0] is not None and answers[0] != ValidationAnswer.HAPPY:
             self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
-            self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
-        if answers[1] is not None and answers[1] != ValidationAnswer.HAPPY:
-            self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+            if self.configuration.get_clustering_selection() != HIERARCHICAL and self.configuration.get_clustering_selection() != OPTICS \
+                    or self.configuration.get_clustering_configuration() == HIERARCHICAL and self.configuration.get_clustering_configuration()[METHOD] != 'average' and self.configuration.get_clustering_configuration()[METHOD] != 'weighted':
+                self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+        if answers[1] is not None and answers[1] == ValidationAnswer.MORE:
+            if self.configuration.clustering_expert_mode:
+                self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+            else:
+                self.label_clustering_advice.config(text=CLUSTERING_ADVICE_EXPERT)
+        if answers[1] is not None and answers[1] == ValidationAnswer.LESS:
+            if self.configuration.clustering_expert_mode:
+                self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[2] is not None and answers[2] != ValidationAnswer.HAPPY:
             self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)

@@ -100,62 +100,62 @@ def get_suggested_algorithms(validation_answers):
 def get_suggested_parameter_modifications(validation_answers, configuration):
     parameter_modifications = {}
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
-        if configuration.get_clustering_selection()[0] == HIERARCHICAL:
-            parameter_modifications[METHOD] = ('single', 'average', 'centroid')
+        if configuration.get_clustering_selection() == HIERARCHICAL:
+            parameter_modifications[METHOD] = ('average', 'weighted')
     if validation_answers[1] is not None and validation_answers[1] == ValidationAnswer.MORE:
-        if configuration.get_clustering_selection()[0] == DBSCAN:
+        if configuration.get_clustering_selection() == DBSCAN:
             parameter_modifications[EPS] = '⬇'
             parameter_modifications[MIN_SAMPLES] = '⬆'
-        if configuration.get_clustering_selection()[0] == OPTICS:
+        if configuration.get_clustering_selection() == OPTICS:
             parameter_modifications[MIN_SAMPLES] = '⬆'
             parameter_modifications[MAX_EPS] = '⬇'
             parameter_modifications[EPS] = '⬇'
             parameter_modifications[MIN_CLUSTER_SIZE] = '⬆'
     if validation_answers[1] is not None and validation_answers[1] == ValidationAnswer.LESS:
-        if configuration.get_clustering_selection()[0] == DBSCAN:
+        if configuration.get_clustering_selection() == DBSCAN:
             parameter_modifications[EPS] = '⬆'
             parameter_modifications[MIN_SAMPLES] = '⬇'
-        if configuration.get_clustering_selection()[0] == OPTICS:
+        if configuration.get_clustering_selection() == OPTICS:
             parameter_modifications[MIN_SAMPLES] = '⬇'
             parameter_modifications[MAX_EPS] = '⬆'
             parameter_modifications[EPS] = '⬆'
             parameter_modifications[MIN_CLUSTER_SIZE] = '⬇'
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
-        if configuration.get_clustering_selection()[0] == HIERARCHICAL:
+        if configuration.get_clustering_selection() == HIERARCHICAL:
             parameter_modifications[N_CLUSTERS] = '⬆'
             parameter_modifications[THRESHOLD] = '⬇'
-        if configuration.get_clustering_selection()[0] == K_MEDOIDS:
+        if configuration.get_clustering_selection() == K_MEDOIDS:
             parameter_modifications[N_CLUSTERS] = '⬆'
-        if configuration.get_clustering_selection()[0] == DBSCAN:
+        if configuration.get_clustering_selection() == DBSCAN:
             parameter_modifications[EPS] = '⬇'
             parameter_modifications[MIN_SAMPLES] = '⬇'
-        if configuration.get_clustering_selection()[0] == OPTICS:
+        if configuration.get_clustering_selection() == OPTICS:
             parameter_modifications[MIN_SAMPLES] = '⬇'
             parameter_modifications[MAX_EPS] = '⬇'
             parameter_modifications[EPS] = '⬇'
             parameter_modifications[MIN_CLUSTER_SIZE] = '⬇'
-        if configuration.get_clustering_selection()[0] == SPECTRAL_CLUSTERING:
+        if configuration.get_clustering_selection() == SPECTRAL_CLUSTERING:
             parameter_modifications[N_CLUSTERS] = '⬆'
-        if configuration.get_clustering_selection()[0] == AFFINITY_PROPAGATION:
+        if configuration.get_clustering_selection() == AFFINITY_PROPAGATION:
             parameter_modifications[DAMPING] = '⬇'
             parameter_modifications[PREFERENCE] = '⬆'
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.LESS:
-        if configuration.get_clustering_selection()[0] == HIERARCHICAL:
+        if configuration.get_clustering_selection() == HIERARCHICAL:
             parameter_modifications[N_CLUSTERS] = '⬇'
             parameter_modifications[THRESHOLD] = '⬆'
-        if configuration.get_clustering_selection()[0] == K_MEDOIDS:
+        if configuration.get_clustering_selection() == K_MEDOIDS:
             parameter_modifications[N_CLUSTERS] = '⬇'
-        if configuration.get_clustering_selection()[0] == DBSCAN:
+        if configuration.get_clustering_selection() == DBSCAN:
             parameter_modifications[EPS] = '⬆'
             parameter_modifications[MIN_SAMPLES] = '⬆'
-        if configuration.get_clustering_selection()[0] == OPTICS:
+        if configuration.get_clustering_selection() == OPTICS:
             parameter_modifications[MIN_SAMPLES] = '⬆'
             parameter_modifications[MAX_EPS] = '⬆'
             parameter_modifications[EPS] = '⬆'
             parameter_modifications[MIN_CLUSTER_SIZE] = '⬆'
-        if configuration.get_clustering_selection()[0] == SPECTRAL_CLUSTERING:
+        if configuration.get_clustering_selection() == SPECTRAL_CLUSTERING:
             parameter_modifications[N_CLUSTERS] = '⬇'
-        if configuration.get_clustering_selection()[0] == AFFINITY_PROPAGATION:
+        if configuration.get_clustering_selection() == AFFINITY_PROPAGATION:
             parameter_modifications[DAMPING] = '⬆'
             parameter_modifications[PREFERENCE] = '⬇'
     return parameter_modifications if parameter_modifications != {} else None
