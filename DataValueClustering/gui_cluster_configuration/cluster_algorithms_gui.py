@@ -16,7 +16,7 @@ from gui_cluster_configuration.parameter_frames import create_enum_frame, create
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPENDENCY_ACTIVATION_ACTIVATION, \
     DEPENDENCY_ACTIVATION_ENUM, DEPENDENCY_ENUM_ACTIVATION, DEPENDENCY_VALUE_SLIDER_MAX
 
-EXPERT_CAPTION = create_parameter_caption("\n⬇ Expert Parameters ⬇")
+EXPERT_CAPTION = create_parameter_caption("\n⬇ Expert Parameters ⬇", "In most cases, the default values of the following parameters are suitable.\nModification is only encouraged if you know the details of the selected clustering algorithm or are unsatisfied with a previous clustering.")
 
 
 def simple_cluster_hierarchical(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
