@@ -55,7 +55,7 @@ def get_suggested_abstraction_modifications(validation_answers, configuration):
     abstraction_advice = ""
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
         abstraction_advice += "\nTo achieve a more meaningful clustering, first, check your configuration concerning an erroneous abstraction of aspects that actually cause significant dissimilarity of data values. " \
-                              "For this, please reconsider the checked questions." \
+                              "For this, please reconsider the checked questions. " \
                               "Further, check that all details that do not cause significant dissimilarity of data values are abstracted from. " \
                               "For this, please reconsider the unchecked questions."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
