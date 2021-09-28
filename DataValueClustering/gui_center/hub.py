@@ -543,15 +543,18 @@ class Hub:
             blob_configuration = None
             config_method = DistanceView.MATRIX
 
-        self.reset_validation_answers()
-
         if cost_map is None or previous_cost_map == cost_map:
             self.configuration.blob_configuration = blob_configuration
-        else:
-            self.configuration.set_distance_configuration(cost_map, blob_configuration)
+            self.update()
+            self.root.update()
+            return
+
+        self.configuration.set_distance_configuration(cost_map, blob_configuration)
 
         if config_method is not None:
             self.configuration.set_distance_config_method(config_method)
+
+        self.reset_validation_answers()
 
         self.update()
         self.root.update()
