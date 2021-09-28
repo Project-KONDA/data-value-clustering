@@ -149,7 +149,8 @@ class Hub:
         self.selected_distance_option.set(DISTANCE_OPTION_SLIDERS)
         self.option_menu_distance_choice = OptionMenu(self.refined_clustering_frame, self.selected_distance_option,
                                                  *self.distance_options, command=self.selected_distance_option_changed)
-        self.option_menu_distance_choice.grid(sticky='ws', row=10, column=2, pady=10)
+        self.option_menu_distance_choice.grid(sticky='wes', row=10, column=2, padx=(0,10), pady=10)
+        self.option_menu_distance_choice.configure(width=15)
 
         "buttons"
         button_width_part = 37
