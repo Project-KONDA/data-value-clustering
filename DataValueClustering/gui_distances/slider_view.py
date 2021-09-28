@@ -147,7 +147,7 @@ class SliderInput:
         self.sliderlist = np.full(self.n, Scale(self.scrollable_frame))
         self.valuelist = np.full(self.n, IntVar())
 
-        self.tooltips = np.full(2*self.n, None)
+        self.tooltips = {}
 
         for i in range(0, self.n):
             t = ""
@@ -178,7 +178,7 @@ class SliderInput:
         self.root.mainloop()
 
     def hide_all_tool_tips(self):
-        for i in range(0, 2*self.n):
+        for i in self.tooltips.keys():
             if self.tooltips[i] is not None:
                 self.tooltips[i].hidetip()
 
