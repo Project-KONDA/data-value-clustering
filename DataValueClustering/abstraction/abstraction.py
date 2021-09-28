@@ -16,10 +16,10 @@ def duplicate_removal_function():
 
 
 def max_abstraction_function():
-    answers = [True, True, True, True, True, True, True, True, True,
-        True, True, True,
-        True, False, False, False, False, False,
-        True]
+    answers = [True, True, False, False, True, False, False, False, True,
+               True, True, True,
+               True, False, False, False, False, False,
+               True]
     return get_abstraction_method(answers), answers
 
 
