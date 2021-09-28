@@ -75,7 +75,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
         self.predefined_options = list(self.predefined_abstractions[:, 0])
         self.selected_predefined_option = StringVar()
-        self.selected_predefined_option.set(DEFAULT_CONFIG)
+        self.predefined_answers = predefined_answers
+        if predefined_answers is None:
+            self.selected_predefined_option.set(DEFAULT_CONFIG)
+        else:
+            self.selected_predefined_option.set(self.get_predefined_option_from_answers())
         self.predefined_option_menu = OptionMenu(self.root, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
         self.predefined_option_menu.grid(sticky='nw', row=3, column=0, columnspan=3, padx=5)
 
@@ -108,6 +112,12 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         super().selection_changed()
         if self.data is not None:
             self.hide_preview()
+
+    def get_predefined_option_from_answers(self):
+        for a in self.predefined_abstractions:
+            if a[1] == self.predefined_answers:
+                return a[0]
+        return MANUAL_CONFIG
 
     def option_changed(self, *args):
         selected_option = self.selected_predefined_option.get()
