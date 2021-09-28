@@ -60,7 +60,7 @@ class QuestionnaireResultInput(ABC):
 
         self.label_suggested = None
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text=suggestion, bg="white", anchor='w', pady=10, fg='blue', justify='left')
+            self.label_suggested = Label(self.root, text=suggestion, bg="white", anchor='w', pady=10, fg='blue', justify='left', wraplength=self.caption_width)
             self.question_caption_label.grid(row=0, column=0, sticky='nsew', columnspan=4, pady=(10, 0))
             self.hint_label.grid(row=1, column=0, sticky='nsew', columnspan=3, pady=(0, 0))
             self.label_suggested.grid(row=2, column=0, sticky='senw', columnspan=3, padx=10)
