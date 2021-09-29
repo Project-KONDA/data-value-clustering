@@ -160,7 +160,7 @@ class SliderInput:
             self.label_list[i] = Label(self.scrollable_frame, width=27, bg="white", anchor=W, justify=LEFT)
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
-            self.entry_var_list[i].trace("w", lambda name, index, mode, sv=self.entry_var_list[i], j=i: self.update_labels())
+            self.entry_var_list[i].trace("w", lambda name, index, mode: self.update_labels())
             self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
             self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i], width=25, highlightthickness=2)
             if i == self.n-1 or self.fixed:
@@ -410,7 +410,7 @@ class SliderInput:
         entrylist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
         sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(0, 0))
 
-        entry_var_list[self.n-1].trace("w", lambda name, index, mode, sv=entry_var_list[self.n-1], j=self.n: self.update_labels())
+        entry_var_list[self.n-1].trace("w", lambda name, index, mode: self.update_labels())
 
         # 4. move element n
         entrylist[self.n] = self.entrylist[self.n-1]
