@@ -330,6 +330,8 @@ class SliderInput:
                 l.config(text=newtext)
             for i, tip in enumerate(tool_tips_labels):
                 CreateToolTip(self.label_list[i], tip)
+                if i == self.n-1:
+                    CreateToolTip(self.label_list[i], "<rest> represents all characters not covered above.")
 
     def update_warning_for_entry(self, i, tool_tips_entries, redundant_chars_per_entry,
                                  undefined_chars_per_entry):
@@ -368,8 +370,11 @@ class SliderInput:
     def set_tool_tips(self, tool_tips_abstraction_info, tool_tips_warning):
         self.hide_all_tool_tips()
         for i in range(0, self.n):
-            self.tooltips.append(CreateToolTip(self.entrylist[i], tool_tips_warning[i], color=warning_color))
-            self.tooltips.append(CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i], color=warning_color))
+            self.tooltips.append(CreateToolTip(self.entrylist[i], tool_tips_warning[i], color=warning_color if tool_tips_warning[i].startswith("Warning") else None))
+            if i == self.n - 1:
+                self.tooltips.append(CreateToolTip(self.entrylist[i], "<rest> represents all characters not covered above."))
+            self.tooltips.append(CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i]))
+
 
     def get(self):
         if self.canceled:
