@@ -10,6 +10,7 @@ from gui_distances.distance_choice import DistanceView
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_general.scrollable_frame import create_scrollable_frame
+from gui_general.window_size import set_window_size
 
 WARNING_REDUNDANT_1 = "Warning: The following characters are already contained in this or a previous group: "
 WARNING_REDUNDANT_2 = ". Only their first occurrence will have an impact on the dissimilarities."
@@ -69,6 +70,7 @@ class SliderInput:
                     self.values.append(costmap[(i + 1, 0)])
 
         self.root = Toplevel(self.master)
+        self.root.attributes('-alpha', 0.0)
         self.root.title("Distance Configuration - Sliders")
         self.root.config(bg="white")
         self.root.resizable(False, True)
@@ -179,8 +181,21 @@ class SliderInput:
         self.fg_color = self.sliderlist[0].cget("fg")
         self.troughcolor_color = self.sliderlist[0].cget("troughcolor")
 
-        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.trigger_extend()
+
+        self.root.update_idletasks()
+        self.canvas.configure(height=self.scrollable_frame.winfo_height())
+        self.root.update_idletasks()
+
+        h_root = self.root.winfo_reqheight()
+        h_scrollable = self.scrollable_frame.winfo_height()
+        h_canvas_questionnaire = self.canvas.winfo_height()
+        h_expanded = h_root - h_canvas_questionnaire + h_scrollable + 200
+        set_window_size(self.root, h_expanded)
+
+        self.root.attributes('-alpha', 1.0)
+
+        self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
     def hide_all_tool_tips(self):
