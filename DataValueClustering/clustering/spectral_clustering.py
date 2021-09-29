@@ -43,9 +43,9 @@ def spectral_eigen_solver_config():
         ['lobpcg', ""],
         ['amg', "Faster, but partially instable."]
     ], dtype=str)  # TODO
-    suggestions = ['arpack']
+    suggestion = 'arpack'
     deactivatable = False  # If None 'arpack' is used
-    return name, explanation, options, suggestions, deactivatable
+    return name, explanation, options, suggestion, deactivatable
 
 
 def spectral_n_components_config(no_values):
@@ -97,7 +97,7 @@ def spectral_assign_labels_config():
         ['kmeans', "A popular choice, but can be sensitive to initialization."],
         ['discretize', "Another approach which is less sensitive to random initialization."]
     ], dtype=str)  # TODO
-    suggestions = ['kmeans']
+    suggestion = 'kmeans'
     deactivatable = False
-    return name, explanation, options, suggestions, deactivatable
+    return name, explanation, options, suggestion, deactivatable
 

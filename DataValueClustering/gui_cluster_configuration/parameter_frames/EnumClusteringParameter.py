@@ -19,12 +19,12 @@ class EnumClusteringParameter(ClusteringParameter):
     A widget for specifying an enumeration parameter of a clusering algorithm via radio buttons.
     '''
 
-    def __init__(self, parent, name, explanation, options, suggestions, previous_value=None, deactivatable=False,
+    def __init__(self, parent, name, explanation, options, default, previous_value=None, deactivatable=False,
                  default_active=False, plot_function=None, suggestion=None):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
-        assert len(suggestions) > 0, name
-        self.suggestions = suggestions
+        assert default is not None, name
+        self.default = default
 
         self.validation_suggestions = None
         if suggestion is not None and self.name in suggestion:
@@ -37,13 +37,12 @@ class EnumClusteringParameter(ClusteringParameter):
         self.option_labels_activated = self.option_labels
 
         try:
-            self.default = np.where(self.option_labels == self.suggestions[0])[0][0]
             if previous_value is None:
                 self.previous = None
             else:
                 self.previous = np.where(self.option_labels == previous_value)[0][0]
         except IndexError:
-            raise ValueError("Suggestions of parameter " + name + " are not correct: " + str(suggestions))
+            raise ValueError("Default or previous value of parameter " + name + " is not correct")
 
         self.radiobuttons = np.empty(self.n, Radiobutton)
         self.choice = IntVar()
@@ -52,9 +51,7 @@ class EnumClusteringParameter(ClusteringParameter):
         else:
             self.choice.set(self.previous)
 
-
         for i, option in enumerate(self.options):
-            is_suggested = option[0] in self.suggestions
             text = option[0]  # if not is_suggested else "♣ " + option[0]
             self.radiobuttons[i] = Radiobutton(self.frame, text=text,
                                                padx=20, variable=self.choice, command=self.update_enum, value=i,
@@ -115,17 +112,12 @@ class EnumClusteringParameter(ClusteringParameter):
         super().activate()
         for i, button in enumerate(self.radiobuttons):
             # self.update_options(self.option_labels_activated)
-            is_suggested = self.option_labels[i] in self.suggestions
             is_suggested_by_validation = False if self.validation_suggestions is None else self.option_labels[i] in self.validation_suggestions
             is_active_label = (self.option_labels[i] in self.option_labels_activated)
             if is_active_label:
                 button.config(state='normal')
                 if is_suggested_by_validation:
                     button.config(bg='SeaGreen1')
-                elif is_suggested:
-                    button.config(bg='#f0fff0')  # fg
-                else:
-                    button.config(bg='#fff0f0')  # fg
             else:
                 button.config(bg='#ffffff')  # fg
                 button.config(state='disabled')

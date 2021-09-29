@@ -55,9 +55,9 @@ def kmedoids_init_config():
     name = HEURISTIC
     explanation = "Initialization method for medoids."
     options = initialization_array[:, (2, 3)]
-    suggestion_values = ["heuristic"]
+    suggestion = "heuristic"
 
-    return name, explanation, options, suggestion_values
+    return name, explanation, options, suggestion
 
 
 def kmedoids_max_iter_config():

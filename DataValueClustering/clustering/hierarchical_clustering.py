@@ -81,8 +81,8 @@ def hierarchical_method_config():
     name = METHOD
     explanation = "Method for calculating the distance between clusters. The two clusters with the minimum distance are merged at each step."
     options = method_array[:, (2, 3)]
-    suggestion_values = ["average"]
-    return name, explanation, options, suggestion_values
+    suggestion = "average"
+    return name, explanation, options, suggestion
 
 
 def hierarchical_n_clusters_config(no_values):
@@ -132,10 +132,10 @@ def hierarchical_criterion_config():
         # ["monocrit", ""],
         # ["maxclust_monocrit", ""],
     ], dtype=object)
-    suggestions = ["maxclust", "distance"]
+    suggestion = "maxclust"
     deactivatable = False
 
-    return name, explanation, options, suggestions, deactivatable
+    return name, explanation, options, suggestion, deactivatable
 
 
 def hierarchical_depth_config():
