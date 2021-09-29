@@ -400,8 +400,8 @@ class SliderInput:
         entry_var_list[self.n-1].set("")
         valuelist[self.n-1].set(1)
 
-        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1],
-                                    state=("normal"))
+        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1], width=25,
+                                    highlightthickness=2)
         label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
         sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
                                         length=400, bg='white', highlightthickness=0, resolution=1)
