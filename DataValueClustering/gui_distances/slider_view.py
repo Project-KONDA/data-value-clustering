@@ -17,6 +17,8 @@ WARNING_UNDEFINED_1 = "Warning: The following characters do not occur in the abs
 WARNING_UNDEFINED_2 = ". Thus, their weights will have no impact on the dissimilarities."
 
 warning_color = "#ffbb00"
+disable_scale_color_trough = "grey90"
+disable_scale_color_fg = "grey40"
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
     view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration)
@@ -79,7 +81,7 @@ class SliderInput:
 
         self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
-        self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.", bg="white", anchor='c', justify="center")
+        self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity. Rows with empty entries will be ignored.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view)
         CreateToolTip(self.button_expert, "Open Matrix view, which allows setting the weights entirely flexible.")
         self.extended = IntVar(self.root, 0)
@@ -173,6 +175,9 @@ class SliderInput:
             self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=1, pady=(18, 0), padx=2)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=1, pady=(0, 0))
 
+        self.fg_color = self.sliderlist[0].cget("fg")
+        self.troughcolor_color = self.sliderlist[0].cget("troughcolor")
+
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.trigger_extend()
         self.root.mainloop()
@@ -185,6 +190,13 @@ class SliderInput:
 
     def unbind_all(self):
         self.root.unbind_all("<MouseWheel>")
+
+    def disable_slider(self, i):
+        self.valuelist[i].set(0)
+        self.sliderlist[i].configure(state="disabled", fg=disable_scale_color_fg, troughcolor=disable_scale_color_trough)
+
+    def enable_slider(self, i):
+        self.sliderlist[i].configure(state="normal", fg=self.fg_color, troughcolor=self.troughcolor_color)
 
     def redundant_char_warning(self, entry):
         entry.configure(highlightbackground=warning_color, highlightcolor=warning_color)
@@ -253,21 +265,27 @@ class SliderInput:
                     abstraction_char_occurred = False
                     for i, entry in enumerate(self.entrylist):
                         if i < len(self.entrylist)-1:
-                            for k, entry_char in enumerate(self.entry_var_list[i].get()):
-                                if abstraction_char == entry_char:
-                                    if abstraction_char_occurred:
-                                        redundant_chars_per_entry[i].append(abstraction_char)
-                                        self.redundant_char_warning(entry)
-                                    elif len(mapping[1]) == 1:
-                                        abstraction_char_occurred = True
-                                        self.update_label_text(abstraction_char, self.label_list[i], mapping[0])
-                                        if tool_tips_labels[i] != "":
-                                            tool_tips_labels[i] += "\n"
-                                        tool_tips_labels[i] += mapping[3]
-                                elif l == j == 0 and entry_char not in chars_in_abstraction and entry_char not in \
-                                        undefined_chars_per_entry[i]:
-                                    undefined_chars_per_entry[i].append(entry_char)
-                                    self.undefined_char_warning(entry)
+                            if self.entry_var_list[i].get() == "":
+                                self.disable_slider(i)
+                                tool_tips_entries[i] = "This row will be ignored as its entry is empty."
+                                tool_tips_labels[i] = "This row will be ignored as its entry is empty."
+                            else:
+                                self.enable_slider(i)
+                                for k, entry_char in enumerate(self.entry_var_list[i].get()):
+                                    if abstraction_char == entry_char:
+                                        if abstraction_char_occurred:
+                                            redundant_chars_per_entry[i].append(abstraction_char)
+                                            self.redundant_char_warning(entry)
+                                        elif len(mapping[1]) == 1:
+                                            abstraction_char_occurred = True
+                                            self.update_label_text(abstraction_char, self.label_list[i], mapping[0])
+                                            if tool_tips_labels[i] != "":
+                                                tool_tips_labels[i] += "\n"
+                                            tool_tips_labels[i] += mapping[3]
+                                    elif l == j == 0 and entry_char not in chars_in_abstraction and entry_char not in \
+                                            undefined_chars_per_entry[i]:
+                                        undefined_chars_per_entry[i].append(entry_char)
+                                        self.undefined_char_warning(entry)
 
             for i, entry in enumerate(self.entrylist):
                 if i < len(self.entrylist) - 1:
@@ -283,6 +301,9 @@ class SliderInput:
             for i, e in enumerate(self.entrylist):
                 self.label_list[i].config(text="")
                 text[i] = e.get()
+                if self.entry_var_list[i].get() == "":
+                    self.disable_slider(i)
+                    tool_tips_labels[i] = "This row will be ignored."
             for i, t in enumerate(text):
                 for abstraction_char in t:
                     for j in range(i+1, self.n):
