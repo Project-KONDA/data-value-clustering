@@ -855,6 +855,7 @@ class Hub:
                 text += str(data_upper_limit)
             if data_lower_limit is not None or data_upper_limit is not None:
                 text += "]"
+            text += "\n" + str(self.configuration.num_data) + " values"
             self.label_data_config.configure(text=text)
 
     def update_frame_abstraction(self):
