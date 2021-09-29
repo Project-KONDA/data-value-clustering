@@ -160,6 +160,7 @@ class SliderInput:
                 v = self.values[i]
 
             self.label_list[i] = Label(self.scrollable_frame, width=27, bg="white", anchor=W, justify=LEFT)
+            self.label_list[i].config(text = "<rest>" if i == self.n-1 else "")
             self.valuelist[i] = IntVar(self.scrollable_frame, v)
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode: self.update_labels())
@@ -324,6 +325,8 @@ class SliderInput:
                 if text[i] == "":
                     label_text[i] = label_text[i][2:]
                 newtext = text[i] + label_text[i]
+                if i == self.n-1:
+                    newtext = "<rest>"
                 l.config(text=newtext)
             for i, tip in enumerate(tool_tips_labels):
                 CreateToolTip(self.label_list[i], tip)
