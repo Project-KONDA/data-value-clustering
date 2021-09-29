@@ -6,6 +6,7 @@ import numpy as np
 
 from gui_general.ToolTip import CreateToolTip
 from gui_general.scrollable_frame import create_scrollable_frame
+from gui_general.window_size import set_window_size
 
 
 class QuestionnaireResultInput(ABC):
@@ -38,6 +39,7 @@ class QuestionnaireResultInput(ABC):
 
         # root:
         self.root = Toplevel(master)
+        self.root.attributes('-alpha', 0.0)
         self.root.title(title)
         self.root.config(bg='white')
         self.root.resizable(False, True)
@@ -117,11 +119,18 @@ class QuestionnaireResultInput(ABC):
             self.canvas_result.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
-        # Center Window on Screen
+        # set windows size:
         self.root.update_idletasks()
-        midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
-        midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
-        self.root.geometry(f"+%s+%s" % (midx, midy))
+        self.canvas_questions.configure(height=self.scrollable_questions_frame.winfo_height())
+        self.root.update_idletasks()
+
+        h_root = self.root.winfo_reqheight()
+        h_scrollable = self.scrollable_questions_frame.winfo_height()
+        h_canvas_questionnaire = self.canvas_questions.winfo_height()
+        h_expanded = h_root - h_canvas_questionnaire + h_scrollable
+        set_window_size(self.root, h_expanded)
+
+        self.root.attributes('-alpha', 1.0)
 
         self.root.focus_force()
         self.root.grab_set()
