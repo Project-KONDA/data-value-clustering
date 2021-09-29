@@ -147,7 +147,7 @@ class SliderInput:
         self.sliderlist = np.full(self.n, Scale(self.scrollable_frame))
         self.valuelist = np.full(self.n, IntVar())
 
-        self.tooltips = {}
+        self.tooltips = list()
 
         for i in range(0, self.n):
             t = ""
@@ -178,9 +178,10 @@ class SliderInput:
         self.root.mainloop()
 
     def hide_all_tool_tips(self):
-        for i in self.tooltips.keys():
-            if self.tooltips[i] is not None:
-                self.tooltips[i].hidetip()
+        for tip in self.tooltips:
+            if tip is not None:
+                tip.hidetip()
+        self.tooltips = list()
 
     def unbind_all(self):
         self.root.unbind_all("<MouseWheel>")
@@ -343,8 +344,8 @@ class SliderInput:
     def set_tool_tips(self, tool_tips_abstraction_info, tool_tips_warning):
         self.hide_all_tool_tips()
         for i in range(0, self.n):
-            self.tooltips[i] = CreateToolTip(self.entrylist[i], tool_tips_warning[i], color=warning_color)
-            self.tooltips[2 * i + 1] = CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i], color=warning_color)
+            self.tooltips.append(CreateToolTip(self.entrylist[i], tool_tips_warning[i], color=warning_color))
+            self.tooltips.append(CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i], color=warning_color))
 
     def get(self):
         if self.canceled:
