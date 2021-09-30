@@ -67,7 +67,7 @@ def _configure_scrollable_frame(event, scrollable_frame, canvas, outer_frame, dy
         outer_frame.config(width=scrollable_frame.winfo_reqwidth())
     if dynamic_height and scrollable_frame.winfo_reqheight() != canvas.winfo_height():
         canvas.config(height=scrollable_frame.winfo_reqheight())
-        outer_frame.config(height=scrollable_frame.winfo_reqheight())
+        # outer_frame.config(height=scrollable_frame.winfo_reqheight())
 
 
 def _configure_canvas(event, scrollable_frame, canvas, outer_frame, canvas_id):
