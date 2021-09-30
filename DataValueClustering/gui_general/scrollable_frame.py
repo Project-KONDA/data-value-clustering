@@ -1,19 +1,19 @@
 from tkinter import Frame, Canvas, Scrollbar, LabelFrame
 
 
-def create_scrollable_label_frame(root, text, dynamic=False, dynamic_height=True):
+def create_scrollable_label_frame(root, text, dynamic=False, dynamic_height=True, surrounding_frame=None, surrounding_canvas=None):
     outer_frame = LabelFrame(root, bg="white", relief="groove", borderwidth=2, text=text)
     outer_frame.grid_rowconfigure(0, weight=1)
-    return _create_scrollable_frame_in_outer_frame(outer_frame, dynamic, dynamic_height)
+    return _create_scrollable_frame_in_outer_frame(outer_frame, dynamic, dynamic_height, surrounding_frame, surrounding_canvas)
 
 
-def create_scrollable_frame(root, dynamic=False, dynamic_height=True):
+def create_scrollable_frame(root, dynamic=False, dynamic_height=True, surrounding_frame=None, surrounding_canvas=None):
     outer_frame = Frame(root, bg="white", relief="groove", borderwidth=2)
     outer_frame.grid_rowconfigure(0, weight=1)
-    return _create_scrollable_frame_in_outer_frame(outer_frame, dynamic, dynamic_height)
+    return _create_scrollable_frame_in_outer_frame(outer_frame, dynamic, dynamic_height, surrounding_frame, surrounding_canvas)
 
 
-def _create_scrollable_frame_in_outer_frame(outer_frame, dynamic=False, dynamic_height=True):
+def _create_scrollable_frame_in_outer_frame(outer_frame, dynamic=False, dynamic_height=True, surrounding_frame=None, surrounding_canvas=None):
     canvas = Canvas(outer_frame, bg="white", highlightthickness=0)
     canvas.grid(row=0, column=0, sticky='nswe')
 
@@ -37,7 +37,7 @@ def _create_scrollable_frame_in_outer_frame(outer_frame, dynamic=False, dynamic_
 
     scrollable_frame = Frame(canvas, bg="white")
     scrollable_frame.bind('<Enter>', lambda args: _enter_scrollable_frame(args, scrollable_frame=scrollable_frame, canvas=canvas))
-    scrollable_frame.bind('<Leave>', lambda args: _leave_scrollable_frame(args, scrollable_frame=scrollable_frame))
+    scrollable_frame.bind('<Leave>', lambda args: _leave_scrollable_frame(args, scrollable_frame=scrollable_frame, surrounding_frame=surrounding_frame, surrounding_canvas=surrounding_canvas))
 
     canvas_id = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
@@ -51,8 +51,10 @@ def _enter_scrollable_frame(*args, scrollable_frame, canvas):
     scrollable_frame.bind_all("<MouseWheel>", lambda event: _on_mousewheel_scrollable_frame(event, scrollable_frame, canvas))
 
 
-def _leave_scrollable_frame(*args, scrollable_frame):
+def _leave_scrollable_frame(*args, scrollable_frame, surrounding_frame, surrounding_canvas):
     scrollable_frame.unbind_all("<MouseWheel>")
+    if surrounding_frame is not None and surrounding_canvas is not None:
+        surrounding_frame.bind_all("<MouseWheel>", lambda event: _on_mousewheel_scrollable_frame(event, surrounding_frame, surrounding_canvas))
 
 
 def _on_mousewheel_scrollable_frame(event, scrollable_frame, canvas):
