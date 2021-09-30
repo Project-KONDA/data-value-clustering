@@ -142,8 +142,15 @@ class BlobInput:
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)
         for i, c in reversed(list(enumerate(self.coordinates))):
+            split_info = self.chars_info[i].split("represents ")
+            if len(split_info) > 1:
+                info = split_info[1]
+            else:
+                info = split_info[0]
+            info = info[0:len(info)-1]
+            print(info)
             self.blobs[i] = Blob(self, label=self.labels[i], regex=self.regexes[i], resizable=self.resizable[i],
-                                 info=self.chars_info[i], rel_x=self.coordinates[i, 0], rel_y=self.coordinates[i, 1],
+                                 info=info, rel_x=self.coordinates[i, 0], rel_y=self.coordinates[i, 1],
                                  rel_size=self.sizes[i])
 
         """Buttons"""
@@ -201,13 +208,13 @@ class BlobInput:
             text = self._drag_data["nearest"].info
             # text += f"\ndist.: {str(blob.get_distance(event.x, event.y))}"
             # text += f"\nposition: ({event.x:>4},{event.y:>4})"
-            text += f"\nregex: {self._drag_data['nearest'].regex}"
+            text += f"\ncharacter(s): {self._drag_data['nearest'].regex}"
             if self._drag_data["nearest"].resizable:
                 text += f"\nsize : {str(self._drag_data['nearest'].get_size() * self.size_factor)}"
             if self._drag_data['last_nearest'] is not None \
                     and self._drag_data['last_nearest'] is not self._drag_data['nearest']:
-                text += f"\n    distance from: {self._drag_data['last_nearest'].label}"
-                text += f"\n    " + str(round(self._drag_data['nearest'].get_distance(
+                text += f"\ndistance from {self._drag_data['last_nearest'].label}"
+                text += f" = " + str(round(self._drag_data['nearest'].get_distance(
                     blob=self._drag_data['last_nearest']) * self.distance_factor, 2))
             self.canvas.itemconfigure(self.canvas.text, text=text)
         else:
