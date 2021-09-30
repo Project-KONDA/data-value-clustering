@@ -70,7 +70,6 @@ class SliderInput:
                     self.values.append(costmap[(i + 1, 0)])
 
         self.root = Toplevel(self.master)
-        # self.root.attributes('-alpha', 0.0)
         self.root.title("Distance Configuration - Sliders")
         self.root.config(bg="white")
         self.root.resizable(False, True)
@@ -183,16 +182,7 @@ class SliderInput:
 
         self.trigger_extend()
 
-        # set window size:
-        self.root.update()
-        #
-        # h_root = self.root.winfo_reqheight()
-        # h_scrollable = self.scrollable_frame.winfo_height()
-        # h_canvas_questionnaire = self.canvas.winfo_height()
-        # h_expanded = h_root - h_canvas_questionnaire + h_scrollable + 200
         set_window_size_simple(self.root)
-
-        # self.root.attributes('-alpha', 1.0)
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
