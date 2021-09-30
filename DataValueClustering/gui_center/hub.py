@@ -552,7 +552,8 @@ class Hub:
 
     def update_option_menu_value_list(self):
         menu = self.option_menu_distance_choice["menu"]
-        menu.delete(0, "end")
+        if menu:
+            menu.delete(0, "end")
         for string in self.distance_options:
             menu.add_command(label=string,
                              command=lambda value=string: self.option_menu_command(value))
