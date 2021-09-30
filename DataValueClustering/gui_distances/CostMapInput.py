@@ -5,6 +5,7 @@ from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_cost_map
 from gui_distances.costmapinput_helper import validate_input_float, print_cost_map, character_escape, get_n_from_map, \
     preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
+from gui_general.window_size import set_window_size_simple
 
 
 def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None, suggestion=None,
@@ -234,11 +235,7 @@ class CostMapInput:
         self.button_plus = Button(self.root, text='+', command=self.plus, justify=RIGHT, width=3, background='snow')
         self.button_plus.grid(sticky="nswe", row=4, column=3, pady=2, padx=2)
 
-        # Center Window on Screen
-        self.root.update_idletasks()
-        midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
-        midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
-        self.root.geometry(f"+%s+%s" % (midx, midy))
+        set_window_size_simple(self.root)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
