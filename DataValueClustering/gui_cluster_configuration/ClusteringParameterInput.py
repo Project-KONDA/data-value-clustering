@@ -4,6 +4,7 @@ import numpy as np
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
 from gui_general.help_popup_gui import menu_help_clustering_configuration
 from gui_general.scrollable_frame import create_scrollable_frame
+from gui_general.window_size import set_window_size_simple
 
 
 def get_configuration_parameters(master, title, parameter_frame_inits, dependencies, suggestion=None):
@@ -101,11 +102,7 @@ class ClusterConfigurationInput:
 
         self.button.grid(row=4, column=0, sticky='nsew')
 
-        # Center Window on Screen
-        self.root.update_idletasks()
-        midx = max(0, self.root.winfo_screenwidth() // 2 - self.root.winfo_reqwidth() // 2)
-        midy = max(0, self.root.winfo_screenheight() // 3 - self.root.winfo_reqheight() // 2)
-        self.root.geometry(f"+%s+%s" % (midx, midy))
+        set_window_size_simple(self.root)
 
         self.root.after(1, lambda: self.root.focus_force())
 
