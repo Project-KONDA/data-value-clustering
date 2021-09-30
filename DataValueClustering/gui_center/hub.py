@@ -256,13 +256,13 @@ class Hub:
         frame_width = button_width_full
 
         self.preview_data_outer, self.preview_data_canvas, self.preview_data = \
-            create_scrollable_frame(self.data_frame)
+            create_scrollable_frame(self.data_frame, dynamic_height=False)
         self.preview_abstraction_outer, self.preview_abstraction_canvas, self.preview_abstraction = \
-            create_scrollable_frame(self.simple_clustering_frame)
+            create_scrollable_frame(self.simple_clustering_frame, dynamic_height=False)
         self.preview_distance_outer, self.preview_distance_canvas, self.preview_distance = \
-            create_scrollable_frame(self.refined_clustering_frame)
+            create_scrollable_frame(self.refined_clustering_frame, dynamic_height=False)
         self.preview_clustering_outer, self.preview_clustering_canvas, self.preview_clustering = \
-            create_scrollable_frame(self.refined_clustering_frame)
+            create_scrollable_frame(self.refined_clustering_frame, dynamic_height=False)
 
         self.preview_data_canvas.config(height=0, bg="grey90")
         self.preview_abstraction_canvas.config(height=0, bg="grey90")
