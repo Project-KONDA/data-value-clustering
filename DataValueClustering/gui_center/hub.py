@@ -101,7 +101,6 @@ class Hub:
 
         "initialisation"
         self.root = Tk()
-        self.root.attributes('-alpha', 0.0)
         self.root.title(TITLE)
         self.root.configure(background='white')
 
@@ -330,17 +329,7 @@ class Hub:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.update()
 
-        self.root.update_idletasks()
-
-        # calculate and set window size:
-        # h_root = self.root.winfo_reqheight()
-        # h_scrollable = self.scrollable_frame.winfo_height()
-        # h_canvas_questionnaire = self.canvas.winfo_height()
-        # h_expanded = h_root - h_canvas_questionnaire + h_scrollable
-        # set_window_size(self.root, h_expanded)
         set_window_size_simple(self.root)
-
-        self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
         if loadpath is not None:
