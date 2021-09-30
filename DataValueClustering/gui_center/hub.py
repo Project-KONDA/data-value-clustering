@@ -27,7 +27,7 @@ from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_hub
 from gui_general.scrollable_frame import create_scrollable_frame
-from gui_general.window_size import set_window_size
+from gui_general.window_size import set_window_size_simple
 from gui_result.ResultView import result_view
 from gui_result.validation_questionnaire import get_suggested_algorithms, get_suggested_data, \
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
@@ -333,11 +333,12 @@ class Hub:
         self.root.update_idletasks()
 
         # calculate and set window size:
-        h_root = self.root.winfo_reqheight()
-        h_scrollable = self.scrollable_frame.winfo_height()
-        h_canvas_questionnaire = self.canvas.winfo_height()
-        h_expanded = h_root - h_canvas_questionnaire + h_scrollable
-        set_window_size(self.root, h_expanded)
+        # h_root = self.root.winfo_reqheight()
+        # h_scrollable = self.scrollable_frame.winfo_height()
+        # h_canvas_questionnaire = self.canvas.winfo_height()
+        # h_expanded = h_root - h_canvas_questionnaire + h_scrollable
+        # set_window_size(self.root, h_expanded)
+        set_window_size_simple(self.root)
 
         self.root.attributes('-alpha', 1.0)
 
