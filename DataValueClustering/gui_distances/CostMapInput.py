@@ -106,7 +106,8 @@ class CostMapInput:
             if float(low) <= 0.0 and float(high) >= 1.0:
                 scrollbar.grid_remove()
             else:
-                scrollbar.grid()
+                if scrollbar.grid_info() == {}:
+                    scrollbar.grid()
             scrollbar.set(low, high)
 
         self.canvasNE = Canvas(self.frame, height=5, highlightthickness=0,
@@ -149,8 +150,8 @@ class CostMapInput:
         self.scrollbarS.config(command=configS)
 
         def _configure_scrollable_frame(event, scrollable_frame, canvas, outer_frame, w=False, h=False):
-            size = (scrollable_frame.winfo_reqwidth(), scrollable_frame.winfo_reqheight())
-            canvas.config(scrollregion="0 0 %s %s" % size)
+            canvas.config(scrollregion=scrollable_frame.bbox("all"))
+
             if w and scrollable_frame.winfo_reqwidth() != canvas.winfo_width():
                 canvas.config(width=scrollable_frame.winfo_reqwidth())
                 outer_frame.config(width=scrollable_frame.winfo_reqwidth())
