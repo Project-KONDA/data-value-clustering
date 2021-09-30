@@ -91,6 +91,7 @@ class HubConfiguration():
         self.data_upper_limit = None
         self.num_data = None
 
+        self.abstraction_changed = False
         self.abstraction_answers = None
         # self.abstraction_f = None
         self.values_abstracted = None
@@ -165,7 +166,6 @@ class HubConfiguration():
         self.fancy_simple_cluster_list = list()
         for i,v in enumerate(self.abstraction_dict.values()):
             self.fancy_simple_cluster_list.append(v)
-
 
     def execute_distance(self):
         time_distance_start = datetime.now()
