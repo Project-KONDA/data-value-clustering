@@ -82,7 +82,7 @@ class SliderInput:
 
         self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
-        self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity. Rows with empty entries will be ignored.", bg="white", anchor='c', justify="center")
+        self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity. Rows with empty entries will be ignored. You can custimize the character groups.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view)
         CreateToolTip(self.button_expert, "Open Matrix view, which allows setting the weights entirely flexible.")
         self.extended = IntVar(self.root, 0)
@@ -166,7 +166,7 @@ class SliderInput:
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode: self.update_labels())
             self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
-            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i], width=25, highlightthickness=2)
+            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i], highlightthickness=2)
             if i == self.n-1 or self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
@@ -435,7 +435,7 @@ class SliderInput:
         entry_var_list[self.n-1].set("")
         valuelist[self.n-1].set(1)
 
-        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1], width=25,
+        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1],
                                     highlightthickness=2)
         label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
         sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
