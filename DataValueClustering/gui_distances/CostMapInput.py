@@ -160,11 +160,11 @@ class CostMapInput:
 
         self.scrollableframeNE.bind('<Configure>',
                                     lambda event: _configure_scrollable_frame(event, self.scrollableframeNE,
-                                                                              self.canvasNE, self.frame))
+                                                                              self.canvasNE, self.frame, w=True))
 
         self.scrollableframeSW.bind('<Configure>',
                                     lambda event: _configure_scrollable_frame(event, self.scrollableframeSW,
-                                                                              self.canvasSW, self.frame))
+                                                                              self.canvasSW, self.frame, h=True, w=True))
 
         self.scrollableframeSE.bind('<Configure>',
                                     lambda event: _configure_scrollable_frame(event, self.scrollableframeSE,
@@ -191,7 +191,7 @@ class CostMapInput:
             self.label[i].grid(sticky=NW, row=9, column=i, padx=(0, 1))
             self.regex[i] = Entry(self.scrollableframeSW, width=20, bg='white', validate=ALL, validatecommand=(
                 self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P'))
-            self.regex_label[i] = Label(self.scrollableframeSW, anchor=W, justify="left", width=20)
+            self.regex_label[i] = Label(self.scrollableframeSW, anchor=W, justify="left")
             self.regex[i].grid(sticky=NW, row=i, column=1)
             self.regex_label[i].grid(sticky=NW, row=i, column=4, columnspan=1)
 
