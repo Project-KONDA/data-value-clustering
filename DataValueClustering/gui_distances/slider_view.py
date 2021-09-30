@@ -166,7 +166,7 @@ class SliderInput:
             self.entry_var_list[i] = StringVar(self.scrollable_frame, t)
             self.entry_var_list[i].trace("w", lambda name, index, mode: self.update_labels())
             self.entry_var_list[i].set("<rest>" if i == self.n-1 else t)
-            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i], highlightthickness=2)
+            self.entrylist[i] = Entry(self.scrollable_frame, font="12", textvariable=self.entry_var_list[i], width=25, highlightthickness=2)
             if i == self.n-1 or self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
@@ -435,7 +435,7 @@ class SliderInput:
         entry_var_list[self.n-1].set("")
         valuelist[self.n-1].set(1)
 
-        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1],
+        entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1], width=25,
                                     highlightthickness=2)
         label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
         sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
