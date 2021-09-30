@@ -757,7 +757,7 @@ class Hub:
                 self.label_abstraction_progress.configure(text=ABSTRACTION_DONE, fg='green')
                 self.show_simple_clustering_hint(self.configuration.no_values_abstracted)
             else:
-                self.label_abstraction_progress.configure(text=ABSTRACTION_CONFIGURED, fg='orange')
+                self.label_abstraction_progress.configure(text=ABSTRACTION_CONFIGURED, fg='DarkOrange2')
         else:
             self.button_abstraction.configure(bg='paleturquoise1')
             self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
@@ -793,7 +793,7 @@ class Hub:
             self.checkbutton_expert_clustering.configure(state="disabled")
 
             if self.configuration.distance_configuration_valid():
-                self.label_distance_progress.configure(text=DISTANCE_NOT_CALC, fg='orange')
+                self.label_distance_progress.configure(text=DISTANCE_NOT_CALC, fg='DarkOrange2')
                 self.button_distance_play.configure(state="normal", bg='paleturquoise1')
             else:
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
@@ -809,12 +809,12 @@ class Hub:
             self.button_show_result.configure(state="disabled", bg=self.original_button_color)
             if self.configuration.clustering_execution_possible():
                 # self.clustering_progress['value'] = 100
-                self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='orange')
+                self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='DarkOrange2')
                 self.button_clustering_play.configure(state="normal", bg='paleturquoise1')
             else:
                 # self.clustering_progress['value'] = 0
                 if self.configuration.clustering_configuration_valid():
-                    self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='orange')
+                    self.label_clustering_progress.configure(text=CLUSTERING_NOT_CALC, fg='DarkOrange2')
                 else:
                     self.label_clustering_progress.configure(text=CLUSTERING_NOT_CONFIGURED, fg='red')
                 self.button_clustering_play.configure(state="disabled", bg=self.original_button_color)
