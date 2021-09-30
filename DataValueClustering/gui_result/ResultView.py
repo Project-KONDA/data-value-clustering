@@ -13,7 +13,7 @@ from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
 from gui_general.scrollable_frame import create_scrollable_label_frame
-from gui_general.window_size import set_window_size, set_window_size_simple
+from gui_general.window_size import set_window_size_simple
 from gui_result.result_gui import show_mds_scatter_plot_integrated
 from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
