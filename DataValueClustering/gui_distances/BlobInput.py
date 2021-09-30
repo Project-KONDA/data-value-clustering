@@ -113,24 +113,30 @@ class BlobInput:
         self.canvas.bind("<MouseWheel>", self.scale_a_blob)
 
         """Info"""
-        text_x = self.canvas_w / 12
+        text_x = self.canvas_w / 20
         text_y = self.canvas_h / 30
-        text_w = self.canvas_w * 10 / 12
+        text_w = self.canvas_w * 18 / 20
 
         # TODO: place texts dependent on character height/width
 
         self.canvas.bind("<Motion>", self.canvas_blob_info)
         self.canvas.text = self.canvas.create_text(10, self.canvas_h * 26/ 30, text="", anchor="nw")
 
-        self.canvas.advice = self.canvas.create_text(text_x, text_y,
+        self.canvas.explanation = self.canvas.create_text(text_x, text_y,
                                                      text=EXPLANATION,
                                                      anchor="nw", font=('TkDefaultFont', 12, 'bold'), width=text_w)
-        self.canvas.advice = self.canvas.create_text(text_x, 2*text_y,
+        explanation_bounds = self.canvas.bbox(self.canvas.explanation)
+        explanation_height = explanation_bounds[3] - explanation_bounds[1]
+
+        self.canvas.sub_explanation = self.canvas.create_text(text_x, text_y + explanation_height,
                                                      text=SUB_EXPLANATION,
                                                      anchor="nw", width=text_w)
 
+        sub_explanation_bounds = self.canvas.bbox(self.canvas.sub_explanation)
+        sub_explanation_height = sub_explanation_bounds[3] - sub_explanation_bounds[1]
+
         if suggestion is not None:
-            self.canvas.advice = self.canvas.create_text(text_x, 3*text_y, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=text_w)
+            self.canvas.suggestion = self.canvas.create_text(text_x, text_y + sub_explanation_height, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=text_w)
 
 
         """Build Blobs"""
