@@ -6,7 +6,7 @@ import numpy as np
 
 from gui_general.ToolTip import CreateToolTip
 from gui_general.scrollable_frame import create_scrollable_frame
-from gui_general.window_size import set_window_size
+from gui_general.window_size import set_window_size_simple
 
 
 class QuestionnaireResultInput(ABC):
@@ -119,16 +119,8 @@ class QuestionnaireResultInput(ABC):
             self.canvas_result.yview_scroll(-1 * (event.delta // 120), "units")
 
     def run(self):
-        # set windows size:
-        self.root.update_idletasks()
-        self.canvas_questions.configure(height=self.scrollable_questions_frame.winfo_height())
-        self.root.update_idletasks()
 
-        h_root = self.root.winfo_reqheight()
-        h_scrollable = self.scrollable_questions_frame.winfo_height()
-        h_canvas_questionnaire = self.canvas_questions.winfo_height()
-        h_expanded = h_root - h_canvas_questionnaire + h_scrollable
-        set_window_size(self.root, h_expanded)
+        set_window_size_simple(self.root)
 
         self.root.attributes('-alpha', 1.0)
 
