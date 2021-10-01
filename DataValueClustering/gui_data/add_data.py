@@ -47,7 +47,7 @@ class AddData:
         self.button_path = Button(self.root, text="...", command=self.selectpath)
         self.label_path.grid(sticky='nswe', row=3, column=1, columnspan=1)
         self.entry_path.grid(sticky='nswe', row=3, column=2, columnspan=2, pady=1, padx=1)
-        self.button_path.grid(sticky='nsew', row=3, column=4, pady=1, padx=1)
+        self.button_path.grid(sticky='nsew', row=3, column=2, columnspan=3, pady=1, padx=1)
 
         self.label_field = Label(self.root, anchor="w", text="Field:")
         CreateToolTip(self.label_field, "The name of the XML element from which to extract the data values.")
@@ -101,6 +101,7 @@ class AddData:
         self.entry_path.delete(0, END)
         self.entry_path.insert(0, newpath)
         self.entry_path.configure(state="readonly")
+        self.button_path.grid(sticky='nsew', row=3, column=4, pady=1, padx=1)
 
         self.fieldnames = get_fieldnames(newpath)
         if self.fieldnames:
