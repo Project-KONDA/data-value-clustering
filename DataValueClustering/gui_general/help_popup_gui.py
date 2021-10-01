@@ -245,7 +245,7 @@ def menu_information_display(master, title, content):
     root.configure(bg='white')
     root.resizable(False, True)
     width = root.winfo_screenwidth() // 2
-    Label(root, text=title, font='Arial 14 bold',
+    Label(root, text=title, font=('TkDefaultFont', 12, 'bold'),
           anchor=W, justify=LEFT, fg="dark green", background='white'
           ).grid(row=1, column=1, sticky=W)
 
@@ -256,11 +256,11 @@ def menu_information_display(master, title, content):
 
     for i, t in enumerate(content):
         if isinstance(t, str):
-            l = Label(scrollable_frame, text=t, font='Arial 10', wraplengt=width,
+            l = Label(scrollable_frame, text=t, font=('TkDefaultFont', 10), wraplength=width,
                       anchor=W, justify=LEFT, fg="dark green", background='white')
             l.grid(row=i, column=1, sticky=W + E)
         else:
-            l = Label(scrollable_frame, text=t[0], font='Arial 12 bold',
+            l = Label(scrollable_frame, text=t[0], font=('TkDefaultFont', 12, 'bold'),
                   anchor=W, justify=LEFT, fg="dark green", background='white')
             l.grid(row=i, column=1, sticky=W)
 
