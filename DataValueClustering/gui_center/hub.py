@@ -484,7 +484,6 @@ class Hub:
 
         # 4. save abstraction into configuration
         self.set_saved(False)
-        self.configuration.abstraction_changed = self.configuration.abstraction_configuration_valid()
         self.reset_validation_answers()
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
@@ -518,16 +517,6 @@ class Hub:
         self.button_abstraction_excel.configure(bg=self.original_button_color)
 
     def configure_distance(self):
-        reset = self.configuration.abstraction_changed and messagebox.askyesno(
-            "Distance Configuration Reset",
-            "The configuration of the abstraction has recently changed. "
-            "The distance configuration might not fit anymore. "
-            "However you could keep working with the old configuration. "
-            "\nDo you want to reset the current configuration?",
-            icon=WARNING)
-        if reset:
-            print("we need to implement a reset here")
-
         self.label_distance_progress.configure(text=DISTANCE_CONFIGURATION_IN_PROGRESS, fg='magenta2')
         previous_cost_map, blob_configuration = self.configuration.get_distance_configuration()
 
@@ -551,7 +540,6 @@ class Hub:
             self.root.update()
             return
 
-        self.configuration.abstraction_changed = False
         self.configuration.set_distance_configuration(cost_map, blob_configuration)
 
         if config_method is not None:
@@ -768,6 +756,7 @@ class Hub:
     def update(self):
         self.update_option_menu()
 
+
         if self.configuration.data_configuration_valid():
             self.label_data_progress.configure(text=DATA_DONE, fg='green')
             self.button_data.configure(bg=self.original_button_color)
@@ -785,6 +774,7 @@ class Hub:
         else:
             self.button_abstraction.configure(bg='paleturquoise1')
             self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
+
 
         if self.configuration.distance_configuration_possible():
             if self.configuration.distance_configuration_valid():
