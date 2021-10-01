@@ -607,6 +607,8 @@ class Hub:
         self.update()
         # self.configuration.save_as_json()
 
+        self.root.focus_force()
+
     def configure_clustering(self):
         self.label_clustering_progress.configure(text=CLUSTERING_CONFIG_IN_PROGRESS, fg='magenta2')
         prev_clustering_algorithm = self.configuration.get_clustering_selection()
@@ -678,6 +680,8 @@ class Hub:
         # self.configuration.save_as_excel()
 
         self.update()
+
+        self.root.focus_force()
 
     def show_result(self):
         # validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
