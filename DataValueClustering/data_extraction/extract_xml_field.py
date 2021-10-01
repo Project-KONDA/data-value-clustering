@@ -45,7 +45,7 @@ def execute_xquery(my_query, database=None):
 
         query.close()
     except ConnectionRefusedError:
-        messagebox.showwarning("BaseX Client not started", "The connection to the BaseX server could not be established. \nPlease start the local BaseX server!")
+        messagebox.showwarning("BaseX Client not started", "The connection to the local BaseX server could not be established. \nPlease start the local BaseX server!")
     except Exception as error:
         messagebox.showwarning("Error during Query Execution", error)
     finally:

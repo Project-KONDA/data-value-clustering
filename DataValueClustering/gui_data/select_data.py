@@ -1,6 +1,7 @@
 import os
 from tkinter import Tk, Listbox, Button, Label, END, Scrollbar, Toplevel, messagebox, Menu
 from tkinter.messagebox import WARNING
+from BaseXClient import BaseXClient
 
 import numpy as np
 
@@ -82,8 +83,12 @@ class SelectData:
             self.listbox.select_set(index)
 
     def add(self):
-        add_data(self.root, self.path)
-        self.load()
+        try:
+            BaseXClient.Session('localhost', 1984, 'admin', 'admin')
+            add_data(self.root, self.path)
+            self.load()
+        except ConnectionRefusedError:
+            messagebox.showwarning("BaseX Client not started", "The connection to the local BaseX server could not be established. \nPlease start the local BaseX server!")
 
     def remove(self):
         index = self.listbox.curselection()
