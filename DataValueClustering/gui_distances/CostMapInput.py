@@ -263,15 +263,17 @@ class CostMapInput:
     def reset_groups(self):
         blob_configuration = self.configuration.create_blob_configuration()
         newtexts = list(blob_configuration[1:, 1])
-        new_n = len(newtexts)
+        new_n = len(newtexts)+1
 
         while self.n < new_n:
             self.plus()
         while self.n > new_n:
             self.minus()
-        for i, t in enumerate(newtexts):
-            self.regex[i].delete(0, END)
-            self.regex[i].insert(0, t)
+        for i in range(new_n):
+            if i > 0 and i < new_n-1:
+                t = newtexts[i-1]
+                self.regex[i].delete(0, END)
+                self.regex[i].insert(0, t)
             for j in range(self.n):
                 self.value_entries[i, j].delete(0, END)
                 self.value_entries[i, j].insert(0, int(i != j))
