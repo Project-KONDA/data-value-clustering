@@ -402,6 +402,7 @@ class SliderInput:
         blob_configuration = self.configuration.create_blob_configuration()
         newtexts = list(blob_configuration[1:, 1])
         new_n = len(newtexts)
+        newtexts[new_n-1] = "<rest>"
 
         while self.n < new_n:
             self.plus()
