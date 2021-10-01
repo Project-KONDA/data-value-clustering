@@ -590,6 +590,14 @@ class Hub:
                 self.set_selected_distance_option(DISTANCE_OPTION_BLOBS)
 
     def execute_distance(self):
+        if not messagebox.askokcancel("Starting Distance Calculation", "Note that the Distance Calculation may take up to multiple hours and cannot be interrupted. "
+                                                                       "You will not be able to make any inputs to this application during the calculation. "
+                                                                       "In order for the calculation to complete successfully, you must not close the application. "
+                                                                       "Once the calculation is completed, the application icon in the taskbar will be highlighted and the status label will change."
+                                                                       "\nDo you really want to start the Distance Calculation now?",
+                                       icon=WARNING):
+            return
+
         self.label_distance_progress.configure(text=DISTANCE_CALC_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
 
