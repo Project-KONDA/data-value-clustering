@@ -1,35 +1,24 @@
-from tkinter import Tk, Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT, Frame, Canvas, Scrollbar, \
-    Menu, Checkbutton
+from tkinter import Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W, LEFT, Menu, Checkbutton
 
 import numpy as np
 
-from gui_distances.CostMapInput import input_costmap
 from gui_distances.costmapinput_helper import costmap_is_valid, print_cost_map, get_n_from_map, \
     groups_to_enumerations
 from gui_distances.distance_choice import DistanceView
+from gui_distances.distance_warnings import warning_color, \
+    undo_highlight_entries, update_warnings, update_warnings_vars
+from gui_distances.CostMapInput import input_costmap
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_general.scrollable_frame import create_scrollable_frame
 from gui_general.window_size import set_window_size_simple
 
-WARNING_REDUNDANT_1 = "Warning: The following characters are already contained in this or a previous group: "
-WARNING_REDUNDANT_2 = ". Only their first occurrence will have an impact on the dissimilarities."
-WARNING_UNDEFINED_1 = "Warning: The following characters do not occur in the abstracted data values: "
-WARNING_UNDEFINED_2 = ". Thus, their weights will have no impact on the dissimilarities."
-
-warning_color = "#ffbb00"
 disable_scale_color_trough = "grey90"
 disable_scale_color_fg = "grey40"
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
     view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration)
     return view.get()
-
-
-def create_array_of_empty_lists(n):
-    arr = np.empty(n, dtype=object)
-    arr[...] = [[] for _ in range(arr.shape[0])]
-    return arr
 
 
 class SliderInput:
@@ -187,12 +176,6 @@ class SliderInput:
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
-    def hide_all_tool_tips(self):
-        for tip in self.tooltips:
-            if tip is not None:
-                tip.hidetip()
-        self.tooltips = list()
-
     def unbind_all(self):
         self.root.unbind_all("<MouseWheel>")
 
@@ -202,33 +185,6 @@ class SliderInput:
 
     def enable_slider(self, i):
         self.sliderlist[i].configure(state="normal", fg=self.fg_color, troughcolor=self.troughcolor_color)
-
-    def redundant_char_warning(self, entry):
-        entry.configure(highlightbackground=warning_color, highlightcolor=warning_color)
-
-    def redundant_char_warning_global(self, redundant_chars):
-        warning_text = self.label_warning["text"]
-        new_warning = "Warning: The following characters are specified multiple times: " + str(redundant_chars) + ". Only their first occurrence will have an impact on the dissimilarities."
-        if warning_text is not None and warning_text != "":
-            self.label_warning.configure(text=warning_text + "\n" + new_warning, bg=warning_color, borderwidth=1)
-        else:
-            self.label_warning.configure(text=new_warning, bg=warning_color, borderwidth=1)
-
-    def undefined_char_warning(self, entry):
-        entry.configure(highlightbackground=warning_color, highlightcolor=warning_color)
-
-    def undefined_char_warning_global(self, undefined_chars):
-        warning_text = self.label_warning["text"]
-        new_warning = "Warning: The following characters do not occur in the abstracted data values: " + str(undefined_chars) +". Thus, their weights will have no impact on the dissimilarities."
-        if warning_text is not None and warning_text != "":
-            self.label_warning.configure(text=warning_text + "\n" + new_warning, bg=warning_color, borderwidth=1)
-        else:
-            self.label_warning.configure(text=new_warning, bg=warning_color, borderwidth=1)
-
-    def undo_highlight_entries(self):
-        for i, entry in enumerate(self.entrylist):
-            entry.configure(highlightbackground="white", highlightcolor="white")
-        self.label_warning.configure(text="", bg="white", borderwidth=0)
 
     def remove_duplicate_chars(self):
         for i, entry in enumerate(self.entrylist):
@@ -254,53 +210,14 @@ class SliderInput:
             return
 
 
-        self.undo_highlight_entries()
-
-        tool_tips_labels = np.full(self.n, "").tolist()
-        tool_tips_entries = np.full(self.n, "").tolist()
+        undo_highlight_entries(self.entrylist, self.label_warning)
 
         if self.extended.get():
-            for st in self.label_list:
-                st.config(text="")
-            chars_in_abstraction = [item for mapping in self.abstraction for item in list(mapping[1])]
-            redundant_chars_per_entry = create_array_of_empty_lists(self.n)
-            undefined_chars_per_entry = create_array_of_empty_lists(self.n)
-            for l, mapping in enumerate(self.abstraction):
-                for j, abstraction_char in enumerate(mapping[1]):
-                    abstraction_char_occurred = False
-                    for i, entry in enumerate(self.entrylist):
-                        if i < len(self.entrylist)-1:
-                            if self.entry_var_list[i].get() == "":
-                                self.disable_slider(i)
-                                tool_tips_entries[i] = "This row will be ignored as its entry is empty."
-                                tool_tips_labels[i] = "This row will be ignored as its entry is empty."
-                            else:
-                                self.enable_slider(i)
-                                for k, entry_char in enumerate(self.entry_var_list[i].get()):
-                                    if abstraction_char == entry_char:
-                                        if abstraction_char_occurred:
-                                            redundant_chars_per_entry[i].append(abstraction_char)
-                                            self.redundant_char_warning(entry)
-                                        elif len(mapping[1]) == 1:
-                                            abstraction_char_occurred = True
-                                            self.update_label_text(abstraction_char, self.label_list[i], mapping[0])
-                                            if tool_tips_labels[i] != "":
-                                                tool_tips_labels[i] += "\n"
-                                            tool_tips_labels[i] += mapping[3]
-                                    elif l == j == 0 and entry_char not in chars_in_abstraction and entry_char not in \
-                                            undefined_chars_per_entry[i]:
-                                        undefined_chars_per_entry[i].append(entry_char)
-                                        self.undefined_char_warning(entry)
-
-            for i, entry in enumerate(self.entrylist):
-                if i < len(self.entrylist) - 1:
-                    self.update_warning_for_entry(i, tool_tips_entries, redundant_chars_per_entry, undefined_chars_per_entry)
-
-            self.update_global_warning(redundant_chars_per_entry, undefined_chars_per_entry)
-            self.set_tool_tips(tool_tips_labels, tool_tips_entries)
+            update_warnings_vars(self.entrylist, self.label_warning, self.n, self.label_list, self.abstraction, self.tooltips, 0, self.entry_var_list, self.disable_slider, self.enable_slider)
             self.updating_labels = False
 
         else:
+            tool_tips_labels = np.full(self.n, "").tolist()
             text = np.full(self.n, "", dtype=object)
             label_text = np.full(self.n, "", dtype=object)
             for i, e in enumerate(self.entrylist):
@@ -337,50 +254,6 @@ class SliderInput:
                     CreateToolTip(self.label_list[i], "<rest> represents all characters not covered above.")
                 else:
                     CreateToolTip(self.label_list[i], tip)
-
-    def update_warning_for_entry(self, i, tool_tips_entries, redundant_chars_per_entry,
-                                 undefined_chars_per_entry):
-        if undefined_chars_per_entry[i]:
-            if tool_tips_entries[i] != "":
-                tool_tips_entries[i] += "\n"
-            tool_tips_entries[i] += WARNING_UNDEFINED_1 + str(undefined_chars_per_entry[i]) + WARNING_UNDEFINED_2
-        if redundant_chars_per_entry[i]:
-            if tool_tips_entries[i] != "":
-                tool_tips_entries[i] += "\n"
-            tool_tips_entries[i] += WARNING_REDUNDANT_1 + str(redundant_chars_per_entry[i]) + WARNING_REDUNDANT_2
-
-    def detect_undefined_chars_in_entry(self, chars_in_abstraction, entry):
-        undefined_chars = list()
-        for j, char in enumerate(entry.get()):
-            if not char in chars_in_abstraction:
-                undefined_chars.append(char)
-                self.undefined_char_warning(entry)
-        return undefined_chars
-
-    def update_label_text(self, char, label, mapping):
-        string = label.cget("text")
-        if string != "":
-            string += "\n"
-        string += "'" + char + "' - " + mapping
-        label.config(text=string)
-
-    def update_global_warning(self, redundant_chars_per_entry, undefined_chars_per_entry):
-        redundant_chars = set([item for sublist in redundant_chars_per_entry for item in sublist])
-        undefined_chars = set([item for sublist in undefined_chars_per_entry for item in sublist])
-        if undefined_chars:
-            self.undefined_char_warning_global(undefined_chars)
-        if redundant_chars:
-            self.redundant_char_warning_global(redundant_chars)
-
-    def set_tool_tips(self, tool_tips_abstraction_info, tool_tips_warning):
-        self.hide_all_tool_tips()
-        for i in range(0, self.n):
-            if i == self.n - 1:
-                self.tooltips.append(CreateToolTip(self.entrylist[i], "<rest> represents all characters not covered above."))
-            else:
-                self.tooltips.append(CreateToolTip(self.entrylist[i], tool_tips_warning[i], color=warning_color if tool_tips_warning[i].startswith("Warning") else None))
-            self.tooltips.append(CreateToolTip(self.label_list[i], tool_tips_abstraction_info[i]))
-
 
     def get(self):
         if self.canceled:

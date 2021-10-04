@@ -1,21 +1,16 @@
 from tkinter import *
 import numpy as np
 
+from gui_distances.distance_warnings import create_array_of_empty_lists, redundant_char_warning, update_label_text, \
+    undefined_char_warning, update_warning_for_entry, update_global_warning, set_tool_tips, undo_highlight_entries, \
+    update_warnings, update_warnings_no_vars
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_cost_map
-from gui_distances.costmapinput_helper import validate_input_float, print_cost_map, character_escape, get_n_from_map, \
+from gui_distances.costmapinput_helper import validate_input_float, print_cost_map, get_n_from_map, \
     preprocess_regexes, example_costmap, get_regexes_from_map, groups_to_enumerations
 from gui_general.window_size import set_window_size_simple
 
-
-def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None, suggestion=None,
-                  configuration=None):
-    if size is not None:
-        size += 2
-    assert (size is None or size in range(2, 21))
-    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction,
-                         suggestion=suggestion, configuration=configuration)
-    return myMap.get()
+warning_color = "#ffbb00"
 
 
 class CostMapInput:
@@ -88,13 +83,17 @@ class CostMapInput:
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 10))
 
+        self.label_warning = Label(self.root, text="", wraplengt=800, bg=warning_color, anchor='center',
+                                   justify='center', borderwidth=1, relief="solid")
+        self.label_warning.grid(sticky='ns', row=3, column=1, columnspan=4, pady=(0, 10), padx=10)
+
         # Frames and Canvas
 
         self.frame = Frame(self.root, relief="groove", borderwidth=2, bg="white")
 
-        self.frame.grid(sticky='nswe', row=3, column=1, columnspan=4)
+        self.frame.grid(sticky='nswe', row=4, column=1, columnspan=4)
 
-        self.root.rowconfigure(3, weight=1)
+        self.root.rowconfigure(4, weight=1)
         self.root.columnconfigure(4, weight=1)
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(2, weight=1)
@@ -188,6 +187,8 @@ class CostMapInput:
 
         self.case_entry.grid(sticky=NW, row=0, column=1)
 
+        self.tooltips = list()
+
         for i in range(self.n):
             self.label[i] = Label(self.scrollableframeNE, width=7, bg='ivory2', anchor=W, relief="groove", borderwidth=2)
             self.label[i].grid(sticky=NW, row=9, column=i, padx=(0, 1))
@@ -205,10 +206,10 @@ class CostMapInput:
                 self.regex[i].config(state='disabled')
             elif i == self.n - 1:
                 self.regex[i].insert(END, '<rest>')
-                CreateToolTip(self.regex[i], "This row represents any characters not covered above.")
+                CreateToolTip(self.regex[i], "<rest> represents all characters not covered above.")
                 self.label[i].configure(text='<rest>', state='disabled')
                 CreateToolTip(self.label[i],
-                              "This column represents any characters not covered by the columns to the left.")
+                              "<rest> represents all characters not covered above by the columns to the left.")
                 self.regex[i].config(state='disabled')
             else:
                 if not self.empty and i < len(self.predefined_labels):
@@ -224,17 +225,17 @@ class CostMapInput:
 
         self.button_ok = Button(self.root, text='OK', command=self.button_click_output_map,
                                 justify=RIGHT, background='snow')
-        self.button_ok.grid(sticky="nswe", row=4, column=4, pady=2, padx=2)
+        self.button_ok.grid(sticky="nswe", row=5, column=4, pady=2, padx=2)
 
         self.button_reset = Button(self.root, text='Reset', command=self.reset_groups,
                                    background='snow', width=16)
-        self.button_reset.grid(sticky="nswe", row=4, column=1, pady=2, padx=2)
+        self.button_reset.grid(sticky="nswe", row=5, column=1, pady=2, padx=2)
         self.button_minus = Button(self.root, text='-', command=self.minus,
                                    justify=LEFT, width=3, background='snow')
-        self.button_minus.grid(sticky="nswe", row=4, column=2, pady=2, padx=2)
+        self.button_minus.grid(sticky="nswe", row=5, column=2, pady=2, padx=2)
 
         self.button_plus = Button(self.root, text='+', command=self.plus, justify=RIGHT, width=3, background='snow')
-        self.button_plus.grid(sticky="nswe", row=4, column=3, pady=2, padx=2)
+        self.button_plus.grid(sticky="nswe", row=5, column=3, pady=2, padx=2)
 
         set_window_size_simple(self.root)
 
@@ -279,33 +280,20 @@ class CostMapInput:
                 self.value_entries[i, j].insert(0, int(i != j))
         self.costmap = None
 
-    def copy_to_column(self, i, text):
+    def copy_to_column(self, regex_index, text):
         if self.updating_labels:
             return
         self.updating_labels = True
-        self.label[i].configure(text=text)
+        self.label[regex_index].configure(text=text)
 
         if self.abstraction is None:
             return
-        for st in self.regex_label:
-            st.config(text="")
-        tool_tips = np.full(len(self.regex), "").tolist()
-        for mapping in self.abstraction.tolist():
-            for x, entry in enumerate(self.regex):
-                value = text if x == i else entry.get()
-                if len(mapping[1]) == 1 and mapping[1] in value:
-                    string = self.regex_label[x].cget("text")
-                    if string != "":
-                        string += "\n"
-                    string += "'" + mapping[1] + "' - " + mapping[0]
-                    self.regex_label[x].config(text=string)
-                    if tool_tips[x] != "":
-                        tool_tips[x] = tool_tips[x] + "\n" + mapping[3]
-                    else:
-                        tool_tips[x] = mapping[3]
-                    break
-        for j, tip in enumerate(tool_tips):
-            CreateToolTip(self.regex_label[j], tip)
+
+        undo_highlight_entries(self.regex, self.label_warning)
+
+        update_warnings_no_vars(self.regex, self.label_warning, self.n, self.regex_label, self.abstraction, self.tooltips, 1,
+                        regex_index, text, None, None, True)
+
         self.updating_labels = False
         return True
 
@@ -477,6 +465,16 @@ class CostMapInput:
         if self.canceled:
             return None
         return self.costmap
+
+
+def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abstraction=None, suggestion=None,
+                  configuration=None):
+    if size is not None:
+        size += 2
+    assert (size is None or size in range(2, 21))
+    myMap = CostMapInput(root, n=size, regexes=regexes, costmap=costmap, empty=empty, abstraction=abstraction,
+                         suggestion=suggestion, configuration=configuration)
+    return myMap.get()
 
 
 if __name__ == '__main__':
