@@ -97,7 +97,6 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             else:
                 arg.widget.configure(relief="raised")
 
-
         self.canvas_preview_button = Canvas(self.root, width=14, background="SystemButtonFace", borderwidth=2, relief="raised")
         self.canvas_preview_button.grid(row=4, column=1, sticky='ns', pady=5, padx=1)
         self.canvas_preview_button.create_text((4, 50), angle="90", anchor="ne", text=SHOW, fill="SystemButtonText")

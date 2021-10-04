@@ -148,7 +148,6 @@ class BlobInput:
             else:
                 info = split_info[0]
             info = info[0:len(info)-1]
-            print(info)
             self.blobs[i] = Blob(self, label=self.labels[i], regex=self.regexes[i], resizable=self.resizable[i],
                                  info=info, rel_x=self.coordinates[i, 0], rel_y=self.coordinates[i, 1],
                                  rel_size=self.sizes[i])

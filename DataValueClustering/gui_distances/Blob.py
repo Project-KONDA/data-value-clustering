@@ -15,10 +15,11 @@ class Blob:
         self.rel_x = rel_x
         self.rel_y = rel_y
 
-        self.sizefactor = min(blob_input.canvas_h, blob_input.canvas_w)
-        self.image_sizefactor = self.sizefactor // 8
+        self.size_factor = 1.2
+        self.canvas_size = min(blob_input.canvas_h, blob_input.canvas_w)
+        self.image_size = (self.canvas_size // 8) * self.size_factor
         self.min_size = 0.5
-        self.default_size = 1.0
+        self.default_size = self.size_factor
         self.rel_size = (lambda: rel_size if resizable else 0.5)()
         self.step_size = 0.05
         self.max_size = 5.5  # self.min_size + 100 * self.step_size
@@ -32,7 +33,7 @@ class Blob:
         return round((self.rel_size - 0.5) * 2, 1)
 
     def get_abs_size(self):
-        return int(self.rel_size * self.image_sizefactor)
+        return int(self.rel_size * self.image_size)
 
     def get_abs_x(self):
         return self.blob_input.get_absolute_coordinate_value(self.rel_x, True)
@@ -43,9 +44,9 @@ class Blob:
     # calculate distance to point or blob
     def get_distance(self, abs_x1=0, abs_y1=0, blob=None):
         if blob is None:
-            return sqrt((self.get_abs_x() - abs_x1) ** 2 + (self.get_abs_y() - abs_y1) ** 2)
+            return sqrt((self.get_abs_x() - abs_x1) ** 2 + (self.get_abs_y() - abs_y1) ** 2) / self.size_factor
         else:
-            return sqrt((self.get_abs_x() - blob.get_abs_x()) ** 2 + (self.get_abs_y() - blob.get_abs_y()) ** 2)
+            return sqrt((self.get_abs_x() - blob.get_abs_x()) ** 2 + (self.get_abs_y() - blob.get_abs_y()) ** 2) / self.size_factor
 
     def move(self, dx=0, dy=0):
         # geht v1
