@@ -65,7 +65,7 @@ def calculate_distance_matrix_map_jit(distance_function, values):
     max_distance = 0.
 
     for y in range(size):
-        for x in range(size):
+        for x in range(y,size):
             vx = str(values[x])  # numba needs str
             vy = str(values[y])  # numba needs str
             distance_x_y = distance_function(vx, vy)
@@ -76,6 +76,7 @@ def calculate_distance_matrix_map_jit(distance_function, values):
                 max_distance = distance_x_y
 
             matrix[x, y] = distance_x_y
+            matrix[y, x] = distance_x_y
 
             if x >= y + 1:
                 condensed_matrix[i] = distance_x_y
