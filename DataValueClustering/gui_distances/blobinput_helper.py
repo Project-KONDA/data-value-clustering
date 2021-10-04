@@ -49,7 +49,7 @@ def create_coordinates_relative(n):
 blob_configuration_array = [
     # dependencies, not-dependencies, name, regex, resizable, info
     [[],           [],                       "none",                        "",                                                        False,  # TODO: handle "nothing"
-     ""],
+     "'' represents empty characters."],
     [[],           [],                       "space",                        " ",                                                        False,
      "' ' represents a blank space."],
 
