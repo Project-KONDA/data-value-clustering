@@ -85,7 +85,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
         def canvas_preview_button_press(arg, press):
             if press:
-                arg.widget.configure(relief="raised")
+                arg.widget.configure(relief="sunken")
                 self.canvas_preview_button.delete('all')
                 if self.preview_shown:
                     self.canvas_preview_button.create_text((4, 50), angle="90", anchor="ne", text=SHOW, fill="SystemButtonText")
@@ -95,7 +95,8 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
                     self.show_preview()
                 self.preview_shown = not self.preview_shown
             else:
-                arg.widget.configure(relief="sunken")
+                arg.widget.configure(relief="raised")
+
 
         self.canvas_preview_button = Canvas(self.root, width=14, background="SystemButtonFace", borderwidth=2, relief="raised")
         self.canvas_preview_button.grid(row=4, column=1, sticky='ns', pady=5, padx=1)
