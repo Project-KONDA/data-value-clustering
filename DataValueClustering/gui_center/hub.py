@@ -591,8 +591,14 @@ class Hub:
 
         self.label_distance_progress.configure(text=DISTANCE_CALC_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
+        try:
+            self.configuration.execute_distance()
+        except MemoryError:
+            messagebox.showerror("Too many values",
+                                   "The distance calculation failed due to too many values. Please reconfigure the abstraction such that less values remain. "
+                                   "Typically, checking the last question, i.e. allowing the removal of duplicates, is sufficient.",
+                                   icon=ERROR)
 
-        self.configuration.execute_distance()
         self.set_saved(False)
 
         self.update()
