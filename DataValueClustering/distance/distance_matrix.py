@@ -1,9 +1,9 @@
 '''Calculate distance matrix containing pairwise distances between abstracted data values.'''
+import time
 from datetime import datetime
 
 import numpy as np
 from numba import njit
-import numba as nb
 
 from scipy.spatial.distance import is_valid_y
 
@@ -40,8 +40,24 @@ def get_symmetric(matrix):
     return symmetric_matrix
 
 
-def calculate_distance_matrix_map(distance_function, values):
-    dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, values)
+def calculate_distance_matrix_map(distance_function, values, duplicates_removed):
+    start = time.time()
+    size = len(values)
+    size_condensed = 0
+    for si in range(size):
+        size_condensed += si
+    matrix = np.full((size, size), -1.0, dtype=np.float32)
+    condensed_matrix = np.zeros(size_condensed, dtype=np.float32)
+    if duplicates_removed:
+        values_unique = values
+        size_unique = size
+    else:
+        values_unique = list(set(values))
+        size_unique = len(values_unique)
+    dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, values, values_unique, matrix,
+                                                            condensed_matrix, duplicates_removed, size_unique, size)
+    end = time.time()
+    print(end - start)
     return {"distance_matrix": dm,
             "condensed_distance_matrix": cdm,
             "affinity_matrix": am,
@@ -50,24 +66,18 @@ def calculate_distance_matrix_map(distance_function, values):
 
 
 @njit
-def calculate_distance_matrix_map_jit(distance_function, values):
-    size = len(values)
-    size_condensed = 0
-    for si in range(size):
-        size_condensed += si
-
-    matrix = np.zeros((size, size), dtype=np.float64)
-    condensed_matrix = np.zeros(size_condensed, dtype=np.float64)
-
-    i = 0
-
+def calculate_distance_matrix_map_jit(distance_function, values, values_unique, matrix, condensed_matrix,
+                                      duplicates_removed, size_unique, size):
+    # new new
     min_distance = np.inf
     max_distance = 0.
-
-    for y in range(size):
-        for x in range(y,size):
-            vx = str(values[x])  # numba needs str
-            vy = str(values[y])  # numba needs str
+    condensed_index = 0
+    for y in range(size_unique):
+        if duplicates_removed:
+            matrix[y, y] = 0
+        for x in range(y + 1, size_unique):
+            vx = str(values_unique[x])  # numba needs str
+            vy = str(values_unique[y])  # numba needs str
             distance_x_y = distance_function(vx, vy)
 
             if x != y and distance_x_y < min_distance:
@@ -75,15 +85,32 @@ def calculate_distance_matrix_map_jit(distance_function, values):
             if distance_x_y > max_distance:
                 max_distance = distance_x_y
 
-            matrix[x, y] = distance_x_y
-            matrix[y, x] = distance_x_y
+            if duplicates_removed:
+                matrix[x, y] = distance_x_y
+                matrix[y, x] = distance_x_y
+                # if x >= y + 1:
+                condensed_matrix[condensed_index] = distance_x_y
+                condensed_index += 1
+            else:
+                for i, ox in enumerate(values):
+                    for j, oy in enumerate(values):
+                        if matrix[i, j] == -1:
+                            if vx == str(ox) and vy == str(oy):
+                                matrix[i, j] = distance_x_y
+                                matrix[j, i] = distance_x_y
+                            if ox == oy:
+                                matrix[i, j] = 0
+                                matrix[j, i] = 0
 
-            if x >= y + 1:
-                condensed_matrix[i] = distance_x_y
-                i += 1
-        print("...", round((y + 1) / size * 100, 1), "%")
+        print("...", round((y + 1) / size_unique * 100, 1), "%")
 
-    assert (i == len(condensed_matrix))
+    if not duplicates_removed:
+        for y in range(size):
+            for x in range(y + 1, size):
+                condensed_matrix[condensed_index] = matrix[x, y]
+                condensed_index += 1
+
+    assert (condensed_index == len(condensed_matrix))
     # if not is_valid_y(condensed_matrix):
     #     condensed_matrix = None
 
@@ -188,7 +215,7 @@ if __name__ == "__main__":
         distance_function,
         values
     )
-    print("Compile:", datetime.now()-start, ":", x)
+    print("Compile:", datetime.now() - start, ":", x)
     # print(type(b))
     start = datetime.now()
     x = calculate_distance_matrix_map(
@@ -196,5 +223,3 @@ if __name__ == "__main__":
         values
     )
     print("Normal:", datetime.now() - start, ":", x)
-
-

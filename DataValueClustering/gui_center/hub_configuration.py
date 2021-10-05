@@ -170,7 +170,8 @@ class HubConfiguration():
     def execute_distance(self):
         time_distance_start = datetime.now()
         distance_f = self.get_distance_function()
-        self.distance_matrix_map = calculate_distance_matrix_map(distance_f, self.values_abstracted)
+        duplicates_removed = self.get_abstraction_configuration()[len(self.get_abstraction_configuration())-1]
+        self.distance_matrix_map = calculate_distance_matrix_map(distance_f, self.values_abstracted, duplicates_removed)
         time_distance_end = datetime.now()
         self.timedelta_distance = time_distance_end - time_distance_start
 
