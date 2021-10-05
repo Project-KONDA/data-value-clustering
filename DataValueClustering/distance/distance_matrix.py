@@ -42,42 +42,25 @@ def get_symmetric(matrix):
 
 def calculate_distance_matrix_map(distance_function, values, duplicates_removed):
     start = time.time()
-    size = len(values)
-    size_condensed = 0
-    for si in range(size):
-        size_condensed += si
-    matrix = np.full((size, size), -1.0, dtype=np.float32)
-    condensed_matrix = np.zeros(size_condensed, dtype=np.float32)
     if duplicates_removed:
-        values_unique = values
-        size_unique = size
+        calculate_distance_matrix_map_without_duplicates(distance_function, values)
     else:
-        values_unique = list(set(values))
-        size_unique = len(values_unique)
-    dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, values, values_unique, matrix,
-                                                            condensed_matrix, duplicates_removed, size_unique, size)
+        calculate_distance_matrix_map_with_duplicates(distance_function, values)
     end = time.time()
     print(end - start)
-    return {"distance_matrix": dm,
-            "condensed_distance_matrix": cdm,
-            "affinity_matrix": am,
-            "min_distance": mi,
-            "max_distance": ma}
 
 
 @njit
-def calculate_distance_matrix_map_jit(distance_function, values, values_unique, matrix, condensed_matrix,
-                                      duplicates_removed, size_unique, size):
-    # new new
+def calculate_distance_matrix_map_jit(distance_function, values, matrix, condensed_matrix):
     min_distance = np.inf
     max_distance = 0.
     condensed_index = 0
-    for y in range(size_unique):
-        if duplicates_removed:
-            matrix[y, y] = 0
-        for x in range(y + 1, size_unique):
-            vx = str(values_unique[x])  # numba needs str
-            vy = str(values_unique[y])  # numba needs str
+    size = len(values)
+    for y in range(size):
+        matrix[y, y] = 0
+        for x in range(y + 1, size):
+            vx = str(values[x])  # numba needs str
+            vy = str(values[y])  # numba needs str
             distance_x_y = distance_function(vx, vy)
 
             if x != y and distance_x_y < min_distance:
@@ -85,30 +68,13 @@ def calculate_distance_matrix_map_jit(distance_function, values, values_unique, 
             if distance_x_y > max_distance:
                 max_distance = distance_x_y
 
-            if duplicates_removed:
-                matrix[x, y] = distance_x_y
-                matrix[y, x] = distance_x_y
-                # if x >= y + 1:
-                condensed_matrix[condensed_index] = distance_x_y
-                condensed_index += 1
-            else:
-                for i, ox in enumerate(values):
-                    for j, oy in enumerate(values):
-                        if matrix[i, j] == -1:
-                            if vx == str(ox) and vy == str(oy):
-                                matrix[i, j] = distance_x_y
-                                matrix[j, i] = distance_x_y
-                            if ox == oy:
-                                matrix[i, j] = 0
-                                matrix[j, i] = 0
+            matrix[x, y] = distance_x_y
+            matrix[y, x] = distance_x_y
+            # if x >= y + 1:
+            condensed_matrix[condensed_index] = distance_x_y
+            condensed_index += 1
 
-        print("...", round((y + 1) / size_unique * 100, 1), "%")
-
-    if not duplicates_removed:
-        for y in range(size):
-            for x in range(y + 1, size):
-                condensed_matrix[condensed_index] = matrix[x, y]
-                condensed_index += 1
+        print("...", round((y + 1) / size * 100, 1), "%")
 
     assert (condensed_index == len(condensed_matrix))
     # if not is_valid_y(condensed_matrix):
@@ -181,38 +147,55 @@ def calculate_affinity_matrix_from_distance_matrix(distance_matrix):
 
 
 def upscale_dm_cdm(distance_matrix, abstracted_values, original_values):
-    n = original_values.size
-    n_a = abstracted_values.size
+    n = len(original_values)
+    n_a = len(abstracted_values)
     abstracted = list(abstracted_values)
     if n_a == n:
         return distance_matrix
     index = list()
     for v in original_values:
         index.append(abstracted.index(v))
-    print(distance_matrix)
     dm = np.full((n, n), -1)
     for i, a in enumerate(index):
         for j, b in enumerate(index):
             dm[i, j] = \
                 distance_matrix[(a, b)]
     cdm = get_condensed(dm)
-    print(dm)
     return dm, cdm
 
 
-def calculate_distance_matrix_with_duplicates(distance_function, values):
-    condensed_values = np.array(list(set(values)), dtype=np.str)
-    print(condensed_values)
-    n = values.size
-    n_a = condensed_values.size
-    if (float(n_a) // float(n)) < 0.8:
-        print(":D")
-        dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, condensed_values)
-        dm, cdm = upscale_dm_cdm(dm, condensed_values, values)
+def calculate_distance_matrix_map_without_duplicates(distance_function, values):
+    size = len(values)
+    matrix = np.full((size, size), -1.0, dtype=np.float32)
+    condensed_matrix = np.zeros(sum(range(1, size)), dtype=np.float32)
+
+    dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, values, matrix, condensed_matrix)
+    return {"distance_matrix": dm,
+            "condensed_distance_matrix": cdm,
+            "affinity_matrix": am,
+            "min_distance": mi,
+            "max_distance": ma}
+
+
+def calculate_distance_matrix_map_with_duplicates(distance_function, values):
+    unique_values = np.array(list(set(values)), dtype=np.str)
+    size = len(values)
+    size_unique = len(unique_values)
+
+    if (float(size_unique) // float(size)) < 0.8:
+        matrix = np.full((size_unique, size_unique), -1.0, dtype=np.float32)
+        condensed_matrix = np.zeros(sum(range(1, size_unique)), dtype=np.float32)
+
+        dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, unique_values, matrix, condensed_matrix)
+        dm, cdm = upscale_dm_cdm(dm, unique_values, values)
         am = calculate_affinity_matrix_from_distance_matrix(dm)
-        return dm, cdm, am, mi, ma
+        return {"distance_matrix": dm,
+                "condensed_distance_matrix": cdm,
+                "affinity_matrix": am,
+                "min_distance": mi,
+                "max_distance": ma}
     else:
-        return calculate_distance_matrix_map_jit(distance_function, values)
+        return calculate_distance_matrix_map_without_duplicates(distance_function, values)
 
 
 if __name__ == "__main__":
@@ -248,13 +231,15 @@ if __name__ == "__main__":
     start = datetime.now()
     x = calculate_distance_matrix_map(
         distance_function,
-        values
+        values,
+        True
     )
     print("Compile:", datetime.now() - start, ":", x)
     # print(type(b))
     start = datetime.now()
     x = calculate_distance_matrix_map(
         distance_function,
-        values
+        values,
+        True
     )
     print("Normal:", datetime.now() - start, ":", x)
