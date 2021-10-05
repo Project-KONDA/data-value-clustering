@@ -5,9 +5,6 @@ from datetime import datetime
 import numpy as np
 from numba import njit
 
-from scipy.spatial.distance import is_valid_y
-
-
 def get_condensed(matrix):
     size = len(matrix)
     condensed = np.zeros(sum(range(1, size)))
@@ -94,40 +91,6 @@ def calculate_distance_matrix(distance_function, values):
     return matrix
 
 
-def calculate_condensed_distance_matrix_from_distance_matrix(distance_matrix):
-    size_y = sum(range(len(distance_matrix)))
-    condensed_distance_matrix = np.zeros(size_y)
-
-    i = 0
-    for y in range(len(distance_matrix)):
-        for x in range(y + 1, len(distance_matrix)):
-            condensed_distance_matrix[i] = distance_matrix[x, y]
-            i += 1
-    assert (i == len(condensed_distance_matrix))
-
-    if is_valid_y(condensed_distance_matrix):
-        return condensed_distance_matrix
-    else:
-        return None
-
-
-def calculate_condensed_distance_matrix(distance_function, values):
-    size_y = sum(range(len(values)))
-    condensed_distance_matrix = np.zeros(size_y)
-
-    i = 0
-    for y in range(len(values)):
-        for x in range(y + 1, len(values)):
-            condensed_distance_matrix[i] = distance_function(values[x], values[y])
-            i += 1
-    assert (i == len(condensed_distance_matrix))
-
-    if is_valid_y(condensed_distance_matrix):
-        return condensed_distance_matrix
-    else:
-        return None
-
-
 def calculate_affinity_matrix(distance_function, values):
     distance_matrix = calculate_distance_matrix(distance_function, values)
     return calculate_affinity_matrix_from_distance_matrix(distance_matrix)
@@ -136,10 +99,6 @@ def calculate_affinity_matrix(distance_function, values):
 @njit
 def calculate_affinity_matrix_from_distance_matrix(distance_matrix):
     affinity_matrix = 1 - (distance_matrix / np.amax(distance_matrix))
-
-    # for i in range(len(affinity_matrix)):
-    #     for j in range(i):
-    #         affinity_matrix[i,j] = affinity_matrix[j,i]
 
     assert np.amax(affinity_matrix) <= 1
     assert np.amin(affinity_matrix) >= 0
