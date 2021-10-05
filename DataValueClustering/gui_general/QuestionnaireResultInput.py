@@ -80,7 +80,7 @@ class QuestionnaireResultInput(ABC):
             j = start_row + i
             self.answers[i] = IntVar()
             self.answers[i].set(int(self.config_default[i]))
-            self.checks[i] = Checkbutton(self.scrollable_questions_frame, variable=self.answers[i], command=self.selection_changed, bg='white', text=question, anchor='nw', padx=20)
+            self.checks[i] = Checkbutton(self.scrollable_questions_frame, variable=self.answers[i], command=lambda j=i: self.selection_changed(j), bg='white', text=question, anchor='nw', padx=20)
             self.checks[i].grid(row=j + 5, column=0, sticky='nw')
             if self.m > 5:
                 message = str(self.config_notes[i])
@@ -146,7 +146,7 @@ class QuestionnaireResultInput(ABC):
                 self.answers[i].set(False)
             self.visible[i] = should_visible
 
-    def selection_changed(self):
+    def selection_changed(self, j=None):
         self.update_visibility()
         self.apply()
 

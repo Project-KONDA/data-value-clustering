@@ -1,4 +1,5 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button, Canvas, CENTER
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button, Canvas, CENTER, messagebox
+from tkinter.messagebox import WARNING
 
 import gui_abstraction.abstraction_questions
 from gui_general import CreateToolTip
@@ -124,9 +125,16 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         answers_of_selected_option = self.predefined_abstractions[np.where(self.predefined_abstractions[:, 0] == selected_option)][:, 1][0]
         self.update_check_buttons(answers_of_selected_option)
 
-    def selection_changed(self):
-        super().selection_changed()
+    def selection_changed(self, j=None):
+        super().selection_changed(j)
         self.selected_predefined_option.set(MANUAL_CONFIG)
+
+        if j == len(self.answers)-1 and not self.answers[len(self.answers)-1].get() and (self.data is None or len(self.data) > 200):
+            if not messagebox.askokcancel("Duplicate removal",
+                                          "We advice you to enable duplicate removal since its deactivation will typically increase run times dramatically."
+                                          "\nDo you really want to disable duplicate removal?",
+                                          icon=WARNING, parent=self.root):
+                self.answers[len(self.answers) - 1].set(1)
 
     def apply(self):
         if self.data is None:
