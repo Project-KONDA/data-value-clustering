@@ -180,6 +180,41 @@ def calculate_affinity_matrix_from_distance_matrix(distance_matrix):
     return affinity_matrix
 
 
+def upscale_dm_cdm(distance_matrix, abstracted_values, original_values):
+    n = original_values.size
+    n_a = abstracted_values.size
+    abstracted = list(abstracted_values)
+    if n_a == n:
+        return distance_matrix
+    index = list()
+    for v in original_values:
+        index.append(abstracted.index(v))
+    print(distance_matrix)
+    dm = np.full((n, n), -1)
+    for i, a in enumerate(index):
+        for j, b in enumerate(index):
+            dm[i, j] = \
+                distance_matrix[(a, b)]
+    cdm = get_condensed(dm)
+    print(dm)
+    return dm, cdm
+
+
+def calculate_distance_matrix_with_duplicates(distance_function, values):
+    condensed_values = np.array(list(set(values)), dtype=np.str)
+    print(condensed_values)
+    n = values.size
+    n_a = condensed_values.size
+    if (float(n_a) // float(n)) < 0.8:
+        print(":D")
+        dm, cdm, am, mi, ma = calculate_distance_matrix_map_jit(distance_function, condensed_values)
+        dm, cdm = upscale_dm_cdm(dm, condensed_values, values)
+        am = calculate_affinity_matrix_from_distance_matrix(dm)
+        return dm, cdm, am, mi, ma
+    else:
+        return calculate_distance_matrix_map_jit(distance_function, values)
+
+
 if __name__ == "__main__":
     # from gui_distances.matrix_plots import plot_box, plot_histogram, plot_image, plot_at_y
     #
