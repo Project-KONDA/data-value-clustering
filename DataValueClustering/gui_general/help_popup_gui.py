@@ -7,7 +7,7 @@ from gui_general.scrollable_frame import create_scrollable_frame
 def menu_help_result(master):
     """help popup for Clustering Result & Evaluation view"""
     text = [
-        "The Clustering Result & Evaluation view provides information on the calculated clustering and supports you in validating it. In the top left, quantitative meta-information on the calculated clustering are given.",
+        "The Clustering Result & Evaluation view provides information on the calculated clustering and supports you validating it. In the top left, quantitative meta-information on the calculated clustering are given.",
         "",
         ["MDS Scatter Plot"],
         "Below, the MDS Scatter Plot gives an overview of the clustering. Each dot represents an abstracted data value. The distances between the dots represent the dissimilarities between the abstracted data values. Therefore, the closer the dots are, the similar the values are. Each cluster is represented by a different colour. The noisy values are presented as black dots. This plot allows you to quickly get an overview of the compactness and separation of the clustering.",
@@ -89,7 +89,7 @@ def menu_help_cost_map(master):
         "The left input fields represent groups of characters. Please enumerate all characters, that should be in the group. Note, that the interface supports sequences like 'a-z' or 'A-Z' for letters and '0-9' for digits. Only the first occurrence of a character in one of the groups is relevant. The last row and column represent all characters not mentioned in the lines above.",
         "You are free to modify the character groups. The default groups are automatically derived from the abstraction configuration. You also can add new groups i.e. lines via the '+' button or remove the last group via the '-' button. To reset the groups correspondingly, press the 'Reset' button.",
         "",
-        "Note that some characters actually represent features that were removed by the abstraction. For example, depending on the abstraction configuration, '1' may represent any integer. This mapping between characters and the represented features that were abstracted is provided in the second column.",
+        "Note that some characters represent features that were removed by the abstraction. For example, depending on the abstraction configuration, '1' may represent any integer. This mapping between characters and the represented features that were abstracted is provided in the second column.",
         "",
         ["Weights"],
         "You must enter the weights of character deletions (first column), insertions (first row) and substitution (rest of the matrix) as numbers. The first column and row represent the empty string. Here the weights of deleting and inserting the corresponding character are entered. The weight in row i and column j represents the weight for substituting the characters represented by row i by characters represented by column j. Only the relative size of the weights matters. The dissimilarity measure between two values shall be symmetrical. That means the distance from value A to value B is the same as from B to A. Because of this, the matrix is mirrored on the diagonal. The entry fields above the diagonal are read-only.",
@@ -139,15 +139,15 @@ def menu_help_blob_input(master):
 def menu_help_distance_slider(master):
     """help popup for Dissimilarity Configuration - Sliders view"""
     text = [
-        "The Matrix view is a View for the Configuration of the Dissimilarities between values. It allows you to configure the weights via sliders. The weights represent the dissimilarities between character groups. You should specify these weights based on your domain knowledge, which means based on your understanding on how different the characters are in the context of the data field that you want to analyse.",
+        "The Sliders view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of certain characters or character sequences on the dissimilarity between data values in which they occur. These weights are specified via sliders. You should choose the weights based on your domain knowledge about the data field analysed.",
         "",
         ["Character Groups"],
-        "On the left-hand side, the character groups are specified via enumerations of characters. Only the first occurrence of a character in one of the groups is relevant. The last line represents all characters not mentioned in the previous lines.",
-        "Note that some characters actually represent features that were removed by the abstraction. For example, depending on the abstraction configuration, '1' may represent any integer. This mapping between characters and the represented features that were abstracted is provided in the column 'Mapping'.",
-        "ou are free to modify the character groups, thus move characters between groups. You can add and remove groups, i.e. lines via the '+' and '-' buttons. The default groups are automatically derived from the abstraction configuration and serve as a good starting point. To reset the groups correspondingly, press the 'Reset' button.",
+        "The Sliders view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of certain characters or character sequences on the dissimilarity between data values in which they occur. These weights are specified via sliders. You should choose the weights based on your domain knowledge about the data field analysed.",
+        "When activating 'Custom Character Groups', another column appears on the left-hand side containing an entry field per group. This column allows you to modify the groups. Here abstracted features are not represented by the descriptive label but by the single character to which they were abstracted. The meaning of these characters is indicated by the middle column. Again, the tooltips provide explanations. You can move characters between die entry fields to move them between groups. Note that only the first occurrence of a character in one of the groups is relevant. Rows with empty entries will be ignored. Characters which are not present in the abstracted data values are ignored. The last line represents all characters not mentioned in the previous lines. You can add and remove groups, i.e. lines, via the '+' and '-' buttons.  The default groups are automatically derived from the abstraction configuration and serve as a good starting point. To reset the groups correspondingly, press the 'Reset' button.",
         "",
         ["Weights"],
-        "Per character group, you specify the weight via the slider given on the right-hand side. This input method is limited, such that you only specify the relative importance of certain character groups concerning the dissimilarity between data values. Thus, higher weights for a character group mean more dissimilarity caused by the presence of these characters in data values. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
+        "Per group, you can specify the weight via the slider given on the right-hand side. This input method is limited such that you only specify the relative influence of characters (and character sequences) on the dissimilarity between data values. Thus, higher weights for a group mean more dissimilarity caused by the presence of these characters in data values. A weight of zero means these characters do not have any influence on the dissimilarity. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
+        "To specify the weights more flexibly, choose Expert Mode.",
         "",
         ["Confirm & Discard"],
         "To confirm your modifications of the weights, press the 'OK' button.",
@@ -170,13 +170,14 @@ def menu_help_distance_choice(master):
 def menu_help_abstraction(master):
     """help popup for Abstraction Configuration view"""
     text = [
-        "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data values. The result of applying the abstraction is a smaller set of shorter values, the abstracted values. This represents a first grouping of the data values.",
+        "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data values based on your domain knowledge. The result of applying the abstraction is a smaller set of shorter values, the abstracted values. This represents a first grouping of the data values, which we call Simple Clustering.",
         "",
         ["Questionnaire"],
-        "To achieve an abstraction that fits your data, you should answer the questions on the left-hand side. You can start with one of the predefined configurations if you like. When answering the questions, please use your domain knowledge about the selected data and data field to decide which features of the data values are irrelevant for clustering. Make sure that you do not abstract from features that you do not expect or that may alter the data values’ meaning significantly. Note that each question is explained in detail in the corresponding tooltip shown when hovering over the question.",
+        "To achieve an abstraction that fits your data, you should answer the questions based on your domain knowledge. You can start with one of the predefined configurations if you like, but you should carefully read and answer each question since the abstraction has great influence on the final clustering. Note that each question is explained in detail in the corresponding tooltip shown when hovering over the question. Some questions are dynamically enabled/disabled depending on your answers to related questions.",
+        "When answering the questions, please use your domain knowledge about the selected data and data field to decide which features of the data values are irrelevant for clustering. You should abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly.",
         "",
         ["Result Preview"],
-        "On the right-hand side, the result of applying the abstraction to the first 100 data values is shown and updated dynamically.",
+        "The result of applying the configured abstraction to the first 100 data values is shown upon clicking the button on the right-hand side. Hence, this is a preview of the Simple Clustering. Each cluster is represented by a yellow block of text showing the contained values. The preview is updated dynamically when you modify your answers.",
         "",
         ["Confirm & Discard"],
         "To confirm your configuration of the abstraction, press the 'OK' button.",
@@ -210,18 +211,21 @@ def menu_help_data_selection(master):
 def menu_help_hub(master):
     """help popup for hub view"""
     text = [
-        "The Hub view is the central view of this program for data value clustering. The data value clustering requires you to perform 4 configuration steps:",
-        "data, abstraction, dissimilarity and clustering configuration.",
-        "The hub view allows you to navigate through the 4 configuration steps and access the calculated clustering subsequently.",
+        "The Hub view is the central view of this application for data value clustering. It allows you to navigate through the configuration steps and subsequently access the calculated clustering.",
         "",
         ["Configuration"],
-        "The configuration steps are performed in separate views which are opened upon clicking the corresponding button in the hub view. The configuration step required to be performed next is highlighted in blue. We advise you to perform the configuration steps from top to bottom, even though in some cases a different order is possible. On the right-hand side, you see previews of the 4 configurations.",
+        "The data value clustering typically requires you to perform 4 steps: You need to select the data, configure the abstraction for the simple clustering and configure both the dissimilarities and the clustering algorithm for the refined clustering.",
+        "The configuration steps are performed in separate views which are opened upon clicking the corresponding button in the hub view. The configuration step required to be performed next is highlighted in blue. For the Dissimilarities and the clustering algorithm, multiple configuration methods are supported. Some methods are designed for beginners, i.e. are easy to use, whereas others are designed for experts and thus allow more flexibility. We advise you to perform the configuration steps from top to bottom, even though in some cases a different order is possible. On the right-hand side, previews of the 4 configurations are shown.",
+        "Note that below each configuration button there is a small label indicating the status, i.e. whether no configuration is present, the configuration is in progress, the calculation is in progress or the calculation is done.",
         "",
         ["Execution"],
-        "Once configured, the data extraction and abstraction are performed automatically. This typically takes only a few seconds. But since dissimilarity calculation and clustering may take up to multiple hours, they are started manually by pressing the corresponding play button. Note that below each configuration button there is a small label indicating the status, i.e. whether no configuration is present, the configuration is in progress, the calculation is in progress or the calculation is done.",
+        "Once configured, the data extraction and abstraction are performed automatically. This typically takes only a few seconds. But since dissimilarity calculation and clustering may take up to multiple hours, they are started manually by pressing the corresponding play button.",
+        "",
+        ["Results"],
+        "Once calculated, you can access the simple and refined clustering via the corresponding buttons. In some cases, simple clustering may be sufficient. Then you do not need to configure the refined clustering. The refined clustering is presented to you together with a questionnaire for evaluating the clustering’s quality. After answering these questions you come back to the hub. Then advice concerning modifications of the configuration based on your answers is shown below the status labels.",
         "",
         ["Managing Configurations & Results"],
-        "You can save, load and reset your configuration via the menu. Once the clustering is ready, you can open the result view to see further information and perform the evaluation or save the clustering in an Excel file.",
+        "You can save, load and reset your configuration via the menu at the top of the window. Note that autosave is not supported.",
     ]
     menu_information_display(master, "Hub - Help", text)
 
