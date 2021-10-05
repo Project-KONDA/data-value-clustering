@@ -13,7 +13,7 @@ def get_condensed(matrix):
     condensed = np.zeros(sum(range(1, size)))
     i = 0
     for y in range(size):
-        for x in range(y):
+        for x in range(y+1, size):
             condensed[i] = matrix[x, y]
             i += 1
     return condensed
