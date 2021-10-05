@@ -107,7 +107,9 @@ abstraction_question_array = [
 
     [[], [], "unify", True,
      "Should duplicates be removed?",
-     "Recommended. Choose yes if ultimately duplicate abstracted values should be removed. Then the number of occurrences of an abstract value will not impact the clustering.\n"
-     "Choosing no will increase the run time." +
+     "Abstraction from duplicate data values. Then the number of occurrences of an abstract value will not impact the clustering.\n"
+     "We advice you to choose yes since choosing no will typically increase the run time dramatically.\n"
+     "If there are more than 1500 data values, we strongly advice you to choose yes to ensure acceptable run times of 3 hours maximum.\n" +
+     "If there are more than 40000 data values, you must choose yes to ensure that the clustering can be performed.\n"
      "For example, if all lower case letters are treated equally (cf. question 1), 'face' and 'tree' will be treated equally and one value will be removed."]  # 18
 ]
