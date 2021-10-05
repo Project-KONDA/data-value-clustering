@@ -85,20 +85,6 @@ def get_costmap_num(cost_map):
 
 
 @jit(nopython=True)
-def get_costmap_index(cost_map, c):
-    if not isinstance(cost_map, dict):
-        return -1
-    num = math.floor(math.sqrt(len(cost_map)))
-    for i in range(num):
-        for d in cost_map[i]:
-            if c == d:
-                return i
-        # if match(cost_map[i], c):
-        #     return i
-    raise ValueError("Error when trying to identify: " + c)
-
-
-@jit(nopython=True)
 def get_cost(cost_map_case, cost_map_weights, c1, index1, c2, index2):
     if c1 == c2:
         return 0
