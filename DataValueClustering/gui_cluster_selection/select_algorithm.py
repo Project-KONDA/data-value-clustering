@@ -14,7 +14,7 @@ def select_algorithm(master, predefined_algorithm=None, suggested_algorithms=Non
 class SelectAlgorithm:
     def __init__(self, master, predefined_algorithm=None, suggested_algorithms=None):
         self.root = Toplevel(master)
-        self.root.title("Data Selection")
+        self.root.title("Algorithm Selection")
         self.root.resizable(False, True)
 
         self.canceled = False
