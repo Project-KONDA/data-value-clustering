@@ -27,6 +27,7 @@ from gui_distances.costmapinput_helper import string_simplified_cost_map_split
 from gui_distances.distance_choice import DistanceView
 from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
+from gui_general.LoadingWindow import load_and_compile
 from gui_general.help_popup_gui import menu_help_hub
 from gui_general.scrollable_frame import create_scrollable_frame
 from gui_general.window_size import set_window_size_simple
@@ -101,7 +102,7 @@ class Hub:
 
     def __init__(self, loadpath=None):
 
-        self.compile_numba()
+        load_and_compile()
 
         "initialisation"
         self.root = Tk()
@@ -339,13 +340,6 @@ class Hub:
         if loadpath is not None:
             self.load(loadpath)
         self.root.mainloop()
-
-    def compile_numba(self):
-        cost_map = {(()): 100., 0: "", (0, 0): 1}
-        distance_f = get_weighted_levenshtein_distance(cost_map)
-        values_abstracted = np.array(["a", "b"])
-        duplicates_removed = True
-        calculate_distance_matrix_map(distance_f, values_abstracted, duplicates_removed)
 
     def set_selected_distance_option(self, value):
         self.selected_distance_option.set(value)
