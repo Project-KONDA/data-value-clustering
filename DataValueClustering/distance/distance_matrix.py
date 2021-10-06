@@ -40,11 +40,12 @@ def get_symmetric(matrix):
 def calculate_distance_matrix_map(distance_function, values, duplicates_removed):
     start = time.time()
     if duplicates_removed:
-        calculate_distance_matrix_map_without_duplicates(distance_function, values)
+        map = calculate_distance_matrix_map_without_duplicates(distance_function, values)
     else:
-        calculate_distance_matrix_map_with_duplicates(distance_function, values)
+        map = calculate_distance_matrix_map_with_duplicates(distance_function, values)
     end = time.time()
     print(end - start)
+    return map
 
 
 @njit
