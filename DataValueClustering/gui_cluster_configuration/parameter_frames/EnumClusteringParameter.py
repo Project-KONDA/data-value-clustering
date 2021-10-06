@@ -24,7 +24,6 @@ class EnumClusteringParameter(ClusteringParameter):
         super().__init__(parent, name, explanation, deactivatable, default_active, plot_function)
 
         assert default is not None, name
-        self.default = default
 
         self.validation_suggestions = None
         if suggestion is not None and self.name in suggestion:
@@ -35,6 +34,8 @@ class EnumClusteringParameter(ClusteringParameter):
         self.option_labels = self.options[:, 0]
         self.option_explanation = self.options[:, 1]
         self.option_labels_activated = self.option_labels
+
+        self.default = np.where(self.option_labels == default)[0][0]
 
         try:
             if previous_value is None:
