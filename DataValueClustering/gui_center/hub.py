@@ -11,6 +11,8 @@ import sys
 import xlsxwriter
 
 from clustering.hierarchical_clustering import hierarchical_method_config, METHOD
+from distance import calculate_distance_matrix_map
+from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_abstraction.abstraction_questions import abstraction_question_array
@@ -98,6 +100,8 @@ def data_name_from_path(data_path):
 class Hub:
 
     def __init__(self, loadpath=None):
+
+        self.compile_numba()
 
         "initialisation"
         self.root = Tk()
@@ -335,6 +339,13 @@ class Hub:
         if loadpath is not None:
             self.load(loadpath)
         self.root.mainloop()
+
+    def compile_numba(self):
+        cost_map = {(()): 100., 0: "", (0, 0): 1}
+        distance_f = get_weighted_levenshtein_distance(cost_map)
+        values_abstracted = np.array(["a", "b"])
+        duplicates_removed = True
+        calculate_distance_matrix_map(distance_f, values_abstracted, duplicates_removed)
 
     def set_selected_distance_option(self, value):
         self.selected_distance_option.set(value)
