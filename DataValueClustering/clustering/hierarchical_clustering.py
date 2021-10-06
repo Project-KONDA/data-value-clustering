@@ -16,9 +16,9 @@ METHOD = "method"
 
 
 def hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold,
-                                                               criterion, depth=2, monocrit=None):
+                                                               criterion, depth=2):
     return lambda distance_matrix_map, values: hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold,
-                                                               criterion, depth, monocrit)
+                                                               criterion, depth)
 
 
 def hierarchical_args(method, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
@@ -61,12 +61,12 @@ def generate_linkage_matrix(condensed_distance_matrix, values, method):
     return linkage(condensed_distance_matrix, method)
 
 
-def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
+def hierarchical_lm(linkage_matrix, values, n_clusters, distance_threshold, criterion, depth=2):
     # show_dendrogram(linkage_matrix, values)
     if not (n_clusters is None):
-        return decrease_by_one(fcluster(linkage_matrix, n_clusters, criterion, depth, None, monocrit))
+        return decrease_by_one(fcluster(linkage_matrix, n_clusters, criterion, depth, None))
     elif not (distance_threshold is None):
-        return decrease_by_one(fcluster(linkage_matrix, distance_threshold, criterion, depth, None, monocrit))
+        return decrease_by_one(fcluster(linkage_matrix, distance_threshold, criterion, depth, None))
 
 
 def decrease_by_one(clusters):

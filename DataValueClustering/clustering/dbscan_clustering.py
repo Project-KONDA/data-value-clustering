@@ -13,14 +13,14 @@ EPS = "eps"
 MIN_SAMPLES = "min_samples"
 
 
-def dbscan(distance_matrix, values, eps=0.5, min_samples=5, n_jobs=None):
+def dbscan(distance_matrix, values, eps=0.5, min_samples=5):
     # show_k_distance_graph(distance_matrix, min_samples)
-    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed', n_jobs=n_jobs).fit_predict(distance_matrix)
+    clusters = DBSCAN(eps=eps, min_samples=min_samples, metric='precomputed').fit_predict(distance_matrix)
     return clusters
 
 
-def dbscan_args(eps, min_samples, n_jobs):
-    return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples, n_jobs)
+def dbscan_args(eps, min_samples):
+    return lambda distance_matrix_map, values: dbscan(distance_matrix_map["distance_matrix"], values, eps, min_samples)
 
 
 def dbscan_min_samples_config(no_values):

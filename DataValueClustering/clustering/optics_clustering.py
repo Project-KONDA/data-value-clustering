@@ -16,19 +16,15 @@ MAX_EPS = "max_eps"
 
 
 def optics(distance_matrix, values,
-           min_samples=5, max_eps=np.inf, cluster_method='xi', eps=None,
-           xi=0.05, predecessor_correction=True, min_cluster_size=None, n_jobs=None):
+           min_samples=5, max_eps=np.inf, xi=0.05, predecessor_correction=True, min_cluster_size=None):
     clusters = OPTICS(
-        min_samples=min_samples, metric='precomputed', max_eps=max_eps, cluster_method=cluster_method, eps=eps,
-        xi=xi, predecessor_correction=predecessor_correction, min_cluster_size=min_cluster_size,
-        n_jobs=n_jobs).fit_predict(distance_matrix)
+        min_samples=min_samples, metric='precomputed', max_eps=max_eps,
+        xi=xi, predecessor_correction=predecessor_correction, min_cluster_size=min_cluster_size).fit_predict(distance_matrix)
     return clusters
 
 
-def optics_args(min_samples, max_eps, cluster_method, eps, xi, predecessor_correction, min_cluster_size,
-                          n_jobs):
-    return lambda distance_matrix_map, values: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, cluster_method,
-                          eps, xi, predecessor_correction, min_cluster_size, n_jobs)
+def optics_args(min_samples, max_eps,  xi, predecessor_correction, min_cluster_size):
+    return lambda distance_matrix_map, values: optics(distance_matrix_map["distance_matrix"], values, min_samples, max_eps, xi, predecessor_correction, min_cluster_size)
 
 
 def optics_min_samples_config(no_values):
