@@ -102,7 +102,7 @@ class SliderInput:
             self.title.grid(sticky='nswe', row=0, column=0, columnspan=8, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=0, columnspan=8, pady=(0, 10))
 
-        self.label_warning = Label(self.root, text="", wraplengt=800, bg=warning_color, anchor='center', justify='center', borderwidth=1, relief="solid")
+        self.label_warning = Label(self.root, text="", wraplengt=800, bg=warning_color, anchor='nw', justify='left', borderwidth=1, relief="solid")
         self.label_warning.grid(sticky='ns', row=3, column=0, columnspan=8, pady=(0, 10), padx=10)
 
         CreateToolTip(self.button_reset, "Reset character groups to original groups derived from abstraction and reset values.")

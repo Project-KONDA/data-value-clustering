@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter.font import Font
+
 import numpy as np
 
 from gui_distances.distance_warnings import create_array_of_empty_lists, redundant_char_warning, update_label_text, \
@@ -64,17 +66,21 @@ class CostMapInput:
         menu.add_command(label='Help', command=lambda: menu_help_cost_map(self.root))
         self.root.config(menu=menu)
 
+        heading = "Weight the influence of characters on the dissimilarity between data values"
+        font = Font(family="TkDefaultFont", size=12, weight="bold")
         self.title = Label(self.root,
-                           text="Weight the influence of characters on the dissimilarity between data values",
+                           text=heading,
                            bg="white",
-                           font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
+                           font=font, anchor='c', justify="center")
+
+        caption_width = font.measure(heading)
 
         self.hint = Label(self.root,
-                          text="Choose heigher weights for characters that you do not expect to find frequently in the data values\nand that may cause great dissimilarity.",
-                          bg="white", anchor='c', justify="center")
+                          text="Choose heigher weights for characters that you do not expect to find frequently in the data values and that may cause great dissimilarity.",
+                          bg="white", anchor='c', justify="center",  wraplength=caption_width)
 
         if suggestion is not None:
-            self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplengt=800,
+            self.label_suggested = Label(self.root, text="Advice based on the evaluation: " + suggestion, wraplength=caption_width,
                                          bg="white", anchor='w', fg='blue', justify='left')
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 0))
@@ -83,8 +89,8 @@ class CostMapInput:
             self.title.grid(sticky='nswe', row=0, column=1, columnspan=4, pady=(10, 0))
             self.hint.grid(sticky='nswe', row=1, column=1, columnspan=4, pady=(0, 10))
 
-        self.label_warning = Label(self.root, text="", wraplengt=800, bg=warning_color, anchor='center',
-                                   justify='center', borderwidth=1, relief="solid")
+        self.label_warning = Label(self.root, text="", wraplength=caption_width, bg=warning_color, anchor='nw',
+                                   justify='left', borderwidth=1, relief="solid")
         self.label_warning.grid(sticky='ns', row=3, column=1, columnspan=4, pady=(0, 10), padx=10)
 
         # Frames and Canvas
