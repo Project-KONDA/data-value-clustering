@@ -41,7 +41,7 @@ class ResultView:
         self.root.title("Clustering Result & Evaluation")
         self.root.config(bg='white')
         self.root.resizable(False, True)
-        if master.icon:
+        if hasattr(master, "icon"):
             self.root.icon = master.icon
             self.root.iconphoto(False, master.icon)
 

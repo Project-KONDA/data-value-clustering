@@ -44,7 +44,7 @@ class QuestionnaireResultInput(ABC):
         self.root.config(bg='white')
         self.root.resizable(False, True)
         # self.root.grid_rowconfigure(1, minsize=400)
-        if master.icon:
+        if hasattr(master, "icon"):
             self.root.icon = master.icon
             self.root.iconphoto(False, master.icon)
 

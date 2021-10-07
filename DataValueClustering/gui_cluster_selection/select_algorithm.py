@@ -16,7 +16,7 @@ class SelectAlgorithm:
         self.root = Toplevel(master)
         self.root.title("Algorithm Selection")
         self.root.resizable(False, True)
-        if master.icon:
+        if hasattr(master, "icon"):
             self.root.icon = master.icon
             self.root.iconphoto(False, master.icon)
 

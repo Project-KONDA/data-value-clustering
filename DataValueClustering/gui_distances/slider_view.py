@@ -60,7 +60,7 @@ class SliderInput:
 
         self.root = Toplevel(self.master, bg="white")
         self.root.title("Distance Configuration - Sliders")
-        if master.icon:
+        if hasattr(master, "icon"):
             self.root.icon = master.icon
             self.root.iconphoto(False, master.icon)
 

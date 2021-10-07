@@ -17,6 +17,7 @@ SUB_EXPLANATION = "Each blob represents a group of characters and character sequ
                   "Increase the distance between two blobs to increase the influence of corresponding substitutions. " \
                   "Increase the size of a blob to increase the influence of substitutions within the corresponding group."
 
+
 def input_blobs(root, config, suggestion=None):
     blobs = BlobInput(root, config, suggestion)
     config_method, cost_map, new_config = blobs.get()
@@ -50,9 +51,6 @@ class BlobInput:
         self.master = master
         self.root = Toplevel(self.master)
         self.root.title('Dissimilarity Configuration - Blobs')
-        if master.icon:
-            self.root.icon = master.icon
-            self.root.iconphoto(False, master.icon)
 
         self.root.focus_force()
         self.root.grab_set()
@@ -60,13 +58,18 @@ class BlobInput:
         self.matrix_costmap = None
 
         """Frame"""
-        self.window_size = 3/4
+        self.window_size = 3 / 4
         self.w = int(self.root.winfo_screenwidth() * self.window_size)
         self.h = int(self.root.winfo_screenheight() * self.window_size)
         self.x = self.w // 2
         self.y = self.h // 2
         self.diagonal = int(sqrt(self.w * self.w + self.h * self.h))
-        self.root.geometry(f"{self.w}x{self.h}+{self.w // 6}+{self.h // 6}")
+        if hasattr(master, "icon"):
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
+            self.root.geometry(f"{self.w}x{self.h + 20}+{self.w // 6}+{self.h // 6}")
+        else:
+            self.root.geometry(f"{self.w}x{self.h}+{self.w // 6}+{self.h // 6}")
         self.root.resizable(False, False)
         # self.root.minsize(400, 300)
         # self.root.maxsize(self.root.winfo_screenwidth(), self.root.winfo_screenheight())
@@ -124,24 +127,25 @@ class BlobInput:
         # TODO: place texts dependent on character height/width
 
         self.canvas.bind("<Motion>", self.canvas_blob_info)
-        self.canvas.text = self.canvas.create_text(10, self.canvas_h * 26/ 30, text="", anchor="nw")
+        self.canvas.text = self.canvas.create_text(10, self.canvas_h * 26 / 30, text="", anchor="nw")
 
         self.canvas.explanation = self.canvas.create_text(text_x, text_y,
-                                                     text=EXPLANATION,
-                                                     anchor="nw", font=('TkDefaultFont', 12, 'bold'), width=text_w)
+                                                          text=EXPLANATION,
+                                                          anchor="nw", font=('TkDefaultFont', 12, 'bold'), width=text_w)
         explanation_bounds = self.canvas.bbox(self.canvas.explanation)
         explanation_height = explanation_bounds[3] - explanation_bounds[1]
 
         self.canvas.sub_explanation = self.canvas.create_text(text_x, text_y + explanation_height,
-                                                     text=SUB_EXPLANATION,
-                                                     anchor="nw", width=text_w)
+                                                              text=SUB_EXPLANATION,
+                                                              anchor="nw", width=text_w)
 
         sub_explanation_bounds = self.canvas.bbox(self.canvas.sub_explanation)
         sub_explanation_height = sub_explanation_bounds[3] - sub_explanation_bounds[1]
 
         if suggestion is not None:
-            self.canvas.suggestion = self.canvas.create_text(text_x, text_y + sub_explanation_height, text="Advice based on the evaluation: " + suggestion, anchor="nw", width=text_w)
-
+            self.canvas.suggestion = self.canvas.create_text(text_x, text_y + sub_explanation_height,
+                                                             text="Advice based on the evaluation: " + suggestion,
+                                                             anchor="nw", width=text_w)
 
         """Build Blobs"""
         self.blobs = np.empty(len(config), dtype=Blob)
@@ -151,7 +155,7 @@ class BlobInput:
                 info = split_info[1]
             else:
                 info = split_info[0]
-            info = info[0:len(info)-1]
+            info = info[0:len(info) - 1]
             self.blobs[i] = Blob(self, label=self.labels[i], regex=self.regexes[i], resizable=self.resizable[i],
                                  info=info, rel_x=self.coordinates[i, 0], rel_y=self.coordinates[i, 1],
                                  rel_size=self.sizes[i])
@@ -183,10 +187,10 @@ class BlobInput:
         self.button_ok.place(anchor='se', x=self.w - self.gui_spacing - 1, y=self.h - self.gui_spacing)
 
         self.button_expert = Button(self.root, text='Expert', command=self.expert_view,
-                                width=self.button_w, height=self.button_h, bg='black', border=0,
-                                image=self.button_image_expert)
+                                    width=self.button_w, height=self.button_h, bg='black', border=0,
+                                    image=self.button_image_expert)
         # self.button_expert.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
-        self.button_expert.place(anchor='s', x=self.w//2, y=self.h - self.gui_spacing)
+        self.button_expert.place(anchor='s', x=self.w // 2, y=self.h - self.gui_spacing)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
@@ -202,7 +206,6 @@ class BlobInput:
         self.canvas.unbind_all("<ButtonRelease-1>")
         self.canvas.unbind_all("<B1-Motion>")
         self.canvas.unbind_all("<ButtonPress-1>")
-
 
     def canvas_blob_info(self, event):
         """On mouse over show Information of Blob in Canvas"""
@@ -327,7 +330,8 @@ class BlobInput:
     def expert_view(self):
         config_method, costmap, config = self.get()
         self.matrix_costmap = input_costmap(self.root, regexes=list(config[1:, 1]), costmap=costmap, empty=False,
-                                            abstraction=config[1:, 0:4], suggestion=self.suggestion, configuration=config)
+                                            abstraction=config[1:, 0:4], suggestion=self.suggestion,
+                                            configuration=config)
         if self.matrix_costmap is not None:
             self.close()
 
@@ -365,7 +369,7 @@ if __name__ == '__main__':
                  True]
     min_config = get_blob_configuration(min_blobs)
     # print(len(min_config), min_config)
-    costmap, config = BlobInput(Tk(),min_config).get()
+    costmap, config = BlobInput(Tk(), min_config).get()
     print_cost_map(costmap)
 
     # max_blobs = [False, False, True, True, True, True, True, True, True,
