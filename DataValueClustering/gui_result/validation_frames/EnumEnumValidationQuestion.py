@@ -25,10 +25,8 @@ class EnumEnumValidationQuestion(EnumValidationQuestion):
             self.check_buttons_per_answer[i] = []
             self.check_vars_per_answer[i] = []
 
-        pixelVirtual = PhotoImage(width=1, height=1)
-
         for i, answer in enumerate(answers):
-            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j), wraplength=question_break-22, compound="c", width=question_break-22, image=pixelVirtual)
+            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j))
             if answer[3]:
                 assert self.check_labels_per_answer[i] is not None
                 assert self.check_labels_per_answer[i]
