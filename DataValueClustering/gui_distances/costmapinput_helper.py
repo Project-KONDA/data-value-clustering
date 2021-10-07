@@ -45,6 +45,7 @@ def groups_to_enumerations(s):
     s = replace_interval_by_enumeration(alphabet, regex_alphabet, s)
     s = replace_interval_by_enumeration(alphabet_capitalized, regex_alphabet_capitalized, s)
     s = replace_interval_by_enumeration(digits, regex_digits, s)
+    s = s.replace("\-", "-")
     return s
 
 
