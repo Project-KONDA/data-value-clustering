@@ -109,7 +109,7 @@ class Hub:
         self.root = Tk()
         self.root.title(TITLE)
 
-        ico = Image.open('..\\gui_general\\logo_loading.png')
+        ico = Image.open('..\\gui_general\\logo.png')
         photo = ImageTk.PhotoImage(ico)
         self.root.iconphoto(False, photo)
 
