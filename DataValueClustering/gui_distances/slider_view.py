@@ -58,9 +58,12 @@ class SliderInput:
                     self.texts.append(costmap[(i + 1)])
                     self.values.append(costmap[(i + 1, 0)])
 
-        self.root = Toplevel(self.master)
+        self.root = Toplevel(self.master, bg="white")
         self.root.title("Distance Configuration - Sliders")
-        self.root.config(bg="white")
+        if master.icon:
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
+
         self.root.resizable(False, True)
         self.root.focus_force()
         self.root.grab_set()

@@ -24,6 +24,10 @@ class AddData:
         self.root.title("Data Addition")
         self.root.configure(bg="white")
         self.root.resizable(False, False)
+        if master.icon:
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
+
         self.root.grab_set()
         self.root.focus_force()
         self.canceled = False

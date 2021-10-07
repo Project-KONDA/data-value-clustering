@@ -39,6 +39,10 @@ class CostMapInput:
 
         self.root = Toplevel(master)
         self.root.resizable(True, True)
+        if master.icon:
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
+
         self.root.focus_force()
         self.root.grab_set()
 

@@ -41,6 +41,9 @@ class ResultView:
         self.root.title("Clustering Result & Evaluation")
         self.root.config(bg='white')
         self.root.resizable(False, True)
+        if master.icon:
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
 
         self.menu = Menu(self.root)
         self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root))

@@ -50,6 +50,10 @@ class BlobInput:
         self.master = master
         self.root = Toplevel(self.master)
         self.root.title('Dissimilarity Configuration - Blobs')
+        if master.icon:
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
+
         self.root.focus_force()
         self.root.grab_set()
         self.canceled = False

@@ -18,12 +18,15 @@ class ClusterConfigurationInput:
     '''
 
     def __init__(self, master, title, parameter_frame_inits, dependencies, suggestion=None):
-        self.root = Toplevel(master)
+        self.root = Toplevel(master, bg='white')
         self.root.title(title)
         self.root.resizable(False, True)
         self.root.minsize(200, 200)
         self.root.grid_rowconfigure(3, weight=1)
-        self.root.config(bg='white')
+        if master.icon:
+            self.root.icon = master.icon
+            self.root.iconphoto(False, master.icon)
+
         self.canceled = False
         self.root.focus_force()
         self.root.grab_set()

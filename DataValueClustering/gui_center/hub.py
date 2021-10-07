@@ -108,10 +108,9 @@ class Hub:
         "initialisation"
         self.root = Tk()
         self.root.title(TITLE)
-
-        ico = Image.open('..\\gui_general\\logo.png')
-        photo = ImageTk.PhotoImage(ico)
-        self.root.iconphoto(False, photo)
+        icon = Image.open('..\\gui_general\\logo.ico')
+        self.root.icon = ImageTk.PhotoImage(icon)
+        self.root.iconphoto(False, self.root.icon)
 
         self.root.configure(background='white')
 
