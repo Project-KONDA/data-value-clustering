@@ -146,11 +146,11 @@ def update_warnings(entry_list, label_warning, n, label_list, abstraction, toolt
                                     redundant_chars_per_entry[i].append(abstraction_char)
                                     redundant_char_warning(entry)
                                 elif len(mapping[1]) == 1:
-                                    abstraction_char_occurred = True
                                     update_label_text(abstraction_char, label_list[i], mapping[0])
                                     if tool_tips_labels[i] != "":
                                         tool_tips_labels[i] += "\n"
                                     tool_tips_labels[i] += mapping[3]
+                                abstraction_char_occurred = True
                             elif l == j == 0 and entry_char not in chars_in_abstraction and entry_char not in \
                                     undefined_chars_per_entry[i]:
                                 undefined_chars_per_entry[i].append(entry_char)
