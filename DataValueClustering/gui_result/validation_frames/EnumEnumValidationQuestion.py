@@ -6,11 +6,11 @@ from gui_center.hub_configuration import cluster_label_from_txt_name
 from gui_result.validation_frames.EnumValidationQuestion import EnumValidationQuestion
 
 
-def create_enum_int_validation_question(parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
-    return EnumIntValidationQuestion(parent, question_and_explanation, answers, result_view, question_break, previous, previous_cluster, check_labels)
+def create_enum_enum_validation_question(parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
+    return EnumEnumValidationQuestion(parent, question_and_explanation, answers, result_view, question_break, previous, previous_cluster, check_labels)
 
 
-class EnumIntValidationQuestion(EnumValidationQuestion):
+class EnumEnumValidationQuestion(EnumValidationQuestion):
     def __init__(self, parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
         assert (len(answers[0]) == 4)
         super().__init__(parent, question_and_explanation, answers, result_view, question_break, previous)
@@ -25,10 +25,8 @@ class EnumIntValidationQuestion(EnumValidationQuestion):
             self.check_buttons_per_answer[i] = []
             self.check_vars_per_answer[i] = []
 
-        pixelVirtual = PhotoImage(width=1, height=1)
-
         for i, answer in enumerate(answers):
-            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j), wraplength=question_break-22, compound="c", width=question_break-22, image=pixelVirtual)
+            self.radio_buttons[i].configure(command = lambda j=i: self.update_advice_and_activate_check_buttons(j))
             if answer[3]:
                 assert self.check_labels_per_answer[i] is not None
                 assert self.check_labels_per_answer[i]

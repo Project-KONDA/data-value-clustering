@@ -2,6 +2,17 @@
 from math import floor, sqrt
 import re
 
+alphabet = "abcdefghijklmnopqrstuvwxyz"
+alphabet_capitalized = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+digits = "0123456789"
+regex_alphabet = '[a-z]\\\-[a-z]'
+regex_alphabet_capitalized = '[A-Z]\\\-[A-Z]'
+regex_digits = '[0-9]\\\-[0-9]'
+
+regex_alphabet_pure = '[a-z]\\-[a-z]'
+regex_alphabet_capitalized_pure = '[A-Z]\\-[A-Z]'
+regex_digits_pure = '[0-9]\\-[0-9]'
+
 
 def is_number(string):
     try:
@@ -36,15 +47,10 @@ def character_escape(s):
 
 def groups_to_enumerations(s):
     s = s.replace("-", "\-")
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
-    alphabet_capitalized = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    digits = "0123456789"
-    regex_alphabet = '[a-z]\\\-[a-z]'
-    regex_alphabet_capitalized = '[A-Z]\\\-[A-Z]'
-    regex_digits = '[0-9]\\\-[0-9]'
     s = replace_interval_by_enumeration(alphabet, regex_alphabet, s)
     s = replace_interval_by_enumeration(alphabet_capitalized, regex_alphabet_capitalized, s)
     s = replace_interval_by_enumeration(digits, regex_digits, s)
+    s = s.replace("\-", "-")
     return s
 
 
@@ -150,15 +156,13 @@ def string_simplified_cost_map_split(map, abstraction):
         return "/"
     n = int(floor(sqrt(len(map))))
     text1 = ""
-    for i in range(1, n-1):
+    for i in range(1, n - 1):
         text1 += translate(i) + "\n"
     text1 += "<rest>"
     text2 = ""
     for i in range(1, n):
         text2 += str(map[0, i]) + "\n"
     return text1, text2
-
-
 
 
 def preprocess_regexes(regexlist):
