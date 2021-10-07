@@ -765,7 +765,7 @@ class Hub:
 
     def save(self):
         if self.configuration.json_save_path is not None:
-            self.root.title("Saving too " + self.configuration.json_save_path + " in progress ...")
+            self.root.title("Saving to " + self.configuration.json_save_path + " in progress ...")
             self.configuration.save_as_json()
             self.set_saved(True)
         else:
