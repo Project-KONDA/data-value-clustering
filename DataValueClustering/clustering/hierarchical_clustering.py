@@ -21,9 +21,9 @@ def hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold,
                                                                criterion, depth)
 
 
-def hierarchical_args(method, n_clusters, distance_threshold, criterion, depth=2, monocrit=None):
+def hierarchical_args(method, n_clusters, distance_threshold, criterion, depth=2):
     return lambda distance_matrix_map, values: hierarchical_lm(generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, method), values,
-                                                               n_clusters, distance_threshold, criterion, depth, monocrit)
+                                                               n_clusters, distance_threshold, criterion, depth)
 
 method_array = np.array([
     # dependencies, not-dependencies, value
