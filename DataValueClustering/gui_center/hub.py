@@ -2,13 +2,14 @@ import os
 import subprocess
 from math import floor, sqrt
 from tkinter import Tk, Button, Label, Frame, messagebox, Menu, Checkbutton, IntVar, LabelFrame, \
-    OptionMenu, StringVar
+    OptionMenu, StringVar, PhotoImage
 from pathlib import Path
 from tkinter.messagebox import WARNING, ERROR
 import numpy as np
 import sys
 
 import xlsxwriter
+from PIL import ImageTk, Image
 
 from clustering.hierarchical_clustering import hierarchical_method_config, METHOD
 from distance import calculate_distance_matrix_map
@@ -107,6 +108,11 @@ class Hub:
         "initialisation"
         self.root = Tk()
         self.root.title(TITLE)
+
+        ico = Image.open('..\\gui_general\\logo_loading.png')
+        photo = ImageTk.PhotoImage(ico)
+        self.root.iconphoto(False, photo)
+
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
