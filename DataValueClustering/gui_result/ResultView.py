@@ -23,7 +23,7 @@ from gui_result.validation_questionnaire import question_1_answers, question_2_a
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
 QUESTIONNAIRE_EXPLANATION = "Please answer the questions above so we can help you decide whether another iteration is necessary and how to modify the parameters correspondingly."
-NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration. Pay attention to the advice given in the configuration views in blue text."
+NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration with a modified configuration. Pay attention to the advice given in the hub and the configuration views in blue text."
 SATISFIED = "According to your answers above, you are satisfied with the clustering.\nCongratulations, you are done!"
 
 
