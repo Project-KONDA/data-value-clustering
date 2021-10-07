@@ -6,11 +6,11 @@ from gui_center.hub_configuration import cluster_label_from_txt_name
 from gui_result.validation_frames.EnumValidationQuestion import EnumValidationQuestion
 
 
-def create_enum_int_validation_question(parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
-    return EnumIntValidationQuestion(parent, question_and_explanation, answers, result_view, question_break, previous, previous_cluster, check_labels)
+def create_enum_enum_validation_question(parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
+    return EnumEnumValidationQuestion(parent, question_and_explanation, answers, result_view, question_break, previous, previous_cluster, check_labels)
 
 
-class EnumIntValidationQuestion(EnumValidationQuestion):
+class EnumEnumValidationQuestion(EnumValidationQuestion):
     def __init__(self, parent, question_and_explanation, answers, result_view, question_break, previous=None, previous_cluster=None, check_labels=None):
         assert (len(answers[0]) == 4)
         super().__init__(parent, question_and_explanation, answers, result_view, question_break, previous)

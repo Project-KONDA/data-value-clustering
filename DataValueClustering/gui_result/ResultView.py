@@ -15,7 +15,7 @@ from gui_general.help_popup_gui import menu_help_result
 from gui_general.scrollable_frame import create_scrollable_label_frame
 from gui_general.window_size import set_window_size_simple
 from gui_result.result_gui import show_mds_scatter_plot_integrated
-from gui_result.validation_frames.EnumIntValidationQuestion import create_enum_int_validation_question
+from gui_result.validation_frames.EnumEnumValidationQuestion import create_enum_enum_validation_question
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
 from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
     question_4_answers, ValidationAnswer, question_2, question_3, question_4, question_1
@@ -166,7 +166,7 @@ class ResultView:
         cluster_range_plus_noise = ["noise" if x==0 else x for x in cluster_range_plus]
         check_labels_per_answer = np.array([[], cluster_range_plus_noise], dtype=object)
         previosly_selected_check_labels = self.previous_cluster_file_names_to_labels(self.configuration.get_validation_answer_4()[1])
-        self.q4 = create_enum_int_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_4()[0], [[], previosly_selected_check_labels], check_labels_per_answer)
+        self.q4 = create_enum_enum_validation_question(self.questions_frame, question_4, question_4_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_4()[0], [[], previosly_selected_check_labels], check_labels_per_answer)
         self.q4.frame.grid(row=3, column=0, sticky='nsew')
 
         self.suggestion_frame = Frame(self.scrollable_frame_questionnaire, bg="white", width=line_break)
