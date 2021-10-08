@@ -145,14 +145,14 @@ def update_warnings(entry_list, label_warning, n, label_list, abstraction, toolt
                         if enable_input is not None:
                             enable_input(i)
                         for k, entry_char in enumerate(value):
+                            enum_match = False
+                            if 0 < k < len(value) - 1:
+                                s = value[k - 1] + entry_char + value[k + 1]
+                                match_alphabet = re.search(regex_alphabet_pure, s)
+                                match_alphabet_capitalized = re.search(regex_alphabet_capitalized_pure, s)
+                                match_digits = re.search(regex_digits_pure, s)
+                                enum_match = not (match_alphabet is None and match_alphabet_capitalized is None and match_digits is None)
                             if abstraction_char == entry_char:
-                                enum_match = False
-                                if 0 < k < len(value) - 1:
-                                    s = value[k - 1] + entry_char + value[k + 1]
-                                    match_alphabet = re.search(regex_alphabet_pure, s)
-                                    match_alphabet_capitalized = re.search(regex_alphabet_capitalized_pure, s)
-                                    match_digits = re.search(regex_digits_pure, s)
-                                    enum_match = not (match_alphabet is None and match_alphabet_capitalized is None and match_digits is None)
                                 if abstraction_char_occurred:
                                     if not enum_match:
                                         redundant_chars_per_entry[i].append(abstraction_char)
@@ -164,7 +164,7 @@ def update_warnings(entry_list, label_warning, n, label_list, abstraction, toolt
                                     tool_tips_labels[i] += mapping[3]
                                 abstraction_char_occurred = not enum_match
                             elif l == j == 0 and entry_char not in chars_in_abstraction and entry_char not in \
-                                    undefined_chars_per_entry[i]:
+                                    undefined_chars_per_entry[i] and not enum_match:
                                 undefined_chars_per_entry[i].append(entry_char)
                                 undefined_char_warning(entry)
     for i, entry in enumerate(entry_list):
