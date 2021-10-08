@@ -248,6 +248,10 @@ def menu_information_display(master, title, content):
     root.title("Help")
     root.configure(bg='white')
     root.resizable(False, True)
+    if hasattr(master, "icon"):
+        root.icon = master.icon
+        root.iconphoto(False, master.icon)
+
     width = root.winfo_screenwidth() // 2
     Label(root, text=title, font=('TkDefaultFont', 12, 'bold'),
           anchor=W, justify=LEFT, fg="dark green", background='white'
