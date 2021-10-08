@@ -5,7 +5,7 @@ from gui_general.scrollable_frame import create_scrollable_frame
 
 def menu_help_hub(master):
     """help popup for hub view"""
-    titel = "Hub"
+    caption = "Hub"
     text = [
         "The Hub view is the central view of this application for data value clustering. It allows you to navigate through the configuration steps and subsequently access the calculated clustering.",
         "",
@@ -23,12 +23,12 @@ def menu_help_hub(master):
         ["Managing Configurations & Results"],
         "You can save, load and reset your configuration via the menu at the top of the window. Note that autosave is not supported.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_data_selection(master):
     """help popup for Data Selection view"""
-    titel = "Data Selection"
+    caption = "Data Selection"
     text = [
         "The Data Selection view allows you to select the data set to be clustered. Each data set consists of a set of data values extracted from a database. When first starting the program, a few predefined data sets are available.",
         "To add a data set, press the '+' button below. For this, a local BaseX client is required.",
@@ -37,24 +37,24 @@ def menu_help_data_selection(master):
         "To confirm your data selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_data_add(master):
     """help popup for Data Addition view"""
-    titel = "Data Addition"
+    caption = "Data Addition"
     text = [
         "The Data Addition view allows you to add a data set to the list of supported data sets selectable in the Select Data view. Currently, only XML data is supported. For this, you must specify a name for the data set, which will be displayed in the Select Data view. Further, you must specify the XML file containing the data and specify the data field (i.e. XML element) of interest. Per default, the content of the corresponding XML elements will be extracted. Alternatively, you can specify an attribute whose value will be extracted.",
         "",
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_abstraction(master):
     """help popup for Abstraction Configuration view"""
-    titel = "Abstraction Configuration"
+    caption = "Abstraction Configuration"
     text = [
         "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data values based on your domain knowledge. The result of applying the abstraction is a smaller set of shorter values, the abstracted values. This represents a first grouping of the data values, which we call Simple Clustering.",
         "",
@@ -69,12 +69,12 @@ def menu_help_abstraction(master):
         "To confirm your configuration of the abstraction, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_distance_slider(master):
     """help popup for Dissimilarity Configuration - Sliders view"""
-    titel = "Dissimilarity Configuration - Sliders"
+    caption = "Dissimilarity Configuration - Sliders"
     text = [
         "The Sliders view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of certain characters or character sequences on the dissimilarity between data values in which they occur. These weights are specified via sliders. You should choose the weights based on your domain knowledge about the data field analysed.",
         "",
@@ -94,12 +94,12 @@ def menu_help_distance_slider(master):
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_blob_input(master):
     """help popup for Dissimilarity Configuration - Blobs view"""
-    titel = "Dissimilarity Configuration - Blobs"
+    caption = "Dissimilarity Configuration - Blobs"
     text = [
         "The Blob view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of the insertion, deletion and substitution of certain characters or character sequences on the dissimilarity between data values. This is done by moving and scaling graphical objects on a 2D canvas, which we call blobs. You should choose the weights based on your domain knowledge about the data field analysed.",
         "",
@@ -127,12 +127,12 @@ def menu_help_blob_input(master):
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_cost_map(master):
     """help popup for Dissimilarity Configuration - Matrix view"""
-    titel = "Dissimilarity Configuration - Matrix"
+    caption = "Dissimilarity Configuration - Matrix"
     text = [
         "The Matrix View allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of the insertion, deletion and substitution of certain characters or character sequences on the dissimilarity between data values. These weights are specified entirely flexible via numerical values.",
         "The weights for character deletions are represented by the '<delete>' column. Those for character insertions are represented by the '<insert>' row. The weight for substituting characters of group i by characters of group j (or vice versa) is represented by the cell in row i and column j and by the cell in row j and column i. You should choose the weights based on your domain knowledge about the data field analysed.",
@@ -155,12 +155,12 @@ def menu_help_cost_map(master):
         "To reset the whole matrix, press the 'Reset' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_clustering_selection(master):
     """help popup for Clustering Algorithm Selection view"""
-    titel = "Clustering Algorithm Selection"
+    caption = "Clustering Algorithm Selection"
     text = [
         "The Algorithm Selection view allows you to choose a clustering algorithm. The Tooltips provide information on the level of difficulty of the algorithm configuration and potential drawbacks of the algorithms. Typically hierarchical clustering achieves good results. That is why this algorithm is used when simple algorithm configuration is selected in Hub.",
         "",
@@ -174,12 +174,12 @@ def menu_help_clustering_selection(master):
         "To confirm your selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master,  titel, text)
+    menu_information_display(master,  caption, text)
 
 
 def menu_help_clustering_configuration(master):
     """help popup for Clustering Parameter Configuration view"""
-    titel = "Clustering Parameter Configuration"
+    caption = "Clustering Parameter Configuration"
     text = [
         "The Clustering Parameter Configuration view allows you to configure the chosen clustering algorithm, thus specifying its parameters.",
         "",
@@ -203,13 +203,13 @@ def menu_help_clustering_configuration(master):
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 
 def menu_help_result(master):
     """help popup for Clustering Result & Evaluation view"""
-    titel = "Clustering Result & Evaluation"
+    caption = "Clustering Result & Evaluation"
     text = [
         "The Clustering Result & Evaluation view provides information on the calculated clustering and supports you in evaluating it.",
         "",
@@ -233,22 +233,22 @@ def menu_help_result(master):
         "To confirm your evaluation answers, press the 'OK' button.",
         "To discard your evaluation answers, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
 def menu_help_distance_choice(master):  # REMOVED
     """help popup for Dissimilarity Configuration Method Selection view"""
-    titel = "Dissimilarity Configuration Method Selection"
+    caption = "Dissimilarity Configuration Method Selection"
     text = [
         "The Dissimilarity Configuration Method Selection view allows you to select a method for configuring the dissimilarity calculation, i.e. for weighting the similarity between character groups based on your domain knowledge. Currently, only the weighted Levenshtein distance is supported and can be configured via 3 different methods. The easier methods allow less flexibility. But as in most cases, the easiest method is sufficient to achieve useful results, we advise you to start with the easiest method, the Sliders View. Further note that once you use the Sliders or Matrix View, you cannot open your configuration via the Blobs View.",
         "",
         "To confirm your selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
     ]
-    menu_information_display(master, titel, text)
+    menu_information_display(master, caption, text)
 
 
-def menu_information_display(master, title, content):
+def menu_information_display(master, caption, content):
     """
     Show window with text
     as help feature for context menu
@@ -271,7 +271,7 @@ def menu_information_display(master, title, content):
         root.iconphoto(False, master.icon)
 
     width = root.winfo_screenwidth() // 2
-    Label(root, text=title, font=('TkDefaultFont', 12, 'bold'),
+    Label(root, text=caption, font=('TkDefaultFont', 12, 'bold'),
           anchor=W, justify=LEFT, fg="dark green", background='white'
           ).grid(row=1, column=1, sticky=W)
 
