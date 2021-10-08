@@ -38,6 +38,7 @@ class CostMapInput:
             else 7
 
         self.root = Toplevel(master)
+        self.root.attributes('-alpha', 0.0)
         self.root.resizable(True, True)
         if hasattr(master, "icon"):
             self.root.icon = master.icon
@@ -248,6 +249,7 @@ class CostMapInput:
         self.button_plus.grid(sticky="nswe", row=5, column=3, pady=2, padx=2)
 
         set_window_size_simple(self.root)
+        self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)

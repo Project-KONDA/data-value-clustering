@@ -50,6 +50,7 @@ class BlobInput:
         """Root"""
         self.master = master
         self.root = Toplevel(self.master)
+        self.root.attributes('-alpha', 0.0)
         self.root.title('Dissimilarity Configuration - Blobs')
 
         self.root.focus_force()
@@ -192,6 +193,7 @@ class BlobInput:
         # self.button_expert.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
         self.button_expert.place(anchor='s', x=self.w // 2, y=self.h - self.gui_spacing)
 
+        self.root.attributes('-alpha', 1.0)
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()

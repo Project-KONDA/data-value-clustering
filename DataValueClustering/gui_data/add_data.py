@@ -9,6 +9,7 @@ from data_extraction.extract_xml_field import write_fielddata_from_xml, get_attr
 from export.path import getOpenFilePath
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_data_add
+from gui_general.window_size import set_window_size_simple
 
 
 def add_data(master, path=""):
@@ -84,6 +85,7 @@ class AddData:
         self.button_ok.grid(sticky='nswe', row=6, column=1, columnspan=4)
 
         self.root.protocol("WM_DELETE_WINDOW", self.close)
+        set_window_size_simple(self.root)
         self.root.mainloop()
 
     def selectpath(self):

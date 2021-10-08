@@ -6,6 +6,7 @@ from gui_cluster_selection.algorithm_selection import algorithm_array
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_clustering_selection
 from gui_general.scrollable_frame import create_scrollable_frame
+from gui_general.window_size import set_window_size_simple
 
 
 def select_algorithm(master, predefined_algorithm=None, suggested_algorithms=None):
@@ -66,6 +67,7 @@ class SelectAlgorithm:
         self.build_result_frame()
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+        set_window_size_simple(self.root)
         self.root.grab_set()
         self.root.focus_force()
         self.root.mainloop()

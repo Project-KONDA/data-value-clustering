@@ -107,6 +107,7 @@ class Hub:
 
         "initialisation"
         self.root = Tk()
+        self.root.attributes('-alpha', 0.0)
         self.root.title(TITLE)
         icon = Image.open('..\\gui_general\\logo.ico')
         self.root.icon = ImageTk.PhotoImage(icon)
@@ -340,6 +341,8 @@ class Hub:
         self.update()
 
         set_window_size_simple(self.root)
+
+        self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
         if loadpath is not None:

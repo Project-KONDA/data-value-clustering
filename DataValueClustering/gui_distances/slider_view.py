@@ -59,6 +59,7 @@ class SliderInput:
                     self.values.append(costmap[(i + 1, 0)])
 
         self.root = Toplevel(self.master, bg="white")
+        self.root.attributes('-alpha', 0.0)
         self.root.title("Distance Configuration - Sliders")
         if hasattr(master, "icon"):
             self.root.icon = master.icon
@@ -175,6 +176,8 @@ class SliderInput:
         self.trigger_extend()
 
         set_window_size_simple(self.root)
+
+        self.root.attributes('-alpha', 1.0)
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()

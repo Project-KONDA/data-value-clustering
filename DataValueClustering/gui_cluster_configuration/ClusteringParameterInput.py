@@ -19,6 +19,7 @@ class ClusterConfigurationInput:
 
     def __init__(self, master, title, parameter_frame_inits, dependencies, suggestion=None):
         self.root = Toplevel(master, bg='white')
+        self.root.attributes('-alpha', 0.0)
         self.root.title(title)
         self.root.resizable(False, True)
         self.root.minsize(200, 200)
@@ -106,6 +107,7 @@ class ClusterConfigurationInput:
         self.button.grid(row=4, column=0, sticky='nsew')
 
         set_window_size_simple(self.root)
+        self.root.attributes('-alpha', 1.0)
 
         self.root.after(1, lambda: self.root.focus_force())
 

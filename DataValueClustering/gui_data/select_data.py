@@ -9,6 +9,7 @@ from data_extraction import get_sources_in_experiment_data_directory
 from gui_data.add_data import add_data
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_data_selection
+from gui_general.window_size import set_window_size_simple
 
 
 def get_list(path=""):
@@ -69,7 +70,9 @@ class SelectData:
         CreateToolTip(self.button_remove, "Remove selected data value set.")
 
         self.load()
+
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+        set_window_size_simple(self.root)
         self.root.grab_set()
         self.root.focus_force()
         self.root.mainloop()
