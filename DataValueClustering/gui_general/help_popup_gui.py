@@ -31,7 +31,7 @@ def menu_help_data_selection(master):
     caption = "Data Selection"
     text = [
         "The Data Selection view allows you to select the data set to be clustered. Each data set consists of a set of data values extracted from a database. When first starting the program, a few predefined data sets are available.",
-        "To add a data set, press the '+' button below. For this, a local BaseX client is required.",
+        "To add a data set, press the '+' button below. For this, a local BaseX client is required. For this, please install BaseX and execute 'bin/basexserver.bat'.",
         "To remove a data set, press the '-' button below, but be careful as once removed data sets cannot be recovered.",
         "",
         "To confirm your data selection, press the 'OK' button.",
@@ -253,8 +253,8 @@ def menu_information_display(master, caption, content):
     Show window with text
     as help feature for context menu
 
-    :param title: str
-        window title
+    :param caption: str
+        window caption
     :param content: list[str]
         help text for window content
         one string per line

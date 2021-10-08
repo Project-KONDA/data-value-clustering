@@ -94,7 +94,10 @@ class SelectData:
             add_data(self.root, self.path)
             self.load()
         except ConnectionRefusedError:
-            messagebox.showwarning("BaseX Client not started", "The connection to the local BaseX server could not be established. \nPlease start the local BaseX server!")
+            messagebox.showwarning("BaseX Client not started",
+                                   "The connection to the local BaseX server could not be established. \n"
+                                   "Please start the local BaseX server! \n"
+                                   "For this, please install BaseX and execute 'bin/basexserver.bat'.")
 
     def remove(self):
         index = self.listbox.curselection()
