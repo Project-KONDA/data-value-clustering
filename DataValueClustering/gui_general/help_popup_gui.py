@@ -206,7 +206,6 @@ def menu_help_clustering_configuration(master):
     menu_information_display(master, caption, text)
 
 
-
 def menu_help_result(master):
     """help popup for Clustering Result & Evaluation view"""
     caption = "Clustering Result & Evaluation"
@@ -306,4 +305,4 @@ def menu_information_display(master, caption, content):
 if __name__ == "__main__":
     # menu_help_cost_matrix()
     menu_help_blob_input(None)
-##########################################################################################
+

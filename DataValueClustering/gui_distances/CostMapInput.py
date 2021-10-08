@@ -192,7 +192,7 @@ class CostMapInput:
         self.case_entry = Entry(self.frame, width=10, validate='key', justify=RIGHT, borderwidth=2,
                                 validatecommand=(self.case_entry.register(validate_input_float), '%P'))
         if not self.empty and self.costmap is None:
-            self.case_entry.insert(END, '.5')
+            self.case_entry.insert(END, '1.')
         elif not self.empty and self.costmap is not None:
             self.case_entry.insert(END, str(self.costmap[()]))
 

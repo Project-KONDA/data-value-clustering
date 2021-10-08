@@ -266,7 +266,7 @@ class SliderInput:
             return None, None
         if self.matrix_costmap:
             return DistanceView.MATRIX, self.matrix_costmap
-        map = {(()): 100., 0: "", (0, 0): 0}
+        map = {(()): 1., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
             map[(0, i + 1)] = self.valuelist[i].get()
