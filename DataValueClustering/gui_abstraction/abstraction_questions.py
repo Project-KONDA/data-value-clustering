@@ -100,7 +100,7 @@ abstraction_question_array = [
      "Choose yes if the concrete quotation mark does not have a crucial impact on the meaning and you expect a lot of quotation marks.\n" +
      "For example, '\"'' and ''' will be treated equally since both are quotation marks."],  # 16
     [[], [12], "special_rest", False,
-     "Should all other characters be treated equally?",
+     "Should all other characters not mentioned above be treated equally?",
      "Abstraction from all other concrete characters.\n"
      "Choose yes if the concrete character does not have a crucial impact on the meaning and you expect a lot of such characters.\n" +
      "For example, '$' and 'µ' will be treated equally since both are specical characters."],  # 17
