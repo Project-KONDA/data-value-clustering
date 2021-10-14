@@ -255,6 +255,20 @@ class CostMapInput:
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         self.root.mainloop()
 
+    def disable_row_column(self, i):
+        for j in range(self.n):
+            if j <= i:
+                self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
+                self.value_entries[j, i].insert(END, 0)
+                self.value_entries[j, i].configure(state="readonly")
+
+    def enable_row_column(self, i):
+        for j in range(self.n):
+            if j <= i:
+                self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
+                self.value_entries[j, i].insert(END, int(i != j))
+                self.value_entries[j, i].configure(state="normal")
+
     def generate_entry(self, i, j):
         entry = Entry(self.scrollableframeSE, validate='key', width=7, justify=RIGHT, bg='alice blue')
         entry['validatecommand'] = (
@@ -304,7 +318,7 @@ class CostMapInput:
         undo_highlight_entries(self.regex, self.label_warning)
 
         update_warnings_no_vars(self.regex, self.label_warning, self.n, self.regex_label, self.abstraction, self.tooltips, 1,
-                        regex_index, text, None, None, True)
+                        regex_index, text, self.disable_row_column, self.enable_row_column, True)
 
         self.updating_labels = False
         return True
