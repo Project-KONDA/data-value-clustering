@@ -204,7 +204,7 @@ class CostMapInput:
             self.label[i] = Label(self.scrollableframeNE, width=7, bg='ivory2', anchor=W, relief="groove", borderwidth=2)
             self.label[i].grid(sticky=NW, row=9, column=i, padx=(0, 1))
             self.regex[i] = Entry(self.scrollableframeSW, width=20, bg='white', validate=ALL, validatecommand=(
-                self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P',), highlightthickness=2)
+                self.regex[i].register(lambda s, i2=i: self.copy_to_column(i2, s)), '%P',), highlightthickness=2, highlightbackground="white", highlightcolor="white")
             self.regex_label[i] = Label(self.scrollableframeSW, anchor=W, justify="left", width=30)
             self.regex[i].grid(sticky=NW, row=i, column=1)
             self.regex_label[i].grid(sticky=NW, row=i, column=4, columnspan=1)
@@ -384,7 +384,7 @@ class CostMapInput:
         self.regex_label = regex_label
 
         # 3. add element n-1
-        self.regex[self.n - 1] = Entry(self.scrollableframeSW, width=20, bg='white', validate=ALL)
+        self.regex[self.n - 1] = Entry(self.scrollableframeSW, width=20, bg='white', validate=ALL, highlightthickness=2, highlightbackground="white", highlightcolor="white")
         self.regex[self.n - 1]['validatecommand'] = (
             self.regex[self.n - 1].register(lambda s, i2=self.n - 1: self.copy_to_column(i2, s)), '%P')
 
