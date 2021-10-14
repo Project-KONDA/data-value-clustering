@@ -1,5 +1,10 @@
 '''text popup for context menu, used as help'''
-from tkinter import *
+
+from tkinter import Label, Toplevel, W, LEFT, E, RIGHT, Button
+from PIL import Image
+from PIL.ImageTk import PhotoImage
+from math import floor
+
 
 from gui_general.scrollable_frame import create_scrollable_frame
 
@@ -284,9 +289,17 @@ def menu_information_display(master, caption, content):
             l = Label(scrollable_frame, text=t, font=('TkDefaultFont', 10), wraplength=width,
                       anchor=W, justify=LEFT, fg="dark green", background='white')
             l.grid(row=i, column=1, sticky=W + E)
-        else:
+        elif isinstance(t, list):
             l = Label(scrollable_frame, text=t[0], font=('TkDefaultFont', 12, 'bold'),
                   anchor=W, justify=LEFT, fg="dark green", background='white')
+            l.grid(row=i, column=1, sticky=W)
+        elif isinstance(t, set):
+            img = Image.open(t.pop())
+            if img.width > width:
+                height_new = floor(img.height * width//img.width)
+                img = img.resize((height_new, width), Image.ANTIALIAS)
+            img = PhotoImage(img)
+            l = Label(scrollable_frame, image=img)
             l.grid(row=i, column=1, sticky=W)
 
     def button_quit():
