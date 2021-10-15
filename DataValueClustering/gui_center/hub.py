@@ -205,7 +205,7 @@ class Hub:
         self.label_expert_configuration.grid(sticky='w', row=14, column=1, padx=(10,0), pady=10)
         self.checked_expert_clustering = IntVar(value=1)
         self.checkbutton_expert_clustering = Checkbutton(self.refined_clustering_frame,
-            variable=self.checked_expert_clustering, bg="white", command=self.trigger_expert_clustering, text="Expert")
+                                                         variable=self.checked_expert_clustering, bg="white", command=self.update_expert_clustering, text="Expert")
         self.checkbutton_expert_clustering.grid(sticky='ws', row=14, column=2, pady=10)
 
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
@@ -663,7 +663,7 @@ class Hub:
         self.update()
         self.root.update()
 
-    def trigger_expert_clustering(self):
+    def update_expert_clustering(self):
         self.configuration.clustering_expert_mode = bool(self.checked_expert_clustering.get())
         if self.configuration.clustering_expert_mode:
             self.button_clustering.configure(text=CONFIG_CLUSTERING_EXPERT)
@@ -789,7 +789,6 @@ class Hub:
     def update(self):
         self.update_option_menu()
 
-
         if self.configuration.data_configuration_valid():
             self.label_data_progress.configure(text=DATA_DONE, fg='green')
             self.button_data.configure(bg=self.original_button_color)
@@ -874,6 +873,8 @@ class Hub:
         self.update_frame_abstraction()
         self.update_frame_distance()
         self.update_frame_clustering()
+
+        self.update_expert_clustering()
 
         self.update_advice()
 
