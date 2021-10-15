@@ -96,6 +96,8 @@ class BlobInput:
 
         """Canvas"""
         self.canvas_h = 17 * self.h // 18 - self.gui_spacing
+        if restricted:
+            self.canvas_h -= 3*self.gui_spacing
         self.canvas_w = self.w - 3 * self.gui_spacing
         self.canvas = Canvas(self.root, width=self.canvas_w, height=self.canvas_h,
                              highlightbackground="black")  # , background="alice blue")
@@ -162,8 +164,12 @@ class BlobInput:
                                  rel_size=self.sizes[i])
 
         """Buttons"""
-        self.button_h = self.h * 2 // 3 // 18
-        self.button_w = self.x * 2 // 3 - 2 * self.gui_spacing
+        if restricted:
+            self.button_w = self.x * 2 // 2 - 2 * self.gui_spacing
+            self.button_h = self.h * 2 // 2 // 18
+        else:
+            self.button_w = self.x * 2 // 3 - 2 * self.gui_spacing
+            self.button_h = self.h * 2 // 3 // 18
 
         self.button_image_restart = Image.open("..\\gui_distances\\blob_images\\button_restart.png")
         self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
@@ -187,11 +193,12 @@ class BlobInput:
         # self.button_ok.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
         self.button_ok.place(anchor='se', x=self.w - self.gui_spacing - 1, y=self.h - self.gui_spacing)
 
-        self.button_expert = Button(self.root, text='Expert', command=self.expert_view,
+        if not restricted:
+            self.button_expert = Button(self.root, text='Expert', command=self.expert_view,
                                     width=self.button_w, height=self.button_h, bg='black', border=0,
                                     image=self.button_image_expert)
-        # self.button_expert.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
-        self.button_expert.place(anchor='s', x=self.w // 2, y=self.h - self.gui_spacing)
+            # self.button_expert.place(anchor='center', x=3 * self.x // 2, y=self.h - self.button_h // 2 - self.gui_spacing)
+            self.button_expert.place(anchor='s', x=self.w // 2, y=self.h - self.gui_spacing)
 
         self.root.attributes('-alpha', 1.0)
         self.root.after(1, lambda: self.root.focus_force())

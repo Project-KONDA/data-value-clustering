@@ -76,7 +76,7 @@ class SliderInput:
         self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
         self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity. Rows with empty entries will be ignored. You can custimize the character groups.", bg="white", anchor='c', justify="center")
-        self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view)
+        self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view, state="disabled" if restricted else "normal")
         CreateToolTip(self.button_expert, "Open Matrix view, which allows setting the weights entirely flexible.")
         self.extended = IntVar(self.root, 0)
         self.checkbutton_extend = Checkbutton(self.root, text="Custom Character Groups", bg="white", variable=self.extended, command=self.trigger_extend)

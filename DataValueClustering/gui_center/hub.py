@@ -204,7 +204,7 @@ class Hub:
         self.label_expert_configuration.grid(sticky='w', row=14, column=1, padx=(10,0), pady=10)
         self.checked_expert_clustering = IntVar(value=1)
         self.checkbutton_expert_clustering = Checkbutton(self.refined_clustering_frame,
-                                                         variable=self.checked_expert_clustering, bg="white", command=self.update_expert_clustering, text="Expert")
+                                                         variable=self.checked_expert_clustering, bg="white", command=self.update_expert_clustering, text="Expert", state="disabled")
         self.checkbutton_expert_clustering.grid(sticky='ws', row=14, column=2, pady=10)
 
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
@@ -825,7 +825,8 @@ class Hub:
             self.label_distance_progress.configure(text=DISTANCE_DONE, fg='green')
             self.button_distance_play.configure(state="normal", bg=self.original_button_color)
             self.label_expert_configuration.configure(state="normal")
-            self.checkbutton_expert_clustering.configure(state="normal")
+            if not self.restricted:
+                self.checkbutton_expert_clustering.config(state="normal")
             if self.configuration.clustering_configuration_valid():
                 self.button_clustering.configure(state="normal", bg=self.original_button_color)
             else:
@@ -942,4 +943,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub()
+    Hub(restricted=True)
