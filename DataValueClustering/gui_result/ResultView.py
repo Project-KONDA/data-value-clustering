@@ -27,15 +27,15 @@ NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration
 SATISFIED = "According to your answers above, you are satisfied with the clustering.\nCongratulations, you are done!"
 
 
-def result_view(master, configuration):
-    res = ResultView(master, configuration)
+def result_view(master, configuration, restricted=False):
+    res = ResultView(master, configuration, restricted)
     return res.get()
 
 
 class ResultView:
 
     # def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
-    def __init__(self, master, configuration):
+    def __init__(self, master, configuration, restricted=False):
         self.root = Toplevel(master)
         self.root.attributes('-alpha', 0.0)
         self.root.title("Clustering Result & Evaluation")
@@ -52,6 +52,7 @@ class ResultView:
         self.canceled = False
 
         self.configuration = configuration
+        self.restricted = restricted
 
         # self.excel_path = excel_path
         # self.num_data = num_data

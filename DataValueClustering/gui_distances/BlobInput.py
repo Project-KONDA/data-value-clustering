@@ -18,8 +18,8 @@ SUB_EXPLANATION = "Each blob represents a group of characters and character sequ
                   "Increase the size of a blob to increase the influence of substitutions within the corresponding group."
 
 
-def input_blobs(root, config, suggestion=None):
-    blobs = BlobInput(root, config, suggestion)
+def input_blobs(root, config, suggestion=None, restricted=False):
+    blobs = BlobInput(root, config, suggestion, restricted)
     config_method, cost_map, new_config = blobs.get()
     return config_method, cost_map, new_config
 
@@ -30,7 +30,7 @@ class BlobInput:
     by moving and resizing objects on a canvas
     """
 
-    def __init__(self, master, config, suggestion=None):
+    def __init__(self, master, config, suggestion=None, restricted=False):
         """
         :param config: array
             config is array of form [label, regex, resizable, info, x, y, size]

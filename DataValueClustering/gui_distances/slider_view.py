@@ -16,14 +16,14 @@ from gui_general.window_size import set_window_size_simple
 disable_scale_color_trough = "grey90"
 disable_scale_color_fg = "grey40"
 
-def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None):
-    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration)
+def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None, restricted=False):
+    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration, restricted)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None, restricted=False):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
         assert (n or costmap or abstraction is not None)
 

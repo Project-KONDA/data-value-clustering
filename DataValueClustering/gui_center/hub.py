@@ -99,7 +99,7 @@ def data_name_from_path(data_path):
 
 class Hub:
 
-    def __init__(self, loadpath=None):
+    def __init__(self, loadpath=None, restricted=False):
 
         load_and_compile()
 
@@ -114,6 +114,7 @@ class Hub:
         self.root.configure(background='white')
 
         self.configuration = HubConfiguration()
+        self.restricted = restricted
 
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
@@ -539,10 +540,10 @@ class Hub:
 
         if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
             config_method, cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:4],
-                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
+                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration, restricted=self.restricted)
             blob_configuration = None
         elif self.selected_distance_option.get() == DISTANCE_OPTION_BLOBS:
-            config_method, cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration))
+            config_method, cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), restricted=self.restricted)
         else:
             cost_map = input_costmap(self.root, regexes=list(blob_configuration[:, 1]), costmap=previous_cost_map,
                                          abstraction=blob_configuration[1:, 0:4], suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration)
@@ -696,7 +697,7 @@ class Hub:
         # validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
         #             self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
         #             self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
-        result_view(self.root, self.configuration)
+        result_view(self.root, self.configuration, restricted=self.restricted)
         self.update()
 
     def update_advice(self):
