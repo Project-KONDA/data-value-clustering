@@ -37,21 +37,23 @@ from gui_result.validation_questionnaire import get_suggested_algorithms, get_su
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
     get_suggested_parameter_modifications, ValidationAnswer
 
-DISTANCE_OPTION_MATRIX = "Matrix (expert)"
-DISTANCE_OPTION_BLOBS = "Blobs (advanced)"
-DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
+TITLE = "Clustering Configuration Hub"
 
+SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
+SIMPLE_CLUSTERING_HINT_2 = " clusters. You can stop here \nor continue below to achieve a coarser clustering."
+# SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
 
 CONFIG_DISSIMILARITIES = 'Configure Dissimilarities...'
 CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Dissimilarities... (Sliders)'
 CONFIG_DISSIMILARITIES_BLOBS = 'Configure Dissimilarities... (Blobs)'
 CONFIG_DISSIMILARITIES_MATRIX = 'Configure Dissimilarities... (Matrix)'
 
+DISTANCE_OPTION_MATRIX = "Matrix (expert)"
+DISTANCE_OPTION_BLOBS = "Blobs (advanced)"
+DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
+
 CONFIG_CLUSTERING_SIMPLE = 'Configure Algorithm... (simple)'
 CONFIG_CLUSTERING_EXPERT = 'Configure Algorithm... (expert)'
-
-
-TITLE = "Clustering Configuration Hub"
 
 STATUS = "Status: "
 CLUSTERING_NOT_CALC = STATUS + 'Algorithm configured but not executed'
@@ -73,10 +75,6 @@ CLUSTERING_NOT_CONFIGURED = STATUS + "Algorithm not configured"
 DISTANCE_NOT_CONFIGURED = STATUS + "Dissimilarities not configured"
 ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
-
-SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
-SIMPLE_CLUSTERING_HINT_2 = " clusters. You can stop here \nor continue below to achieve a coarser clustering."
-# SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
 
 NONE = "None"
 
@@ -347,6 +345,7 @@ class Hub:
         self.root.after(1, lambda: self.root.focus_force())
         if loadpath is not None:
             self.load(loadpath)
+            self.update()
         self.root.mainloop()
 
     def set_selected_distance_option(self, value):
@@ -807,7 +806,6 @@ class Hub:
             self.button_abstraction.configure(bg='paleturquoise1')
             self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
 
-
         if self.configuration.distance_configuration_possible():
             if self.configuration.distance_configuration_valid():
                 self.button_distance.configure(state="normal", bg=self.original_button_color)
@@ -924,7 +922,6 @@ class Hub:
             self.label_distance_config2.configure(text=numbers)
 
     def update_frame_clustering(self):
-
         clustering_algorithm = self.configuration.get_clustering_selection()
         if clustering_algorithm is None:
             self.label_clustering_config.configure(text=NONE)
