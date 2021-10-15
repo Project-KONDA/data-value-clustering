@@ -9,6 +9,9 @@ def show_dendrogram(linkage_matrix, labels=None):
     fig.canvas.set_window_title('Dendrogram')
     fig.suptitle('Dendrogram')
 
+    plt.xlabel('distance')
+    plt.ylabel('representative values')
+
     if labels is None:
         dendrogram(linkage_matrix,
                    orientation='right',
