@@ -6,6 +6,7 @@ from clustering.dbscan_clustering import *
 from clustering.optics_clustering import *
 from clustering.affinity_propagation_clustering import *
 from clustering.spectral_clustering import *
+from data_extraction.representants import get_repr_list
 from gui_cluster_configuration.ClusteringParameterInput import get_configuration_parameters
 from gui_cluster_configuration.dendrogram import show_dendrogram
 from gui_cluster_configuration.k_distance_graph import show_k_distance_graph
@@ -19,7 +20,7 @@ from gui_cluster_configuration.parameter_frames.ClusteringParameter import DEPEN
 EXPERT_CAPTION = create_parameter_caption("\n\nExpert Parameters", "In most cases, the default values of the following parameters are suitable.\nModification is only encouraged if you know the details of the selected clustering algorithm or are unsatisfied with a previous clustering.")
 
 
-def simple_cluster_hierarchical(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def simple_cluster_hierarchical(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, "average")
 
     n_clusters_info = hierarchical_n_clusters_config(len(values))
@@ -28,7 +29,8 @@ def simple_cluster_hierarchical(master, distance_matrix_map, values, previous_pa
     # distance_threshold = 3.8  # 15  # 3.8  # depends on distances
     distance_threshold_info = hierarchical_distance_threshold_config(linkage_matrix,
                                                                      distance_matrix_map["min_distance"])
-    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, values), suggestion=suggestion)
+    representatives = get_repr_list(values, abstraction_dict)
+    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, representatives), suggestion=suggestion)
 
     frames = [n_clusters_frame, distance_threshold_frame]
     dependencies2 = [
@@ -44,7 +46,7 @@ def simple_cluster_hierarchical(master, distance_matrix_map, values, previous_pa
     return {"method": "average", "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": "maxclust", "depth": None}
 
 
-def cluster_hierarchical(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_hierarchical(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
 
     # ask user for 'method' argument
     # method = 'single'
@@ -73,7 +75,8 @@ def cluster_hierarchical(master, distance_matrix_map, values, previous_parameter
     # distance_threshold = 3.8  # 15  # 3.8  # depends on distances
     distance_threshold_info = hierarchical_distance_threshold_config(linkage_matrix,
                                                                      distance_matrix_map["min_distance"])
-    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, values), suggestion=suggestion)
+    representatives = get_repr_list(values, abstraction_dict)
+    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, representatives), suggestion=suggestion)
 
     # criterion = 'distance'
     criterion_info = hierarchical_criterion_config()
@@ -112,7 +115,7 @@ def cluster_hierarchical(master, distance_matrix_map, values, previous_parameter
     # return hierarchical_lm_args(linkage_matrix, n_clusters, distance_threshold, criterion, depth, None)
 
 
-def cluster_kmedoids(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_kmedoids(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
     # TODO: show questionnaire if not shown already
 
     # n_clusters = 7  # TODO: support elbow method
@@ -145,7 +148,7 @@ def cluster_kmedoids(master, distance_matrix_map, values, previous_parameters=No
     # return kmedoids_args(n_clusters, init, max_iter)
 
 
-def cluster_dbscan(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_dbscan(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
     # TODO: see 'Parameter Estimation' at https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
     # TODO: and https://medium.com/@tarammullin/dbscan-parameter-estimation-ff8330e3a3bd
     n_values = len(values)
@@ -175,7 +178,7 @@ def cluster_dbscan(master, distance_matrix_map, values, previous_parameters=None
     # return dbscan_args(eps, min_samples, n_jobs)
 
 
-def cluster_optics(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_optics(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
     n_values = len(values)
 
     # min_samples = 2
@@ -241,7 +244,7 @@ def cluster_optics(master, distance_matrix_map, values, previous_parameters=None
     #                       n_jobs)
 
 
-def cluster_affinity(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_affinity(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
     # damping = 0.99
     damping_info = affinity_damping_config()
     damping_frame = create_slider_frame(*damping_info, previous_value=None if previous_parameters is None else previous_parameters[damping_info[0]], suggestion=suggestion)
@@ -271,7 +274,7 @@ def cluster_affinity(master, distance_matrix_map, values, previous_parameters=No
     # return affinity_args(damping=damping, max_iter=max_iter, convergence_iter=convergence_iter, preference=preference)
 
 
-def cluster_spectral(master, distance_matrix_map, values, previous_parameters=None, suggestion=None):
+def cluster_spectral(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):
     num_values = len(values)
     # n_clusters = 5
     n_clusters_info = spectral_n_clusters_config(num_values)
