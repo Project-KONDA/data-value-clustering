@@ -746,6 +746,15 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.set_saved(True)
+        if (self.configuration.clustering_expert_mode or self.configuration.distance_config_method == DistanceView.MATRIX) and self.restricted:
+            if messagebox.showinfo("Loading failed",
+                                   "You tried to load a configuration which uses expert mode while running the application in restricted mode. "
+                                   "This is not possible. Please load another configuration or run the application in expert mode.",
+                                   icon=WARNING):
+                self.configuration = HubConfiguration()
+                self.set_saved(False)
+                self.root.title(TITLE)
+
         self.update()
 
     def menu_new(self):
