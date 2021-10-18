@@ -210,7 +210,16 @@ class ResultView:
         return labels
 
     def update_suggestion(self):
-        if not self.restricted:
+        if self.restricted:
+            if self.q1.get_result() == ValidationAnswer.UNHAPPY or self.q3.get_result() == ValidationAnswer.MORE \
+                    or self.q3.get_result() == ValidationAnswer.LESS or self.q4.get_result()[0] == ValidationAnswer.UNHAPPY:
+                self.advice_label.config(text=NOT_SATISFIED, fg="red")
+            elif self.q1.get_result() == ValidationAnswer.HAPPY \
+                    and self.q3.get_result() == ValidationAnswer.HAPPY and self.q4.get_result()[0] == ValidationAnswer.HAPPY:
+                self.advice_label.config(text=SATISFIED, fg="green")
+            else:
+                self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
+        else:
             if self.q1.get_result() == ValidationAnswer.UNHAPPY or self.q2.get_result() == ValidationAnswer.MORE \
                     or self.q2.get_result() == ValidationAnswer.LESS or self.q3.get_result() == ValidationAnswer.MORE \
                     or self.q3.get_result() == ValidationAnswer.LESS or self.q4.get_result()[0] == ValidationAnswer.UNHAPPY:
