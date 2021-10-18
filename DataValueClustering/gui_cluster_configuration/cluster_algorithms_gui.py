@@ -43,7 +43,7 @@ def simple_cluster_hierarchical(master, distance_matrix_map, values, abstraction
     if n_clusters is None and distance_threshold is None:
         return None
 
-    return {"method": "average", "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": "maxclust", "depth": None}
+    return {"method": "complete", "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": "maxclust", "depth": None}
 
 
 def cluster_hierarchical(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None):

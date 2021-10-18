@@ -37,14 +37,14 @@ method_array = np.array([
     #  "The sum of squared deviations from samples to centroids.\n"
     #  "Clusters are type, i.e. clouds more dense and more concentric towards their middle, whereas marginal points are few and could be scattered relatively freely.\n"
     #  "Will yield globular clusters of similar size."],
+    [[], [4], "complete", "The maximum distance between contained samples.\n"
+                          "Two most distant from each other members cannot be much more dissimilar than other quite dissimilar pairs.\n"
+                          "Will yield small globular (circle or blob) clusters."],
     [[], [], "average",
      "The average distance between contained samples.\n"
      "Clusters are generic united classes or close-knit collectives.\n"
      "Clusters of miscellaneous shapes and outlines can be produced."], # sometimes default
     [[], [], "weighted", "The arithmetic mean of the average distances between members of the subclusters."],  # 4
-    [[], [4], "complete", "The maximum distance between contained samples.\n"
-                          "Two most distant from each other members cannot be much more dissimilar than other quite dissimilar pairs.\n"
-                          "Will yield small globular (circle or blob) clusters."],
     [[], [4], "single", "The minimum distance between contained samples.\n"
                        "Two most dissimilar cluster members can happen to be very much dissimilar in comparison to two most similar.\n"
                        "Will yield long chain-like clusters."],
