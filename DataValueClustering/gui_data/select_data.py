@@ -27,6 +27,7 @@ class SelectData:
         self.single_cluster_data = single_cluster_data
 
         self.root = Toplevel(master)
+        self.root.attributes('-alpha', 0.0)
         self.root.title("Data Selection")
         self.root.resizable(False, True)
         if hasattr(master, "icon"):
@@ -73,6 +74,7 @@ class SelectData:
 
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
         set_window_size_simple(self.root)
+        self.root.attributes('-alpha', 1.0)
         self.root.grab_set()
         self.root.focus_force()
         self.root.mainloop()
