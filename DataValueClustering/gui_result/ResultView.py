@@ -292,7 +292,8 @@ class ResultView:
         if self.canceled:
             return
         self.configuration.set_validation_answer_1(self.q1.get_result())
-        self.configuration.set_validation_answer_2(self.q2.get_result())
+        if not self.restricted:
+            self.configuration.set_validation_answer_2(self.q2.get_result())
         self.configuration.set_validation_answer_3(self.q3.get_result())
         answer, selected_checks_per_answer = self.q4.get_result()
         if selected_checks_per_answer is None:
