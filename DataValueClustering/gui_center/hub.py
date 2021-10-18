@@ -637,7 +637,7 @@ class Hub:
                 prev_parameters = None
                 suggested_parameter_modifications = None
             else:
-                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
+                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=True)
             parameters = cluster_config_f(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications)
         else:
             clustering_algorithm = "Hierarchical"
@@ -646,7 +646,7 @@ class Hub:
                 prev_parameters = None
                 suggested_parameter_modifications = None
             else:
-                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration)
+                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=False)
             parameters = simple_cluster_hierarchical(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications)
 
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):

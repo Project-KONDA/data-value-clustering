@@ -97,10 +97,10 @@ def get_suggested_algorithms(validation_answers):
     return suggested_algorithms if len(suggested_algorithms) > 0 else None
 
 
-def get_suggested_parameter_modifications(validation_answers, configuration):
+def get_suggested_parameter_modifications(validation_answers, configuration, expert):
     parameter_modifications = {}
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
-        if configuration.get_clustering_selection() == HIERARCHICAL:
+        if configuration.get_clustering_selection() == HIERARCHICAL and expert:
             parameter_modifications[METHOD] = ('average', 'weighted')
     if validation_answers[1] is not None and validation_answers[1] == ValidationAnswer.MORE:
         if configuration.get_clustering_selection() == DBSCAN:
