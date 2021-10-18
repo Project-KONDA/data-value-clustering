@@ -17,6 +17,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     workbook = xlsxwriter.Workbook(path)
     style_caption = workbook.add_format({'bold': True, 'font_color': 'red', 'left': 2, 'bottom': 1, 'font_size': 15, 'bg_color': '#DDDDDD'})
     style_sum = workbook.add_format({'bold': True, 'font_color': 'blue', 'left': 2, 'bottom': 1, 'bg_color': '#DDDDDD'})
+    style_representative = workbook.add_format({'bold': True, 'font_color': 'orange', 'left': 2, 'bottom': 1, 'bg_color': '#DDDDDD'})
     style_grey = workbook.add_format({'bg_color': '#DDDDDD', 'bottom': 1})
     style_grey_right = workbook.add_format({'right': 2, 'bg_color': '#DDDDDD', 'bottom': 1})
     # style_sums = workbook.add_format({'right': 2, 'bottom': 1})
@@ -29,7 +30,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
     sheet1 = workbook.add_worksheet("Cluster_Original")
     sheet1.write(2, 0, "#original", style_sum)
-    sheet1.set_column(0, 0, 12)
+    sheet1.set_column(0, 0, 14)
 
     sheet1.write(1, 0, "", style_grey)
     sheet1.write(1, 1, "Noise", style_caption)
@@ -39,9 +40,19 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     sheet1.set_column(1, 1, 15)
     sheet1.set_column(2, 2, 6)
     noise_unique, noise_count = get_sorted_unique_values_counts(noise)
-    write_list_to_sheet(sheet1, 3, 1, noise_unique, style_val_left)
-    write_list_to_sheet(sheet1, 3, 2, noise_count, style_val_right, True)
-    sheet1.conditional_format(3, 2, 3 + len(noise_count), 2, {'type': 'data_bar'})
+    first_noise = noise_unique[0] if len(noise_unique) > 0 else ""
+
+    offset = 2
+    if comp_to_normal_map is None:
+        offset += 1
+        sheet1.write(offset, 0, "representative", style_representative)
+        sheet1.write(offset, 1, first_noise, style_representative)
+        sheet1.write(offset, 2, "", style_grey_right)
+    offset += 1
+
+    write_list_to_sheet(sheet1, offset, 1, noise_unique, style_val_left)
+    write_list_to_sheet(sheet1, offset, 2, noise_count, style_val_right, True)
+    sheet1.conditional_format(offset + 1, 2, offset + 1 + len(noise_count), 2, {'type': 'data_bar'})
 
     cluster_sizes = list(map(len, clusters))
     cluster_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(clusters))), cluster_sizes)
@@ -52,12 +63,22 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet1.write(1, i * 2 + 4, "", style_grey_right)
         sheet1.write_number(2, i * 2 + 3, cluster_counts_sorted[i], style_sum)
         sheet1.write(2, i * 2 + 4, "", style_grey_right)
-        sheet1.set_column(3 + i * 2, 3 + i * 2, 15)
-        sheet1.set_column(4 + i * 2, 4 + i * 2, 6)
+
         cluster_unique, cluster_count = get_sorted_unique_values_counts(clusters[v])
-        write_list_to_sheet(sheet1, 3, i * 2 + 3, cluster_unique, style_val_left)
-        write_list_to_sheet(sheet1, 3, i * 2 + 4, cluster_count, style_val_right, True)
-        sheet1.conditional_format(3, i * 2 + 4, 3 + len(cluster_count), i * 2 + 4, {'type': 'data_bar'})
+
+        offset = 2
+        if comp_to_normal_map is None:
+            offset += 1
+            sheet1.write(offset, i * 2 + 3, cluster_unique[0], style_representative)
+            sheet1.write(offset, i * 2 + 4, "", style_grey_right)
+
+        offset += 1
+        sheet1.set_column(offset + i * 2, 3 + i * 2, 15)
+        sheet1.set_column(offset + 1 + i * 2, 4 + i * 2, 6)
+
+        write_list_to_sheet(sheet1, offset, i * 2 + 3, cluster_unique, style_val_left)
+        write_list_to_sheet(sheet1, offset, i * 2 + 4, cluster_count, style_val_right, True)
+        sheet1.conditional_format(offset, i * 2 + 4, offset + 1 + len(cluster_count), i * 2 + 4, {'type': 'data_bar'})
     sheet1.conditional_format(2, 1, 2, 3 + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
 
     if not comp_to_normal_map is None:
@@ -100,7 +121,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet2.conditional_format(2, 1, 2, 3 + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
         sheet2.conditional_format(3, 1, 3, 3 + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#C3C365'})
 
-    if not comp_to_normal_map is None and True:
+    if not comp_to_normal_map is None:
 
         sheet3 = workbook.add_worksheet("Cluster_Repr_Dists")
         sheet3.write(2, 0, "#original", style_sum)
@@ -165,6 +186,13 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet3.conditional_format(4, 1, 4, 4 + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#666666'})
 
     workbook.close()
+
+
+def get_abstracted_from_original(comp_to_normal_map, first_noise, first_noise_abstracted):
+    for j, abs in enumerate(comp_to_normal_map.keys()):
+        if first_noise in comp_to_normal_map[abs]:
+            first_noise_abstracted = abs
+    return first_noise_abstracted
 
 
 def get_sorted_representatives_counts(comp_to_normal_map, values_compressed, values_intra=None):
