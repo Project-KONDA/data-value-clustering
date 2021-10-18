@@ -682,6 +682,7 @@ class Hub:
 
         self.set_saved(False)
         self.configuration.excel_saved = False
+        self.configuration.excel_save_path = None
 
         # self.label_clustering_progress.configure(text="Saving in progress ...", fg='RoyalBlue1')
         # self.root.update()
@@ -952,4 +953,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub(restricted=True)
+    Hub(restricted=False)
