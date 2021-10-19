@@ -10,6 +10,8 @@ from gui_distances.Blob import Blob
 from gui_distances.blobinput_helper import get_blob_configuration, \
     create_coordinates_relative
 from gui_distances.costmapinput_helper import print_cost_map
+import os
+from pathlib import Path
 
 EXPLANATION = "Weight the influence of deletions/insertions and substitutions of certain characters and character sequences on the dissimilarity between data values"
 SUB_EXPLANATION = "Each blob represents a group of characters and character sequences. " \
@@ -171,13 +173,16 @@ class BlobInput:
             self.button_w = self.x * 2 // 3 - 2 * self.gui_spacing
             self.button_h = self.h * 2 // 3 // 18
 
-        self.button_image_restart = Image.open("..\\gui_distances\\blob_images\\button_restart.png")
+        dir_path = str(Path(__file__).parent.parent) + "\\gui_distances\\blob_images"
+        os.chdir(dir_path)
+
+        self.button_image_restart = Image.open(dir_path + "\\button_restart.png")
         self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
         self.button_image_restart = ImageTk.PhotoImage(self.button_image_restart)
-        self.button_image_ok = Image.open("..\\gui_distances\\blob_images\\button_ok.png")
+        self.button_image_ok = Image.open(dir_path + "\\button_ok.png")
         self.button_image_ok = self.button_image_ok.resize((self.button_w, self.button_h), Image.ANTIALIAS)
         self.button_image_ok = ImageTk.PhotoImage(self.button_image_ok)
-        self.button_image_expert = Image.open("..\\gui_distances\\blob_images\\button_expert.png")
+        self.button_image_expert = Image.open(dir_path + "\\button_expert.png")
         self.button_image_expert = self.button_image_expert.resize((self.button_w, self.button_h), Image.ANTIALIAS)
         self.button_image_expert = ImageTk.PhotoImage(self.button_image_expert)
 

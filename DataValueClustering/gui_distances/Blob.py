@@ -1,5 +1,7 @@
 from math import sqrt
 from PIL import Image, ImageTk
+import os
+from pathlib import Path
 
 
 class Blob:
@@ -24,7 +26,9 @@ class Blob:
         self.step_size = 0.05
         self.max_size = 5.5  # self.min_size + 100 * self.step_size
 
-        self.path = "..\\gui_distances\\blob_images\\" + (lambda: "" if self.resizable else "fixed\\")() + self.label + ".png"
+        dir_path = str(Path(__file__).parent.parent) + "\\gui_distances\\blob_images" + (lambda: "" if self.resizable else "\\fixed")()
+        os.chdir(dir_path)
+        self.path = dir_path + "\\" + self.label + ".png"
         self.photo_image = None
         self.image = self.create_image()
 
