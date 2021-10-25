@@ -59,8 +59,12 @@ def get_fieldnames(database):
     return execute_xquery(query, None)
 
 
-def get_attributenames(database):
-    query = 'distinct-values(doc("' + database + '")//@*/name())'
+def get_attributenames(database, field_name=None):
+    query = 'distinct-values(doc("' + database + '")"'
+    if field_name is None:
+        query += '//@*/name())'
+    else:
+        query += '//*[name()="' + field_name + '"]/@*/name())'
     return execute_xquery(query, None)
 
 
