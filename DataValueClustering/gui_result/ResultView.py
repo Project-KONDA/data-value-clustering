@@ -109,7 +109,7 @@ class ResultView:
                                          self.configuration.distance_matrix_map["distance_matrix"],
                                          self.configuration.clusters_abstracted)
 
-        self.info = Label(self.scrollable_frame_summary,
+        self.info = Label(self.scrollable_frame_summary, bg="white",
                           text="The plot visualizes the calculated distances and clusters. "
                                "Each dot represents an abstracted value representing a group of original values treated equivalently. "
                                "Each dot is labeled with one of these original values. "
