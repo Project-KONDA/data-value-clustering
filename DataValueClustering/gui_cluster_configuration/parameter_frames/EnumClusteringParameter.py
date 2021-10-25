@@ -82,9 +82,10 @@ class EnumClusteringParameter(ClusteringParameter):
     def update_options(self, new_options):
         self.option_labels_activated = new_options
         assert len(new_options) > 0
+        self.default = np.where(self.option_labels == new_options[0])[0][0]
         self.update_active()
         if not self.option_labels[self.choice.get()] in new_options:
-            self.choice.set(np.where(self.option_labels == new_options[0])[0][0])
+            self.choice.set(self.default)
             self.update_dependency(DEPENDENCY_ENUM_ACTIVATION)
 
     def update_enum(self):
