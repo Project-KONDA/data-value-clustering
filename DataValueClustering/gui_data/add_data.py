@@ -131,8 +131,7 @@ class AddData:
         if self.state_attribute.get() == 1:
             if self.attributenames == list():
                 self.attributenames = get_attributenames(self.entry_path.get())
-            self.combobox_attribute.configure(values=self.attributenames)
-            self.combobox_attribute.configure(state="normal")
+            self.combobox_attribute.configure(values=self.attributenames, state="normal")
         else:
             self.combobox_attribute.configure(state="disabled")
 

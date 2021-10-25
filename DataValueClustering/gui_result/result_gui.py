@@ -28,7 +28,7 @@ def show_mds_scatter_plot_integrated(root, values_compressed, distance_matrix, c
     a.set_title("MDS Scatter Plot", fontsize=10)
     a.axis('equal')
     clusters_compressed_plus_one = np.copy(clusters_compressed)
-    for i,e in enumerate(clusters_compressed):
+    for i, e in enumerate(clusters_compressed):
         clusters_compressed_plus_one[i] = clusters_compressed[i]+1
     scatter = a.scatter(out[:, 0], out[:, 1], c=clusters_compressed_plus_one, norm=plt.Normalize(vmin=min(clusters_compressed_plus_one), vmax=max(clusters_compressed_plus_one)), cmap="nipy_spectral")
     handles, labels = scatter.legend_elements()

@@ -5,7 +5,6 @@ from PIL import Image
 from PIL.ImageTk import PhotoImage
 from math import floor
 
-
 from gui_general.scrollable_frame import create_scrollable_frame
 
 def menu_help_hub(master):
