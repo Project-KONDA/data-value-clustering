@@ -239,8 +239,7 @@ class ResultView:
                 if not self.configuration.excel_saved:
                     self.configuration.save_as_excel()
                     self.configuration.excel_saved = True
-                subprocess.check_output('"' + self.configuration.excel_save_path + '"', shell=True,
-                                        stderr=subprocess.STDOUT)
+                os.startfile('"' + self.configuration.excel_save_path + '"')
             except (PermissionError, xlsxwriter.exceptions.FileCreateError) as e:
                 messagebox.showerror("Error",
                                        "Cannot save file at selected path since the file exists already and is currently open."
@@ -248,10 +247,7 @@ class ResultView:
                                        icon=ERROR)
                 self.configuration.excel_save_path = None
             except subprocess.CalledProcessError as e:
-                messagebox.showerror("Error",
-                                     "File is already open.",
-                                     icon=ERROR)
-
+                messagebox.showerror("Error", "File is already open.", icon=ERROR)
             # os.system('"' + self.configuration.excel_save_path + '"')
 
     def get_info(self):

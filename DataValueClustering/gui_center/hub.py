@@ -424,8 +424,7 @@ class Hub:
                 if not self.configuration.excel_simple_saved:
                     self.configuration.save_simple_as_excel()
                     self.configuration.excel_simple_saved = True
-                subprocess.check_output('"' + self.configuration.excel_simple_save_path + '"', shell=True,
-                                        stderr=subprocess.STDOUT)
+                os.startfile('"' + self.configuration.excel_simple_save_path + '"')
             except (PermissionError, xlsxwriter.exceptions.FileCreateError) as e:
                 messagebox.showerror("Error",
                                        "Cannot save file at selected path since the file exists already and is currently open."
@@ -433,9 +432,7 @@ class Hub:
                                        icon=ERROR)
                 self.configuration.excel_simple_save_path = None
             except subprocess.CalledProcessError as e:
-                messagebox.showerror("Error",
-                                     "File is already open.",
-                                     icon=ERROR)
+                messagebox.showerror("Error", "File is already open.", icon=ERROR)
             # os.system('"' + self.configuration.excel_simple_save_path + '"')
 
     def data_path_from_name(self, data_name):
