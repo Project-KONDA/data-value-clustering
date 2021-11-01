@@ -25,11 +25,12 @@ def redundant_char_warning(entry):
 
 
 def update_label_text(char, label, mapping):
-    string = label.cget("text")
-    if string != "":
-        string += "\n"
-    string += "'" + char + "' - " + mapping
-    label.config(text=string)
+    if char != "_":
+        string = label.cget("text")
+        if string != "":
+            string += "\n"
+        string += "'" + char + "' - " + mapping
+        label.config(text=string)
 
 
 def undefined_char_warning(entry):

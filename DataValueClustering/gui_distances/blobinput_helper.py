@@ -101,12 +101,12 @@ blob_configuration_array = [
      '\'"\' represents all quotation marks, i.e. \'"\', \'`\', \'´\', \'\'\', » and «.'],
     [[],           [12, 16],                 "quotation_marks",             "\"`´'»«",                                                 True,
      'all quotation marks, i.e. \'"\', \'`\', \'´\', \'\'\', » and «.'],
-    [[17],         [12],                     "other_characters",            "_",                                                       False,
-     "'_' represents all characters that are not letters, digits, blank space, punctuation marks, brackets, math operators or quotation marks. "],
-    [[],           [12, 17],                 "other_characters",            "§", True,  # TODO: handle rest
-     "'^' represents all other characters."],
+    [[17],         [12],                     "other_characters",            "§",                                                       False,
+     "'§' represents all characters that are not letters, digits, blank space, punctuation marks, brackets, math operators or quotation marks. "],
+    [[],           [12, 17],                 "other_characters",            "_", True,
+     "'_' represents all other characters."],
     [[12],         [],                       "other_characters",            "§",                                                       False,
-     "'$' represents all characters that are not letters or digits or blank space."]
+     "'§' represents all characters that are not letters or digits or blank space."]
 ]
 
 
