@@ -55,7 +55,7 @@ blob_configuration_array = [
 
     [[0],          [1, 3],                   "lower_case_letters",          "l",                                                       False,
      "'l' represents all lower case letters, e.g. 'a', 'b' and 'c'."],
-    [[],           [0],                      "lower_case_letters",          "abcdefghijklmnopqrstuvwxyzäöüß",                                               True,
+    [[],           [0],                      "lower_case_letters",          "abcdefghijklmnopqrstuvwxyzäöüßáàãéèíìóòōúùøñçčåâêěëîïæœôûřÿýṭžşūšēőżůćłęĺńǰǐṣąűśḥĉõźā",                                               True,
      "all lower case letter sequences, i.e. lower case words, e.g. 'red' and 'to'."],
     [[0, 3],       [1, 6],                   "lower_case_words",            "s",                                                       False,
      "'s' represents all lower case letter sequences, i.e. lower case words, e.g. 'red' and 'to'."],
@@ -71,7 +71,7 @@ blob_configuration_array = [
      "'Q' represents all sequences of sequences of lower and upper case letters separated by a blank space, e.g. 'in USA' and 'around or in Marburg'."],
     [[2],          [1, 5],                   "upper_case_letters",          "L",                                                       False,
      "'L' represents all upper case letters, e.g. 'A', 'B' and 'C'."],
-    [[],           [1, 2],                   "upper_case_letters",          "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ",                                                True,
+    [[],           [1, 2],                   "upper_case_letters",          "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜÁÀÉÈĚĖÍÌÓÒŌÚÙÑÅÂÃÇČÊËÎÏḤŚŠṢŁŘÆÔŒÛŸŻŽ",                                                True,
      "all upper case letters, e.g. 'A', 'B' and 'C'."],
     [[2, 5],       [1],                      "upper_case_letter_sequences", "S",                                                       False,
      "'S' represents all sequences of upper case letters, e.g. 'USA' and 'EU'."],
