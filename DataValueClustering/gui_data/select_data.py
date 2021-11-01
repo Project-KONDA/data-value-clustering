@@ -16,12 +16,12 @@ def get_list(path=""):
     return get_sources_in_experiment_data_directory()[:, 0]
 
 
-def select_data(master, previous=None, single_cluster_data=None):
-    return SelectData(master, "", previous, single_cluster_data).get()
+def select_data(master, previous=None, single_cluster_data=None, restricted=False):
+    return SelectData(master, "", previous, single_cluster_data, restricted).get()
 
 
 class SelectData:
-    def __init__(self, master, path, previous=None, single_cluster_data=None):
+    def __init__(self, master, path, previous=None, single_cluster_data=None, restricted=False):
         self.path = path
         self.previous = previous
         self.single_cluster_data = single_cluster_data
@@ -35,6 +35,9 @@ class SelectData:
             self.root.iconphoto(False, master.icon)
 
         self.menu = Menu(self.root)
+        if not restricted:
+            self.menu.add_command(label="Files", command=self.openFolder)
+            self.menu.add_command(label="Reload", command=self.load)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
         self.root.config(menu=self.menu)
 
@@ -63,9 +66,12 @@ class SelectData:
             self.label_hint.grid(sticky='nswe', row=2, column=1, columnspan=4, padx=10)
         self.listbox.grid(sticky='nswe', row=3, column=1, columnspan=3)
         self.scrollbar.grid(sticky='nse', row=3, column=4)
-        self.button_add.grid(sticky='nswe', row=5, column=1, columnspan=1)
-        self.button_remove.grid(sticky='nswe', row=5, column=2, columnspan=1)
-        self.button_ok.grid(sticky='nswe', row=5, column=3, columnspan=2)
+        if restricted:
+            self.button_ok.grid(sticky='nswe', row=5, column=1, columnspan=4)
+        else:
+            self.button_add.grid(sticky='nswe', row=5, column=1, columnspan=1)
+            self.button_remove.grid(sticky='nswe', row=5, column=2, columnspan=1)
+            self.button_ok.grid(sticky='nswe', row=5, column=3, columnspan=2)
 
         CreateToolTip(self.button_add, "Add a data value set.")
         CreateToolTip(self.button_remove, "Remove selected data value set.")
@@ -89,6 +95,9 @@ class SelectData:
         if self.previous is not None:
             index = np.where(self.datalist == self.previous)[0][0]
             self.listbox.select_set(index)
+
+    def openFolder(self):
+        os.startfile(os.getcwd())
 
     def add(self):
         try:

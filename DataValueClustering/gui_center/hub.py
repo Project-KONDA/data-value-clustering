@@ -451,7 +451,8 @@ class Hub:
         previous_data_path = self.configuration.get_data_configuration()[0]
         previous_data_name = data_name_from_path(previous_data_path)
 
-        data_name = select_data(self.root, previous_data_name, get_suggested_data(self.get_validation_answers()))
+        data_name = select_data(self.root, previous_data_name, get_suggested_data(self.get_validation_answers()),
+                                self.restricted)
 
         if data_name is None or previous_data_name == data_name:
             self.update()
