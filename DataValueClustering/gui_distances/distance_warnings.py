@@ -165,7 +165,7 @@ def update_warnings(entry_list, label_warning, n, label_list, abstraction, toolt
                                     tool_tips_labels[i] += mapping[3]
                                 abstraction_char_occurred = not enum_match
                             elif l == j == 0 and entry_char not in chars_in_abstraction and entry_char not in \
-                                    undefined_chars_per_entry[i] and not enum_match:
+                                    undefined_chars_per_entry[i] and not enum_match and re.search("[^a-zäöüßáàãéèíìóòōúùøñçčåâêěëîïæœôûřÿýṭžşūšēőżůćłęĺńǰǐṣąűśḥĉõźāA-ZÄÖÜÁÀÉÈĚĖÍÌÓÒŌÚÙÑÅÂÃÇČÊËÎÏḤŚŠṢŁŘÆÔŒÛŸŻŽ0-9 \.,:;!\?\(\)\[\]\{\}\+\-\*/%=<>\&\|\"`´']", entry_char) is None:
                                 undefined_chars_per_entry[i].append(entry_char)
                                 undefined_char_warning(entry)
     for i, entry in enumerate(entry_list):
