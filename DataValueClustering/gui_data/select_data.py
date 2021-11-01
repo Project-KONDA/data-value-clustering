@@ -35,6 +35,8 @@ class SelectData:
             self.root.iconphoto(False, master.icon)
 
         self.menu = Menu(self.root)
+        self.menu.add_command(label="Files", command=self.openFolder)
+        self.menu.add_command(label="Reload", command=self.load)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
         self.root.config(menu=self.menu)
 
@@ -89,6 +91,9 @@ class SelectData:
         if self.previous is not None:
             index = np.where(self.datalist == self.previous)[0][0]
             self.listbox.select_set(index)
+
+    def openFolder(self):
+        os.startfile(os.getcwd())
 
     def add(self):
         try:
