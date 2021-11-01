@@ -94,16 +94,16 @@ blob_configuration_array = [
     [[],           [12, 14],                 "brackets",                    "()[]{}",                                          True,
      "all brackets, i.e. '(', '[', '{' and the corresponding opposites."],
     [[15],         [12],                     "math_operators",              "+",                                                      False,
-     "'+' represents all math operators, i.e. '+', '-', '*', '/', '%', '=', '<', '>', '&', and '|'."],
-    [[],           [12, 15],                 "math_operators",              "+-*/%=<>&|",                                       True,
-     "all math operators, i.e. '+', '-', '*', '/', '%', '=', '<', '>', '&', and '|'."],
+     "'+' represents all math operators, i.e. '+', '-', '*', '/', '%', '=', '<', '>', '&', '^' and '|'."],
+    [[],           [12, 15],                 "math_operators",              "+-*/%=<>^&|",                                       True,
+     "all math operators, i.e. '+', '-', '*', '/', '%', '=', '<', '>', '&', '^' and '|'."],
     [[16],         [12],                     "quotation_marks",             '"',                                                      False,
-     '\'"\' represents all quotation marks, i.e. \'"\', \'`\', \'´\' and \'\'\'.'],
-    [[],           [12, 16],                 "quotation_marks",             "\"`´'",                                                 True,
-     'all quotation marks, i.e. \'"\', \'`\', \'´\' and \'\'\'.'],
+     '\'"\' represents all quotation marks, i.e. \'"\', \'`\', \'´\', \'\'\', » and «.'],
+    [[],           [12, 16],                 "quotation_marks",             "\"`´'»«",                                                 True,
+     'all quotation marks, i.e. \'"\', \'`\', \'´\', \'\'\', » and «.'],
     [[17],         [12],                     "other_characters",            "_",                                                       False,
      "'_' represents all characters that are not letters, digits, blank space, punctuation marks, brackets, math operators or quotation marks. "],
-    [[],           [12, 17],                 "other_characters",            "^", True,  # TODO: handle rest
+    [[],           [12, 17],                 "other_characters",            "§", True,  # TODO: handle rest
      "'^' represents all other characters."],
     [[12],         [],                       "other_characters",            "§",                                                       False,
      "'$' represents all characters that are not letters or digits or blank space."]
