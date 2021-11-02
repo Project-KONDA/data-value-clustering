@@ -60,6 +60,10 @@ class BlobInput:
         self.canceled = False
         self.matrix_costmap = None
 
+
+        dir_path = str(Path(__file__).parent.parent) + "\\gui_distances\\blob_images"
+        os.chdir(dir_path)
+
         """Frame"""
         self.window_size = 3 / 4
         self.w = int(self.root.winfo_screenwidth() * self.window_size)
@@ -106,7 +110,7 @@ class BlobInput:
         self.canvas.place(anchor='nw', x=self.gui_spacing, y=self.gui_spacing)
 
         # garbage collector defense mechanism
-        self.img = Image.open("..\\gui_distances\\blob_images\\background4.png")
+        self.img = Image.open(dir_path + "\\background4.png")
         self.img = self.img.resize((self.canvas_w, self.canvas_h), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
         self.background_image = self.img
@@ -172,9 +176,6 @@ class BlobInput:
         else:
             self.button_w = self.x * 2 // 3 - 2 * self.gui_spacing
             self.button_h = self.h * 2 // 3 // 18
-
-        dir_path = str(Path(__file__).parent.parent) + "\\gui_distances\\blob_images"
-        os.chdir(dir_path)
 
         self.button_image_restart = Image.open(dir_path + "\\button_restart.png")
         self.button_image_restart = self.button_image_restart.resize((self.button_w, self.button_h), Image.ANTIALIAS)
