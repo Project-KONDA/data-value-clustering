@@ -182,6 +182,8 @@ def get_abstraction_method(answers):
         if unique:
             # remove redundancy:
             values_abstracted = np.array(list(set(values_abstracted)))  # order differs across multiple runs
+        else:
+            values_abstracted = np.array(values_abstracted)
         return values_abstracted, abstraction_dict
 
     n = len(answers)
