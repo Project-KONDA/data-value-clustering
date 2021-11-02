@@ -328,6 +328,9 @@ class BlobInput:
         self.close(canceled=True)
 
     def close(self, event=None, canceled=False):
+
+        os.chdir(str(Path(__file__).parent))
+
         """Close Tk Window"""
         self.canceled = canceled
         self.unbind_all()
