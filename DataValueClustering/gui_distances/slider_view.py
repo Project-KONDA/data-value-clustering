@@ -190,7 +190,8 @@ class SliderInput:
         self.sliderlist[i].configure(state="disabled", fg=disable_scale_color_fg, troughcolor=disable_scale_color_trough)
 
     def enable_slider(self, i):
-        self.valuelist[i].set(1)
+        if self.sliderlist[i]['state'] == 'disabled':
+            self.valuelist[i].set(1)
         self.sliderlist[i].configure(state="normal", fg=self.fg_color, troughcolor=self.troughcolor_color)
 
     def remove_duplicate_chars(self):
