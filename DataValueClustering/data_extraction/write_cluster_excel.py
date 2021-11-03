@@ -229,11 +229,12 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet4.write_number(2, i * 2 + 1, cluster_counts_sorted[i], style_sum)
             sheet4.write(2, i * 2 + 2, "", style_grey_right)
 
+            representative = simple_cluster[v][0]
             cluster_unique, cluster_count = get_sorted_unique_values_counts(simple_cluster[v])
 
             row_offset = 2
             row_offset += 1
-            sheet4.write(row_offset, i * 2 + 1, cluster_unique[0], style_representative)
+            sheet4.write(row_offset, i * 2 + 1, representative, style_representative)
             sheet4.write(row_offset, i * 2 + 2, "", style_grey_right)
 
             row_offset += 1
