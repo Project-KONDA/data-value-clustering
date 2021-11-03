@@ -100,6 +100,7 @@ def data_name_from_path(data_path):
 class Hub:
 
     def __init__(self, loadpath=None, restricted=False):
+        os.chdir(str(Path(__file__).parent))
 
         load_and_compile()
 
