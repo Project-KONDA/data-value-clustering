@@ -6,6 +6,8 @@ from BaseXClient import BaseXClient
 import numpy as np
 
 from data_extraction import get_sources_in_experiment_data_directory
+from data_extraction.write_cluster_excel import data_to_excel
+from export.path import getExcelSavePath
 from gui_data.add_data import add_data
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_data_selection
@@ -38,6 +40,7 @@ class SelectData:
         if not restricted:
             self.menu.add_command(label="Files", command=self.openFolder)
             self.menu.add_command(label="Reload", command=self.load)
+            self.menu.add_command(label="Export", command=self.export_data_as_excel)
         self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
         self.root.config(menu=self.menu)
 
@@ -98,6 +101,25 @@ class SelectData:
 
     def openFolder(self):
         os.startfile(os.getcwd())
+
+    def export_data_as_excel(self):
+
+        def read_data_values_from_file(path):
+            with open(path, encoding='UTF-8') as f:
+                values = f.read().splitlines()
+            assert len(values) > 0
+            return values
+
+        index = self.listbox.curselection()
+        if index == ():
+            return
+        path = getExcelSavePath()
+        data_path = "..\\data\\" + self.datalist[index] + ".txt"
+        data = read_data_values_from_file(data_path)
+
+        if not (data and path):
+            return
+        data_to_excel(path, data)
 
     def add(self):
         try:

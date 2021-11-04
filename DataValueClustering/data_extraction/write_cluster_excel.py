@@ -1,4 +1,6 @@
 '''Export calculated clustering to excel file.'''
+from collections import OrderedDict
+
 import xlsxwriter
 
 from data_extraction.representants import get_repr_list
@@ -300,6 +302,58 @@ def write_list_to_sheet(sheet, x, y, list, style=None, number=False):
             sheet.write_number(x + i, y, v, style)
         else:
             sheet.write(x + i, y, v, style)
+
+
+def data_to_excel(path, data):
+    dict = get_dict_occurences(data)
+    data_size = len(data)
+    if path is None:
+        return
+    if not (path.endswith('.xlsx')):
+        path += '.xlsx'
+
+    workbook = xlsxwriter.Workbook(path)
+    style_caption = workbook.add_format(
+        {'bold': True, 'font_color': 'red', 'left': 2, 'bottom': 1, 'font_size': 15, 'bg_color': '#DDDDDD'})
+    style_val_right = workbook.add_format({'right': 2})
+
+    sheet1 = workbook.add_worksheet("Raw Data")
+    for i, v in enumerate(data):
+        sheet1.write(i, 0, v)
+
+    sheet2 = workbook.add_worksheet("Occurences")
+    data_occurence = OrderedDict(sorted(dict.items(), key=lambda x: -x[1]))
+    sheet2.write(1, 1, "Data", style_caption)
+    sheet2.write(1, 2, "#", style_caption)
+    for i, (key, value) in enumerate(data_occurence.items()):
+        sheet2.write(i+2, 1, key, style_val_right)
+        sheet2.write(i+2, 2, value)
+
+    sheet2.conditional_format(2, 2, data_size + 2, 2,
+                              {'type': 'data_bar', 'bar_color': '#63C384'})
+
+    sheet3 = workbook.add_worksheet("Alphabetical")
+    data_alpabetical = OrderedDict(sorted(dict.items(), key=lambda x: x[0]))
+    sheet3.write(1, 1, "Data", style_caption)
+    sheet3.write(1, 2, "#", style_caption)
+    for i, (key, value) in enumerate(data_alpabetical.items()):
+        sheet3.write(i+2, 1, key, style_val_right)
+        sheet3.write(i+2, 2, value)
+
+    sheet3.conditional_format(2, 2, data_size + 2, 2,
+                              {'type': 'data_bar', 'bar_color': '#63C384'})
+    workbook.close()
+    print("export done")
+
+
+def get_dict_occurences(data):
+    dict = {}
+    for datum in data:
+        if datum in dict:
+            dict[datum] = dict[datum]+1
+        else:
+            dict[datum] = 1
+    return dict
 
 
 if __name__ == '__main__':
