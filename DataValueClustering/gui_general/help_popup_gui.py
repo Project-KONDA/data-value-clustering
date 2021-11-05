@@ -1,7 +1,7 @@
 '''text popup for context menu, used as help'''
 import os
 from pathlib import Path
-from tkinter import Label, Toplevel, W, LEFT, E, RIGHT, Button
+from tkinter import Label, Toplevel, W, LEFT, E, RIGHT, Button, N
 from PIL import Image
 from PIL.ImageTk import PhotoImage
 from math import floor
@@ -230,8 +230,8 @@ def menu_help_clustering_configuration(master, restricted):
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
         {"\\param_simple.png"},
-        {"\\param_expert1.png" if not restricted else ""},
-        {"\\param_expert2.png" if not restricted else ""},
+        {"\\param_expert_1.png" if not restricted else ""},
+        {"\\param_expert_2.png" if not restricted else ""},
     ]
     menu_information_display(master, caption, text)
 
