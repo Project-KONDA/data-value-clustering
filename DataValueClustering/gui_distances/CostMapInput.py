@@ -264,7 +264,7 @@ class CostMapInput:
 
     def enable_row_column(self, i):
         for j in range(self.n):
-            if j <= i:
+            if j <= i and self.value_entries[j,i]["state"] != "normal":
                 self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
                 self.value_entries[j, i].insert(END, int(i != j))
                 self.value_entries[j, i].configure(state="normal")
@@ -275,10 +275,10 @@ class CostMapInput:
             entry.register(
                 lambda s, i2=i, j2=j: self.validate_input_float_copy(text=s, i2=i2, j2=j2)), '%P')  # , '%d')
         if not self.empty:
-            if self.costmap is None or i >= self.map_n or j >= self.map_n:
-                entry.insert(END, int(i != j))
-            else:
+            try:
                 entry.insert(END, self.costmap[(i, j)])
+            except:
+                entry.insert(END, int(i != j))
         if i == j:
             entry.config(bg='floral white')
         if i > j:
