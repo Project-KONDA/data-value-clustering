@@ -181,9 +181,13 @@ class Hub:
         self.button_clustering.grid(sticky='nwe', row=15, column=1, columnspan=2, padx=10, pady=10)
 
         CreateToolTip(self.button_data, "Specify which data you intend to analyse.")
-        CreateToolTip(self.button_abstraction, "Specify features of the data values that you are not interested in.")
+        CreateToolTip(self.button_abstraction, "Specify which features of the data values you are not interested in.")
         CreateToolTip(self.button_distance, "Specify how certain features influence the dissimilarity between data values.")
-        CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
+        if self.restricted:
+            CreateToolTip(self.button_clustering,
+                          "Specify the parameters of the clustering algorithm.")
+        else:
+            CreateToolTip(self.button_clustering, "Specify which clustering algorithm should be applied.")
 
         self.button_distance_play = Button(self.refined_clustering_frame, text='▶', command=self.execute_distance,
                                            width=4, height=2, state="disabled")
