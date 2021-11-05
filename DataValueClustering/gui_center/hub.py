@@ -499,6 +499,8 @@ class Hub:
         abstraction_changed = self.configuration.abstraction_configuration_valid()
         if abstraction_changed:
             self.configuration.set_distance_configuration(None)
+            self.configuration.set_clustering_selection(None)
+            self.configuration.set_clustering_configuration(None)
         self.reset_validation_answers()
         self.configuration.set_abstraction_configuration(abstraction_answers)
         # 5. update self
