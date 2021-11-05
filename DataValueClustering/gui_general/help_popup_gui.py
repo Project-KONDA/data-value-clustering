@@ -334,10 +334,7 @@ def menu_information_display(master, caption, content):
                 img = Image.open(dir_path + pop)
                 if img.width > width:
                     height_new = floor(img.height * width/img.width)
-                    img = img.resize((height_new, width), Image.ANTIALIAS)
-                # else:
-                    # img = img.resize((floor(img.height * 0.75), floor(img.width * 0.75)), Image.ANTIALIAS)
-                # img = img.resize( [int(0.5 * s) for s in img.size] )
+                    img = img.resize((width, height_new), Image.ANTIALIAS)
                 img = PhotoImage(img)
                 l = Label(scrollable_frame, image=img)
                 l.grid(row=i, column=1, sticky=W+E)
