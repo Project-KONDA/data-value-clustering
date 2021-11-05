@@ -13,7 +13,7 @@ class QuestionnaireResultInput(ABC):
 
     # config: [dependencies, not-dependencies, name, default, question, notes?]
 
-    def __init__(self, master, title, config, predefined_answers=None, start_row=0, suggestion=None):
+    def __init__(self, master, title, config, predefined_answers=None, start_row=0, suggestion=None, disabled=None):
         # Parameters
         self.config = np.array(config, dtype=object)
         self.n = len(config)
@@ -85,6 +85,8 @@ class QuestionnaireResultInput(ABC):
             self.answers[i].set(int(self.config_default[i]))
             self.checks[i] = Checkbutton(self.scrollable_questions_frame, variable=self.answers[i], command=lambda j=i: self.selection_changed(j), bg='white', text=question, anchor='nw', padx=20)
             self.checks[i].grid(row=j + 5, column=0, sticky='nw')
+            if disabled is not None and i in disabled:
+                self.checks[i].config(state=DISABLED)
             if self.m > 5:
                 message = str(self.config_notes[i])
                 CreateToolTip(self.checks[i], text=message)

@@ -16,15 +16,15 @@ CAPTION_PART_ONE = "Answer the following questions to configure the abstraction 
 DEFAULT_CONFIG = "Letter Sequences & Digit Sequences (Default)"
 MANUAL_CONFIG = "Custom Configuration"
 
-def abstraction_configuration(master, data, predefined_answers=None, suggestion=None):
-    answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers, suggestion)
+def abstraction_configuration(master, data, predefined_answers=None, suggestion=None, restricted=False):
+    answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers, suggestion, restricted)
     if answers is None:
         return None, None
     return get_abstraction_method(answers), answers
 
 
-def input_questionnaire_abstraction(master, config, data, predefined_answers=None, suggestion=None):
-    questionnaire = AbstractionQuestionnaireResultInput(master, config, data, predefined_answers, suggestion)
+def input_questionnaire_abstraction(master, config, data, predefined_answers=None, suggestion=None, restricted=False):
+    questionnaire = AbstractionQuestionnaireResultInput(master, config, data, predefined_answers, suggestion, restricted)
     questionnaire.run()
     answers = questionnaire.get()
     return answers
@@ -33,7 +33,7 @@ def input_questionnaire_abstraction(master, config, data, predefined_answers=Non
 class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
     """ binary questionaire GUI for configuring the abstraction function """
 
-    def __init__(self, master, config, data, predefined_answers=None, suggestion=None):
+    def __init__(self, master, config, data, predefined_answers=None, suggestion=None, restricted=False):
         self.caption_text = CAPTION_PART_ONE
         self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values " \
                          "and that do not alter the values’ meaning significantly. " \
@@ -42,7 +42,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
                          "A preview of the simple clustering achieved through the abstraction is shown on demand."
         if suggestion is not None:
             suggestion = "Advice based on the clustering evaluation:" + suggestion
-        super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion)
+        if restricted:
+            disabled = [18]
+        else:
+            disabled = None
+        super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion, disabled)
 
         # self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 
