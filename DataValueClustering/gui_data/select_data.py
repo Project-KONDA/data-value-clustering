@@ -41,7 +41,7 @@ class SelectData:
             self.menu.add_command(label="Files", command=self.openFolder)
             self.menu.add_command(label="Reload", command=self.load)
             self.menu.add_command(label="Export", command=self.export_data_as_excel)
-        self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_data_selection(self.root, restricted))
         self.root.config(menu=self.menu)
 
         self.result = None

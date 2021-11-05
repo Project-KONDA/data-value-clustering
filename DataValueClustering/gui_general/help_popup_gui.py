@@ -1,13 +1,16 @@
 '''text popup for context menu, used as help'''
-
+import os
+from pathlib import Path
 from tkinter import Label, Toplevel, W, LEFT, E, RIGHT, Button
 from PIL import Image
 from PIL.ImageTk import PhotoImage
 from math import floor
 
 from gui_general.scrollable_frame import create_scrollable_frame
+from gui_general.window_size import set_window_size_simple
 
-def menu_help_hub(master):
+
+def menu_help_hub(master, restricted):
     """help popup for hub view"""
     caption = "Hub"
     text = [
@@ -26,20 +29,24 @@ def menu_help_hub(master):
         "",
         ["Managing Configurations & Results"],
         "You can save, load and reset your configuration via the menu at the top of the window. Note that autosave is not supported.",
+        {"\\hub_execute_dissimilarities" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
 
 
-def menu_help_data_selection(master):
+def menu_help_data_selection(master, restricted):
     """help popup for Data Selection view"""
     caption = "Data Selection"
+
     text = [
         "The Data Selection view allows you to select the data set to be clustered. Each data set consists of a set of data values extracted from a database. When first starting the program, a few predefined data sets are available.",
-        "To add a data set, press the '+' button below. For this, a local BaseX client is required. For this, please install BaseX and execute 'bin/basexserver.bat'.",
-        "To remove a data set, press the '-' button below, but be careful as once removed data sets cannot be recovered.",
+        "As shown by the screenshot below, we chose the 'classification' data value set for our running example. It contains values of the corresponding LIDO field for classifying the object described by the data.",
+        None if restricted else "To add a data set, press the '+' button below. For this, a local BaseX client is required. For this, please install BaseX and execute 'bin/basexserver.bat'.",
+        None if restricted else "To remove a data set, press the '-' button below, but be careful as once removed data sets cannot be recovered.",
         "",
         "To confirm your data selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
+        {"\\data_selection" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
 
@@ -48,60 +55,71 @@ def menu_help_data_add(master):
     """help popup for Data Addition view"""
     caption = "Data Addition"
     text = [
-        "The Data Addition view allows you to add a data set to the list of supported data sets selectable in the Select Data view. Currently, only XML data is supported. For this, you must specify a name for the data set, which will be displayed in the Select Data view. Further, you must specify the XML file containing the data and specify the data field (i.e. XML element) of interest. Per default, the content of the corresponding XML elements will be extracted. Alternatively, you can specify an attribute whose value will be extracted.",
+        "The Data Addition view allows you to add a data set to the list of supported data sets selectable in the Select Data view. Currently, only XML data is supported. For this, you must specify a name for the data set, which will be displayed in the Select Data view. Further, you must specify the XML file containing the data and specify the data field (i.e. XML element) of interest. In the example below we chose the field 'lido:extentMeasurements'. Per default, the content of the corresponding XML elements will be extracted. Alternatively, you can specify an attribute whose value will be extracted.",
         "",
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
+        {"\\data_addition.png"},
     ]
     menu_information_display(master, caption, text)
 
 
-def menu_help_abstraction(master):
+def menu_help_abstraction(master, restricted):
     """help popup for Abstraction Configuration view"""
     caption = "Abstraction Configuration"
     text = [
         "The Abstraction Configuration view allows you to configure the abstraction from irrelevant features of the data values based on your domain knowledge. The result of applying the abstraction is a smaller set of shorter values, the abstracted values. This represents a first grouping of the data values, which we call Simple Clustering.",
         "",
         ["Questionnaire"],
-        "To achieve an abstraction that fits your data, you should answer the questions based on your domain knowledge. You can start with one of the predefined configurations if you like, but you should carefully read and answer each question since the abstraction has great influence on the final clustering. Please use your domain knowledge about the selected data and data field to decide which features of the data values are irrelevant for clustering. You should abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly.",
+        "To achieve an abstraction that fits your data, you should answer the questions based on your domain knowledge. You can start with one of the predefined configurations. The default configuration typically yields good results.",
+        "Please use your domain knowledge to abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly.",
+        "For our running example we chose the default configuration. Since we expect a variety of textual values, we assume that which concrete letters occur, whether they are capitalized or not and how long the words are does not influence the meaning of the values significantly. Even if unexpected digits occur, the concrete digits and the length of digit sequences is not of interest.",
+        "The less questions you answer with 'yes' the loner the runtime of the dissimilarity calculation will be.",
         "Note that each question is explained in detail in the corresponding Tooltip shown when hovering over the question. Some questions are dynamically enabled/disabled depending on your answers to related questions.",
         "",
         ["Result Preview"],
-        "The result of applying the configured abstraction to the first 100 data values is shown upon clicking the  'Preview' button on the right-hand side. Hence, this is a preview of the Simple Clustering. Each cluster is represented by a yellow block of text showing the contained values. The preview is updated dynamically when you modify your answers.",
+        "The result of applying the configured abstraction to the first 100 data values is shown upon clicking the 'Preview' button on the right-hand side. Hence, this is a preview of the Simple Clustering. Each cluster is represented by a yellow block of text showing the contained values. The preview is updated dynamically when you modify your answers.",
+        "As the screenshot below shows, the abstraction of the first 100 data values often does not provide a sufficient overview of the whole abstraction.",
         "",
         ["Confirm & Discard"],
         "To confirm your configuration of the abstraction, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
+        {"\\abstraction_normal_tip" + ("_restricted" if restricted else "") + ".png"},
+        {"\\abstraction_preview" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
 
 
-def menu_help_distance_slider(master):
+def menu_help_distance_slider(master, restricted):
     """help popup for Dissimilarity Configuration - Sliders view"""
     caption = "Dissimilarity Configuration - Sliders"
     text = [
         "The Sliders view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of certain characters or character sequences on the dissimilarity between data values in which they occur. These weights are specified via sliders. You should choose the weights based on your domain knowledge about the data field analysed.",
         "",
         ["Character Groups"],
-        "On the left-hand side, the characters (and character sequences) are specified. Depending on the abstraction they are represented as enumerations (not -abstracted) or via a descriptive label (abstracted). The Tooltips provide explanations. All characters (and sequences) of the same group are assigned the same weight.",
+        "On the left-hand side, the characters (and character sequences) are specified. Depending on the abstraction they are represented as enumerations (if not abstracted), as for example '.,:;!?' in the first screenshot below, or via a descriptive label (if abstracted), as for example '<letter_sequences>'. The Tooltips provide explanations. All characters (and sequences) of the same group are assigned the same weight.",
         "",
         ["Custom Character Groups"],
-        "When activating 'Custom Character Groups', another column appears on the left-hand side containing an entry field per group. This column allows you to modify the groups. Here abstracted features are not represented by the descriptive label but by the single character to which they were abstracted. The meaning of these characters is indicated by the middle column. Again, not abstracted features are represented as enumerations. Again, the Tooltips provide explanations.",
+        "When activating 'Custom Character Groups', another column appears on the left-hand side containing an entry field per group, as shown by the secon screenshot below. This column allows you to modify the groups. Here abstracted features are not represented by the descriptive label but by the single character to which they were abstracted. The meaning of these characters is indicated by the middle column. For example 'b' represents letter sequences. Again, not abstracted features are represented as enumerations. Again, the Tooltips provide explanations.",
         "You can move characters between entry fields to move them between groups. Note that only the first occurrence of a character in one of the groups is relevant. Rows with empty entries are ignored. Characters that are not present in the abstracted data values are ignored. Warnings will be displayed if these cases occur. The last line represents all characters not mentioned in the previous lines.",
         "You can add and remove groups, i.e. lines, via the '+' and '-' buttons.  The default groups are automatically derived from the abstraction configuration and serve as a good starting point. To reset the groups correspondingly, press the 'Reset' button.",
+        "As indicated by the screenshots below, in our running example, we moved '-' to a separate group so we could give it a different weight.",
         "",
         ["Weights"],
         "Per group, you can specify the weight via the slider given on the right-hand side. This input method is limited such that you only specify the relative influence of characters (and character sequences) on the dissimilarity between data values. Thus, higher weights for a group mean more dissimilarity caused by the presence of these characters in data values. A weight of zero means these characters do not have any influence on the dissimilarity. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
-        "To specify the weights more flexibly, choose Expert Mode.",
+        "For our running example on classification values we expect mainly letter sequences and blank spaces, so we set those weights low. Since we do not expect digit sequences (= integers), punctuation marks, and math operators and assume they could have a significant impact on the values' meaning, we chose their weights high. For brackets, quotation marks and minus signs we chose medium weights as we do not really expect many of them but still assume that their influence on the values' meaning is limited.",
+        None if restricted else "To specify the weights more flexibly, choose Expert Mode.",
         "",
         ["Confirm & Discard"],
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
+        {"\\sliders_normal" + ("_restricted" if restricted else "") + ".png"},
+        {"\\sliders_custom" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
 
 
-def menu_help_blob_input(master):
+def menu_help_blob_input(master, restricted):
     """help popup for Dissimilarity Configuration - Blobs view"""
     caption = "Dissimilarity Configuration - Blobs"
     text = [
@@ -117,6 +135,7 @@ def menu_help_blob_input(master):
         # controls
         "The distances can be modified via Drag & Drop.",
         "Higher distances, i.e. weights, mean more dissimilarity caused by the deletion, insertion or substitution of corresponding characters. Based on your domain knowledge, you should choose higher weights for the insertion and deletion of characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values. You should choose higher weights for the substitution of characters that are dissimilar in meaning while choosing lower weights for the substitution of rather similar characters.",
+        "For our running example on classification values we expect mainly letter sequences and blank spaces, so we positioned them close to the empty blue blob. Since we do not expect digit sequences (= integers), punctuation marks, and math operators and assume they could have a significant impact on the values' meaning, we placed them further away from all other blobs. For brackets, quotation marks and minus signs we placed the blobs in medium range of the blue blob and most other blobs as we do not really expect many of them but still assume that their influence on the values' meaning is limited. "
         "",
         ["Size"],
         "The size of each blob represents the weight of substituting characters of the represented group by each other. Some blobs cannot be scaled. They represent groups of characters, whose concrete manifestation was abstracted from. Their size is fixed to the minimal possible size and they are slightly less saturated. Which blobs are fixed depends on your configuration of the abstraction.",
@@ -130,6 +149,7 @@ def menu_help_blob_input(master):
         "To specify the weights more flexibly, select 'Expert Mode'.",
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
+        {"\\blob_v2" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
 
@@ -177,11 +197,12 @@ def menu_help_clustering_selection(master):
         ["Confirm & Discard"],
         "To confirm your selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
+        {"\\algo_selection_expert.png"},
     ]
     menu_information_display(master,  caption, text)
 
 
-def menu_help_clustering_configuration(master):
+def menu_help_clustering_configuration(master, restricted):
     """help popup for Clustering Parameter Configuration view"""
     caption = "Clustering Parameter Configuration"
     text = [
@@ -192,10 +213,12 @@ def menu_help_clustering_configuration(master):
         " • sliders (for numerical values)",
         " • radio buttons (for enumerations)",
         " • check boxes (for booleans)",
-        "The list of parameters is split by the caption 'Expert Parameters'. Parameters above this caption should be considered in any case. The parameters below this caption, however, can be ignored in most cases as the default values are suitable. Modification is only encouraged for users who know the details of the selected clustering algorithm.",
+        None if restricted else "The list of parameters is split by the caption 'Expert Parameters'. Parameters above this caption should be considered in any case. The parameters below this caption, however, can be ignored in most cases as the default values are suitable. Modification is only encouraged for users who know the details of the selected clustering algorithm.",
         "",
         ["Assistance"],
         "The values that are selected per default often serve as a good starting point for your first iteration. To reset the parameter value to this default value, press the 'Reset' button. For some parameters, a plot showing extra information is provided when pressing the 'Show plot' button.",
+        "For our running example we used the default values.",
+        "For hierarchical clustering, the Dendrogram is shown when clicking the 'Show plot' button. As the screenshot below indicates, the x-axis show the distances at which the two closest clusters are merged and the y-axis shows the representative values.",
         "",
         ["Optional Parameters"],
         "Some parameters are optional or only used under specific circumstances. When they are not used, they are greyed out. Optional parameters can be enabled and disabled via a checkbox on the left-hand side.",
@@ -206,6 +229,9 @@ def menu_help_clustering_configuration(master):
         ["Confirm & Discard"],
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
+        {"\\param_simple.png"},
+        {"\\param_expert1.png" if not restricted else ""},
+        {"\\param_expert2.png" if not restricted else ""},
     ]
     menu_information_display(master, caption, text)
 
@@ -222,10 +248,11 @@ def menu_help_result(master):
         "",
         ["Clustering"],
         "Most importantly, you can access the complete clustering provided in an Excel file via the green button on the left-hand side. Upon first opening the file, you must specify the save path.",
-        "The Excel file contains three sheets, that present the clutering:",
+        "As shown by the screenshots below, the Excel file contains four sheets, that present the clutering:",
         " • The first one shows the clustering of the original values.",
         " • The second one shows the clustering of the abstracted values employing original values as representatives.",
         " • The third sheet additionally shows the variance within each cluster and the dissimilarity of each value to the others in the same cluster.",
+        " • The fourth sheet shows the mapping between original and representative values.",
         "An extremely high variance within a cluster indicates that you should consider analysing this cluster separately (cf. evaluation question 4) as it may be too heterogeneous to oversee the types of contained values. You should further take a look at values with an extremely high dissimilarity to the other values in the same cluster, as they may be significantly different from those.",
         "",
         ["Clustering Evaluation"],
@@ -235,6 +262,12 @@ def menu_help_result(master):
         ["Confirm & Discard"],
         "To confirm your evaluation answers, press the 'OK' button.",
         "To discard your evaluation answers, press the 'X' button in the upper right corner.",
+        {"\\excel_refined_sheets.png"},
+        {"\\excel_refined_original.png"},
+        {"\\excel_refined_repr.png"},
+        {"\\excel_refined_repr_dist.png"},
+        {"\\excel_refined_mapping.png"},
+
     ]
     menu_information_display(master, caption, text)
 
@@ -274,14 +307,17 @@ def menu_information_display(master, caption, content):
         root.iconphoto(False, master.icon)
 
     width = root.winfo_screenwidth() // 2
+
     Label(root, text=caption, font=('TkDefaultFont', 12, 'bold'),
           anchor=W, justify=LEFT, fg="dark green", background='white'
           ).grid(row=1, column=1, sticky=W)
 
     outer_frame, canvas, scrollable_frame = create_scrollable_frame(root)
-
     root.rowconfigure(2, weight=1)
     outer_frame.grid(sticky='nswe', row=2, column=1)
+
+    dir_path = str(Path(__file__).parent.parent) + "\\gui_general\\help_screenshots"
+    os.chdir(dir_path)
 
     for i, t in enumerate(content):
         if isinstance(t, str):
@@ -293,13 +329,18 @@ def menu_information_display(master, caption, content):
                   anchor=W, justify=LEFT, fg="dark green", background='white')
             l.grid(row=i, column=1, sticky=W)
         elif isinstance(t, set):
-            img = Image.open(t.pop())
-            if img.width > width:
-                height_new = floor(img.height * width//img.width)
-                img = img.resize((height_new, width), Image.ANTIALIAS)
-            img = PhotoImage(img)
-            l = Label(scrollable_frame, image=img)
-            l.grid(row=i, column=1, sticky=W)
+            pop = t.pop()
+            if pop != "":
+                img = Image.open(dir_path + pop)
+                if img.width > width:
+                    height_new = floor(img.height * width/img.width)
+                    img = img.resize((height_new, width), Image.ANTIALIAS)
+                # else:
+                    # img = img.resize((floor(img.height * 0.75), floor(img.width * 0.75)), Image.ANTIALIAS)
+                # img = img.resize( [int(0.5 * s) for s in img.size] )
+                img = PhotoImage(img)
+                l = Label(scrollable_frame, image=img)
+                l.grid(row=i, column=1, sticky=W+E)
 
     def button_quit():
         root.quit()
@@ -311,6 +352,8 @@ def menu_information_display(master, caption, content):
     root.update()
     # root.geometry("500x" + str(root.winfo_height() + 10))
     root.protocol("WM_DELETE_WINDOW", button_quit)
+    set_window_size_simple(root)
+
     root.mainloop()
 
 

@@ -89,7 +89,7 @@ class BlobInput:
         # configMenu = Menu(menu)
         # configMenu.add_command(label="Configure1")
         # menu.add_cascade(label="Configure", menu=configMenu)
-        self.menu.add_command(label="Help", command=lambda: menu_help_blob_input(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_blob_input(self.root, restricted))
         self.root.config(menu=self.menu)
 
         """Images"""

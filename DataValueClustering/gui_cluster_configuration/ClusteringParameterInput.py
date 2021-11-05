@@ -7,8 +7,8 @@ from gui_general.scrollable_frame import create_scrollable_frame
 from gui_general.window_size import set_window_size_simple
 
 
-def get_configuration_parameters(master, title, parameter_frame_inits, dependencies, suggestion=None):
-    input = ClusterConfigurationInput(master, title, parameter_frame_inits, dependencies, suggestion)
+def get_configuration_parameters(master, title, parameter_frame_inits, dependencies, suggestion=None, restricted=False):
+    input = ClusterConfigurationInput(master, title, parameter_frame_inits, dependencies, suggestion, restricted)
     return input.get()
 
 
@@ -17,7 +17,7 @@ class ClusterConfigurationInput:
     A view that contains widgets for specifying the parameters of the clustering algorithm.
     '''
 
-    def __init__(self, master, title, parameter_frame_inits, dependencies, suggestion=None):
+    def __init__(self, master, title, parameter_frame_inits, dependencies, suggestion=None, restricted=False):
         self.root = Toplevel(master, bg='white')
         self.root.attributes('-alpha', 0.0)
         self.root.title(title)
@@ -33,7 +33,7 @@ class ClusterConfigurationInput:
         self.root.grab_set()
 
         self.menu = Menu(self.root)
-        self.menu.add_command(label="Help", command=lambda: menu_help_clustering_configuration(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_clustering_configuration(self.root, restricted))
         self.root.config(menu=self.menu)
 
         self.root.bind_all("<Return>", self.close)

@@ -70,7 +70,7 @@ class SliderInput:
         self.root.grab_set()
 
         self.menu = Menu(self.root)
-        self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root, restricted))
         self.root.config(menu=self.menu)
 
         self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",

@@ -131,7 +131,7 @@ class Hub:
         self.menu.add_command(label="Save", command=self.menu_save)
         self.menu.add_command(label="Save As...", command=self.menu_saveas)
         self.menu.add_command(label="Load", command=self.menu_load)
-        self.menu.add_command(label="Help", command=lambda: menu_help_hub(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_hub(self.root, self.restricted))
         self.root.config(menu=self.menu)
         self.root.resizable(False, True)
 
@@ -639,7 +639,7 @@ class Hub:
                 suggested_parameter_modifications = None
             else:
                 suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=True)
-            parameters = cluster_config_f(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications)
+            parameters = cluster_config_f(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications, restricted=self.restricted)
         else:
             clustering_algorithm = "Hierarchical"
 
@@ -648,7 +648,7 @@ class Hub:
                 suggested_parameter_modifications = None
             else:
                 suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=False)
-            parameters = simple_cluster_hierarchical(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications)
+            parameters = simple_cluster_hierarchical(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications, restricted=self.restricted)
 
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()

@@ -51,13 +51,13 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         # self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 
         self.menu = Menu(self.root)
-        self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root, restricted))
         self.root.config(menu=self.menu)
 
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
             # [DEFAULT_CONFIG, self.config[:, 3]],
-            ["Duplicate Removal", duplicate_removal_function()[1]],
+            ["Only Duplicate Removal", duplicate_removal_function()[1]],
             ["Case-Sensitive Letters & Digits", char_abstraction_case_sensitive_function()[1]],
             ["Letters & Digits", char_abstraction_function()[1]],
             ["Letter Sequences & Digits", letter_sequence_abstraction_function()[1]],
