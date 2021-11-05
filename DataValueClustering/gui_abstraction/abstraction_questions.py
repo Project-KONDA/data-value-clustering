@@ -22,7 +22,7 @@ abstraction_question_array = [
      "Choose yes if the length of lower case letter sequences does not have a crucial impact on the meaning and if\n" +
      "you expect a lot of lower case letter sequences of heterogeneous length.\n" +
      "For example, 'red' and 'to' will be treated equally since both consist of a sequence of lower case letters."],  # 3
-    [[0, 1], [], "sequence", False,
+    [[0, 1], [], "sequence", True,
      "Should all letter sequences be treated equally?",
      "Abstraction from the length of sequences of any letters.\n"
      "Choose yes if the length of lower, upper or mixed case letter sequences does not have a crucial impact on the\n" +
@@ -61,7 +61,7 @@ abstraction_question_array = [
      "Abstraction from the concrete digits.\n"
      "Choose yes if the concrete digit does not have a crucial impact on the meaning and you expect a lot of digits.\n" +
      "For example, '1' and '2' will be treated equally since both are digits."],  # 9
-    [[9], [], "int", False,
+    [[9], [], "int", True,
      "Should all digit sequences be treated equally?",
      "Abstraction from the length of digit sequences (= integers).\n"
      "Choose yes if the length of digit sequences does not have a crucial impact on the meaning and if you expect\n" +

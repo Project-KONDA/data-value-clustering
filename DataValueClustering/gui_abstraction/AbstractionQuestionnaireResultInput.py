@@ -13,7 +13,7 @@ HIDE = "▲     Preview     ▲"
 # CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
 CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details"
 
-DEFAULT_CONFIG = "Letters & Digits (Default)"
+DEFAULT_CONFIG = "Letter Sequences & Digit Sequences (Default)"
 MANUAL_CONFIG = "Custom Configuration"
 
 def abstraction_configuration(master, data, predefined_answers=None, suggestion=None):
@@ -55,11 +55,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
             # [DEFAULT_CONFIG, self.config[:, 3]],
             ["Duplicate Removal", duplicate_removal_function()[1]],
             ["Case-Sensitive Letters & Digits", char_abstraction_case_sensitive_function()[1]],
-            [DEFAULT_CONFIG, char_abstraction_function()[1]],
+            ["Letters & Digits", char_abstraction_function()[1]],
             ["Letter Sequences & Digits", letter_sequence_abstraction_function()[1]],
             ["Letters & Digit Sequences", number_sequence_abstraction_function()[1]],
             ["Case-Sensitive Letter Sequences & Digit Sequences", sequence_abstraction_case_sensitive_function()[1]],
-            ["Letter Sequences & Digit Sequences", sequence_abstraction_function()[1]],
+            [DEFAULT_CONFIG, sequence_abstraction_function()[1]], # Letter Sequences & Digit Sequences
             ["Words & Digit Sequences", word_abstraction_function()[1]],
             ["Words & Decimals", word_decimal_abstraction_function()[1]],
             ["Sentences & Digit Sequences", word_sequence_abstraction_function()[1]],
@@ -122,7 +122,9 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def option_changed(self, *args):
         selected_option = self.selected_predefined_option.get()
+        print(selected_option)
         answers_of_selected_option = self.predefined_abstractions[np.where(self.predefined_abstractions[:, 0] == selected_option)][:, 1][0]
+        print(answers_of_selected_option)
         self.update_check_buttons(answers_of_selected_option)
 
     def selection_changed(self, j=None):
