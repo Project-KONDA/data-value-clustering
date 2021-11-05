@@ -38,7 +38,7 @@ def simple_cluster_hierarchical(master, distance_matrix_map, values, abstraction
         [hierarchical_clustering.THRESHOLD, hierarchical_clustering.N_CLUSTERS, DEPENDENCY_ACTIVATION_ACTIVATION, False],
     ]
     n_clusters, distance_threshold = \
-        get_configuration_parameters(master, "Simple Hierarchical Clustering Parameter Configuration ", frames, dependencies2, suggestion, restricted)
+        get_configuration_parameters(master, "Simple Hierarchical Clustering Parameter Configuration", frames, dependencies2, suggestion, restricted)
 
     if n_clusters is None and distance_threshold is None:
         return None

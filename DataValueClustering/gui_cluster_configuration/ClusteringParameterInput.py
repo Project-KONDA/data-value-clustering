@@ -2,7 +2,7 @@ from tkinter import Label, Button, Tk, StringVar, Frame, font, Canvas, Scrollbar
 import numpy as np
 
 from gui_cluster_configuration.parameter_frames.ClusteringParameter import ClusteringParameter
-from gui_general.help_popup_gui import menu_help_clustering_configuration
+from gui_general.help_popup_gui import menu_help_clustering_configuration, menu_help_clustering_configuration_simple
 from gui_general.scrollable_frame import create_scrollable_frame
 from gui_general.window_size import set_window_size_simple
 
@@ -33,7 +33,10 @@ class ClusterConfigurationInput:
         self.root.grab_set()
 
         self.menu = Menu(self.root)
-        self.menu.add_command(label="Help", command=lambda: menu_help_clustering_configuration(self.root, restricted))
+        if title == "Simple Hierarchical Clustering Parameter Configuration":
+            self.menu.add_command(label="Help", command=lambda: menu_help_clustering_configuration_simple(self.root))
+        else:
+            self.menu.add_command(label="Help", command=lambda: menu_help_clustering_configuration(self.root))
         self.root.config(menu=self.menu)
 
         self.root.bind_all("<Return>", self.close)

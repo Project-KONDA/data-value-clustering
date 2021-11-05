@@ -18,17 +18,19 @@ def menu_help_hub(master, restricted):
         "",
         ["Configuration"],
         "The data value clustering typically requires you to perform 4 steps: You need to select the data, configure the abstraction for the simple clustering and configure both the dissimilarities and the clustering algorithm for the refined clustering.",
-        "The configuration steps are performed in separate views which are opened upon clicking the corresponding button in the hub view. The configuration step required to be performed next is highlighted in blue. For the Dissimilarities and the clustering algorithm, multiple configuration methods are supported. Some methods are designed for beginners, i.e. are easy to use, whereas others are designed for experts and thus allow more flexibility. We advise you to perform the configuration steps from top to bottom, even though in some cases a different order is possible. On the right-hand side, previews of the 4 configurations are shown.",
+        "The configuration steps are performed in separate views which are opened upon clicking the corresponding button in the hub view. The configuration step required to be performed next is highlighted in blue. For the Dissimilarities and the clustering algorithm, multiple configuration methods are supported. Some methods are designed for beginners, i.e. are easy to use, whereas others are designed for experts and thus allow more flexibility. We advise you to perform the configuration steps from top to bottom. On the right-hand side, previews of the 4 configurations are shown.",
         "Note that below each configuration button there is a small label indicating the status, i.e. whether no configuration is present, the configuration is in progress, the calculation is in progress or the calculation is done.",
         "",
         ["Execution"],
         "Once configured, the data extraction and abstraction are performed automatically. This typically takes only a few seconds. But since dissimilarity calculation and clustering may take up to multiple hours, they are started manually by pressing the corresponding play button.",
         "",
         ["Results"],
-        "Once calculated, you can access the simple and refined clustering via the corresponding buttons. In some cases, simple clustering may be sufficient. Then you do not need to configure the refined clustering. The refined clustering is presented to you together with a questionnaire for evaluating the clustering’s quality. After answering these questions you come back to the hub. Then advice concerning modifications of the configuration based on your answers is shown below the status labels.",
+        "Once calculated, you can access the simple and refined clustering via the corresponding buttons. In some cases, simple clustering may be sufficient, i.e. provide a good overview of the data values. Then you do not need to configure the refined clustering. The refined clustering is presented to you together with a questionnaire for evaluating the clustering’s quality. After answering these questions you come back to the hub. Then advice concerning modifications of the configuration based on your answers is shown below the status labels.",
         "",
         ["Managing Configurations & Results"],
         "You can save, load and reset your configuration via the menu at the top of the window. Note that autosave is not supported.",
+        "",
+        ["Screenshot of the Hub View Where the Next Step is the Calculation of Dissimilarities"],
         {"\\hub_execute_dissimilarities" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
@@ -40,12 +42,14 @@ def menu_help_data_selection(master, restricted):
 
     text = [
         "The Data Selection view allows you to select the data set to be clustered. Each data set consists of a set of data values extracted from a database. When first starting the program, a few predefined data sets are available.",
-        "As shown by the screenshot below, we chose the 'classification' data value set for our running example. It contains values of the corresponding LIDO field for classifying the object described by the data.",
+        "As shown by the screenshot below, we chose the 'classification' data set for our running example. It contains values of the corresponding LIDO field for classifying the object described by the data.",
         None if restricted else "To add a data set, press the '+' button below. For this, a local BaseX client is required. For this, please install BaseX and execute 'bin/basexserver.bat'.",
         None if restricted else "To remove a data set, press the '-' button below, but be careful as once removed data sets cannot be recovered.",
         "",
         "To confirm your data selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Data Selection View Where the data set 'classification' is Selected"],
         {"\\data_selection" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
@@ -59,6 +63,8 @@ def menu_help_data_add(master):
         "",
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Data Addition View Where the field 'lido:extentMeasurements' is Chosen"],
         {"\\data_addition.png"},
     ]
     menu_information_display(master, caption, text)
@@ -72,10 +78,10 @@ def menu_help_abstraction(master, restricted):
         "",
         ["Questionnaire"],
         "To achieve an abstraction that fits your data, you should answer the questions based on your domain knowledge. You can start with one of the predefined configurations. The default configuration typically yields good results.",
-        "Please use your domain knowledge to abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly.",
-        "For our running example we chose the default configuration. Since we expect a variety of textual values, we assume that which concrete letters occur, whether they are capitalized or not and how long the words are does not influence the meaning of the values significantly. Even if unexpected digits occur, the concrete digits and the length of digit sequences is not of interest.",
         "The less questions you answer with 'yes' the loner the runtime of the dissimilarity calculation will be.",
         "Note that each question is explained in detail in the corresponding Tooltip shown when hovering over the question. Some questions are dynamically enabled/disabled depending on your answers to related questions.",
+        "Please use your domain knowledge to abstract from features that you expect to find frequently in the data values and that do not alter the values’ meaning significantly.",
+        "For our running example we chose the default configuration. Since we expect a variety of textual values, we assume that the concrete letters occurring, whether they are capitalized or not and how long the words are does not influence the meaning of the classification values significantly. Even if unexpectedly digits occur, the concrete digits and the length of digit sequences does not seem decisive.",
         "",
         ["Result Preview"],
         "The result of applying the configured abstraction to the first 100 data values is shown upon clicking the 'Preview' button on the right-hand side. Hence, this is a preview of the Simple Clustering. Each cluster is represented by a yellow block of text showing the contained values. The preview is updated dynamically when you modify your answers.",
@@ -84,7 +90,11 @@ def menu_help_abstraction(master, restricted):
         ["Confirm & Discard"],
         "To confirm your configuration of the abstraction, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Abstraction Configuration View With Configuration for the Classification Values"],
         {"\\abstraction_normal_tip" + ("_restricted" if restricted else "") + ".png"},
+        "",
+        ["Screenshot of the Abstraction Configuration View With Preview"],
         {"\\abstraction_preview" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
@@ -94,26 +104,30 @@ def menu_help_distance_slider(master, restricted):
     """help popup for Dissimilarity Configuration - Sliders view"""
     caption = "Dissimilarity Configuration - Sliders"
     text = [
-        "The Sliders view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of certain characters or character sequences on the dissimilarity between data values in which they occur. These weights are specified via sliders. You should choose the weights based on your domain knowledge about the data field analysed.",
+        "The Sliders view allows configuring the calculation of Dissimilarities between data values. More precisely, you weight the influence of certain characters (e.g. '?', '/') or character sequences (e.g. letters sequences, integers) on the dissimilarity between data values in which they occur. These weights are specified via sliders. You should choose the weights based on your domain knowledge about the data field analysed.",
         "",
         ["Character Groups"],
-        "On the left-hand side, the characters (and character sequences) are specified. Depending on the abstraction they are represented as enumerations (if not abstracted), as for example '.,:;!?' in the first screenshot below, or via a descriptive label (if abstracted), as for example '<letter_sequences>'. The Tooltips provide explanations. All characters (and sequences) of the same group are assigned the same weight.",
+        "On the left-hand side, the characters (and character sequences) are specified. Depending on the abstraction they are represented as enumerations (if not abstracted), as for example '.,:;!?' in the first screenshot below, or via a descriptive label (if abstracted), as for example '<letter_sequences>'. The Tooltips provide explanations. All characters (and sequences) in the same group (i.e. row) are assigned the same weight.",
         "",
         ["Custom Character Groups"],
-        "When activating 'Custom Character Groups', another column appears on the left-hand side containing an entry field per group, as shown by the secon screenshot below. This column allows you to modify the groups. Here abstracted features are not represented by the descriptive label but by the single character to which they were abstracted. The meaning of these characters is indicated by the middle column. For example 'b' represents letter sequences. Again, not abstracted features are represented as enumerations. Again, the Tooltips provide explanations.",
+        "When activating 'Custom Character Groups', another column appears on the left-hand side containing an entry field per group, as shown by the second screenshot. This column allows you to modify the groups. Here abstracted features are not represented by the descriptive label but by the single character to which they were abstracted. The meaning of these characters is indicated by the middle column. For example 'b' represents letter sequences. Again, non-abstracted features are represented as enumerations. Again, the Tooltips provide explanations.",
         "You can move characters between entry fields to move them between groups. Note that only the first occurrence of a character in one of the groups is relevant. Rows with empty entries are ignored. Characters that are not present in the abstracted data values are ignored. Warnings will be displayed if these cases occur. The last line represents all characters not mentioned in the previous lines.",
-        "You can add and remove groups, i.e. lines, via the '+' and '-' buttons.  The default groups are automatically derived from the abstraction configuration and serve as a good starting point. To reset the groups correspondingly, press the 'Reset' button.",
-        "As indicated by the screenshots below, in our running example, we moved '-' to a separate group so we could give it a different weight.",
+        "You can add and remove groups, i.e. rows, via the '+' and '-' buttons.  The default groups are automatically derived from the abstraction configuration and serve as a good starting point. To reset the groups correspondingly, press the 'Reset' button.",
+        "As indicated by the screenshots below, in our running example, we moved '-' to a separate group so we could assign it a different weight.",
         "",
         ["Weights"],
-        "Per group, you can specify the weight via the slider given on the right-hand side. This input method is limited such that you only specify the relative influence of characters (and character sequences) on the dissimilarity between data values. Thus, higher weights for a group mean more dissimilarity caused by the presence of these characters in data values. A weight of zero means these characters do not have any influence on the dissimilarity. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
+        "Per group, you can specify the weight via the slider given on the right-hand side. You specify the relative influence of characters (and character sequences) on the dissimilarity between data values. Thus, higher weights for a group mean more dissimilarity caused by the presence of these characters in data values. A weight of zero means these characters do not have any influence on the dissimilarity. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
         "For our running example on classification values we expect mainly letter sequences and blank spaces, so we set those weights low. Since we do not expect digit sequences (= integers), punctuation marks, and math operators and assume they could have a significant impact on the values' meaning, we chose their weights high. For brackets, quotation marks and minus signs we chose medium weights as we do not really expect many of them but still assume that their influence on the values' meaning is limited.",
         None if restricted else "To specify the weights more flexibly, choose Expert Mode.",
         "",
         ["Confirm & Discard"],
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Sliders View With Configuration for the Classification Values With Default Character Groups"],
         {"\\sliders_normal" + ("_restricted" if restricted else "") + ".png"},
+        "",
+        ["Screenshot of the Sliders View With Configuration for the Classification Values With Custom Character Groups"],
         {"\\sliders_custom" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
@@ -149,6 +163,8 @@ def menu_help_blob_input(master, restricted):
         "To specify the weights more flexibly, select 'Expert Mode'.",
         "To confirm your modifications of the weights, press the 'OK' button.",
         "To discard your modifications, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Blob View With Configuration for the Classification Values"],
         {"\\blob_v2" + ("_restricted" if restricted else "") + ".png"},
     ]
     menu_information_display(master, caption, text)
@@ -197,28 +213,30 @@ def menu_help_clustering_selection(master):
         ["Confirm & Discard"],
         "To confirm your selection, press the 'OK' button.",
         "To discard your selection, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Algorithm Selection View"],
         {"\\algo_selection_expert.png"},
     ]
     menu_information_display(master,  caption, text)
 
 
-def menu_help_clustering_configuration(master, restricted):
+def menu_help_clustering_configuration(master):
     """help popup for Clustering Parameter Configuration view"""
     caption = "Clustering Parameter Configuration"
     text = [
         "The Clustering Parameter Configuration view allows you to configure the chosen clustering algorithm, thus specifying its parameters.",
         "",
         ["Parameters"],
-        "The view lists all parameters that can be specified. A brief explanation of each parameter is given below its title. There are three different input methods for the three types of parameters:",
+        "The view lists all parameters that can be specified. A brief explanation of each parameter is given below its title.",
+        "There are three different input methods for the three types of parameters:",
         " • sliders (for numerical values)",
         " • radio buttons (for enumerations)",
         " • check boxes (for booleans)",
-        None if restricted else "The list of parameters is split by the caption 'Expert Parameters'. Parameters above this caption should be considered in any case. The parameters below this caption, however, can be ignored in most cases as the default values are suitable. Modification is only encouraged for users who know the details of the selected clustering algorithm.",
+        "The list of parameters is split by the caption 'Expert Parameters'. Parameters above this caption should be considered in any case. The parameters below this caption, however, can be ignored in most cases as the default values are suitable. Modification is only encouraged for users who know the details of the selected clustering algorithm.",
         "",
         ["Assistance"],
         "The values that are selected per default often serve as a good starting point for your first iteration. To reset the parameter value to this default value, press the 'Reset' button. For some parameters, a plot showing extra information is provided when pressing the 'Show plot' button.",
         "For our running example we used the default values.",
-        "For hierarchical clustering, the Dendrogram is shown when clicking the 'Show plot' button. As the screenshot below indicates, the x-axis show the distances at which the two closest clusters are merged and the y-axis shows the representative values.",
         "",
         ["Optional Parameters"],
         "Some parameters are optional or only used under specific circumstances. When they are not used, they are greyed out. Optional parameters can be enabled and disabled via a checkbox on the left-hand side.",
@@ -229,31 +247,61 @@ def menu_help_clustering_configuration(master, restricted):
         ["Confirm & Discard"],
         "To confirm your configuration, press the 'OK' button.",
         "To discard your configuration, press the 'X' button in the upper right corner.",
-        {"\\param_simple.png"},
-        {"\\param_expert_1.png" if not restricted else ""},
-        {"\\param_expert_2.png" if not restricted else ""},
+        "",
+        ["Screenshot of the Clustering Parameter Configuration View Part 1"],
+        {"\\param_expert_1.png"},
+        "",
+        ["Screenshot of the Clustering Parameter Configuration View Part 2"],
+        {"\\param_expert_2.png"},
     ]
     menu_information_display(master, caption, text)
 
 
-def menu_help_result(master):
+def menu_help_clustering_configuration_simple(master):
+    """help popup for Simple Clustering Parameter Configuration view"""
+    caption = "Simple Hierarchical Clustering Parameter Configuration"
+    text = [
+        "The Clustering Parameter Configuration view allows you to configure the chosen clustering algorithm, thus specifying its parameters.",
+        "",
+        ["Parameters"],
+        "In simple mode, you just need to specify either 'n_clusters', the maximum number of clusters, or 'distance_threshold', the maximum distance between clusters.",
+        "",
+        ["Assistance"],
+        "The values that are selected per default often serve as a good starting point. To reset the parameter value to this default value, press the 'Reset' button.",
+        "For 'distance_threshold', the Dendrogram is shown when clicking the 'Show plot' button. As the screenshot below indicates, the x-axis shows the distances at which the two closest clusters are merged and the y-axis shows the representative values.",
+        "For our running example we used the default value of 'n_clusters'.",
+        "",
+        ["Confirm & Discard"],
+        "To confirm your configuration, press the 'OK' button.",
+        "To discard your configuration, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Simple Hierarchical Clustering Parameter Configuration View With Configuration for the Classification Values"],
+        {"\\param_simple.png"},
+        "",
+        ["Screenshot of the Dendrogram for the Classification Values"],
+        {"\\dendrogram.png"},
+    ]
+    menu_information_display(master, caption, text)
+
+
+def menu_help_result(master, restricted):
     """help popup for Clustering Result & Evaluation view"""
     caption = "Clustering Result & Evaluation"
     text = [
         "The Clustering Result & Evaluation view provides information on the calculated clustering and supports you in evaluating it.",
         "",
         ["MDS Scatter Plot"],
-        "On the left-hand side, below some quantitative meta-information on the calculated clustering, the MDS Scatter Plot is shown. It gives an overview of the clustering. Each dot represents an abstracted data value. The distances between the dots represent the dissimilarities between the abstracted data values. Therefore, the closer the dots are, the more similar the values are. Each cluster is represented by a different colour. This plot allows you to quickly get an overview of the compactness and separation of the clustering.",
-        "A clustering is compact if there is a high similarity within clusters and it is separate if there is a low similarity between clusters. In general, a good clustering should have high compactness and separation. If the colours are very mixed, this may hint at the low meaningfulness of the clustering (cf. evaluation question 1). The plot may also assist you in answering evaluation question 2. But make sure to also check the entire clustering provided as an Excel file before answering the questions.",
+        "On the left-hand side, below some quantitative meta-information on the calculated clustering, the MDS Scatter Plot is shown. It gives an overview of the clustering. Each dot represents an abstracted data value. The closer the dots are, the more similar the values are. Each cluster is represented by a different colour. This plot allows you to quickly get an overview of the compactness and separation of the clustering.",
+        "A clustering is compact if there is a high similarity within clusters and it is separate if there is a low similarity between clusters. In general, a good clustering should have high compactness and separation. If the colours are very mixed, this may hint at the low meaningfulness of the clustering (cf. evaluation question 1)." + ("" if restricted else "The plot may also assist you in answering evaluation question 2.") + " Make sure to also check the entire clustering provided as an Excel file before answering the questions.",
         "",
         ["Clustering"],
-        "Most importantly, you can access the complete clustering provided in an Excel file via the green button on the left-hand side. Upon first opening the file, you must specify the save path.",
+        "Most importantly, you can access the refined clustering provided in an Excel file via the green button on the left-hand side. Upon first opening the file, you must specify the save path.",
         "As shown by the screenshots below, the Excel file contains four sheets, that present the clutering:",
         " • The first one shows the clustering of the original values.",
         " • The second one shows the clustering of the abstracted values employing original values as representatives.",
         " • The third sheet additionally shows the variance within each cluster and the dissimilarity of each value to the others in the same cluster.",
         " • The fourth sheet shows the mapping between original and representative values.",
-        "An extremely high variance within a cluster indicates that you should consider analysing this cluster separately (cf. evaluation question 4) as it may be too heterogeneous to oversee the types of contained values. You should further take a look at values with an extremely high dissimilarity to the other values in the same cluster, as they may be significantly different from those.",
+        "An extremely high variance within a big cluster indicates that you should consider analysing this cluster separately (cf. evaluation question " + ("3" if restricted else "4") + ") as it may be too heterogeneous to oversee the types of contained values. You should further take a look at values with an extremely high dissimilarity to the other values in the same cluster (3rd sheet), as they may be significantly different from those.",
         "",
         ["Clustering Evaluation"],
         "After having familiarized yourself with the clustering, you need to evaluate the clustering, i.e. find out whether you are satisfied with the clustering or need another iteration with a modified configuration. The evaluation questionnaire given on the right-hand side supports this process. Please read and answer each question carefully. Note that Tooltips of the answers provide explanations.",
@@ -262,10 +310,20 @@ def menu_help_result(master):
         ["Confirm & Discard"],
         "To confirm your evaluation answers, press the 'OK' button.",
         "To discard your evaluation answers, press the 'X' button in the upper right corner.",
+        "",
+        ["Screenshot of the Excel Sheets"],
         {"\\excel_refined_sheets.png"},
+        "",
+        ["Screenshot of the Sheet 'Cluster_Original'"],
         {"\\excel_refined_original.png"},
+        "",
+        ["Screenshot of the Sheet 'Cluster_Representatives'"],
         {"\\excel_refined_repr.png"},
+        "",
+        ["Screenshot of the Sheet 'Cluster_Representatives_Dist'"],
         {"\\excel_refined_repr_dist.png"},
+        "",
+        ["Screenshot of the Sheet 'Mapping_Original_Representativ'"],
         {"\\excel_refined_mapping.png"},
 
     ]
@@ -322,11 +380,13 @@ def menu_information_display(master, caption, content):
     for i, t in enumerate(content):
         if isinstance(t, str):
             l = Label(scrollable_frame, text=t, font=('TkDefaultFont', 10), wraplength=width,
-                      anchor=W, justify=LEFT, fg="dark green", background='white')
+                      anchor=W, justify=LEFT, background='white')
             l.grid(row=i, column=1, sticky=W + E)
         elif isinstance(t, list):
             l = Label(scrollable_frame, text=t[0], font=('TkDefaultFont', 12, 'bold'),
-                  anchor=W, justify=LEFT, fg="dark green", background='white')
+                  anchor=W, justify=LEFT, background='white')
+            if t[0].startswith("Screenshot"):
+                l.config(fg="darkblue")
             l.grid(row=i, column=1, sticky=W)
         elif isinstance(t, set):
             pop = t.pop()
@@ -336,7 +396,7 @@ def menu_information_display(master, caption, content):
                     height_new = floor(img.height * width/img.width)
                     img = img.resize((width, height_new), Image.ANTIALIAS)
                 img = PhotoImage(img)
-                l = Label(scrollable_frame, image=img)
+                l = Label(scrollable_frame, image=img, bg="white")
                 l.image = img  # keep a reference!
                 l.grid(row=i, column=1, sticky=W+E)
 

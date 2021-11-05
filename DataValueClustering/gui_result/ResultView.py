@@ -46,7 +46,7 @@ class ResultView:
             self.root.iconphoto(False, master.icon)
 
         self.menu = Menu(self.root)
-        self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root))
+        self.menu.add_command(label="Help", command=lambda: menu_help_result(self.root, restricted))
         self.root.config(menu=self.menu)
 
         self.canceled = False
