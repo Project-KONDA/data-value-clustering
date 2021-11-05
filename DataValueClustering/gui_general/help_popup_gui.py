@@ -337,6 +337,7 @@ def menu_information_display(master, caption, content):
                     img = img.resize((width, height_new), Image.ANTIALIAS)
                 img = PhotoImage(img)
                 l = Label(scrollable_frame, image=img)
+                l.image = img  # keep a reference!
                 l.grid(row=i, column=1, sticky=W+E)
 
     def button_quit():
