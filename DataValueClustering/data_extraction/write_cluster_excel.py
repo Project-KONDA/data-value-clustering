@@ -91,7 +91,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
     if comp_to_normal_map is not None:
 
-        sheet2 = workbook.add_worksheet("Cluster_Repr")
+        sheet2 = workbook.add_worksheet("Cluster_Representatives")
 
         noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
         has_noise = len(noise_unique) > 0
@@ -139,7 +139,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
     if comp_to_normal_map is not None:
 
-        sheet3 = workbook.add_worksheet("Cluster_Repr_Dists")
+        sheet3 = workbook.add_worksheet("Cluster_Representatives_Dist")
 
         noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
         has_noise = len(noise_unique) > 0
@@ -209,7 +209,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet3.conditional_format(4, 1, 4, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#666666'})
 
     if comp_to_normal_map is not None:
-        sheet4 = workbook.add_worksheet("Mapping_Original_Repr")
+        sheet4 = workbook.add_worksheet("Mapping_Original_Representativ")
         sheet4.write(2, 0, "#original", style_sum)
         sheet4.set_column(0, 0, 14)
 
