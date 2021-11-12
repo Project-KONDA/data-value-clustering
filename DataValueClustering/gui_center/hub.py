@@ -780,23 +780,26 @@ class Hub:
                                    icon=WARNING):
                 self.save()
 
+    def menu_saveas(self):
+        if messagebox.showinfo("Saving Configuration",
+                               "Note that saving the configuration may take up to a minute and cannot be interrupted.",
+                               icon=WARNING):
+            self.saveas()
+
     def save(self):
         if self.configuration.json_save_path is not None:
             self.root.title("Saving to " + self.configuration.json_save_path + " in progress ...")
             self.configuration.save_as_json()
             self.set_saved(True)
         else:
-            self.menu_saveas()
+            self.saveas()
         self.update()
         self.root.focus_force()
 
-    def menu_saveas(self):
-        if messagebox.showinfo("Saving Configuration",
-                               "Note that saving the configuration may take up to a minute and cannot be interrupted.",
-                               icon=WARNING):
-            self.configuration.json_save_path = getJsonSavePath()
-            if self.configuration.json_save_path is not None:
-                self.save()
+    def saveas(self):
+        self.configuration.json_save_path = getJsonSavePath()
+        if self.configuration.json_save_path is not None:
+            self.save()
 
     def reset_validation_answers(self):
         self.configuration.reset_validation_answers()
