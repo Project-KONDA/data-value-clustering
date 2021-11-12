@@ -17,38 +17,38 @@ abstraction_question_array = [
      "Choose yes if the concrete upper case letter present does not have a crucial impact on the meaning and you expect a lot of upper case letters.\n" +
      "For example, 'USA' and 'DDR' will be treated equally since both consist of three upper case letters."],  # 2
     [[0], [1], "lower_sequence", False,
-     "Should all lower case letter sequences (= lower case words) be treated equally?",
+     "Should all lower case letter sequences (= lower case words) of any length be treated equally?",
      "Abstraction from the length of sequences of lower case letters.\n"
      "Choose yes if the length of lower case letter sequences does not have a crucial impact on the meaning and if\n" +
      "you expect a lot of lower case letter sequences of heterogeneous length.\n" +
      "For example, 'red' and 'to' will be treated equally since both consist of a sequence of lower case letters."],  # 3
     [[0, 1], [], "sequence", True,
-     "Should all letter sequences be treated equally?",
+     "Should all letter sequences of any length be treated equally?",
      "Abstraction from the length of sequences of any letters.\n"
      "Choose yes if the length of lower, upper or mixed case letter sequences does not have a crucial impact on the\n" +
      "meaning and if you expect a lot of such letter sequences of heterogeneous length.\n" +
      "For example, 'Portrait' and 'USA' will be treated equally since both consist of a sequence of lower, upper\n" +
      "or mixed case letters."],  # 4
     [[2], [1], "upper_sequence", False,
-     "Should all upper case letter sequences be treated equally?",
+     "Should all upper case letter sequences of any length be treated equally?",
      "Abstraction from the length of sequences of upper case letters.\n"
      "Choose yes if the length of upper case letter sequences does not have a crucial impact on the meaning and if\n" +
      "you expect a lot of upper case letter sequences of heterogeneous length.\n" +
      "For example, 'EU' and 'USA' will be treated equally since both consist of a sequence of upper case letters."],  # 5
     [[0, 3], [1], "words", False,
-     "Should all lower and upper case words be treated equally?",
+     "Should all lower and upper case words of any length be treated equally?",
      "Abstraction from the capitalization of the first letter of words.\n"
      "Choose yes if the capitalization of the first letter of a word does not have a crucial impact on the meaning and you expect a lot of words.\n" +
      "For example, 'red' and 'Portrait' will be treated equally since both are words."],  # 6
     [[0, 3, 6], [1], "word_sequence", False,
-     "Should all sequences of lower or upper case words separated by a blank space (= sentences) be treated equally?",
+     "Should all sequences of any length of lower or upper case words separated by a blank space (= sentences) be treated equally?",
      "Abstraction from the length of sequences of sequences of lower or upper case words separated by a blank.\n"
      "Choose yes if the length of sequences of lower or upper case words does not have a crucial impact on the\n" +
      "meaning and if you expect a lot of sequences of lower or upper case words of heterogeneous length.\n" +
      "For example, 'in Marburg' and 'brother or father' will be treated equally since both are sequences of words\n" +
      "separated by a blank space."],  # 7
     [[0, 1, 4], [], "sequence_sequence", False,
-     "Should all sequences of lower, upper or mixed case letter sequences separated by a blank space be treated equally?",
+     "Should all sequences of any length of lower, upper or mixed case letter sequences separated by a blank space be treated equally?",
      "Abstraction from the length of sequences of sequences of lower or upper or mixed case words separated by a blank.\n"
      "Choose yes if the length of sequences of lower, upper or mixed case letter sequences does not have\n" +
      "a crucial impact on the meaning and if you expect a lot of sequences of lower, upper or mixed case letter sequences of\n" +
@@ -62,13 +62,13 @@ abstraction_question_array = [
      "Choose yes if the concrete digit does not have a crucial impact on the meaning and you expect a lot of digits.\n" +
      "For example, '1' and '2' will be treated equally since both are digits."],  # 9
     [[9], [], "int", True,
-     "Should all digit sequences be treated equally?",
+     "Should all digit sequences of any legnth be treated equally?",
      "Abstraction from the length of digit sequences (= integers).\n"
      "Choose yes if the length of digit sequences does not have a crucial impact on the meaning and if you expect\n" +
      "a lot of digit sequences of heterogeneous length.\n" +
      "For example, '1' and '1024' will be treated equally since both are digit sequences."],  # 10
     [[9, 10], [], "float", False,
-     "Should all pairs of digit sequences separated by a comma be treated equally?",
+     "Should all pairs of digit sequences of any length separated by a comma be treated equally?",
      "Abstraction from the length of digit sequences separated by a comma (= floats).\n"
      "Choose yes if the length of digit sequences preceding and following a comma does not have a crucial impact on\n" +
      "the meaning and if you expect a lot of pairs of digit sequences separated by a comma of heterogeneous length.\n" +
