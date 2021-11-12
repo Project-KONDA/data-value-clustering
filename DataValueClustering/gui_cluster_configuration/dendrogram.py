@@ -23,7 +23,10 @@ def show_dendrogram(linkage_matrix, labels=None):
                    orientation='right',
                    labels=labels,
                    distance_sort='descending',
-                   show_leaf_counts=True)
+                   show_leaf_counts=True,
+                   leaf_font_size=8)
+
+    fig.subplots_adjust(right=0.99)
 
     def quit_figure(event):
         if event.key == 'enter':
