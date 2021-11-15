@@ -38,7 +38,7 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.hint_text = "Use your domain knowledge to abstract from features that you expect to find frequently in the data values " \
                          "and that do not alter the values’ meaning significantly. " \
                          "Each question is explained in detail in the corresponding tool tip. " \
-                         "You can start with one of the predefined configurations. " \
+                         "You can start with one of the predefined configurations. Typically the default configuration yields good results. " \
                          "A preview of the simple clustering achieved through the abstraction is shown on demand."
         if suggestion is not None:
             suggestion = "Advice based on the clustering evaluation:" + suggestion
