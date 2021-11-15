@@ -57,11 +57,11 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.predefined_abstractions = np.array([
             [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
             # [DEFAULT_CONFIG, self.config[:, 3]],
-            ["Only Duplicate Removal", duplicate_removal_function()[1]],
+            #["Only Duplicate Removal", duplicate_removal_function()[1]],
             ["Case-Sensitive Letters & Digits", char_abstraction_case_sensitive_function()[1]],
             ["Letters & Digits", char_abstraction_function()[1]],
-            ["Letter Sequences & Digits", letter_sequence_abstraction_function()[1]],
-            ["Letters & Digit Sequences", number_sequence_abstraction_function()[1]],
+            #["Letter Sequences & Digits", letter_sequence_abstraction_function()[1]],
+            #["Letters & Digit Sequences", number_sequence_abstraction_function()[1]],
             ["Case-Sensitive Letter Sequences & Digit Sequences", sequence_abstraction_case_sensitive_function()[1]],
             [DEFAULT_CONFIG, sequence_abstraction_function()[1]], # Letter Sequences & Digit Sequences
             ["Words & Digit Sequences", word_abstraction_function()[1]],
