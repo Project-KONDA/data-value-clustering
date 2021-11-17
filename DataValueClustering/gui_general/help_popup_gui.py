@@ -402,18 +402,14 @@ def menu_information_display(master, caption, content):
                 l.grid(row=i, column=1, sticky=W+E)
 
     def button_quit():
-        root.quit()
         root.destroy()
 
     button_ok = Button(root, text='OK', command=button_quit, justify=RIGHT, background='snow')
     button_ok.grid(sticky='nwse', row=3, column=1)
 
     root.update()
-    # root.geometry("500x" + str(root.winfo_height() + 10))
-    root.protocol("WM_DELETE_WINDOW", button_quit)
-    set_window_size_simple(root)
 
-    root.mainloop()
+    set_window_size_simple(root)
 
 
 if __name__ == "__main__":
