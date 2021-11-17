@@ -324,10 +324,12 @@ def data_to_excel(path, data):
     sheet2 = workbook.add_worksheet("Occurrences")
     data_occurence = OrderedDict(sorted(dict.items(), key=lambda x: -x[1]))
     sheet2.write(1, 1, "Data", style_caption)
-    sheet2.write(1, 2, "#", style_caption)
+    sheet2.write(1, 2, "#Occurrences", style_caption)
     for i, (key, value) in enumerate(data_occurence.items()):
         sheet2.write(i+2, 1, key, style_val_right)
         sheet2.write(i+2, 2, value)
+    sheet2.set_column(1, 1, 15)
+    sheet2.set_column(2, 2, 18)
 
     sheet2.conditional_format(2, 2, data_size + 2, 2,
                               {'type': 'data_bar', 'bar_color': '#63C384'})
@@ -339,6 +341,8 @@ def data_to_excel(path, data):
     for i, (key, value) in enumerate(data_alpabetical.items()):
         sheet3.write(i+2, 1, key, style_val_right)
         sheet3.write(i+2, 2, value)
+    sheet3.set_column(1, 1, 15)
+    sheet3.set_column(2, 2, 18)
 
     sheet3.conditional_format(2, 2, data_size + 2, 2,
                               {'type': 'data_bar', 'bar_color': '#63C384'})
