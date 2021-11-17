@@ -37,7 +37,7 @@ from gui_result.validation_questionnaire import get_suggested_algorithms, get_su
     get_suggested_abstraction_modifications, get_suggested_distance_modifications, \
     get_suggested_parameter_modifications, ValidationAnswer
 
-TITLE = "Clustering Configuration Hub"
+TITLE = "Data Value Clustering Hub"
 
 SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
 SIMPLE_CLUSTERING_HINT_2 = " clusters. You can stop here \nor continue below to achieve a coarser clustering."

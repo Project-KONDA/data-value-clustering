@@ -12,9 +12,9 @@ from gui_general.window_size import set_window_size_simple
 
 def menu_help_hub(master, restricted):
     """help popup for hub view"""
-    caption = "Hub"
+    caption = "Data Value Clustering Hub"
     text = [
-        "The Hub view is the central view of this application for data value clustering. It allows you to navigate through the configuration steps and subsequently access the calculated clustering.",
+        "The Data Value Clustering Hub view is the central view of this application for data value clustering. It allows you to navigate through the configuration steps and subsequently access the calculated clustering.",
         "",
         ["Configuration"],
         "The data value clustering typically requires you to perform 4 steps: You need to select the data, configure the abstraction for the simple clustering and configure both the dissimilarities and the clustering algorithm for the refined clustering.",
