@@ -297,7 +297,7 @@ def menu_help_result(master, restricted):
         "",
         ["Clustering"],
         "Most importantly, you can access the refined clustering provided in an Excel file via the green button on the left-hand side. Upon first opening the file, you must specify the save path.",
-        "As shown by the screenshots below, the Excel file contains four sheets, that present the clutering:",
+        "As shown by the screenshots below, the Excel file contains four sheets, that present the clustering:",
         " • The first one shows the clustering of the original values.",
         " • The second one shows the clustering of the abstracted values employing original values as representatives.",
         " • The third sheet additionally shows the variance within each cluster and the dissimilarity of each value to the others in the same cluster.",
