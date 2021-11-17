@@ -321,7 +321,7 @@ def data_to_excel(path, data):
     for i, v in enumerate(data):
         sheet1.write(i, 0, v)
 
-    sheet2 = workbook.add_worksheet("Occurences")
+    sheet2 = workbook.add_worksheet("Occurrences")
     data_occurence = OrderedDict(sorted(dict.items(), key=lambda x: -x[1]))
     sheet2.write(1, 1, "Data", style_caption)
     sheet2.write(1, 2, "#", style_caption)
@@ -335,7 +335,7 @@ def data_to_excel(path, data):
     sheet3 = workbook.add_worksheet("Alphabetical")
     data_alpabetical = OrderedDict(sorted(dict.items(), key=lambda x: x[0]))
     sheet3.write(1, 1, "Data", style_caption)
-    sheet3.write(1, 2, "#", style_caption)
+    sheet3.write(1, 2, "#Occurrences", style_caption)
     for i, (key, value) in enumerate(data_alpabetical.items()):
         sheet3.write(i+2, 1, key, style_val_right)
         sheet3.write(i+2, 2, value)
