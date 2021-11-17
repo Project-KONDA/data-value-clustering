@@ -2,4 +2,5 @@ pyinstaller --noconfirm --onedir --windowed --name=DataValueClustering --icon=".
 @ECHO OFF
 ECHO Exe file created in ./dist/hub/
 ECHO If ./dist/hub/ does not contain a folder called 'llvmlite', please copy ...\AppData\Local\Programs\Python\Python38\Lib\site-packages\~~vmlite\binding\llvmlite.dll to .dist/hub/ manually
+ECHO If the icon is not showing, clear the icon cash in Windows 10 by running the following: ie4uinit.exe -show
 PAUSE
