@@ -468,6 +468,9 @@ class Hub:
         self.reset_validation_answers()
         self.configuration.set_data_configuration(self.data_path_from_name(data_name))
 
+        self.configuration.set_clustering_selection(None)
+        self.configuration.set_clustering_configuration(None)
+
         self.update()
         self.root.update()
 
