@@ -154,13 +154,18 @@ class Hub:
         self.label_distance_choice = Label(self.refined_clustering_frame, text="Dissimilarities Configuration Method:", bg="white")
         self.label_distance_choice.grid(sticky='w', row=10, column=1, padx=(10,0), pady=10)
 
-        self.distance_options = [DISTANCE_OPTION_SLIDERS, DISTANCE_OPTION_BLOBS]
+        if restricted:
+            self.distance_options = [DISTANCE_OPTION_SLIDERS]
+        else:
+            self.distance_options = [DISTANCE_OPTION_SLIDERS, DISTANCE_OPTION_BLOBS]
         self.selected_distance_option = StringVar()
         self.selected_distance_option.set(DISTANCE_OPTION_SLIDERS)
         self.option_menu_distance_choice = OptionMenu(self.refined_clustering_frame, self.selected_distance_option,
                                                  *self.distance_options, command=self.selected_distance_option_changed)
         self.option_menu_distance_choice.grid(sticky='wes', row=10, column=2, padx=(0,10), pady=10)
         self.option_menu_distance_choice.configure(width=15)
+        if restricted:
+            self.option_menu_distance_choice.configure(state="disabled")
 
         "buttons"
         button_width_part = 37
@@ -755,7 +760,7 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.set_saved(True)
-        if (self.configuration.clustering_expert_mode or self.configuration.distance_config_method == DistanceView.MATRIX) and self.restricted:
+        if (self.configuration.clustering_expert_mode or self.configuration.distance_config_method == DistanceView.MATRIX or self.configuration.distance_config_method == DistanceView.BLOB) and self.restricted:
             if messagebox.showinfo("Loading failed",
                                    "You tried to load a configuration which uses expert mode while running the application in restricted mode. "
                                    "This is not possible. Please load another configuration or run the application in expert mode.",
@@ -834,7 +839,8 @@ class Hub:
             else:
                 self.button_distance.configure(state="normal", bg='paleturquoise1')
             self.label_distance_choice.configure(state="normal")
-            self.option_menu_distance_choice.configure(state="normal")
+            if not self.restricted:
+                self.option_menu_distance_choice.configure(state="normal")
             # self.label_distance_progress.configure(state="normal")
         else:
             self.button_distance.configure(state="disabled")
