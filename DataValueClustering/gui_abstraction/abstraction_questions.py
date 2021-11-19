@@ -62,7 +62,7 @@ abstraction_question_array = [
      "Choose yes if the concrete digit does not have a crucial impact on the meaning and you expect a lot of digits.\n" +
      "For example, '1' and '2' will be treated equally since both are digits."],  # 9
     [[9], [], "int", True,
-     "Should all digit sequences of any legnth be treated equally?",
+     "Should all digit sequences of any length be treated equally?",
      "Abstraction from the length of digit sequences (= integers).\n"
      "Choose yes if the length of digit sequences does not have a crucial impact on the meaning and if you expect\n" +
      "a lot of digit sequences of heterogeneous length.\n" +
