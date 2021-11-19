@@ -1,5 +1,7 @@
 '''Export calculated clustering to excel file.'''
+import os
 from collections import OrderedDict
+from stat import S_IREAD, S_IRGRP, S_IROTH
 
 import xlsxwriter
 
@@ -83,6 +85,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_rep.conditional_format(4, i * 2 + column_offset + 1, 4 + len(cluster_count), i * 2 + column_offset + 1, {'type': 'data_bar'})
         sheet_rep.conditional_format(2, 1, 2, column_offset + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
         sheet_rep.conditional_format(3, 1, 3, column_offset + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#C3C365'})
+        sheet_rep.protect()
 
     if comp_to_normal_map is not None and not restricted:
 
@@ -154,6 +157,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet_rep_dist.conditional_format(2, 1, 2, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
         sheet_rep_dist.conditional_format(3, 1, 3, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#C3C365'})
         sheet_rep_dist.conditional_format(4, 1, 4, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#666666'})
+        sheet_rep_dist.protect()
 
     sheet_original = workbook.add_worksheet("Cluster_Original")
 
@@ -206,6 +210,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         write_list_to_sheet(sheet_original, row_offset, i * 2 + column_offset + 1, cluster_count, style_val_right, True)
         sheet_original.conditional_format(row_offset, i * 2 + column_offset + 1, row_offset + 1 + len(cluster_count), i * 2 + 4, {'type': 'data_bar'})
     sheet_original.conditional_format(original_row, column_offset, original_row, 3 + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
+    sheet_original.protect()
 
     if comp_to_normal_map is not None:
         sheet_mapping = workbook.add_worksheet("Mapping_Original_Representativ")
@@ -250,6 +255,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
                                   {'type': 'data_bar', 'bar_color': '#63C384'})
 
     workbook.close()
+
+    os.chmod(path, S_IREAD | S_IRGRP | S_IROTH)
 
 
 def get_abstracted_from_original(comp_to_normal_map, first_noise, first_noise_abstracted):
