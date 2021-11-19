@@ -237,7 +237,7 @@ class ResultView:
         if self.configuration.excel_save_path is not None:
             try:
                 if not self.configuration.excel_saved:
-                    self.configuration.save_as_excel()
+                    self.configuration.save_as_excel(self.restricted)
                     self.configuration.excel_saved = True
                 os.startfile('"' + self.configuration.excel_save_path + '"')
             except (PermissionError, xlsxwriter.exceptions.FileCreateError) as e:

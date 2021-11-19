@@ -197,7 +197,7 @@ class HubConfiguration():
             cluster_to_excel(self.excel_simple_save_path, self.fancy_simple_cluster_list, [], None,
                              self.noise_abstracted, None, None, None)
 
-    def save_as_excel(self):
+    def save_as_excel(self, restricted):
         if self.excel_save_path is not None:
             # TODO: add the following to json exports?
             comp_to_normal_map = [list(elem) for elem in self.abstraction_dict.items()]
@@ -212,7 +212,7 @@ class HubConfiguration():
             cluster_to_excel(self.excel_save_path, self.fancy_cluster_list, self.noise, self.fancy_cluster_list_abstracted,
                              self.noise_abstracted, map,
                              intra_cluster_distances_per_cluster_per_value,
-                             intra_cluster_distances, self.fancy_simple_cluster_list)
+                             intra_cluster_distances, restricted, self.fancy_simple_cluster_list)
 
     "Get functions"
 
