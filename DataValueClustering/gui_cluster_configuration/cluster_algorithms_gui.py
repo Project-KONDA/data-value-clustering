@@ -26,24 +26,15 @@ def simple_cluster_hierarchical(master, distance_matrix_map, values, abstraction
     n_clusters_info = hierarchical_n_clusters_config(len(values))
     n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]], suggestion=suggestion)
 
-    # distance_threshold = 3.8  # 15  # 3.8  # depends on distances
-    distance_threshold_info = hierarchical_distance_threshold_config(linkage_matrix,
-                                                                     distance_matrix_map["min_distance"])
-    representatives = get_repr_list(values, abstraction_dict)
-    distance_threshold_frame = create_slider_frame(*distance_threshold_info, previous_value=None if previous_parameters is None else previous_parameters[distance_threshold_info[0]], plot_function=lambda current_value: show_dendrogram(linkage_matrix, representatives), suggestion=suggestion)
-
-    frames = [n_clusters_frame, distance_threshold_frame]
-    dependencies2 = [
-        [hierarchical_clustering.N_CLUSTERS, hierarchical_clustering.THRESHOLD, DEPENDENCY_ACTIVATION_ACTIVATION, False],
-        [hierarchical_clustering.THRESHOLD, hierarchical_clustering.N_CLUSTERS, DEPENDENCY_ACTIVATION_ACTIVATION, False],
-    ]
-    n_clusters, distance_threshold = \
+    frames = [n_clusters_frame]
+    dependencies2 = []
+    n_clusters = \
         get_configuration_parameters(master, "Simple Hierarchical Clustering Parameter Configuration", frames, dependencies2, suggestion, restricted)
 
-    if n_clusters is None and distance_threshold is None:
+    if n_clusters is None:
         return None
 
-    return {"method": "complete", "n_clusters": n_clusters, "distance_threshold": distance_threshold, "criterion": "maxclust", "depth": None}
+    return {"method": "complete", "n_clusters": n_clusters, "distance_threshold": None, "criterion": "maxclust", "depth": None}
 
 
 def cluster_hierarchical(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None, restricted=False):
