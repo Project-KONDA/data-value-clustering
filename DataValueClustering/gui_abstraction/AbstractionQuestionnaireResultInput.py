@@ -1,8 +1,9 @@
-from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Button, Canvas, CENTER, messagebox
+from tkinter import StringVar, Label, LEFT, OptionMenu, Tk, Menu, Canvas, CENTER, messagebox
 from tkinter.messagebox import WARNING
 
 import gui_abstraction.abstraction_questions
-from gui_general import CreateToolTip
+from gui_abstraction.preconfigured_abstractions import preconfigured_abstraction_answers, ABSTRACTION_OPTION_DEFAULT, \
+    ABSTRACTION_OPTION_CUSTOM, get_predefined_option_from_answers
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
@@ -13,8 +14,6 @@ HIDE = "▲     Preview     ▲"
 # CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
 CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details"
 
-DEFAULT_CONFIG = "Letter Sequences & Digit Sequences (Default)"
-MANUAL_CONFIG = "Custom Configuration"
 
 def abstraction_configuration(master, data, predefined_answers=None, suggestion=None, restricted=False):
     answers = input_questionnaire_abstraction(master, abstraction_question_array, data, predefined_answers, suggestion, restricted)
@@ -54,37 +53,18 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         self.menu.add_command(label="Help", command=lambda: menu_help_abstraction(self.root, restricted))
         self.root.config(menu=self.menu)
 
-        self.predefined_abstractions = np.array([
-            [MANUAL_CONFIG, list(np.full(len(abstraction_question_array), False))],
-            # [DEFAULT_CONFIG, self.config[:, 3]],
-            #["Only Duplicate Removal", duplicate_removal_function()[1]],
-            ["Case-Sensitive Letters & Digits", char_abstraction_case_sensitive_function()[1]],
-            ["Letters & Digits", char_abstraction_function()[1]],
-            #["Letter Sequences & Digits", letter_sequence_abstraction_function()[1]],
-            #["Letters & Digit Sequences", number_sequence_abstraction_function()[1]],
-            ["Case-Sensitive Letter Sequences & Digit Sequences", sequence_abstraction_case_sensitive_function()[1]],
-            [DEFAULT_CONFIG, sequence_abstraction_function()[1]], # Letter Sequences & Digit Sequences
-            ["Words & Digit Sequences", word_abstraction_function()[1]],
-            ["Words & Decimals", word_decimal_abstraction_function()[1]],
-            ["Sentences & Digit Sequences", word_sequence_abstraction_function()[1]],
-            ["Maximum Abstraction", max_abstraction_function()[1]],
-
-            # ["Custom Dictionary", lambda data: custom_dictionary()],
-            # ["Custom Full", lambda data: custom_full()]
-        ], dtype=object)
-
         # self.label = Label(self.scrollable_questions_frame, justify='left', wraplength=self.caption_width,
         #                    text="You can start with one of the predefined configurations and selectively adapt the answers to your usecase. "
         #                         "Each question is explained in detail in the corresponding tool tip.", bg="white")
         # self.label.grid(sticky='nw', row=2, column=0)
 
-        self.predefined_options = list(self.predefined_abstractions[:, 0])
+        self.predefined_options = list(preconfigured_abstraction_answers[:, 0])
         self.selected_predefined_option = StringVar()
         self.predefined_answers = predefined_answers
         if predefined_answers is None:
-            self.selected_predefined_option.set(DEFAULT_CONFIG)
+            self.selected_predefined_option.set(ABSTRACTION_OPTION_DEFAULT)
         else:
-            self.selected_predefined_option.set(self.get_predefined_option_from_answers())
+            self.selected_predefined_option.set(get_predefined_option_from_answers(self.predefined_answers))
         self.predefined_option_menu = OptionMenu(self.root, self.selected_predefined_option, *self.predefined_options, command=self.option_changed)
         self.predefined_option_menu.grid(sticky='nw', row=3, column=0, columnspan=3, padx=5)
 
@@ -118,22 +98,16 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
         if self.data is not None:
             self.hide_preview()
 
-    def get_predefined_option_from_answers(self):
-        for a in self.predefined_abstractions:
-            if a[1] == self.predefined_answers:
-                return a[0]
-        return MANUAL_CONFIG
-
     def option_changed(self, *args):
         selected_option = self.selected_predefined_option.get()
         print(selected_option)
-        answers_of_selected_option = self.predefined_abstractions[np.where(self.predefined_abstractions[:, 0] == selected_option)][:, 1][0]
+        answers_of_selected_option = preconfigured_abstraction_answers[np.where(preconfigured_abstraction_answers[:, 0] == selected_option)][:, 1][0]
         print(answers_of_selected_option)
         self.update_check_buttons(answers_of_selected_option)
 
     def selection_changed(self, j=None):
         super().selection_changed(j)
-        self.selected_predefined_option.set(MANUAL_CONFIG)
+        self.selected_predefined_option.set(ABSTRACTION_OPTION_CUSTOM)
 
         if j == len(self.answers)-1 and not self.answers[len(self.answers)-1].get() and (self.data is None or len(self.data) > 200):
             if not messagebox.askokcancel("Duplicate removal",

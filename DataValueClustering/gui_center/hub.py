@@ -1,8 +1,7 @@
 import os
 import subprocess
-from math import floor, sqrt
-from tkinter import Tk, Button, Label, Frame, messagebox, Menu, Checkbutton, IntVar, LabelFrame, \
-    OptionMenu, StringVar, PhotoImage
+from tkinter import Tk, Button, Label, messagebox, Menu, Checkbutton, IntVar, LabelFrame, \
+    OptionMenu, StringVar
 from pathlib import Path
 from tkinter.messagebox import WARNING, ERROR
 import numpy as np
@@ -12,15 +11,18 @@ import xlsxwriter
 from PIL import ImageTk, Image
 
 from abstraction.abstraction import sequence_abstraction_function
-from clustering.hierarchical_clustering import hierarchical_method_config, METHOD
-from distance import calculate_distance_matrix_map
-from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
+from clustering.hierarchical_clustering import METHOD
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
+from gui_abstraction.preconfigured_abstractions import ABSTRACTION_OPTION_CUSTOM, \
+    ABSTRACTION_OPTION_CASE_LETTERS_DIGITS, ABSTRACTION_OPTION_LETTERS_DIGITS, ABSTRACTION_OPTION_CASE_LETTER_DIGIT_SEQ, \
+    ABSTRACTION_OPTION_DEFAULT, ABSTRACTION_OPTION_WORDS_DIGIT_SEQ, ABSTRACTION_OPTION_WORDS_DECIMALS, \
+    ABSTRACTION_OPTION_SENTENCES_DIGIT_SEQ, ABSTRACTION_OPTION_MAX, preconfigured_abstraction_answers, \
+    get_predefined_option_from_answers
 from gui_abstraction.abstraction_questions import abstraction_question_array
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 from gui_cluster_configuration.cluster_algorithms_gui import simple_cluster_hierarchical
-from gui_cluster_selection.algorithm_selection import HIERARCHICAL, OPTICS, DBSCAN
+from gui_cluster_selection.algorithm_selection import HIERARCHICAL, OPTICS
 from gui_cluster_selection.select_algorithm import select_algorithm
 from gui_data.select_data import select_data
 from gui_distances.BlobInput import input_blobs
@@ -117,8 +119,8 @@ class Hub:
 
         self.restricted = restricted
         self.configuration = HubConfiguration()
-        if self.restricted:
-            self.configuration.set_abstraction_configuration(sequence_abstraction_function()[1])
+
+        self.configuration.set_abstraction_configuration(sequence_abstraction_function()[1])
 
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
@@ -152,6 +154,27 @@ class Hub:
         self.data_frame.grid(sticky='nswe', row=2, column=0, columnspan=2, padx=5, pady=5)
         self.simple_clustering_frame.grid(sticky='nswe', row=3, column=0, columnspan=2, padx=5, pady=5)
         self.refined_clustering_frame.grid(sticky='nswe', row=6, column=0, columnspan=2, padx=5, pady=5)
+
+        "preconfigured abstraction choice"
+        self.label_abstraction_preconfigured = Label(self.simple_clustering_frame, text="Preconfigured Abstraction:", bg="white")
+        self.label_abstraction_preconfigured.grid(sticky='w', row=0, column=1, padx=(10,0), pady=10)
+
+        if restricted:
+            self.abstraction_options = [ABSTRACTION_OPTION_DEFAULT]
+        else:
+            self.abstraction_options = [ABSTRACTION_OPTION_CUSTOM, ABSTRACTION_OPTION_CASE_LETTERS_DIGITS,
+                                        ABSTRACTION_OPTION_LETTERS_DIGITS, ABSTRACTION_OPTION_CASE_LETTER_DIGIT_SEQ,
+                                        ABSTRACTION_OPTION_DEFAULT, ABSTRACTION_OPTION_WORDS_DIGIT_SEQ,
+                                        ABSTRACTION_OPTION_WORDS_DECIMALS, ABSTRACTION_OPTION_SENTENCES_DIGIT_SEQ,
+                                        ABSTRACTION_OPTION_MAX]
+        self.selected_abstraction_option = StringVar()
+        self.selected_abstraction_option.set(ABSTRACTION_OPTION_DEFAULT)
+        self.option_menu_abstraction_choice = OptionMenu(self.simple_clustering_frame, self.selected_abstraction_option,
+                                                 *self.abstraction_options, command=self.selected_abstraction_option_changed)
+        self.option_menu_abstraction_choice.grid(sticky='wes', row=0, column=2, padx=(0,10), pady=10)
+        self.option_menu_abstraction_choice.configure(width=26)
+        if restricted:
+            self.option_menu_abstraction_choice.configure(state="disabled")
 
         "distance method choice"
         self.label_distance_choice = Label(self.refined_clustering_frame, text="Dissimilarities Configuration Method:", bg="white")
@@ -303,7 +326,7 @@ class Hub:
         self.preview_clustering_outer.config(bg="grey90")
 
         self.preview_data_outer.grid(sticky='nswe', row=5, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
-        self.preview_abstraction_outer.grid(sticky='nswe', row=8, column=3, rowspan=3, columnspan=2, padx=10, pady=10)
+        self.preview_abstraction_outer.grid(sticky='nswe', row=0, column=3, rowspan=11, columnspan=2, padx=10, pady=10)
         self.preview_distance_outer.grid(sticky='nswe', row=10, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
         self.preview_clustering_outer.grid(sticky='nswe', row=14, column=3, rowspan=4, columnspan=2, padx=10, pady=10)
 
@@ -361,6 +384,15 @@ class Hub:
             self.load(loadpath)
             self.update()
         self.root.mainloop()
+
+    def selected_abstraction_option_changed(self, *args):
+        new_selection = self.selected_abstraction_option.get()
+        if new_selection != ABSTRACTION_OPTION_CUSTOM:
+            answers = preconfigured_abstraction_answers[np.where(preconfigured_abstraction_answers[:,0] == new_selection)[0][0], 1]
+            if answers != self.configuration.get_abstraction_configuration():
+                self.apply_abstraction(answers)
+        else:
+            self.apply_abstraction(None)
 
     def set_selected_distance_option(self, value):
         self.selected_distance_option.set(value)
@@ -503,35 +535,31 @@ class Hub:
         previous_abstraction_answers = self.configuration.get_abstraction_configuration()
         # 2. put data into abstraction gui
         # 3. read from abstraction gui
-        abstraction_answers = abstraction_configuration(self.root, self.configuration.data, previous_abstraction_answers, get_suggested_abstraction_modifications(self.get_validation_answers(), self.configuration), self.restricted)[1]
+        method, abstraction_answers = abstraction_configuration(self.root, self.configuration.data, previous_abstraction_answers, get_suggested_abstraction_modifications(self.get_validation_answers(), self.configuration), self.restricted)
         if abstraction_answers is None or previous_abstraction_answers == abstraction_answers:
             self.update()
             self.root.update()
             return
 
-        # 4. save abstraction into configuration
+        self.apply_abstraction(abstraction_answers)
+        # self.configuration.save_as_json()
+
+    def apply_abstraction(self, abstraction_answers):
         self.set_saved(False)
-        abstraction_changed = self.configuration.abstraction_configuration_valid()
-        if abstraction_changed:
-            self.configuration.set_distance_configuration(None)
-            self.configuration.set_clustering_selection(None)
-            self.configuration.set_clustering_configuration(None)
+        self.configuration.reset_abstraction()
+        self.configuration.set_distance_configuration(None)
+        self.configuration.set_clustering_selection(None)
+        self.configuration.set_clustering_configuration(None)
         self.reset_validation_answers()
         self.configuration.set_abstraction_configuration(abstraction_answers)
-        # 5. update self
-        # 6. initiate execution of abstraction in config
 
         self.update()
         self.root.update()
-
         self.label_abstraction_progress.configure(text=ABSTRACTION_IN_PROGRESS, fg='RoyalBlue1')
         self.root.update()
-
-        if self.configuration.data_configuration_valid():
+        if self.configuration.data_configuration_valid() and self.configuration.abstraction_configuration_valid():
             self.configuration.execute_abstraction()
-
         self.update()
-        # self.configuration.save_as_json()
 
     def show_simple_clustering_hint(self, i):
         self.label_abstraction_hint.configure(fg="black", text=SIMPLE_CLUSTERING_HINT_1 + str(i) + SIMPLE_CLUSTERING_HINT_2)
@@ -827,6 +855,7 @@ class Hub:
 
         if self.configuration.abstraction_configuration_valid():
             self.button_abstraction.configure(bg=self.original_button_color)
+            self.selected_abstraction_option.set(get_predefined_option_from_answers(self.configuration.get_abstraction_configuration()))
             if self.configuration.data_configuration_valid():
                 self.label_abstraction_progress.configure(text=ABSTRACTION_DONE, fg='green')
                 self.show_simple_clustering_hint(self.configuration.no_values_abstracted)
@@ -848,7 +877,8 @@ class Hub:
                 self.option_menu_distance_choice.configure(state="normal")
             # self.label_distance_progress.configure(state="normal")
         else:
-            self.button_distance.configure(state="disabled")
+            self.hide_simple_clustering_hint()
+            self.button_distance.configure(state="disabled", bg=self.original_button_color)
             self.label_distance_progress.configure(fg='red')
             self.label_distance_choice.configure(state="disabled")
             self.option_menu_distance_choice.configure(state="disabled")
@@ -975,4 +1005,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub(restricted=True)
+    Hub(restricted=False)
