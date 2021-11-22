@@ -11,6 +11,7 @@ import sys
 import xlsxwriter
 from PIL import ImageTk, Image
 
+from abstraction.abstraction import sequence_abstraction_function
 from clustering.hierarchical_clustering import hierarchical_method_config, METHOD
 from distance import calculate_distance_matrix_map
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
@@ -114,8 +115,10 @@ class Hub:
 
         self.root.configure(background='white')
 
-        self.configuration = HubConfiguration()
         self.restricted = restricted
+        self.configuration = HubConfiguration()
+        if self.restricted:
+            self.configuration.set_abstraction_configuration(sequence_abstraction_function()[1])
 
         "labels"
         self.label_title = Label(self.root, text=TITLE, bg="white",
@@ -760,7 +763,7 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.set_saved(True)
-        if (self.configuration.clustering_expert_mode or self.configuration.distance_config_method == DistanceView.MATRIX or self.configuration.distance_config_method == DistanceView.BLOB) and self.restricted:
+        if (self.configuration.clustering_expert_mode or self.configuration.distance_config_method == DistanceView.MATRIX or self.configuration.distance_config_method == DistanceView.BLOB or self.configuration.get_abstraction_configuration() != sequence_abstraction_function()[1]) and self.restricted:
             if messagebox.showinfo("Loading failed",
                                    "You tried to load a configuration which uses expert mode while running the application in restricted mode. "
                                    "This is not possible. Please load another configuration or run the application in expert mode.",
@@ -832,6 +835,8 @@ class Hub:
         else:
             self.button_abstraction.configure(bg='paleturquoise1')
             self.label_abstraction_progress.configure(text=ABSTRACTION_NOT_CONFIGURED, fg='red')
+        if self.restricted:
+            self.button_abstraction.configure(state="disabled")
 
         if self.configuration.distance_configuration_possible():
             if self.configuration.distance_configuration_valid():
@@ -970,4 +975,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub(restricted=False)
+    Hub(restricted=True)
