@@ -124,7 +124,9 @@ class SliderInput:
 
         # headings:
         self.label_head_characters = Label(self.root, text="Character Groups", bg="white", font=('Sans', '10', 'bold'))
-        self.label_head_weights_sub = Label(self.root, text="ᐊ low influence    ......    high influence ᐅ", bg="white")
+        influence_text = "  low                                                   medium                                                   high  "
+
+        self.label_head_weights_sub = Label(self.root, text=influence_text, bg="white")
         self.label_head_weights = Label(self.root, text="Weights of Influence", bg="white", font=('Sans', '10', 'bold'))
         CreateToolTip(self.label_head_characters, "Enumerate all characters of this group. Only the first occurrence of a "
                                            "character in one of the groups is relevant.\nNote that some characters may "
@@ -133,7 +135,7 @@ class SliderInput:
         CreateToolTip(self.label_head_weights, "Weights indicating the influence of the given character groups on the dissimilarity between data values.")
         self.label_head_characters.grid(sticky='nswe', row=5, column=0, columnspan=3, pady=(20,0))
         self.label_head_weights.grid(sticky='nswe', row=5, column=4, columnspan=4, pady=(20,0))
-        self.label_head_weights_sub.grid(sticky='ns', row=6, column=4, columnspan=4)
+        self.label_head_weights_sub.grid(sticky='nse', row=6, column=4, columnspan=4, padx=(15,15))
 
         self.row_offset = 6
 
@@ -147,11 +149,11 @@ class SliderInput:
 
         for i in range(0, self.n):
             t = ""
-            v = 1
+            v = 4
             if self.texts and len(self.texts) > i:
                 t = self.texts[i]
             if self.values and len(self.values) > i:
-                v = self.values[i]
+                v = self.values[i]-1
 
             self.label_list[i] = Label(self.scrollable_frame, width=27, bg="white", anchor=W, justify=LEFT)
             self.label_list[i].config(text = "<rest>" if i == self.n-1 else "")
@@ -163,12 +165,12 @@ class SliderInput:
             if i == self.n-1 or self.fixed:
                 self.entrylist[i].configure(state="disabled")
 
-            self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=self.valuelist[i],
-                                       length=400, bg='white', highlightthickness=0, resolution=1)
 
+            self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=8, orient='horizontal', variable=self.valuelist[i],
+                                       length=400, bg='white', highlightthickness=0, resolution=4, showvalue=0)
             self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=1, pady=(15, 0), padx=2)
-            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=1, pady=(18, 0), padx=2)
-            self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=1, pady=(0, 0))
+            self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=1, pady=(15, 0), padx=2)
+            self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=1, pady=(15, 0))
 
         self.fg_color = self.sliderlist[0].cget("fg")
         self.troughcolor_color = self.sliderlist[0].cget("troughcolor")
@@ -191,7 +193,7 @@ class SliderInput:
 
     def enable_slider(self, i):
         if self.sliderlist[i]['state'] == 'disabled':
-            self.valuelist[i].set(1)
+            self.valuelist[i].set(4)
         self.sliderlist[i].configure(state="normal", fg=self.fg_color, troughcolor=self.troughcolor_color)
 
     def remove_duplicate_chars(self):
@@ -271,10 +273,10 @@ class SliderInput:
         map = {(()): 1., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
-            map[(0, i + 1)] = self.valuelist[i].get()
-            map[(i + 1, 0)] = self.valuelist[i].get()
+            map[(0, i + 1)] = self.valuelist[i].get()+1
+            map[(i + 1, 0)] = self.valuelist[i].get()+1
             for j in range(self.n):
-                map[(i + 1, j + 1)] = max(self.valuelist[i].get(), self.valuelist[j].get())
+                map[(i + 1, j + 1)] = max(self.valuelist[i].get()+1, self.valuelist[j].get()+1)
         return DistanceView.SLIDER, map
 
     def reset_groups(self):
@@ -320,12 +322,16 @@ class SliderInput:
         entrylist[self.n-1] = Entry(self.scrollable_frame, font="12", textvariable=entry_var_list[self.n-1], width=25,
                                     highlightthickness=2)
         label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
-        sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=10, orient='horizontal', variable=valuelist[self.n-1],
-                                        length=400, bg='white', highlightthickness=0, resolution=1)
+
+
+        sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=8, orient='horizontal',
+                                       variable=valuelist[self.n-1],
+                                       length=400, bg='white', highlightthickness=0, resolution=4, showvalue=0)
+
 
         label_list[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
         entrylist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
-        sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(0, 0))
+        sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(15, 0))
 
         entry_var_list[self.n-1].trace("w", lambda name, index, mode: self.update_labels())
 
@@ -338,7 +344,7 @@ class SliderInput:
 
         entrylist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=1, columnspan=2, pady=(15, 0), padx=1)
         label_list[self.n].grid(sticky='new', row=self.n + self.row_offset, column=3, columnspan=2, pady=(15, 0), padx=1)
-        sliderlist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=5, columnspan=2, pady=(0, 0))
+        sliderlist[self.n].grid(sticky='new', row=self.n + self.row_offset, column=5, columnspan=2, pady=(15, 0))
 
         # 5. complete
         self.n = self.n+1
@@ -386,7 +392,7 @@ class SliderInput:
 
         entrylist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=1, columnspan=2, pady=(15,0), padx=1)
         label_list[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
-        sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(0, 0))
+        sliderlist[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=5, columnspan=2, pady=(15, 0))
 
         # 5. complete
         self.entrylist = entrylist
