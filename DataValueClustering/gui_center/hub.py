@@ -981,7 +981,7 @@ class Hub:
             self.label_distance_config.configure(text=NONE)
             self.label_distance_config2.configure(text="")
         else:
-            labels, numbers = string_simplified_cost_map_split(cost_map, blob_configuration)
+            labels, numbers = string_simplified_cost_map_split(cost_map, blob_configuration, self.configuration.distance_config_method)
             self.label_distance_config.configure(text=labels)
             self.label_distance_config2.configure(text=numbers)
 

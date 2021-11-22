@@ -2,6 +2,8 @@
 from math import floor, sqrt
 import re
 
+from gui_distances.distance_choice import DistanceView
+
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 alphabet_capitalized = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 digits = "0123456789"
@@ -137,7 +139,7 @@ def string_cost_map(map):
     return text
 
 
-def string_simplified_cost_map_split(map, abstraction):
+def string_simplified_cost_map_split(map, abstraction, distance_config_method):
     def translate(i):
         s = map[i]
         t = ""
@@ -161,7 +163,15 @@ def string_simplified_cost_map_split(map, abstraction):
     text1 += "<rest>"
     text2 = ""
     for i in range(1, n):
-        text2 += str(map[0, i]) + "\n"
+        if distance_config_method == DistanceView.SLIDER:
+            if(map[0, i] == 1):
+                text2 += "low" + "\n"
+            elif(map[0, i] == 5):
+                text2 += "medium" + "\n"
+            elif (map[0, i] == 9):
+                text2 += "high" + "\n"
+        else:
+            text2 += str(map[0, i]) + "\n"
     return text1, text2
 
 
