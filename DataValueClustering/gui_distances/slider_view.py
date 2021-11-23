@@ -2,12 +2,13 @@ from tkinter import Button, Label, Entry, Scale, IntVar, Toplevel, StringVar, W,
 
 import numpy as np
 
+from gui_distances.CostMapInput import input_costmap
 from gui_distances.costmapinput_helper import costmap_is_valid, print_cost_map, get_n_from_map, \
     groups_to_enumerations
 from gui_distances.distance_choice import DistanceView
 from gui_distances.distance_warnings import warning_color, \
-    undo_highlight_entries, update_warnings, update_warnings_vars
-from gui_distances.CostMapInput import input_costmap
+    undo_highlight_entries, update_warnings_vars
+from gui_distances.slider_helper import scale_to_weight, weight_to_scale
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_general.scrollable_frame import create_scrollable_frame
@@ -15,6 +16,7 @@ from gui_general.window_size import set_window_size_simple
 
 disable_scale_color_trough = "grey90"
 disable_scale_color_fg = "grey40"
+
 
 def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None, restricted=False):
     view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration, restricted)
@@ -149,11 +151,11 @@ class SliderInput:
 
         for i in range(0, self.n):
             t = ""
-            v = 4
+            v = 1
             if self.texts and len(self.texts) > i:
                 t = self.texts[i]
             if self.values and len(self.values) > i:
-                v = self.values[i]-1
+                v = weight_to_scale(self.values[i])
 
             self.label_list[i] = Label(self.scrollable_frame, width=27, bg="white", anchor=W, justify=LEFT)
             self.label_list[i].config(text = "<rest>" if i == self.n-1 else "")
@@ -166,8 +168,8 @@ class SliderInput:
                 self.entrylist[i].configure(state="disabled")
 
 
-            self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=8, orient='horizontal', variable=self.valuelist[i],
-                                       length=400, bg='white', highlightthickness=0, resolution=4, showvalue=0)
+            self.sliderlist[i] = Scale(self.scrollable_frame, from_=0, to_=2, orient='horizontal', variable=self.valuelist[i],
+                                       length=400, bg='white', highlightthickness=0, resolution=1, showvalue=0)
             self.entrylist[i].grid(sticky='new', row=i + self.row_offset, column=1, columnspan=1, pady=(15, 0), padx=2)
             self.label_list[i].grid(sticky='new', row=i + self.row_offset, column=3, columnspan=1, pady=(15, 0), padx=2)
             self.sliderlist[i].grid(sticky='new', row=i + self.row_offset, column=5, columnspan=1, pady=(15, 0))
@@ -273,10 +275,10 @@ class SliderInput:
         map = {(()): 1., 0: "", (0, 0): 0}
         for i in range(self.n):
             map[i + 1] = groups_to_enumerations(self.entry_var_list[i].get())
-            map[(0, i + 1)] = self.valuelist[i].get()+1
-            map[(i + 1, 0)] = self.valuelist[i].get()+1
+            map[(0, i + 1)] = scale_to_weight(self.valuelist[i].get())
+            map[(i + 1, 0)] = scale_to_weight(self.valuelist[i].get())
             for j in range(self.n):
-                map[(i + 1, j + 1)] = max(self.valuelist[i].get()+1, self.valuelist[j].get()+1)
+                map[(i + 1, j + 1)] = max(scale_to_weight(self.valuelist[i].get()), scale_to_weight(self.valuelist[j].get()))
         return DistanceView.SLIDER, map
 
     def reset_groups(self):
@@ -324,9 +326,9 @@ class SliderInput:
         label_list[self.n-1] = Label(self.scrollable_frame, bg="white", anchor=W, justify=LEFT, width=24)
 
 
-        sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=8, orient='horizontal',
+        sliderlist[self.n-1] = Scale(self.scrollable_frame, from_=0, to_=2, orient='horizontal',
                                        variable=valuelist[self.n-1],
-                                       length=400, bg='white', highlightthickness=0, resolution=4, showvalue=0)
+                                       length=400, bg='white', highlightthickness=0, resolution=1, showvalue=0)
 
 
         label_list[self.n-1].grid(sticky='new', row=self.n-1+self.row_offset, column=3, columnspan=2, pady=(15,0), padx=1)
