@@ -752,10 +752,11 @@ class Hub:
         self.label_distance_advice.config(text="")
         self.label_clustering_advice.config(text="")
         if answers[0] is not None and answers[0] != ValidationAnswer.HAPPY:
-            self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
+            if not self.restricted:
+                self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
             if self.configuration.get_clustering_selection() != HIERARCHICAL and self.configuration.get_clustering_selection() != OPTICS \
-                    or self.configuration.get_clustering_configuration() == HIERARCHICAL and self.configuration.get_clustering_configuration()[METHOD] != 'average' and self.configuration.get_clustering_configuration()[METHOD] != 'weighted':
+                    or not self.restricted and self.configuration.get_clustering_selection() == HIERARCHICAL and self.configuration.get_clustering_configuration()[METHOD] != 'average' and self.configuration.get_clustering_configuration()[METHOD] != 'weighted':
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[1] is not None and answers[1] == ValidationAnswer.MORE:
             if self.configuration.clustering_expert_mode:
@@ -766,7 +767,8 @@ class Hub:
             if self.configuration.clustering_expert_mode:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[2] is not None and answers[2] != ValidationAnswer.HAPPY:
-            self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
+            if not self.restricted:
+                self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
             self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[3] is not None and answers[3][0] is not None and answers[3][0] != ValidationAnswer.HAPPY:
