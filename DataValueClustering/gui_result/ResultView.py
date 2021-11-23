@@ -1,5 +1,7 @@
+import datetime
 import os
 import subprocess
+import time
 from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, PhotoImage, messagebox
 from tkinter.messagebox import ERROR
 
@@ -240,7 +242,9 @@ class ResultView:
         file_path = dir_path + "\\log.log"
         tiny_json = self.configuration.get_as_json_tiny()
         f = open(file_path, mode="a", encoding='UTF-8')
-        f.write(tiny_json + ",\n")
+        timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        text = "{\n" + "\"timestamp\": \"" + timestamp + "\",\n" + "\"configuration\":\n" + tiny_json + "\n},\n"
+        f.write(text)
         f.close()
 
     def open_excel(self):
