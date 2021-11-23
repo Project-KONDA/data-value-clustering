@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import json
 from pathlib import Path
-
+import copy
 import jsbeautifier
 import numpy
 import numpy as np
@@ -229,6 +229,19 @@ class HubConfiguration():
 
     "Export"
 
+    def save_as_json_tiny(self):
+        c = copy.deepcopy(self)
+        c.translate_cost_map_to_json()
+        c.reset_data()
+        c.reset_abstraction()
+        c.reset_distances()
+        c.reset_clustering()
+        output_text = c.hub_configuration_to_json()
+        f = open(c.json_save_path, "w")
+        f.write(output_text)
+        c.translate_cost_map_to_dict()
+        f.close()
+
     def save_as_json(self):
         self.translate_cost_map_to_json()
         output_text = self.hub_configuration_to_json()
@@ -448,6 +461,8 @@ class HubConfiguration():
     def reset_abstraction(self):
         self.blob_configuration = None
         self.values_abstracted = None
+        self.no_values_abstracted = None
+        self.fancy_simple_cluster_list = None
         self.abstraction_dict = None
         self.num_abstracted_data = None
         self.abstraction_rate = None
