@@ -47,6 +47,10 @@ def blob_config_to_nparray(hub_config):
 def create_hub_configuration_from_dict(dict):
     hub = HubConfiguration()
     hub.fill_hub_configuration_from_dict(dict)
+    if hub.data_path is not None and hub.data is None:
+        hub.execute_data()
+    if hub.data is not None and hub.abstraction_configuration_valid() and not hub.abstraction_result_valid():
+        hub.execute_abstraction()
     return hub
 
 
