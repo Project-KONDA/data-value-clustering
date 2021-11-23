@@ -479,6 +479,7 @@ class HubConfiguration():
 
     def reset_data(self):
         self.data = None
+        self.num_data = None
 
     def reset_abstraction(self):
         self.blob_configuration = None
