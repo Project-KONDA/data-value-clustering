@@ -28,7 +28,7 @@ def simple_cluster_hierarchical(master, distance_matrix_map, values, abstraction
 
     frames = [n_clusters_frame]
     dependencies2 = []
-    n_clusters = \
+    n_clusters, = \
         get_configuration_parameters(master, "Simple Hierarchical Clustering Parameter Configuration", frames, dependencies2, suggestion, restricted)
 
     if n_clusters is None:
