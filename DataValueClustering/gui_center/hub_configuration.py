@@ -233,7 +233,7 @@ class HubConfiguration():
 
     "Export"
 
-    def save_as_json_tiny(self):
+    def get_as_json_tiny(self):
         c = copy.deepcopy(self)
         c.translate_cost_map_to_json()
         c.reset_data()
@@ -241,10 +241,7 @@ class HubConfiguration():
         c.reset_distances()
         c.reset_clustering()
         output_text = c.hub_configuration_to_json()
-        f = open(c.json_save_path, "w")
-        f.write(output_text)
-        c.translate_cost_map_to_dict()
-        f.close()
+        return output_text
 
     def save_as_json(self):
         self.translate_cost_map_to_json()

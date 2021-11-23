@@ -102,7 +102,7 @@ def data_name_from_path(data_path):
 
 class Hub:
 
-    def __init__(self, loadpath=None, restricted=False):
+    def __init__(self, loadpath=None, restricted=False, logging=False):
         os.chdir(str(Path(__file__).parent))
 
         load_and_compile()
@@ -118,6 +118,7 @@ class Hub:
         self.root.configure(background='white')
 
         self.restricted = restricted
+        self.logging = logging
 
         self.configuration = HubConfiguration()
         self.configuration.set_abstraction_configuration(sequence_abstraction_function()[1])
@@ -742,7 +743,7 @@ class Hub:
         # validation_result = result_view(self.root, self.configuration.excel_save_path, self.configuration.num_data, self.configuration.num_abstracted_data, self.configuration.abstraction_rate, self.configuration.no_clusters, self.configuration.no_noise,
         #             self.configuration.timedelta_abstraction, self.configuration.timedelta_distance, self.configuration.timedelta_cluster, self.configuration.timedelta_total,
         #             self.configuration.values_abstracted, self.configuration.distance_matrix_map, self.configuration.clusters_abstracted)
-        result_view(self.root, self.configuration, restricted=self.restricted)
+        result_view(self.root, self.configuration, restricted=self.restricted, logging=self.logging)
         self.update()
 
     def update_advice(self):
@@ -1008,4 +1009,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub(restricted=False)
+    Hub(restricted=False, logging=True)

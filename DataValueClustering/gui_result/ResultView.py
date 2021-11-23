@@ -19,6 +19,8 @@ from gui_result.validation_frames.EnumEnumValidationQuestion import create_enum_
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
 from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
     question_4_answers, ValidationAnswer, question_2, question_3, question_4, question_1
+from pathlib import Path
+
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
@@ -27,15 +29,15 @@ NOT_SATISFIED = "Based on your answers above, we suggest doing another iteration
 SATISFIED = "According to your answers above, you are satisfied with the clustering.\nCongratulations, you are done!"
 
 
-def result_view(master, configuration, restricted=False):
-    res = ResultView(master, configuration, restricted)
+def result_view(master, configuration, restricted=False, logging=False):
+    res = ResultView(master, configuration, restricted, logging)
     return res.get()
 
 
 class ResultView:
 
     # def __init__(self, master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
-    def __init__(self, master, configuration, restricted=False):
+    def __init__(self, master, configuration, restricted=False, logging=False):
         self.root = Toplevel(master)
         self.root.attributes('-alpha', 0.0)
         self.root.title("Clustering Result & Evaluation")
@@ -53,6 +55,7 @@ class ResultView:
 
         self.configuration = configuration
         self.restricted = restricted
+        self.logging = logging
 
         # self.excel_path = excel_path
         # self.num_data = num_data
@@ -230,9 +233,21 @@ class ResultView:
             else:
                 self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
 
+    def append_log(self):
+        dir_path = str(Path(__file__).parent.parent) + "/log"
+        Path(dir_path).mkdir(exist_ok=True)
+        os.chdir(dir_path)
+        file_path = dir_path + "\\log.log"
+        tiny_json = self.configuration.get_as_json_tiny()
+        f = open(file_path, mode="a", encoding='UTF-8')
+        f.write(tiny_json + ",\n")
+        f.close()
+
     def open_excel(self):
         if self.configuration.excel_save_path is None:
             self.configuration.excel_save_path = getExcelSavePath()
+            if self.logging:
+                self.append_log()
 
         if self.configuration.excel_save_path is not None:
             try:
