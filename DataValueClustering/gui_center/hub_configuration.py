@@ -240,8 +240,29 @@ class HubConfiguration():
         c.reset_abstraction()
         c.reset_distances()
         c.reset_clustering()
-        output_text = c.hub_configuration_to_json()
-        return output_text
+
+        char = "\\"
+        if "/" in c.data_path:
+            char = "/"
+        data_path_split = c.data_path.split(char)
+        c.data_path = data_path_split[len(data_path_split)-1]
+
+        c.json_save_path = None
+
+        char_excel = "\\"
+        if "/" in c.excel_save_path:
+            char_excel = "/"
+        excel_save_path_split = c.excel_save_path.split(char_excel)
+        c.excel_save_path = excel_save_path_split[len(excel_save_path_split) - 1]
+
+        if self.excel_simple_save_path is not None:
+            char_simple = "\\"
+            if "/" in c.excel_simple_save_path_split:
+                char_simple = "/"
+            excel_simple_save_path_split = c.excel_simple_save_path_split.split(char_simple)
+            c.excel_simple_save_path_split = excel_simple_save_path_split[len(excel_simple_save_path_split) - 1]
+
+        return c.hub_configuration_to_json()
 
     def save_as_json(self):
         self.translate_cost_map_to_json()
