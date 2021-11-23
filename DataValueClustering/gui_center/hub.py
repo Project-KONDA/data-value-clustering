@@ -118,8 +118,8 @@ class Hub:
         self.root.configure(background='white')
 
         self.restricted = restricted
-        self.configuration = HubConfiguration()
 
+        self.configuration = HubConfiguration()
         self.configuration.set_abstraction_configuration(sequence_abstraction_function()[1])
 
         "labels"
@@ -811,6 +811,7 @@ class Hub:
                                    "\nDo you want to proceed?",
                                    icon=WARNING):
             self.configuration = HubConfiguration()
+            self.configuration.set_abstraction_configuration(sequence_abstraction_function()[1])
             self.update()
             self.root.title(TITLE)
 
