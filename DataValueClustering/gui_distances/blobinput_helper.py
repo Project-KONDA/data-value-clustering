@@ -88,7 +88,7 @@ blob_configuration_array = [
     [[13],         [12],                     "punctuation_marks",           ".",                                                      False,
      "'.' represents all punctuation marks, i.e. '.', ',', ':', ';', '!', and '?'."],
     [[],           [12, 13],                 "punctuation_marks",           ".,:;!?",                                              True,
-     "all punctuation marks, i.e. '.', ',', ':', ';', '!', and '?'."],
+     "all punctuation marks, i.e. '.', ',', ':', ';', '!', '?', and '—'."],
     [[14],         [12],                     "brackets",                    "(",                                                      False,
      "'(' represents all brackets, i.e. '(', '[', '{' and the corresponding opposites."],
     [[],           [12, 14],                 "brackets",                    "()[]{}",                                          True,
