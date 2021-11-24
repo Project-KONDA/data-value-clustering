@@ -1,7 +1,5 @@
-import datetime
 import os
 import subprocess
-import time
 from tkinter import Tk, StringVar, Label, Frame, Button, Toplevel, Menu, PhotoImage, messagebox
 from tkinter.messagebox import ERROR
 
@@ -14,6 +12,7 @@ from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
 from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
+from gui_general.logger import append_log
 from gui_general.scrollable_frame import create_scrollable_label_frame
 from gui_general.window_size import set_window_size_simple
 from gui_result.result_gui import show_mds_scatter_plot_integrated
@@ -21,8 +20,6 @@ from gui_result.validation_frames.EnumEnumValidationQuestion import create_enum_
 from gui_result.validation_frames.EnumValidationQuestion import create_enum_validation_question
 from gui_result.validation_questionnaire import question_1_answers, question_2_answers, question_3_answers, \
     question_4_answers, ValidationAnswer, question_2, question_3, question_4, question_1
-from pathlib import Path
-
 
 # def result_view(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted):
 #     r = ResultView(master, excel_path, num_data, num_abstracted_data, abstraction_rate, no_clusters, no_noise, timedelta_abstraction, timedelta_distance, timedelta_clustering, timedelta_total, values_abstracted, distance_matrix_map, clusters_abstracted)
@@ -235,23 +232,11 @@ class ResultView:
             else:
                 self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
 
-    def append_log(self):
-        dir_path = str(Path(__file__).parent.parent) + "/log"
-        Path(dir_path).mkdir(exist_ok=True)
-        os.chdir(dir_path)
-        file_path = dir_path + "\\log.log"
-        tiny_json = self.configuration.get_as_json_tiny()
-        f = open(file_path, mode="a", encoding='UTF-8')
-        timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-        text = "{\n" + "\"timestamp\": \"" + timestamp + "\",\n" + "\"configuration\":\n" + tiny_json + "\n},\n"
-        f.write(text)
-        f.close()
-
     def open_excel(self):
         if self.configuration.excel_save_path is None:
             self.configuration.excel_save_path = getExcelSavePath()
             if self.logging:
-                self.append_log()
+                append_log(self.configuration, True)
 
         if self.configuration.excel_save_path is not None:
             try:

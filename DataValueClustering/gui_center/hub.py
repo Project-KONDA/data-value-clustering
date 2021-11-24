@@ -33,6 +33,7 @@ from gui_distances.slider_view import slider_view
 from gui_general import CreateToolTip
 from gui_general.LoadingWindow import load_and_compile
 from gui_general.help_popup_gui import menu_help_hub
+from gui_general.logger import append_log
 from gui_general.scrollable_frame import create_scrollable_frame
 from gui_general.window_size import set_window_size_simple
 from gui_result.ResultView import result_view
@@ -464,6 +465,8 @@ class Hub:
     def open_simple_clustering(self):
         if self.configuration.excel_simple_save_path is None:
             self.configuration.excel_simple_save_path = getExcelSavePath()
+            if self.logging:
+                append_log(self.configuration, False)
 
         if self.configuration.excel_simple_save_path is not None:
             try:
