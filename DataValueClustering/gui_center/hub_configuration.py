@@ -249,18 +249,19 @@ class HubConfiguration():
 
         c.json_save_path = None
 
-        char_excel = "\\"
-        if "/" in c.excel_save_path:
-            char_excel = "/"
-        excel_save_path_split = c.excel_save_path.split(char_excel)
-        c.excel_save_path = excel_save_path_split[len(excel_save_path_split) - 1]
+        if c.excel_save_path is not None:
+            char_excel = "\\"
+            if "/" in c.excel_save_path:
+                char_excel = "/"
+            excel_save_path_split = c.excel_save_path.split(char_excel)
+            c.excel_save_path = excel_save_path_split[len(excel_save_path_split) - 1]
 
-        if self.excel_simple_save_path is not None:
+        if c.excel_simple_save_path is not None:
             char_simple = "\\"
-            if "/" in c.excel_simple_save_path_split:
+            if "/" in c.excel_simple_save_path:
                 char_simple = "/"
-            excel_simple_save_path_split = c.excel_simple_save_path_split.split(char_simple)
-            c.excel_simple_save_path_split = excel_simple_save_path_split[len(excel_simple_save_path_split) - 1]
+            excel_simple_save_path_split = c.excel_simple_save_path.split(char_simple)
+            c.excel_simple_save_path = excel_simple_save_path_split[len(excel_simple_save_path_split) - 1]
 
         return c.hub_configuration_to_json()
 
