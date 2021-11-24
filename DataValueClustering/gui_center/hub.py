@@ -12,6 +12,7 @@ from PIL import ImageTk, Image
 
 from abstraction.abstraction import sequence_abstraction_function
 from clustering.hierarchical_clustering import METHOD
+from data_extraction.path_handling import data_name_from_path
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath
 from gui_abstraction.AbstractionQuestionnaireResultInput import abstraction_configuration
 from gui_abstraction.preconfigured_abstractions import ABSTRACTION_OPTION_CUSTOM, \
@@ -89,16 +90,6 @@ CLUSTERING_ADVICE_EXPERT = "Advice: consider expert mode"
 DISTANCE_ADVICE = "Advice: reconfigure dissimilarities"
 ABSTRACTION_ADVICE = "Advice: reconfigure abstraction"
 DATA_ADVICE = "Advice: reconfigure data"
-
-
-def data_name_from_path(data_path):
-    if data_path is None:
-        return None
-    data_path_split = data_path.split("\\")
-    last = data_path_split[len(data_path_split) - 1]
-    last_split = last.split(".")
-    data_name = last_split[0]
-    return data_name
 
 
 class Hub:

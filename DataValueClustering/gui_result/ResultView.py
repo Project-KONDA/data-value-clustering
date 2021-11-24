@@ -10,6 +10,7 @@ import xlsxwriter
 
 from data_extraction.representants import get_repr_list
 from export.path import getExcelSavePath
+from data_extraction.path_handling import data_name_from_path
 from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
 from gui_general.logger import append_log
@@ -255,7 +256,8 @@ class ResultView:
             # os.system('"' + self.configuration.excel_save_path + '"')
 
     def get_info(self):
-        s = "Number of Data Values: " + str(self.configuration.num_data)
+        s = "Data Set: " + str(data_name_from_path(self.configuration.data_path))
+        s += "\nNumber of Data Values: " + str(self.configuration.num_data)
         s += "\nNumber of Abstracted Data Values: " + str(self.configuration.num_abstracted_data)
         s += "\nAbstraction Rate: " + str(self.configuration.abstraction_rate)
         s += "\n\nNumber of clusters: " + str(self.configuration.no_clusters)
