@@ -21,7 +21,7 @@ def generateGroups():
     if alias_list is None:
         return
 
-    groups = ("A1", "B1", "A2", "B2")
+    groups = ("A1", "B2", "A2", "B1")
     division = list()
 
     for i, alias in enumerate(alias_list):
