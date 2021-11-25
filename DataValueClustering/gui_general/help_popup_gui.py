@@ -17,7 +17,7 @@ def menu_help_hub(master, restricted):
         "The Data Value Clustering Hub view is the central view of this application for data value clustering. It allows you to navigate through the configuration steps and subsequently access the calculated clustering.",
         "",
         ["Configuration"],
-        "The data value clustering typically requires you to perform 4 steps: You need to select the data, configure the abstraction for the simple clustering and configure both the dissimilarities and the clustering algorithm for the refined clustering.",
+        "The data value clustering typically requires you to perform 4 steps: You need to select the data, configure the abstraction for the simple clustering (only in expert mode) and configure both the dissimilarities and the clustering algorithm for the refined clustering.",
         "The configuration steps are performed in separate views which are opened upon clicking the corresponding button in the hub view. The configuration step required to be performed next is highlighted in blue. For the Dissimilarities and the clustering algorithm, multiple configuration methods are supported. Some methods are designed for beginners, i.e. are easy to use, whereas others are designed for experts and thus allow more flexibility. We advise you to perform the configuration steps from top to bottom.",
         "On the right-hand side, previews of the 4 configurations are shown: The data set selected and its size is shown in the first preview box. The next box indicates all abstractions selected. For the dissimilarity calculation the chosen weights are presented. Last, the chosen clustering algorithm and the specified parameters are listed.",
         "Note that below each configuration button there is a small label indicating the status, i.e. whether no configuration is present, the configuration is in progress, the calculation is in progress or the calculation is done.",
@@ -93,10 +93,10 @@ def menu_help_abstraction(master, restricted):
         "To discard your configuration, press the 'X' button in the upper right corner.",
         "",
         ["Screenshot of the Abstraction Configuration View With Configuration for the Classification Values"],
-        {"\\abstraction_normal_tip" + ("_restricted" if restricted else "") + ".png"},
+        None if restricted else {"\\abstraction_normal_tip.png"},
         "",
         ["Screenshot of the Abstraction Configuration View With Preview"],
-        {"\\abstraction_preview" + ("_restricted" if restricted else "") + ".png"},
+        None if restricted else {"\\abstraction_preview.png"},
     ]
     menu_information_display(master, caption, text)
 
@@ -114,11 +114,11 @@ def menu_help_distance_slider(master, restricted):
         "When activating 'Custom Character Groups', another column appears on the left-hand side containing an entry field per group, as shown by the second screenshot. This column allows you to modify the groups. Here abstracted features are not represented by the descriptive label but by the single character to which they were abstracted. The meaning of these characters is indicated by the middle column. For example 'b' represents letter sequences. Again, non-abstracted features are represented as enumerations. Again, the Tooltips provide explanations.",
         "You can move characters between entry fields to move them between groups. Note that only the first occurrence of a character in one of the groups is relevant. Rows with empty entries are ignored. Characters that are not present in the abstracted data values are ignored. Warnings will be displayed if these cases occur. The last line represents all characters not mentioned in the previous lines.",
         "You can add and remove groups, i.e. rows, via the '+' and '-' buttons.  The default groups are automatically derived from the abstraction configuration and serve as a good starting point. To reset the groups correspondingly, press the 'Reset' button.",
-        "As indicated by the screenshots below, in our running example, we moved '-' to a separate group so we could assign it a different weight.",
+        "As indicated by the screenshots below, in our running example, we moved '-' to the second group so we could assign it a low weight.",
         "",
         ["Weights"],
-        "Per group, you can specify the weight via the slider given on the right-hand side. You specify the relative influence of characters (and character sequences) on the dissimilarity between data values. Thus, higher weights for a group mean more dissimilarity caused by the presence of these characters in data values. A weight of zero means these characters do not have any influence on the dissimilarity. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
-        "For our running example on classification values we expect mainly letter sequences and blank spaces, so we set those weights low. Since we do not expect digit sequences (= integers), punctuation marks, and math operators and assume they could have a significant impact on the values' meaning, we chose their weights high. For brackets, quotation marks and minus signs we chose medium weights as we do not really expect many of them but still assume that their influence on the values' meaning is limited.",
+        "Per group, you can specify the weight via the slider given on the right-hand side. You specify the relative influence of characters (and character sequences) on the dissimilarity between data values. Thus, higher weights for a group mean more dissimilarity caused by the presence of these characters in data values. You should choose higher weights for characters that you do not expect to find regularly in the data values and for characters that may cause great dissimilarity of the data values.",
+        "For our running example on classification values we expect mainly letter sequences and blank spaces, so we set those weights low. Since we do not expect digit sequences (= integers), punctuation marks, and math operators and assume they could have a significant impact on the values' meaning, we chose their weights high. For brackets, quotation marks and other characters we chose medium weights as we do not really expect many of them but still assume that their influence on the values' meaning is limited.",
         None if restricted else "To specify the weights more flexibly, choose Expert Mode.",
         "",
         ["Confirm & Discard"],
@@ -166,7 +166,7 @@ def menu_help_blob_input(master, restricted):
         "To discard your modifications, press the 'X' button in the upper right corner.",
         "",
         ["Screenshot of the Blob View With Configuration for the Classification Values"],
-        {"\\blob_v2" + ("_restricted" if restricted else "") + ".png"},
+        None if restricted else {"\\blob_v2.png"},
     ]
     menu_information_display(master, caption, text)
 
@@ -262,14 +262,10 @@ def menu_help_clustering_configuration_simple(master):
     """help popup for Simple Clustering Parameter Configuration view"""
     caption = "Simple Hierarchical Clustering Parameter Configuration"
     text = [
-        "The Clustering Parameter Configuration view allows you to configure the chosen clustering algorithm, thus specifying its parameters.",
-        "",
-        ["Parameters"],
-        "In simple mode, you just need to specify either 'n_clusters', the maximum number of clusters, or 'distance_threshold', the maximum distance between clusters.",
+        "The Clustering Parameter Configuration view allows you to configure the chosen clustering algorithm by specifying the maximum number of clusters.",
         "",
         ["Assistance"],
-        "The values that are selected per default often serve as a good starting point. To reset the parameter value to this default value, press the 'Reset' button.",
-        "For 'distance_threshold', the Dendrogram is shown when clicking the 'Show plot' button. As the screenshot below indicates, the x-axis shows the distances at which the two closest clusters are merged and the y-axis shows the representative values.",
+        "The value selected per default often serves as a good starting point. To reset to this default value, press the 'Reset' button.",
         "For our running example we used the default value of 'n_clusters'.",
         "",
         ["Confirm & Discard"],
@@ -278,9 +274,6 @@ def menu_help_clustering_configuration_simple(master):
         "",
         ["Screenshot of the Simple Hierarchical Clustering Parameter Configuration View With Configuration for the Classification Values"],
         {"\\param_simple.png"},
-        "",
-        ["Screenshot of the Dendrogram for the Classification Values"],
-        {"\\dendrogram.png"},
     ]
     menu_information_display(master, caption, text)
 
