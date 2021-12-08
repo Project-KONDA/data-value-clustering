@@ -12,7 +12,7 @@ from distance.distance_matrix import get_symmetric
 
 
 def show_mds_scatter_plot_integrated(root, values_compressed, distance_matrix, clusters_compressed, savepath=None, show=True,
-                          show_labels=True):
+                          show_labels=False):
     if not show and savepath is None:
         return
 
