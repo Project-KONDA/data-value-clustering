@@ -114,9 +114,9 @@ class ResultView:
 
         self.info = Label(self.scrollable_frame_summary, bg="white",
                           text="The plot visualizes the calculated distances and clusters. "
-                               "Each dot represents an abstracted value representing a group of original values treated equivalently. "
-                               "Each dot is labeled with one of these original values. "
-                               "Each cluster is represented by a different color.", justify="left", anchor="w",
+                               "Each representative value is depicted as a dot. "
+                               "Each cluster is represented by a different color. "
+                               "Note that the legend shows only an excerpt of the mapping between clusters and colors.", justify="left", anchor="w",
                           wraplength=350)
         self.info.grid(row=3, column=0, sticky='wesn', columnspan=1, pady=(0,20), padx=10)
 
