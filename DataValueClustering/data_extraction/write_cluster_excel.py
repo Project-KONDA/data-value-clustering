@@ -46,8 +46,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         column_offset = 1
 
         sheet_rep.write(2, 0, "#original", style_sum)
-        sheet_rep.write(3, 0, "#abstracted", style_sum)
-        sheet_rep.set_column(0, 0, 14)
+        sheet_rep.write(3, 0, "#representatives", style_sum)
+        sheet_rep.set_column(0, 0, 15)
 
         sheet_rep.write(1, 0, "", style_grey)
 
@@ -94,9 +94,9 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         column_offset = 1
 
         sheet_rep_dist.write(2, 0, "#original", style_sum)
-        sheet_rep_dist.write(3, 0, "#abstracted", style_sum)
+        sheet_rep_dist.write(3, 0, "#representatives", style_sum)
         sheet_rep_dist.write(4, 0, "#variance", style_sum)
-        sheet_rep_dist.set_column(0, 0, 14)
+        sheet_rep_dist.set_column(0, 0, 15)
 
         sheet_rep_dist.write(1, 0, "", style_grey)
         if has_noise:
@@ -210,7 +210,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     if comp_to_normal_map is not None:
         sheet_mapping = workbook.add_worksheet("Mapping_Original_Representativ")
         sheet_mapping.write(2, 0, "#original", style_sum)
-        sheet_mapping.set_column(0, 0, 14)
+        sheet_mapping.set_column(0, 0, 15)
 
         sheet_mapping.write(1, 0, "", style_grey)
         sheet_mapping.set_column(1, 1, 15)
