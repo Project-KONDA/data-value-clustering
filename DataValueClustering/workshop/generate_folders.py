@@ -4,16 +4,22 @@ import shutil
 
 path_targetFolder = "./workshop_clustering_tool"
 
-path_slides = "./workshop_files/slides.pdf"
+path_slides = "./workshop_files/Folien.pdf"
 path_alias_Table = "./workshop_files/alias.xlsx"
 
-path_InstructionA1 = "./workshop_files/Anleitung_GruppeA1.pdf"
-path_InstructionB1 = "./workshop_files/Anleitung_GruppeB1.pdf"
-path_InstructionA2 = "./workshop_files/Anleitung_GruppeA2.pdf"
-path_InstructionB2 = "./workshop_files/Anleitung_GruppeB2.pdf"
+# path_InstructionA1 = "./workshop_files/Anleitung_GruppeA1.pdf"
+# path_InstructionB1 = "./workshop_files/Anleitung_GruppeB1.pdf"
+# path_InstructionA2 = "./workshop_files/Anleitung_GruppeA2.pdf"
+# path_InstructionB2 = "./workshop_files/Anleitung_GruppeB2.pdf"
 
-path_Werteliste_A = "./workshop_files/Werteliste_nameActor.xlsx"
-path_Werteliste_B = "./workshop_files/Werteliste_repositoryName.xlsx"
+path_InstructionA1 = "./workshop_files/Anleitung_Gruppe_A1_Pilot.pdf"
+path_InstructionB1 = "./workshop_files/Anleitung_Gruppe_B1_Pilot.pdf"
+path_InstructionA2 = "./workshop_files/Anleitung_Gruppe_A2_Pilot.pdf"
+path_InstructionB2 = "./workshop_files/Anleitung_Gruppe_B2_Pilot.pdf"
+
+path_Werteliste_A = "./workshop_files/RepositoryName_Werteliste.xlsx"
+path_Werteliste_B = "./workshop_files/ActorName_Werteliste.xlsx"
+# path_Werteliste_C = "./workshop_files/RepositoryLocationName_Werteliste.xlsx"
 
 
 def generateGroups():
