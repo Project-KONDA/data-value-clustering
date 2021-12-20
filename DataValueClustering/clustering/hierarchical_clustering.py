@@ -84,6 +84,21 @@ def hierarchical_method_config():
     suggestion = "average"
     return name, explanation, options, suggestion
 
+def hierarchical_n_clusters_config_simple(no_values):
+    # int or range
+    # activation xor with distance_threshold
+    name = N_CLUSTERS
+    explanation = "Maximum number of clusters created. Higher values will yield more clusters."
+    min_n_clusters = 2
+    if no_values is None:
+        max_n_clusters = 100
+        suggestion_value = 7
+    else:
+        max_n_clusters = round(no_values*0.9)
+        suggestion_value = min(max_n_clusters//3, round(log(no_values,2)*3))
+    resolution = 1
+    deactivatable = False
+    return name, explanation, min_n_clusters, max_n_clusters, suggestion_value, resolution, deactivatable
 
 def hierarchical_n_clusters_config(no_values):
     # int or range

@@ -23,7 +23,7 @@ EXPERT_CAPTION = create_parameter_caption("\n\nExpert Parameters", "In most case
 def simple_cluster_hierarchical(master, distance_matrix_map, values, abstraction_dict, previous_parameters=None, suggestion=None, restricted=False):
     linkage_matrix = generate_linkage_matrix(distance_matrix_map["condensed_distance_matrix"], values, "average")
 
-    n_clusters_info = hierarchical_n_clusters_config(len(values))
+    n_clusters_info = hierarchical_n_clusters_config_simple(len(values))
     n_clusters_frame = create_slider_frame(*n_clusters_info, previous_value=None if previous_parameters is None else previous_parameters[n_clusters_info[0]], suggestion=suggestion)
 
     frames = [n_clusters_frame]
