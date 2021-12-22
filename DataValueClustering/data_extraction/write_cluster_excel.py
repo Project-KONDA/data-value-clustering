@@ -34,7 +34,7 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     has_noise = len(noise_unique) > 0
 
     cluster_sizes = list(map(len, clusters))
-    cluster_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(clusters))), cluster_sizes)
+    no_clusters = len(clusters)
 
     if comp_to_normal_map is not None:
 
@@ -65,24 +65,23 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_rep.set_column(2, column_offset + 1, 6)
             column_offset += 2
 
-        cluster_compressed_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(clusters_compressed))), cluster_sizes)
-
-        for i, v in enumerate(cluster_compressed_indices_sorted):
+        for i in range(0, len(clusters_compressed)):
             name = "Cluster " + str(i + 1)
             sheet_rep.write(1, i * 2 + column_offset, name, style_caption)
             sheet_rep.write(1, i * 2 + column_offset + 1, "", style_grey_right)
-            sheet_rep.write_number(2, i * 2 + column_offset, cluster_counts_sorted[i], style_sum)
+            sheet_rep.write_number(2, i * 2 + column_offset, cluster_sizes[i], style_sum)
             sheet_rep.write(2, i * 2 + column_offset + 1, "", style_grey_right)
-            sheet_rep.write_number(3, i * 2 + column_offset, len(clusters_compressed[v]), style_sum)
+            sheet_rep.write_number(3, i * 2 + column_offset, len(clusters_compressed[i]), style_sum)
             sheet_rep.write(3, i * 2 + column_offset + 1, "", style_grey_right)
             sheet_rep.set_column(3 + i * 2, column_offset + i * 2, 15)
             sheet_rep.set_column(4 + i * 2, column_offset + 1 + i * 2, 6)
-            cluster_repr, cluster_count = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[v])
+            cluster_repr, cluster_count = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[i])
             write_list_to_sheet(sheet_rep, 4, i * 2 + column_offset, cluster_repr, style_val_left)
             write_list_to_sheet(sheet_rep, 4, i * 2 + column_offset + 1, cluster_count, style_val_right, True)
-            sheet_rep.conditional_format(4, i * 2 + column_offset + 1, 4 + len(cluster_count), i * 2 + column_offset + 1, {'type': 'data_bar'})
-        sheet_rep.conditional_format(2, 1, 2, column_offset + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
-        sheet_rep.conditional_format(3, 1, 3, column_offset + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#C3C365'})
+            sheet_rep.conditional_format(4, i * 2 + column_offset + 1, 4 + len(cluster_count),
+                                         i * 2 + column_offset + 1, {'type': 'data_bar'})
+        sheet_rep.conditional_format(2, 1, 2, column_offset + 2 * no_clusters, {'type': 'data_bar', 'bar_color': '#63C384'})
+        sheet_rep.conditional_format(3, 1, 3, column_offset + 2 * no_clusters, {'type': 'data_bar', 'bar_color': '#C3C365'})
 
     if comp_to_normal_map is not None and not restricted:
 
@@ -119,23 +118,21 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_rep_dist.conditional_format(5, column_offset + 1, 5 + len(noise_count), column_offset + 1, {'type': 'data_bar'})
             column_offset += 3
 
-        cluster_compressed_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(clusters_compressed))), cluster_sizes)
-
-        for i, v in enumerate(cluster_compressed_indices_sorted):
+        for i in range(0, len(clusters_compressed)):
             name = "Cluster " + str(i + 1)
             sheet_rep_dist.write(1, i * 3 + column_offset, name, style_caption)
             sheet_rep_dist.write(1, i * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(1, i * 3 + column_offset + 2, "", style_grey_right)
 
-            sheet_rep_dist.write_number(2, i * 3 + column_offset, cluster_counts_sorted[i], style_sum)
+            sheet_rep_dist.write_number(2, i * 3 + column_offset, cluster_sizes[i], style_sum)
             sheet_rep_dist.write(2, i * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(2, i * 3 + column_offset + 2, "", style_grey_right)
 
-            sheet_rep_dist.write_number(3, i * 3 + column_offset, len(clusters_compressed[v]), style_sum)
+            sheet_rep_dist.write_number(3, i * 3 + column_offset, len(clusters_compressed[i]), style_sum)
             sheet_rep_dist.write(3, i * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(3, i * 3 + column_offset + 2, "", style_grey_right)
 
-            sheet_rep_dist.write_number(4, i * 3 + column_offset, intra_cluster_distances[v], style_sum)
+            sheet_rep_dist.write_number(4, i * 3 + column_offset, intra_cluster_distances[i], style_sum)
             sheet_rep_dist.write(4, i * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(4, i * 3 + column_offset + 2, "", style_grey_right)
 
@@ -143,17 +140,21 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_rep_dist.set_column(5 + i * 3, column_offset + 1 + i * 3, 6)
             sheet_rep_dist.set_column(6 + i * 3, column_offset + 2 + i * 3, 6)
 
-            cluster_repr, cluster_count, cluster_intra = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[v], aicdpcpv[v])
+            cluster_repr, cluster_count, cluster_intra = get_sorted_representatives_counts(comp_to_normal_map,
+                                                                                           clusters_compressed[i],
+                                                                                           aicdpcpv[i])
             write_list_to_sheet(sheet_rep_dist, 5, i * 3 + column_offset, cluster_repr, style_val_left)
             write_list_to_sheet(sheet_rep_dist, 5, i * 3 + column_offset + 1, cluster_count, style_val, True)
             write_list_to_sheet(sheet_rep_dist, 5, i * 3 + column_offset + 2, cluster_intra, style_val_right)
 
-            sheet_rep_dist.conditional_format(5, i * 3 + column_offset + 1, 5 + len(cluster_count), i * 3 + column_offset + 1, {'type': 'data_bar'})
-            sheet_rep_dist.conditional_format(5, i * 3 + column_offset + 2, 5 + len(cluster_count), i * 3 + column_offset + 2, {'type': 'data_bar', 'bar_color': '#C36565'})
+            sheet_rep_dist.conditional_format(5, i * 3 + column_offset + 1, 5 + len(cluster_count),
+                                              i * 3 + column_offset + 1, {'type': 'data_bar'})
+            sheet_rep_dist.conditional_format(5, i * 3 + column_offset + 2, 5 + len(cluster_count),
+                                              i * 3 + column_offset + 2, {'type': 'data_bar', 'bar_color': '#C36565'})
 
-        sheet_rep_dist.conditional_format(2, 1, 2, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
-        sheet_rep_dist.conditional_format(3, 1, 3, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#C3C365'})
-        sheet_rep_dist.conditional_format(4, 1, 4, column_offset + 3 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#666666'})
+        sheet_rep_dist.conditional_format(2, 1, 2, column_offset + 3 * no_clusters, {'type': 'data_bar', 'bar_color': '#63C384'})
+        sheet_rep_dist.conditional_format(3, 1, 3, column_offset + 3 * no_clusters, {'type': 'data_bar', 'bar_color': '#C3C365'})
+        sheet_rep_dist.conditional_format(4, 1, 4, column_offset + 3 * no_clusters, {'type': 'data_bar', 'bar_color': '#666666'})
 
     sheet_original = workbook.add_worksheet("Cluster_Original")
 
@@ -186,14 +187,14 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     if comp_to_normal_map is None:
         sheet_original.write(representative_row, label_column, "representative", style_representative)
 
-    for i, v in enumerate(cluster_indices_sorted):
+    for i in range(0, len(clusters)):
         name = "Cluster " + str(i + 1)
         sheet_original.write(caption_row, i * 2 + column_offset, name, style_caption)
         sheet_original.write(caption_row, i * 2 + column_offset + 1, "", style_grey_right)
-        sheet_original.write_number(original_row, i * 2 + column_offset, cluster_counts_sorted[i], style_sum)
+        sheet_original.write_number(original_row, i * 2 + column_offset, cluster_sizes[i], style_sum)
         sheet_original.write(original_row, i * 2 + column_offset + 1, "", style_grey_right)
 
-        cluster_unique, cluster_count = get_sorted_unique_values_counts(clusters[v])
+        cluster_unique, cluster_count = get_sorted_unique_values_counts(clusters[i])
 
         if comp_to_normal_map is None:
             sheet_original.write(representative_row, i * 2 + column_offset, cluster_unique[0], style_representative)
@@ -204,8 +205,9 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
         write_list_to_sheet(sheet_original, row_offset, i * 2 + column_offset, cluster_unique, style_val_left)
         write_list_to_sheet(sheet_original, row_offset, i * 2 + column_offset + 1, cluster_count, style_val_right, True)
-        sheet_original.conditional_format(row_offset, i * 2 + column_offset + 1, row_offset + 1 + len(cluster_count), i * 2 + 4, {'type': 'data_bar'})
-    sheet_original.conditional_format(original_row, column_offset, original_row, 3 + 2 * len(cluster_indices_sorted), {'type': 'data_bar', 'bar_color': '#63C384'})
+        sheet_original.conditional_format(row_offset, i * 2 + column_offset + 1, row_offset + 1 + len(cluster_count),
+                                          i * 2 + 4, {'type': 'data_bar'})
+    sheet_original.conditional_format(original_row, column_offset, original_row, 3 + 2 * no_clusters, {'type': 'data_bar', 'bar_color': '#63C384'})
 
     if comp_to_normal_map is not None:
         sheet_mapping = workbook.add_worksheet("Mapping_Original_Representativ")
@@ -222,16 +224,14 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         row_offset += 1
 
         cluster_sizes = list(map(len, simple_cluster))
-        cluster_indices_sorted, cluster_counts_sorted = sort_values_counts(list(range(0, len(simple_cluster))), cluster_sizes)
-
-        for i, v in enumerate(cluster_indices_sorted):
+        for i in range(0, len(simple_cluster)):
             sheet_mapping.write(1, i * 2 + 1, "", style_caption)
             sheet_mapping.write(1, i * 2 + 2, "", style_grey_right)
-            sheet_mapping.write_number(2, i * 2 + 1, cluster_counts_sorted[i], style_sum)
+            sheet_mapping.write_number(2, i * 2 + 1, cluster_sizes[i], style_sum)
             sheet_mapping.write(2, i * 2 + 2, "", style_grey_right)
 
-            representative = simple_cluster[v][0]
-            cluster_unique, cluster_count = get_sorted_unique_values_counts(simple_cluster[v])
+            representative = simple_cluster[i][0]
+            cluster_unique, cluster_count = get_sorted_unique_values_counts(simple_cluster[i])
 
             row_offset = 2
             row_offset += 1
@@ -245,8 +245,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             write_list_to_sheet(sheet_mapping, row_offset, i * 2 + 1, cluster_unique, style_val_left)
             write_list_to_sheet(sheet_mapping, row_offset, i * 2 + 2, cluster_count, style_val_right, True)
             sheet_mapping.conditional_format(row_offset, i * 2 + 2, row_offset + 1 + len(cluster_count), i * 2 + 2,
-                                      {'type': 'data_bar'})
-        sheet_mapping.conditional_format(2, 1, 2, 3 + 2 * len(cluster_indices_sorted),
+                                             {'type': 'data_bar'})
+        sheet_mapping.conditional_format(2, 1, 2, 3 + 2 * no_clusters,
                                   {'type': 'data_bar', 'bar_color': '#63C384'})
 
     workbook.close()
