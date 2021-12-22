@@ -5,7 +5,6 @@ import shutil
 import numpy
 import pandas as pd
 
-# path_target_folder = "C:/Users/Viola Wenz/Documents/GoogleDrive/KONDA AV/[Project] Clustering Data Values/Comprehensive Evaluation/PublicWorkshopFolders/KONDAClusteringWorkshop/"
 path_target_folder = "../../mock_dir/"  # replace with .../PublicWorkshopFolders/KONDAClusteringWorkshop/
 
 path_source_folder_clustering = "./workshop_files/analysis_forms/clustering/"
