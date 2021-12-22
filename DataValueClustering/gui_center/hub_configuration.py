@@ -437,13 +437,27 @@ class HubConfiguration():
             for i, v in enumerate(clusters):
                 assert (type(v) == int)
                 assert (v <= self.no_clusters)
-        data_names = None
+        data_name = None
         if clusters is not None:
-            data_names = list()
-            for i, v in enumerate(clusters):
-                data_name = self.export_cluster_as_txt(v)
-                data_names.append(data_name)
-        self.validation_answer_4 = answer, data_names
+            data_name = self.export_clusters_as_txt(clusters)
+        self.validation_answer_4 = answer, data_name
+
+    def export_clusters_as_txt(self, cluster_labels):
+        now = str(datetime.now())
+        now = now.replace(":", "-").replace(" ", "_").replace(".", "-")
+        data_name = "clusters_" + str(cluster_labels).replace("[","").replace("]","").replace(" ","").replace(",","_") + "_date_" + str(now)
+        data_file = data_name + ".txt"
+        path = str(Path(__file__).parent.parent) + "/data/" + data_file
+        data = list()
+        for i, c in enumerate(cluster_labels):
+            if c == "noise":
+                data.extend(self.noise)
+            else:
+                cluster_number = int(c) - 1
+                print(cluster_number, self.fancy_cluster_list[cluster_number][0])
+                data.extend(self.fancy_cluster_list[cluster_number])
+        write_data_values_to_file(path, data)
+        return data_name
 
     def export_cluster_as_txt(self, cluster_label):
         now = str(datetime.now())

@@ -203,13 +203,15 @@ class ResultView:
         self.root.grab_set()
         self.root.mainloop()
 
-    def previous_cluster_file_names_to_labels(self, previous_cluster_names):
-        if previous_cluster_names is None:
+
+    def previous_cluster_file_names_to_labels(self, previous_cluster_name):
+        if previous_cluster_name is None:
             return None
         labels = []
-        for i, name in enumerate(previous_cluster_names):
-            label = cluster_label_from_txt_name(name)
-            labels.append(label)
+        s = previous_cluster_name.split("clusters_")[1].split("_date_")[0].split("_")
+        for i, c in enumerate(s):
+            cluster_no = int(c)
+            labels.append(cluster_no)
         return labels
 
     def update_suggestion(self):
