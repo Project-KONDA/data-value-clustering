@@ -59,6 +59,23 @@ def cluster_label_from_txt_name(txt_name):
     return int(split[1])
 
 
+def default_object_to_json(o):
+    if isinstance(o, numpy.ndarray):
+        return o.tolist()
+    elif isinstance(o, dt.timedelta):
+        return str(o)
+    else:
+        return o.__dict__
+
+
+def object_to_json(obj):
+    json_text = json.dumps(obj, default=default_object_to_json)
+    my_options = jsbeautifier.default_options()
+    my_options.indent_size = 2
+    json_text = jsbeautifier.beautify(json_text, my_options)
+    return json_text
+
+
 class HubConfiguration():
 
     def fill_hub_configuration_from_dict(self, dic):
@@ -288,19 +305,7 @@ class HubConfiguration():
         self.cost_map = None if self.cost_map is None else get_cost_map(**self.cost_map)
 
     def hub_configuration_to_json(self):
-        json_text = json.dumps(self, default=self.default_object_to_json)
-        my_options = jsbeautifier.default_options()
-        my_options.indent_size = 2
-        json_text = jsbeautifier.beautify(json_text, my_options)
-        return json_text
-
-    def default_object_to_json(self, o):
-        if isinstance(o, numpy.ndarray):
-            return o.tolist()
-        elif isinstance(o, dt.timedelta):
-            return str(o)
-        else:
-            return o.__dict__
+        return object_to_json(self)
 
     "Test configuration validity"
 
