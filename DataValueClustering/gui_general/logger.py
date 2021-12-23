@@ -7,7 +7,7 @@ from pathlib import Path
 from gui_center.hub_configuration import object_to_json
 
 
-def append_log(configuration, is_refined_clustering, restricted):
+def append_log_clustering(configuration, is_refined_clustering, restricted):
     dir_path = str(Path(__file__).parent.parent) + "/log"
     Path(dir_path).mkdir(exist_ok=True)
     os.chdir(dir_path)
