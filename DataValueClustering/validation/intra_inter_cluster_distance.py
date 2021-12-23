@@ -74,9 +74,7 @@ def average_intra_cluster_distances_per_cluster_per_value(clusters, distance_mat
     for i in clusters_unique_sorted:
         distances_per_cluster.append(average_intra_cluster_distance_per_value(i, clusters, distance_matrix).tolist())
 
-    print(distances_per_cluster)
     distances_per_cluster_sorted = sort_distances_counts(distances_per_cluster, cluster_sizes)
-    print(distances_per_cluster_sorted)
     return distances_per_cluster_sorted
 
 
