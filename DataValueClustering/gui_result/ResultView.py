@@ -13,7 +13,7 @@ from export.path import getExcelSavePath
 from data_extraction.path_handling import data_name_from_path
 from gui_center.hub_configuration import HubConfiguration, cluster_label_from_txt_name
 from gui_general.help_popup_gui import menu_help_result
-from gui_general.logger import append_log_clustering
+from gui_general.logger import append_log_clustering, append_log_evaluation
 from gui_general.scrollable_frame import create_scrollable_label_frame
 from gui_general.window_size import set_window_size_simple
 from gui_result.result_gui import show_mds_scatter_plot_integrated
@@ -305,6 +305,7 @@ class ResultView:
         else:
             selected_clusters = selected_checks_per_answer[1]
         self.configuration.set_validation_answer_4(answer, selected_clusters)
+        append_log_evaluation(self.configuration)
 
 
 if __name__ == '__main__':

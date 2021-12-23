@@ -48,3 +48,29 @@ def append_log_clustering(configuration, is_refined_clustering, restricted):
     text = "{\n" + "\"timestamp\": \"" + timestamp + "\",\n" + "\"type\": \"" + type + "\",\n" + "\"configuration\":\n" + json_string + "\n},\n"
     f.write(text)
     f.close()
+
+
+def append_log_evaluation(configuration):
+    dir_path = str(Path(__file__).parent.parent) + "/log"
+    Path(dir_path).mkdir(exist_ok=True)
+    os.chdir(dir_path)
+    file_path = dir_path + "\\log.log"
+    tiny_json = configuration.get_as_json_tiny()
+
+    json_dict = json.loads(tiny_json)
+
+    evaluation_json_dict = dict()
+    evaluation_json_dict["validation_answer_1"] = json_dict["validation_answer_1"]
+    evaluation_json_dict["validation_answer_2"] = json_dict["validation_answer_2"]
+    evaluation_json_dict["validation_answer_3"] = json_dict["validation_answer_3"]
+    evaluation_json_dict["validation_answer_4"] = json_dict["validation_answer_4"]
+
+    json_string = object_to_json(evaluation_json_dict)
+
+    f = open(file_path, mode="a", encoding='UTF-8')
+    timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    type = "Evaluation"
+    text = "{\n" + "\"timestamp\": \"" + timestamp + "\",\n" + "\"type\": \"" + type + "\",\n" + "\"configuration\":\n" + json_string + "\n},\n"
+    f.write(text)
+    f.close()
+
