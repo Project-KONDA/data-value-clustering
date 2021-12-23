@@ -255,7 +255,22 @@ class HubConfiguration():
         c.reset_data()
         c.reset_abstraction()
         c.reset_distances()
-        c.reset_clustering()
+        # c.reset_clustering()
+
+        c.cluster_sizes = None
+        c.noise_size = None
+        c.cluster_sizes_abstracted = None
+        c.noise_size_abstracted = None
+        c.fancy_cluster_list = None
+        c.noise = None
+        # c.fancy_cluster_list_abstracted = None
+        c.noise_abstracted = None
+        c.no_clusters = None
+        c.no_noise = None
+        c.timedelta_cluster = None
+        c.timedelta_total = None
+        c.clusters = None
+        c.clusters_abstracted = None
 
         char = "\\"
         if "/" in c.data_path:

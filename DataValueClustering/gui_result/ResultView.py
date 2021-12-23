@@ -239,7 +239,7 @@ class ResultView:
         if self.configuration.excel_save_path is None:
             self.configuration.excel_save_path = getExcelSavePath()
             if self.logging:
-                append_log(self.configuration, True)
+                append_log(self.configuration, True, self.restricted)
 
         if self.configuration.excel_save_path is not None:
             try:

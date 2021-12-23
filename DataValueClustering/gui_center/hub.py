@@ -457,7 +457,7 @@ class Hub:
         if self.configuration.excel_simple_save_path is None:
             self.configuration.excel_simple_save_path = getExcelSavePath()
             if self.logging:
-                append_log(self.configuration, False)
+                append_log(self.configuration, False, self.restricted)
 
         if self.configuration.excel_simple_save_path is not None:
             try:
