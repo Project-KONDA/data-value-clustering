@@ -474,7 +474,6 @@ class HubConfiguration():
                 data.extend(self.noise)
             else:
                 cluster_number = int(c) - 1
-                print(cluster_number, self.fancy_cluster_list[cluster_number][0])
                 data.extend(self.fancy_cluster_list[cluster_number])
         write_data_values_to_file(path, data)
         return data_name
