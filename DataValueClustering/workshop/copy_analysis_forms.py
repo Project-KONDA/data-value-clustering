@@ -28,12 +28,25 @@ def _copy_analysis_forms(path_excel, path_source_folder, file_name_prefix):
     for file in glob.glob("*.pdf"):
         id = int(file.replace(file_name_prefix, "").replace(".pdf", ""))
         line = numpy.where(table[:, 0] == id)[0][0]
-        this_alias = table[line, 1]
-        other_alias = table[line, 2]
+        this_alias = makeViable(table[line, 1])
+        other_alias = None
+        with open("../../../" + alias_pairs_file_name) as f:
+            for line in f:
+                line = line.replace("\n","")
+                split = line.split(SEPARATOR)
+                assert len(split) == 2
+                if split[0] == this_alias:
+                    other_alias = split[1]
+
+        if other_alias is None:
+            print("ALIAS NOT FOUND ERROR: '" + this_alias + "'. File '" + file + "' was not copied.")
+            continue
+
         file_name = file_name_prefix + this_alias + ".pdf"
 
         this_target_file = path_target_folder + this_alias + "/" + file_name
         other_target_file = path_target_folder + other_alias + "/" + file_name
+
         try:
             shutil.copy(file, this_target_file)
         except FileNotFoundError as e:
