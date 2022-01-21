@@ -32,8 +32,15 @@ def _copy_analysis_forms(path_excel, path_source_folder, file_name_prefix):
 
         this_target_file = path_target_folder + this_alias + "/" + file_name
         other_target_file = path_target_folder + other_alias + "/" + file_name
-        shutil.copy(file, this_target_file)
-        shutil.copy(file, other_target_file)
+        try:
+            shutil.copy(file, this_target_file)
+        except FileNotFoundError as e:
+            print("INVALID ALIAS ERROR: file '" + file + "' should have been copied to author directory '" + this_target_file + "' but a FileNotFoundError was raised")
+        try:
+            shutil.copy(file, other_target_file)
+        except FileNotFoundError as e:
+            print("INVALID ALIAS ERROR: file '" + file + "' should have been copied to partner directory '" + other_target_file + "' but a FileNotFoundError was raised")
+
     os.chdir("../../../")
 
 
