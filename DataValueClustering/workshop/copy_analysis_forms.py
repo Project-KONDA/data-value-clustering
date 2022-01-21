@@ -5,6 +5,8 @@ import shutil
 import numpy
 import pandas as pd
 
+from workshop.generate_folders import alias_pairs_file_name, makeViable, SEPARATOR
+
 path_target_folder = "../../mock_dir/"  # replace with .../PublicWorkshopFolders/KONDAClusteringWorkshop/
 
 path_source_folder_clustering = "./workshop_files/analysis_forms/clustering/"
