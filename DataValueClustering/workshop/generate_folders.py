@@ -5,7 +5,7 @@ import shutil
 path_targetFolder = "./workshop_clustering_tool"
 
 path_slides = "./workshop_files/Folien.pdf"
-path_alias_Table = "./workshop_files/alias.xlsx"
+path_alias_Table = "./workshop_files/Alias1.xlsx"
 
 # path_InstructionA1 = "./workshop_files/Anleitung_GruppeA1.pdf"
 # path_InstructionB1 = "./workshop_files/Anleitung_GruppeB1.pdf"
@@ -21,6 +21,11 @@ path_Werteliste_A = "./workshop_files/RepositoryName_Werteliste.xlsx"
 path_Werteliste_B = "./workshop_files/ActorName_Werteliste.xlsx"
 # path_Werteliste_C = "./workshop_files/RepositoryLocationName_Werteliste.xlsx"
 
+alias_file_name = "alias_pilot.txt"
+alias_pairs_file_name = "alias_pairs_pilot.txt"
+
+SEPARATOR = "|"
+
 
 def generateGroups():
     alias_list = readAliasList(path_alias_Table)
@@ -34,15 +39,15 @@ def generateGroups():
         t = (alias, groups[i % 4], i // 2)
         division.append(t)
 
-    textfile = open("alias.txt", "w")
+    textfile = open(alias_file_name, "w")
     for i, element in enumerate(division):
-        textfile.write(element[0] + "|" + element[1] + "|" + str(element[2]) + "\n")
+        textfile.write(element[0] + SEPARATOR + element[1] + SEPARATOR + str(element[2]) + "\n")
     textfile.close()
-    textfile2 = open("alias_pairs.txt", "w")
+    textfile2 = open(alias_pairs_file_name, "w")
     for i in range(len(division)//2):
         assert (division[i * 2][2] == division[i * 2 + 1][2])
-        textfile2.write(division[i * 2][0] + "|" + division[i * 2 + 1][0] + "\n")
-        textfile2.write(division[i * 2 + 1][0] + "|" + division[i * 2][0] + "\n")
+        textfile2.write(division[i * 2][0] + SEPARATOR + division[i * 2 + 1][0] + "\n")
+        textfile2.write(division[i * 2 + 1][0] + SEPARATOR + division[i * 2][0] + "\n")
     if len(division) % 2 == 1:
         textfile2.write(division[len(division)-1][0])
     textfile2.close()
@@ -65,22 +70,6 @@ def readAliasList(path):
     df = pd.read_excel(path_alias_Table, sheet_name=0, header=0)
     list_from_table = df[df.columns[1]].tolist()
 
-    def makeViable(string):
-        # remove spaces
-        string = string.replace(" ", "_")
-
-        # remove illegal characters
-        for char in "<>/*|\\§?:":
-            string = string.replace(char, "#")
-
-        # do not allow bad starts or endings
-        if string.startswith(".") or string.startswith("_") or string.startswith("-"):
-            string = "a" + string
-        if string.endswith(".") or string.endswith("_") or string.endswith("-"):
-            string += "a"
-
-        return string
-
     result_list = []
     for item in list_from_table:
         result_list.append(makeViable(item))
@@ -102,6 +91,21 @@ def readAliasList(path):
     random.shuffle(result_list)
     return result_list
 
+def makeViable(string):
+    # remove spaces
+    string = string.replace(" ", "_")
+
+    # remove illegal characters
+    for char in "<>/*|\\§?:":
+        string = string.replace(char, "#")
+
+    # do not allow bad starts or endings
+    if string.startswith(".") or string.startswith("_") or string.startswith("-"):
+        string = "a" + string
+    if string.endswith(".") or string.endswith("_") or string.endswith("-"):
+        string += "a"
+
+    return string
 
 def generateFolder(alias_tupel):
     alias = alias_tupel[0]
