@@ -5,30 +5,34 @@ import shutil
 path_targetFolder = "./workshop_clustering_tool"
 
 path_slides = "./workshop_files/Folien.pdf"
-path_alias_Table = "./workshop_files/Alias1.xlsx"
+path_alias_Table = "AliasQuestionarireInput.xlsx"
+path_alias_Table2 = "./workshop_files/Alias1.xlsx"
 
-# path_InstructionA1 = "./workshop_files/Anleitung_GruppeA1.pdf"
-# path_InstructionB1 = "./workshop_files/Anleitung_GruppeB1.pdf"
-# path_InstructionA2 = "./workshop_files/Anleitung_GruppeA2.pdf"
-# path_InstructionB2 = "./workshop_files/Anleitung_GruppeB2.pdf"
+path_InstructionA1 = "./workshop_files/Anleitung_GruppeA1.pdf"
+path_InstructionB1 = "./workshop_files/Anleitung_GruppeB1.pdf"
+path_InstructionA2 = "./workshop_files/Anleitung_GruppeA2.pdf"
+path_InstructionB2 = "./workshop_files/Anleitung_GruppeB2.pdf"
 
-path_InstructionA1 = "./workshop_files/Anleitung_Gruppe_A1_Pilot.pdf"
-path_InstructionB1 = "./workshop_files/Anleitung_Gruppe_B1_Pilot.pdf"
-path_InstructionA2 = "./workshop_files/Anleitung_Gruppe_A2_Pilot.pdf"
-path_InstructionB2 = "./workshop_files/Anleitung_Gruppe_B2_Pilot.pdf"
+# path_InstructionA1 = "./workshop_files/Anleitung_Gruppe_A1_Pilot.pdf"
+# path_InstructionB1 = "./workshop_files/Anleitung_Gruppe_B1_Pilot.pdf"
+# path_InstructionA2 = "./workshop_files/Anleitung_Gruppe_A2_Pilot.pdf"
+# path_InstructionB2 = "./workshop_files/Anleitung_Gruppe_B2_Pilot.pdf"
 
 path_Werteliste_A = "./workshop_files/RepositoryName_Werteliste.xlsx"
 path_Werteliste_B = "./workshop_files/ActorName_Werteliste.xlsx"
 # path_Werteliste_C = "./workshop_files/RepositoryLocationName_Werteliste.xlsx"
 
-alias_file_name = "alias_pilot.txt"
-alias_pairs_file_name = "alias_pairs_pilot.txt"
+# alias_file_name = "alias_pilot.txt"
+# alias_pairs_file_name = "alias_pairs_pilot.txt"
+alias_file_name = "alias.txt"
+alias_pairs_file_name = "alias_pairs.txt"
 
 SEPARATOR = "|"
 
 
 def generateGroups():
     alias_list = readAliasList(path_alias_Table)
+    print(alias_list)
     if alias_list is None:
         return
 
@@ -69,11 +73,15 @@ def readAliasList(path):
 
     df = pd.read_excel(path_alias_Table, sheet_name=0, header=0)
     list_from_table = df[df.columns[1]].tolist()
+    list_from_table_answers = df[df.columns[2]].tolist()
 
+    result_list_noDemo = []
     result_list = []
-    for item in list_from_table:
-        result_list.append(makeViable(item))
-
+    for no, item in enumerate(list_from_table):
+        if list_from_table_answers[no] == "Ja":
+            result_list.append(makeViable(item))
+        else:
+            result_list_noDemo.append(makeViable(item))
     duplicates = [item for item, count in collections.Counter(list_from_table).items() if count > 1]
 
     if not duplicates == []:  # is distinct
@@ -82,14 +90,17 @@ def readAliasList(path):
 
         raise DuplicateError(str(duplicates))
 
+    random.shuffle(result_list)
+    random.shuffle(result_list_noDemo)
+    result_list = [*result_list, *result_list_noDemo]
+
     if len(result_list) % 2 == 1:
         if not messagebox.askokcancel("ODD NAME COUNT: ",
                 str(len(result_list)) + " participants"):
             return None
 
-
-    random.shuffle(result_list)
     return result_list
+
 
 def makeViable(string):
     # remove spaces
@@ -106,6 +117,7 @@ def makeViable(string):
         string += "a"
 
     return string
+
 
 def generateFolder(alias_tupel):
     alias = alias_tupel[0]
