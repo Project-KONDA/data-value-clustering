@@ -468,7 +468,7 @@ class Hub:
             except (PermissionError, xlsxwriter.exceptions.FileCreateError) as e:
                 messagebox.showerror("Error",
                                        "Cannot save file at selected path since the file exists already and is currently open."
-                                       "Please close the file first or select a different path.",
+                                       " Please close the file first or select a different path.",
                                        icon=ERROR)
                 self.configuration.excel_simple_save_path = None
             except subprocess.CalledProcessError as e:
@@ -520,6 +520,8 @@ class Hub:
             self.label_abstraction_progress.configure(text=ABSTRACTION_IN_PROGRESS, fg='RoyalBlue1')
             self.root.update()
             self.configuration.execute_abstraction()
+            self.configuration.excel_simple_saved = False
+            self.configuration.excel_simple_save_path = None
             self.update()
 
         # self.configuration.save_as_json()
@@ -554,6 +556,10 @@ class Hub:
         self.root.update()
         if self.configuration.data_configuration_valid() and self.configuration.abstraction_configuration_valid():
             self.configuration.execute_abstraction()
+
+        self.configuration.excel_simple_saved = False
+        self.configuration.excel_simple_save_path = None
+
         self.update()
 
     def show_simple_clustering_hint(self, i):
