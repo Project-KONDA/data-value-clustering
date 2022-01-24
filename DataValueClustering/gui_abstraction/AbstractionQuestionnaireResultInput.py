@@ -100,9 +100,9 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
 
     def option_changed(self, *args):
         selected_option = self.selected_predefined_option.get()
-        print(selected_option)
+        # print(selected_option)
         answers_of_selected_option = preconfigured_abstraction_answers[np.where(preconfigured_abstraction_answers[:, 0] == selected_option)][:, 1][0]
-        print(answers_of_selected_option)
+        # print(answers_of_selected_option)
         self.update_check_buttons(answers_of_selected_option)
 
     def selection_changed(self, j=None):
