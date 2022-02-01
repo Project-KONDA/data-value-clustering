@@ -36,7 +36,7 @@ def _check_missing_partners(path_excel, type_string):
 
                     print("'" + alias + "' (group " + self_group + ") has a partner ('" + partner + "', group " + partner_group + ") who did not submit the " + type_string + " questionnaire")
             else:
-                print("'" + alias + "' did not have a partner from the beginning")
+                print("'" + alias + "' (group " + self_group + ") did not have a partner from the beginning")
 
 
 
