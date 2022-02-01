@@ -36,6 +36,12 @@ def _check_missing_partners(path_excel, type_string):
 
                     print("'" + alias + "' (group " + self_group + ") has a partner ('" + partner + "', group " + partner_group + ") who did not submit the " + type_string + " questionnaire")
             else:
+                with open(alias_file_name) as f2:
+                    for line2 in f2:
+                        line2 = line2.replace("\n", "")
+                        split2 = line2.split(SEPARATOR)
+                        if split2[0] == alias:
+                            self_group = split2[1]
                 print("'" + alias + "' (group " + self_group + ") did not have a partner from the beginning")
 
 
