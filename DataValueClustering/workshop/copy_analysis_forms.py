@@ -57,7 +57,7 @@ def _copy_analysis_forms(path_excel, path_source_folder, file_name_prefix):
             print("INVALID ALIAS ERROR: file '" + file + "' should have been copied to author directory '" + this_target_file + "' but a FileNotFoundError was raised")
 
         if other_alias is None:
-            print("NO PARTNER ERROR: '" + this_alias + "'. File '" + file + "' was not copied to partner directory.")
+            print("NO PARTNER ERROR: '" + this_alias + "'. File '" + file + "' was not copied to partner directory and " + this_alias + " did not receive partner questionnaires.")
             continue
 
         other_target_file = path_target_folder + other_alias + "/" + file_name
