@@ -2,7 +2,7 @@ import numpy
 import pandas
 
 from workshop.copy_analysis_forms import path_excel_clustering, path_excel_werteliste
-from workshop.generate_folders import alias_pairs_file_name, SEPARATOR, makeViable
+from workshop.generate_folders import alias_pairs_file_name, SEPARATOR, makeViable, alias_file_name
 
 
 def check_missing_partners():
@@ -25,9 +25,18 @@ def _check_missing_partners(path_excel, type_string):
                     if isinstance(n, str) and makeViable(n) == partner:
                         found = True
                 if not found:
-                    print("'" + alias + "' has a partner ('" + partner + "') who did not submit the " + type_string + " questionnaire")
+                    with open(alias_file_name) as f:
+                        for line2 in f:
+                            line2 = line2.replace("\n", "")
+                            split2 = line2.split(SEPARATOR)
+                            if split2[0] == alias:
+                                self_group = split2[1]
+                            if split2[0] == partner:
+                                partner_group = split2[1]
+
+                    print("'" + alias + "' (group " + self_group + ") has a partner ('" + partner + "', group " + partner_group + ") who did not submit the " + type_string + " questionnaire")
             else:
-                print("'" + alias + "' does not have a partner")
+                print("'" + alias + "' did not have a partner from the beginning")
 
 
 
