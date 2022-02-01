@@ -25,8 +25,8 @@ def _check_missing_partners(path_excel, type_string):
                     if isinstance(n, str) and makeViable(n) == partner:
                         found = True
                 if not found:
-                    with open(alias_file_name) as f:
-                        for line2 in f:
+                    with open(alias_file_name) as f2:
+                        for line2 in f2:
                             line2 = line2.replace("\n", "")
                             split2 = line2.split(SEPARATOR)
                             if split2[0] == alias:
