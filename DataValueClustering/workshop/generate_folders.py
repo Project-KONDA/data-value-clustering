@@ -4,7 +4,7 @@ import shutil
 
 path_targetFolder = "./workshop_clustering_tool"
 
-path_slides = "./workshop_files/Folien.pdf"
+path_slides = "workshop_files/Folien_KONDA_Workshop_Clustering.pdf"
 path_alias_Table = "AliasQuestionarireInput.xlsx"
 path_alias_Table2 = "./workshop_files/Alias1.xlsx"
 
