@@ -13,7 +13,7 @@ from clustering.clustering import clustering_args_functions
 from abstraction.abstraction import get_abstraction_method
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel
-from distance.distance import distance_functions
+from distance.distances import distance_functions
 from distance.costmap import get_cost_map, split_cost_map
 from gui_center.main import Main
 from gui_abstraction.abstraction_choices import abstraction_functions

@@ -7,6 +7,7 @@ from gui_abstraction.preconfigured_abstractions import preconfigured_abstraction
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
 from abstraction.abstraction import *
 from gui_general.help_popup_gui import menu_help_abstraction
+from gui_abstraction.abstraction_questions import abstraction_question_array
 
 SHOW = "▼     Preview     ▼"
 HIDE = "▲     Preview     ▲"
