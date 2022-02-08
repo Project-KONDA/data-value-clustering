@@ -1,7 +1,7 @@
 '''This script allows clustering the data values of the field MIDAS artist names with an example configuration used for the evaluation.'''
 import numpy as np
 
-from distance.weighted_levenshtein_distance import get_cost_map
+from distance.costmap import get_cost_map
 from experiments.constants import midas_artist_names_randomized, evaluation_exports, midas_aps_artist_names
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 

@@ -4,8 +4,8 @@ import numpy as np
 from distance.dice_coefficient import dice_coefficient_distance
 from distance.levenshtein_distance import levenshtein_distance
 from distance.longest_common_subsequence_distance import longest_common_subsequence_distance
-from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, suggest_cost_map, \
-    get_weighted_levenshtein_distance
+from distance.weighted_levenshtein_distance import weighted_levenshtein_distance, get_weighted_levenshtein_distance
+from distance.costmap import suggest_cost_map
 
 # pass method of this module as distance_function to clustering.clustering.cluster
 from gui_general.DropdownInput import DropdownInput

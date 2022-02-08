@@ -180,7 +180,8 @@ if __name__ == "__main__":
     # plot_histogram(condensed_matrix)
     # plot_at_y(condensed_matrix)
 
-    from weighted_levenshtein_distance import get_weighted_levenshtein_distance, get_cost_map
+    from weighted_levenshtein_distance import get_weighted_levenshtein_distance
+    from distance.costmap import get_cost_map
 
     distance_function = get_weighted_levenshtein_distance(
         get_cost_map()

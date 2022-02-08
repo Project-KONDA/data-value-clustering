@@ -11,7 +11,8 @@ from experiments.constants import midas_dates, midas_artist_names, midas_measure
     lido_attribution_qualifier, lido_measurement_unit
 from gui_center.main import Main
 from abstraction.abstraction import word_sequence_abstraction_function
-from distance.weighted_levenshtein_distance import get_cost_map, get_weighted_levenshtein_distance
+from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
+from distance.costmap import get_cost_map
 from data_extraction.read_file import read_data_values_from_file
 
 

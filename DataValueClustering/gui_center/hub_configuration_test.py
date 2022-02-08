@@ -2,7 +2,7 @@ import json
 import datetime as dt
 import numpy
 
-from distance.weighted_levenshtein_distance import get_cost_map, split_cost_map
+from distance.costmap import get_cost_map, split_cost_map
 from gui_center.hub_configuration import HubConfiguration, load_hub_configuration
 
 if __name__ == "__main__":

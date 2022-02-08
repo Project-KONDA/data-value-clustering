@@ -1,7 +1,7 @@
 '''This script allows clustering the data values of the field MIDAS dates with an example configuration used for the evaluation.'''
 import numpy as np
 
-from distance.weighted_levenshtein_distance import get_cost_map
+from distance.costmap import get_cost_map
 from experiments.constants import midas_aps_dates, evaluation_exports
 from export.ExecutionConfiguration import ExecutionConfigurationFromParams
 
