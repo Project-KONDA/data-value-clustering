@@ -5,6 +5,31 @@ import xlsxwriter
 
 from data_extraction.representants import get_repr_list
 
+def condense_clusters(clusters, clusters_compressed):
+    clusters2, clusters_compressed2, comp_to_normal_map2 = [], [], []
+    noise = []
+    abstract_noise = []
+    noise_compressed = []
+    abstract_noise_compressed = []
+
+    for i, c in enumerate(clusters_compressed):
+        if len(c) != 1:
+            clusters2.append(clusters[i])
+            clusters_compressed2.append(c)
+        elif len(clusters[i]) == 1:
+            noise.extend(clusters[i])
+            noise_compressed.extend(c)
+        else:
+            abstract_noise.extend(clusters[i])
+            abstract_noise_compressed.extend(c)
+
+    clusters2.append(abstract_noise)
+    clusters2.append(noise)
+    clusters_compressed2.append(abstract_noise_compressed)
+    clusters_compressed2.append(noise_compressed)
+
+    return clusters2, clusters_compressed2
+
 
 def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map,
                      average_intra_cluster_distances_per_cluster_per_value,
@@ -13,6 +38,11 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         return
     if not (path.endswith('.xlsx')):
         path += '.xlsx'
+
+    clusters, clusters_compressed = condense_clusters(clusters, clusters_compressed)
+    if noise is not None:
+        clusters[len(clusters)-1].extend(noise)
+        clusters_compressed[len(clusters_compressed) - 1].extend(noise_compressed)
 
     aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
 
@@ -30,8 +60,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     style_val_right = workbook.add_format({'right': 2})
     style_val_left = workbook.add_format({'left': 2})
 
-    noise_unique, noise_count = get_sorted_unique_values_counts(noise)
-    has_noise = len(noise_unique) > 0
+    # noise_unique, noise_count = get_sorted_unique_values_counts(noise)
+    # has_noise = len(noise_unique) > 0
 
     cluster_sizes = list(map(len, clusters))
     no_clusters = len(clusters)
@@ -40,8 +70,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
         sheet_rep = workbook.add_worksheet("Cluster_Representatives")
 
-        noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
-        has_noise = len(noise_unique) > 0
+        # noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
+        # has_noise = len(noise_unique) > 0
 
         column_offset = 1
 
@@ -51,22 +81,27 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
         sheet_rep.write(1, 0, "", style_grey)
 
-        if has_noise:
-            sheet_rep.write(1, column_offset, "Noise", style_caption)
-            sheet_rep.write(1, column_offset + 1, "", style_grey)
-            sheet_rep.write_number(2, column_offset, len(noise_compressed), style_sum)
-            sheet_rep.write(2, column_offset + 1, "", style_grey_right)
-            sheet_rep.write_number(3, column_offset, len(noise), style_sum)
-            sheet_rep.write(3, column_offset + 1, "", style_grey_right)
-            write_list_to_sheet(sheet_rep, 4, column_offset, noise_repr, style_val_left)
-            write_list_to_sheet(sheet_rep, 4, column_offset + 1, noise_count, style_val_right, True)
-            sheet_rep.conditional_format(4, column_offset + 1, 3 + len(noise_count), column_offset + 1, {'type': 'data_bar'})
-            sheet_rep.set_column(1, column_offset, 15)
-            sheet_rep.set_column(2, column_offset + 1, 6)
-            column_offset += 2
+        # if has_noise:
+        #     sheet_rep.write(1, column_offset, "Noise", style_caption)
+        #     sheet_rep.write(1, column_offset + 1, "", style_grey)
+        #     sheet_rep.write_number(2, column_offset, len(noise_compressed), style_sum)
+        #     sheet_rep.write(2, column_offset + 1, "", style_grey_right)
+        #     sheet_rep.write_number(3, column_offset, len(noise), style_sum)
+        #     sheet_rep.write(3, column_offset + 1, "", style_grey_right)
+        #     write_list_to_sheet(sheet_rep, 4, column_offset, noise_repr, style_val_left)
+        #     write_list_to_sheet(sheet_rep, 4, column_offset + 1, noise_count, style_val_right, True)
+        #     sheet_rep.conditional_format(4, column_offset + 1, 3 + len(noise_count), column_offset + 1, {'type': 'data_bar'})
+        #     sheet_rep.set_column(1, column_offset, 15)
+        #     sheet_rep.set_column(2, column_offset + 1, 6)
+        #     column_offset += 2
 
         for i in range(0, len(clusters_compressed)):
-            name = "Cluster " + str(i + 1)
+            if i == len(clusters_compressed)-2:
+                name = "Abstract Noise"
+            elif i == len(clusters_compressed)-1:
+                name = "Noise"
+            else:
+                name = "Cluster " + str(i + 1)
             sheet_rep.write(1, i * 2 + column_offset, name, style_caption)
             sheet_rep.write(1, i * 2 + column_offset + 1, "", style_grey_right)
             sheet_rep.write_number(2, i * 2 + column_offset, cluster_sizes[i], style_sum)
@@ -87,8 +122,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
 
         sheet_rep_dist = workbook.add_worksheet("Cluster_Representatives_Dist")
 
-        noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
-        has_noise = len(noise_unique) > 0
+        # noise_repr, noise_count = get_sorted_representatives_counts(comp_to_normal_map, noise_compressed)
+        # has_noise = len(noise_unique) > 0
 
         column_offset = 1
 
@@ -98,28 +133,33 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         sheet_rep_dist.set_column(0, 0, 15)
 
         sheet_rep_dist.write(1, 0, "", style_grey)
-        if has_noise:
-            sheet_rep_dist.write(1, column_offset, "Noise", style_caption)
-            sheet_rep_dist.write(1, column_offset + 1, "", style_grey)
-            sheet_rep_dist.write(1, column_offset + 2, "", style_grey_right)
-            sheet_rep_dist.write_number(2, column_offset, len(noise_compressed), style_sum)
-            sheet_rep_dist.write(2, column_offset + 1, "", style_grey)
-            sheet_rep_dist.write(2, column_offset + 2, "", style_grey_right)
-            sheet_rep_dist.write_number(3, column_offset, len(noise), style_sum)
-            sheet_rep_dist.write(3, column_offset + 1, "", style_grey)
-            sheet_rep_dist.write(3, column_offset + 2, "", style_grey_right)
-            sheet_rep_dist.write(4, column_offset, "", style_sum)
-            sheet_rep_dist.write(4, column_offset + 1, "", style_grey)
-            sheet_rep_dist.write(4, column_offset + 2, "", style_grey_right)
-            sheet_rep_dist.set_column(1, 1, 15)
-            sheet_rep_dist.set_column(2, 2, 6)
-            write_list_to_sheet(sheet_rep_dist, 5, column_offset, noise_repr, style_val_left)
-            write_list_to_sheet(sheet_rep_dist, 5, column_offset + 1, noise_count, style_val, True)
-            sheet_rep_dist.conditional_format(5, column_offset + 1, 5 + len(noise_count), column_offset + 1, {'type': 'data_bar'})
-            column_offset += 3
+        # if has_noise:
+        #     sheet_rep_dist.write(1, column_offset, "Noise", style_caption)
+        #     sheet_rep_dist.write(1, column_offset + 1, "", style_grey)
+        #     sheet_rep_dist.write(1, column_offset + 2, "", style_grey_right)
+        #     sheet_rep_dist.write_number(2, column_offset, len(noise_compressed), style_sum)
+        #     sheet_rep_dist.write(2, column_offset + 1, "", style_grey)
+        #     sheet_rep_dist.write(2, column_offset + 2, "", style_grey_right)
+        #     sheet_rep_dist.write_number(3, column_offset, len(noise), style_sum)
+        #     sheet_rep_dist.write(3, column_offset + 1, "", style_grey)
+        #     sheet_rep_dist.write(3, column_offset + 2, "", style_grey_right)
+        #     sheet_rep_dist.write(4, column_offset, "", style_sum)
+        #     sheet_rep_dist.write(4, column_offset + 1, "", style_grey)
+        #     sheet_rep_dist.write(4, column_offset + 2, "", style_grey_right)
+        #     sheet_rep_dist.set_column(1, 1, 15)
+        #     sheet_rep_dist.set_column(2, 2, 6)
+        #     write_list_to_sheet(sheet_rep_dist, 5, column_offset, noise_repr, style_val_left)
+        #     write_list_to_sheet(sheet_rep_dist, 5, column_offset + 1, noise_count, style_val, True)
+        #     sheet_rep_dist.conditional_format(5, column_offset + 1, 5 + len(noise_count), column_offset + 1, {'type': 'data_bar'})
+        #     column_offset += 3
 
         for i in range(0, len(clusters_compressed)):
-            name = "Cluster " + str(i + 1)
+            if i == len(clusters_compressed)-2:
+                name = "Abstract Noise"
+            elif i == len(clusters_compressed)-1:
+                name = "Noise"
+            else:
+                name = "Cluster " + str(i + 1)
             sheet_rep_dist.write(1, i * 3 + column_offset, name, style_caption)
             sheet_rep_dist.write(1, i * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(1, i * 3 + column_offset + 2, "", style_grey_right)
@@ -170,25 +210,30 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     sheet_original.set_column(0, label_column, 14)
     sheet_original.write(caption_row, label_column, "", style_grey)
 
-    if has_noise:
-        sheet_original.write(caption_row, column_offset, "Noise", style_caption)
-        sheet_original.write(caption_row, column_offset + 1, "", style_grey)
-        sheet_original.write_number(original_row, column_offset, len(noise), style_sum)
-        sheet_original.write(original_row, column_offset + 1, "", style_grey_right)
-
-        write_list_to_sheet(sheet_original, row_offset, column_offset, noise_unique, style_val_left)
-        write_list_to_sheet(sheet_original, row_offset, column_offset + 1, noise_count, style_val_right, True)
-        sheet_original.conditional_format(original_row, column_offset + 1, row_offset + 1 + len(noise_count), column_offset + 1,
-                                  {'type': 'data_bar'})
-        sheet_original.set_column(1, column_offset, 15)
-        sheet_original.set_column(2, column_offset + 1, 6)
-        column_offset += 2
+    # if has_noise:
+    #     sheet_original.write(caption_row, column_offset, "Noise", style_caption)
+    #     sheet_original.write(caption_row, column_offset + 1, "", style_grey)
+    #     sheet_original.write_number(original_row, column_offset, len(noise), style_sum)
+    #     sheet_original.write(original_row, column_offset + 1, "", style_grey_right)
+    #
+    #     write_list_to_sheet(sheet_original, row_offset, column_offset, noise_unique, style_val_left)
+    #     write_list_to_sheet(sheet_original, row_offset, column_offset + 1, noise_count, style_val_right, True)
+    #     sheet_original.conditional_format(original_row, column_offset + 1, row_offset + 1 + len(noise_count), column_offset + 1,
+    #                               {'type': 'data_bar'})
+    #     sheet_original.set_column(1, column_offset, 15)
+    #     sheet_original.set_column(2, column_offset + 1, 6)
+    #     column_offset += 2
 
     if comp_to_normal_map is None:
         sheet_original.write(representative_row, label_column, "representative", style_representative)
 
     for i in range(0, len(clusters)):
-        name = "Cluster " + str(i + 1)
+        if i == len(clusters_compressed)-2:
+            name = "Abstract Noise"
+        elif i == len(clusters_compressed)-1:
+            name = "Noise"
+        else:
+            name = "Cluster " + str(i + 1)
         sheet_original.write(caption_row, i * 2 + column_offset, name, style_caption)
         sheet_original.write(caption_row, i * 2 + column_offset + 1, "", style_grey_right)
         sheet_original.write_number(original_row, i * 2 + column_offset, cluster_sizes[i], style_sum)
