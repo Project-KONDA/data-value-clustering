@@ -90,7 +90,7 @@ def get_cost(cost_map_case, cost_map_weights, c1, index1, c2, index2):
     return cost
 
 
-@jit(nopython=True, parallel=True)
+# @jit(nopython=True, parallel=True)
 def get_cost_map_indices(cost_map_regex, s):
     n = len(s)
     indices = np.empty(n, dtype=np.int64)

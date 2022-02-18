@@ -14,6 +14,7 @@ from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel
 from data_extraction.write_file import write_data_values_to_file
 from distance import calculate_distance_matrix_map
+from distance.get_weighted_uncommon_partstring import get_weighted_uncommon_partstring
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
 from distance.costmap import get_cost_map, split_cost_map
 from gui_center.cluster_representation import fancy_cluster_representation, fancy_cluster_representation_abstracted
@@ -65,6 +66,8 @@ def default_object_to_json(o):
         return o.tolist()
     elif isinstance(o, dt.timedelta):
         return str(o)
+    elif isinstance(o, numpy.int32):
+        return int(o)
     else:
         return o.__dict__
 
@@ -241,7 +244,10 @@ class HubConfiguration():
         return get_abstraction_method(self.abstraction_answers)
 
     def get_distance_function(self):
-        return get_weighted_levenshtein_distance(self.cost_map)
+        value = get_weighted_uncommon_partstring(self.cost_map)
+        print("measured via new_dissimilarity_measure")
+        return value
+        # return get_weighted_levenshtein_distance(self.cost_map)
 
     def get_clustering_function(self):
         algorithms = np.array(algorithm_array, dtype=object)

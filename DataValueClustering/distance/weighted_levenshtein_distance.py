@@ -10,14 +10,14 @@ from distance.costmap import get_cost_map, split_cost_map, get_cost, get_cost_ma
 def get_weighted_levenshtein_distance(cost_map):
     case, regex, weight = split_cost_map(cost_map)
 
-    @njit
+    # @njit
     def distance_function(s1, s2):
         return weighted_levenshtein_distance(case, regex, weight, s1, s2)
 
     return distance_function
 
 
-@jit(nopython=True)
+# @jit(nopython=True)
 def weighted_levenshtein_distance_sequential(costmap_case, costmap_regex, costmap_weights, s1, s2):
     l1 = len(s1)
     l2 = len(s2)
@@ -45,7 +45,7 @@ def weighted_levenshtein_distance_sequential(costmap_case, costmap_regex, costma
     return d[l1, l2]
 
 
-@jit(nopython=True, parallel=True)
+# @jit(nopython=True, parallel=True)
 def weighted_levenshtein_distance(costmap_case, costmap_regex, costmap_weights, s1, s2):
     l1 = len(s1)
     l2 = len(s2)
