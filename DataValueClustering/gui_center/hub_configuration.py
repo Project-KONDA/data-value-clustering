@@ -133,15 +133,15 @@ class HubConfiguration():
         self.distance_matrix_map = None
         self.timedelta_distance = None
 
-        self.clustering_expert_mode = False
-        self.clustering_algorithm = None  # string
-        # self.clustering_algorithm = "Hierarchical"  # string
-        self.clustering_parameters = None  # dict
-        # self.clustering_parameters = {'method': 'single',
-        #               'n_clusters': 7,
-        #               'distance_threshold': None,
-        #               'criterion': 'maxclust',
-        #               'depth': None}  # dict
+        self.clustering_default_mode = True
+        # self.clustering_algorithm = None  # string
+        # self.clustering_parameters = None  # dict
+        self.clustering_algorithm = "Hierarchical"  # string
+        self.clustering_parameters = {'method': 'single',
+                      'n_clusters': None,
+                      'distance_threshold': 10,
+                      'criterion': 'maxclust',
+                      'depth': None}  # dict
         # self.cluster_config_f = None
         # self.cluster_f = None
         self.clusters_abstracted = None
@@ -166,7 +166,6 @@ class HubConfiguration():
         self.excel_simple_save_path = None
         self.excel_simple_saved = False
 
-
         self.timedelta_total = None
 
         self.validation_answer_1 = None  # binary: ValidationAnswer.HAPPY or UNHAPPY
@@ -188,9 +187,8 @@ class HubConfiguration():
         self.num_abstracted_data = len(self.values_abstracted)
         self.abstraction_rate = self.num_data / self.num_abstracted_data
         self.fancy_simple_cluster_list = list()
-        for i,v in enumerate(self.abstraction_dict.values()):
+        for v in self.abstraction_dict.values():
             self.fancy_simple_cluster_list.append(v)
-
 
     def execute_distance(self):
         time_distance_start = datetime.now()

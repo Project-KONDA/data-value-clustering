@@ -3,7 +3,7 @@ from math import floor, sqrt
 import re
 
 from gui_distances.distance_choice import DistanceView
-from gui_distances.slider_helper import LOW, MEDIUM, HIGH
+from gui_distances.slider_helper import weight_to_text
 
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 alphabet_capitalized = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -165,12 +165,7 @@ def string_simplified_cost_map_split(map, abstraction, distance_config_method):
     text2 = ""
     for i in range(1, n):
         if distance_config_method == DistanceView.SLIDER:
-            if map[0, i] == LOW:
-                text2 += "low" + "\n"
-            elif map[0, i] == MEDIUM:
-                text2 += "medium" + "\n"
-            elif map[0, i] == HIGH:
-                text2 += "high" + "\n"
+            text2 += weight_to_text(map[0, i]) + "\n"
         else:
             text2 += str(map[0, i]) + "\n"
     return text1, text2
