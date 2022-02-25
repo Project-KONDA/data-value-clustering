@@ -715,7 +715,7 @@ class Hub:
             self.clustering_algorithm = "Hierarchical"
             self.configuration.set_clustering_selection(self.clustering_algorithm)
             self.clustering_parameters = {'method': 'single', 'n_clusters': None,
-                                          'distance_threshold': 10, 'criterion': 'maxclust', 'depth': None}
+                                          'distance_threshold': 10, 'criterion': 'distance', 'depth': None}
             self.configuration.set_clustering_configuration(self.clustering_parameters)
         elif self.configuration.clustering_configuration_possible():
             self.button_clustering.configure(state="normal")

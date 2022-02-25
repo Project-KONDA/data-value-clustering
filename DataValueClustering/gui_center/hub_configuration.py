@@ -140,7 +140,7 @@ class HubConfiguration():
         self.clustering_parameters = {'method': 'single',
                       'n_clusters': None,
                       'distance_threshold': 10,
-                      'criterion': 'maxclust',
+                      'criterion': 'distance',
                       'depth': None}  # dict
         # self.cluster_config_f = None
         # self.cluster_f = None
