@@ -65,6 +65,8 @@ def default_object_to_json(o):
         return o.tolist()
     elif isinstance(o, dt.timedelta):
         return str(o)
+    elif isinstance(o, numpy.int32):
+        return int(o)
     else:
         return o.__dict__
 
