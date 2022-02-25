@@ -48,7 +48,7 @@ def calculate_distance_matrix_map(distance_function, values, duplicates_removed)
     return map
 
 
-# @njit
+@njit
 def calculate_distance_matrix_map_jit(distance_function, values, matrix, condensed_matrix):
     min_distance = np.inf
     max_distance = 0.
