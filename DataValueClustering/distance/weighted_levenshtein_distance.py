@@ -21,6 +21,29 @@ def get_weighted_levenshtein_distance(cost_map):
 def weighted_levenshtein_distance_sequential(costmap_case, costmap_regex, costmap_weights, s1, s2):
     l1 = len(s1)
     l2 = len(s2)
+    equalstart, equalend = 0, 0
+    while equalstart < l1 and equalstart < l2:
+        if s1[equalstart] == s2[equalstart]:
+            equalstart += 1
+        else:
+            break
+    s1 = s1[equalstart:]
+    s2 = s2[equalstart:]
+    l1 -= equalstart
+    l2 -= equalstart
+
+    if l1 > 0 and l2 > 0:
+        equalend = 0
+        while equalend < l1 and equalend < l2:
+            if s1[l1-1-equalend] == s2[l1-1-equalend]:
+                equalend += 1
+            else:
+                break
+        s1 = s1[:l1-equalend]
+        s2 = s2[:l2-equalend]
+        l1 -= equalend
+        l2 -= equalend
+    
     indices1 = get_cost_map_indices(costmap_regex, s1)
     indices2 = get_cost_map_indices(costmap_regex, s2)
     d = np.empty((l1 + 1, l2 + 1), dtype=np.float64)
