@@ -187,7 +187,10 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_rep_dist.write(3, j * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(3, j * 3 + column_offset + 2, "", style_grey_right)
 
-            sheet_rep_dist.write_number(4, j * 3 + column_offset, intra_cluster_distances[i], style_sum)
+            if i < len(clusters_compressed)-2:
+                sheet_rep_dist.write_number(4, j * 3 + column_offset, intra_cluster_distances[i], style_sum)
+            else:
+                sheet_rep_dist.write(4, j * 3 + column_offset, "", style_sum)
             sheet_rep_dist.write(4, j * 3 + column_offset + 1, "", style_grey)
             sheet_rep_dist.write(4, j * 3 + column_offset + 2, "", style_grey_right)
 
@@ -195,12 +198,16 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_rep_dist.set_column(5 + j * 3, column_offset + 1 + i * 3, 6)
             sheet_rep_dist.set_column(6 + j * 3, column_offset + 2 + i * 3, 6)
 
-            cluster_repr, cluster_count, cluster_intra = get_sorted_representatives_counts(comp_to_normal_map,
+
+            if i < len(clusters_compressed)-2:
+                cluster_repr, cluster_count, cluster_intra = get_sorted_representatives_counts(comp_to_normal_map,
                                                                                            clusters_compressed[i],
                                                                                            aicdpcpv[i])
+                write_list_to_sheet(sheet_rep_dist, 5, j * 3 + column_offset + 2, cluster_intra, style_val_right)
+            else:
+                cluster_repr, cluster_count = get_sorted_representatives_counts(comp_to_normal_map, clusters_compressed[i])
             write_list_to_sheet(sheet_rep_dist, 5, j * 3 + column_offset, cluster_repr, style_val_left)
             write_list_to_sheet(sheet_rep_dist, 5, j * 3 + column_offset + 1, cluster_count, style_val, True)
-            write_list_to_sheet(sheet_rep_dist, 5, j * 3 + column_offset + 2, cluster_intra, style_val_right)
 
             sheet_rep_dist.conditional_format(5, j * 3 + column_offset + 1, 5 + len(cluster_count),
                                               j * 3 + column_offset + 1, {'type': 'data_bar'})
