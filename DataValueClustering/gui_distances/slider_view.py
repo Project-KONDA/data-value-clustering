@@ -8,7 +8,7 @@ from gui_distances.costmapinput_helper import costmap_is_valid, print_cost_map, 
 from gui_distances.distance_choice import DistanceView
 from gui_distances.distance_warnings import warning_color, \
     undo_highlight_entries, update_warnings_vars
-from gui_distances.slider_helper import scale_to_weight, weight_to_scale, MEDIUM, LOW
+from gui_distances.slider_helper import scale_to_weight, weight_to_scale, VALUE1, VALUE0
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_general.scrollable_frame import create_scrollable_frame
@@ -126,7 +126,7 @@ class SliderInput:
 
         # headings:
         self.label_head_characters = Label(self.root, text="Character Groups", bg="white", font=('Sans', '10', 'bold'))
-        influence_text = "  low                                                   medium                                                   high  "
+        influence_text = "  low                                           high                                          crucial  "
 
         self.label_head_weights_sub = Label(self.root, text=influence_text, bg="white")
         self.label_head_weights = Label(self.root, text="Weights of Influence", bg="white", font=('Sans', '10', 'bold'))
@@ -190,12 +190,12 @@ class SliderInput:
         self.root.unbind_all("<MouseWheel>")
 
     def disable_slider(self, i):
-        self.valuelist[i].set(weight_to_scale(LOW))
+        self.valuelist[i].set(weight_to_scale(VALUE0))
         self.sliderlist[i].configure(state="disabled", fg=disable_scale_color_fg, troughcolor=disable_scale_color_trough)
 
     def enable_slider(self, i):
         if self.sliderlist[i]['state'] == 'disabled':
-            self.valuelist[i].set(weight_to_scale(MEDIUM))
+            self.valuelist[i].set(weight_to_scale(VALUE1))
         self.sliderlist[i].configure(state="normal", fg=self.fg_color, troughcolor=self.troughcolor_color)
 
     def remove_duplicate_chars(self):

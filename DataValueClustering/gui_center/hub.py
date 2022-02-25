@@ -57,8 +57,7 @@ DISTANCE_OPTION_MATRIX = "Matrix (expert)"
 DISTANCE_OPTION_BLOBS = "Blobs (advanced)"
 DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
 
-CONFIG_CLUSTERING_SIMPLE = 'Configure Algorithm... (simple)'
-CONFIG_CLUSTERING_EXPERT = 'Configure Algorithm... (expert)'
+CONFIG_CLUSTERING = 'Configure Algorithm...'
 
 STATUS = "Status: "
 CLUSTERING_NOT_CALC = STATUS + 'Algorithm configured but not executed'
@@ -196,7 +195,7 @@ class Hub:
                                          width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_distance = Button(self.refined_clustering_frame, text=CONFIG_DISSIMILARITIES_SLIDERS, command=self.configure_distance,
                                       width=button_width_full, height=button_height, state="disabled")
-        self.button_clustering = Button(self.refined_clustering_frame, text=CONFIG_CLUSTERING_SIMPLE, command=self.configure_clustering,
+        self.button_clustering = Button(self.refined_clustering_frame, text=CONFIG_CLUSTERING, command=self.configure_clustering,
                                         width=button_width_part, height=button_height, state="disabled")
 
         self.button_data.grid(sticky='nwe', row=5, column=1, columnspan=2, padx=10, pady=10)
@@ -233,7 +232,7 @@ class Hub:
         self.label_expert_configuration.grid(sticky='w', row=14, column=1, padx=(10,0), pady=10)
         self.checked_expert_clustering = IntVar(value=1)
         self.checkbutton_expert_clustering = Checkbutton(self.refined_clustering_frame,
-                                                         variable=self.checked_expert_clustering, bg="white", command=self.update_expert_clustering, text="Expert", state="disabled")
+                                                         variable=self.checked_expert_clustering, bg="white", command=self.update_expert_clustering, text="Default", state="disabled")
         self.checkbutton_expert_clustering.grid(sticky='ws', row=14, column=2, pady=10)
 
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
@@ -339,7 +338,7 @@ class Hub:
         self.label_data_config = Label(self.preview_data, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
         self.label_abstraction_config = Label(self.preview_abstraction, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
         self.label_distance_config = Label(self.preview_distance, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
-        self.label_distance_config2 = Label(self.preview_distance, text=NONE, bg="grey90", anchor="nw", justify="right", padx=10, width=0)
+        self.label_distance_config2 = Label(self.preview_distance, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=0)
         self.label_clustering_config = Label(self.preview_clustering, text=NONE, bg="grey90", anchor="nw", justify="left", padx=10, width=label_width)
 
         self.label_data_config.grid(sticky='nwse', row=1, column=0, rowspan=1, columnspan=2)
@@ -503,8 +502,8 @@ class Hub:
         self.reset_validation_answers()
         self.configuration.set_data_configuration(self.data_path_from_name(data_name))
 
-        self.configuration.set_clustering_selection(None)
-        self.configuration.set_clustering_configuration(None)
+        # self.configuration.set_clustering_selection(None)
+        # self.configuration.set_clustering_configuration(None)
 
         self.update()
         self.root.update()
@@ -545,8 +544,8 @@ class Hub:
         self.set_saved(False)
         self.configuration.reset_abstraction()
         self.configuration.set_distance_configuration(None)
-        self.configuration.set_clustering_selection(None)
-        self.configuration.set_clustering_configuration(None)
+        # self.configuration.set_clustering_selection(None)
+        # self.configuration.set_clustering_configuration(None)
         self.reset_validation_answers()
         self.configuration.set_abstraction_configuration(abstraction_answers)
 
@@ -670,7 +669,8 @@ class Hub:
         prev_parameters = self.configuration.get_clustering_configuration()
         suggested_algorithms = get_suggested_algorithms(self.get_validation_answers())
 
-        if self.checked_expert_clustering.get() == 1:
+        # if self.checked_expert_clustering.get() == 1:#
+        if True:
             cluster_config_f, clustering_algorithm = select_algorithm(self.root, prev_clustering_algorithm, suggested_algorithms)
 
             if clustering_algorithm is None:
@@ -684,15 +684,15 @@ class Hub:
             else:
                 suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=True)
             parameters = cluster_config_f(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications, restricted=self.restricted)
-        else:
-            clustering_algorithm = "Hierarchical"
-
-            if prev_clustering_algorithm != clustering_algorithm:
-                prev_parameters = None
-                suggested_parameter_modifications = None
-            else:
-                suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=False)
-            parameters = simple_cluster_hierarchical(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications, restricted=self.restricted)
+        # else:
+        #     clustering_algorithm = "Hierarchical"
+        #
+        #     if prev_clustering_algorithm != clustering_algorithm:
+        #         prev_parameters = None
+        #         suggested_parameter_modifications = None
+        #     else:
+        #         suggested_parameter_modifications = get_suggested_parameter_modifications(self.get_validation_answers(), self.configuration, expert=False)
+        #     parameters = simple_cluster_hierarchical(self.root, self.configuration.distance_matrix_map, self.configuration.values_abstracted, self.configuration.abstraction_dict, prev_parameters, suggestion=suggested_parameter_modifications, restricted=self.restricted)
 
         if parameters is None or (prev_clustering_algorithm == clustering_algorithm and prev_parameters == parameters):
             self.update()
@@ -709,11 +709,16 @@ class Hub:
         self.root.update()
 
     def update_expert_clustering(self):
-        self.configuration.clustering_expert_mode = bool(self.checked_expert_clustering.get())
-        if self.configuration.clustering_expert_mode:
-            self.button_clustering.configure(text=CONFIG_CLUSTERING_EXPERT)
-        else:
-            self.button_clustering.configure(text=CONFIG_CLUSTERING_SIMPLE)
+        self.configuration.clustering_default_mode = bool(self.checked_expert_clustering.get())
+        self.button_clustering.configure(state="disabled")
+        if self.configuration.clustering_default_mode:
+            self.clustering_algorithm = "Hierarchical"
+            self.configuration.set_clustering_selection(self.clustering_algorithm)
+            self.clustering_parameters = {'method': 'single', 'n_clusters': None,
+                                          'distance_threshold': 10, 'criterion': 'distance', 'depth': None}
+            self.configuration.set_clustering_configuration(self.clustering_parameters)
+        elif self.configuration.clustering_configuration_possible():
+            self.button_clustering.configure(state="normal")
         self.update_advice()
 
     def get_validation_answers(self):
@@ -760,12 +765,12 @@ class Hub:
                     or not self.restricted and self.configuration.get_clustering_selection() == HIERARCHICAL and self.configuration.get_clustering_configuration()[METHOD] != 'average' and self.configuration.get_clustering_configuration()[METHOD] != 'weighted':
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[1] is not None and answers[1] == ValidationAnswer.MORE:
-            if self.configuration.clustering_expert_mode:
+            if self.configuration.clustering_default_mode:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
             else:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE_EXPERT)
         if answers[1] is not None and answers[1] == ValidationAnswer.LESS:
-            if self.configuration.clustering_expert_mode:
+            if self.configuration.clustering_default_mode:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[2] is not None and answers[2] != ValidationAnswer.HAPPY:
             if not self.restricted:
@@ -794,7 +799,7 @@ class Hub:
         print("loading from " + load_path + " ...")
         self.configuration = load_hub_configuration(load_path)
         self.set_saved(True)
-        if (self.configuration.clustering_expert_mode or self.configuration.distance_config_method == DistanceView.MATRIX or self.configuration.distance_config_method == DistanceView.BLOB or self.configuration.get_abstraction_configuration() != sequence_abstraction_function()[1]) and self.restricted:
+        if (self.configuration.clustering_default_mode or self.configuration.distance_config_method == DistanceView.MATRIX or self.configuration.distance_config_method == DistanceView.BLOB or self.configuration.get_abstraction_configuration() != sequence_abstraction_function()[1]) and self.restricted:
             if messagebox.showinfo("Loading failed",
                                    "You tried to load a configuration which uses expert mode while running the application in restricted mode. "
                                    "This is not possible. Please load another configuration or run the application in expert mode.",
@@ -910,7 +915,7 @@ class Hub:
                 self.label_distance_progress.configure(text=DISTANCE_NOT_CONFIGURED, fg='red')
                 self.button_distance_play.configure(state="disabled", bg=self.original_button_color)
 
-        self.checked_expert_clustering.set(int(self.configuration.clustering_expert_mode))
+        self.checked_expert_clustering.set(int(self.configuration.clustering_default_mode))
 
         if self.configuration.result_is_ready():
             self.button_show_result.configure(state="normal", bg='pale green')
