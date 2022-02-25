@@ -96,8 +96,11 @@ class SelectData:
             if self.single_cluster_data is not None and data_name in self.single_cluster_data:
                 self.listbox.itemconfig(i, bg='SeaGreen1')
         if self.previous is not None:
-            index = np.where(self.datalist == self.previous)[0][0]
-            self.listbox.select_set(index)
+            try:
+                index = np.where(self.datalist == self.previous)[0][0]
+                self.listbox.select_set(index)
+            except IndexError:
+                pass
 
     def openFolder(self):
         os.startfile(os.getcwd())
