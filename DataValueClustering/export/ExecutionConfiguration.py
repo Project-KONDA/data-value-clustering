@@ -10,7 +10,7 @@ from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, com
 from sklearn.metrics.cluster import contingency_matrix
 
 from clustering.clustering import clustering_args_functions
-from abstraction.abstraction import get_abstraction_method
+from abstraction.abstractions import get_abstraction_method
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel
 from distance.distances import distance_functions
@@ -109,7 +109,7 @@ class ExecutionConfiguration(object):
         return json_self == json_other
 
     def get_abstraction(self):
-        import abstraction.abstraction
+        import abstraction.abstractions
         # return abstraction.get_compression_method(self.compression_answers), self.compression_answers
         return get_abstraction_method(self.abstraction_answers)
 

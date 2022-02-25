@@ -10,7 +10,7 @@ from clustering.spectral_clustering import spectral_args
 from experiments.constants import midas_dates, midas_artist_names, midas_measurements, lido_titles, \
     lido_attribution_qualifier, lido_measurement_unit
 from gui_center.main import Main
-from abstraction.abstraction import word_sequence_abstraction_function
+from abstraction.abstractions import word_sequence_abstraction_function
 from distance.weighted_levenshtein_distance import get_weighted_levenshtein_distance
 from distance.costmap import get_cost_map
 from data_extraction.read_file import read_data_values_from_file

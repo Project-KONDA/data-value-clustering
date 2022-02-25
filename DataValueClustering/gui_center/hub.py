@@ -10,7 +10,7 @@ import sys
 import xlsxwriter
 from PIL import ImageTk, Image
 
-from abstraction.abstraction import sequence_abstraction_function
+from abstraction.abstractions import sequence_abstraction_function
 from clustering.hierarchical_clustering import METHOD
 from data_extraction.path_handling import data_name_from_path
 from export.path import getJsonSavePath, getJsonLoadPath, getExcelSavePath

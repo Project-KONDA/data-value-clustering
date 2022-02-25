@@ -1,5 +1,5 @@
 '''Basic choices for abstraction'''
-from abstraction.abstraction import *
+from abstraction.abstractions import *
 
 
 # pass abstraction as compression_function to clustering.clustering.cluster

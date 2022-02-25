@@ -5,7 +5,7 @@ import gui_abstraction.abstraction_questions
 from gui_abstraction.preconfigured_abstractions import preconfigured_abstraction_answers, ABSTRACTION_OPTION_DEFAULT, \
     ABSTRACTION_OPTION_CUSTOM, get_predefined_option_from_answers
 from gui_general.QuestionnaireResultInput import QuestionnaireResultInput
-from abstraction.abstraction import *
+from abstraction.abstractions import *
 from gui_general.help_popup_gui import menu_help_abstraction
 from gui_abstraction.abstraction_questions import abstraction_question_array
 

@@ -2,7 +2,7 @@
 import numpy as np
 from sklearn.metrics import adjusted_mutual_info_score
 
-from abstraction.abstraction import abstraction_single_value
+from abstraction.abstractions import abstraction_single_value
 from gui_center.cluster_representation import fancy_cluster_representation
 
 

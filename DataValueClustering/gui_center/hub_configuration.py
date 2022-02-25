@@ -8,7 +8,7 @@ import jsbeautifier
 import numpy
 import numpy as np
 
-from abstraction.abstraction import get_abstraction_method
+from abstraction.abstractions import get_abstraction_method
 from clustering.clustering import get_clusters_original_values, get_cluster_sizes
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel

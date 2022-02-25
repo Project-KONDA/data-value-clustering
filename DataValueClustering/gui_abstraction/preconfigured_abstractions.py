@@ -1,6 +1,6 @@
 import numpy as np
 
-from abstraction.abstraction import char_abstraction_case_sensitive_function, char_abstraction_function, \
+from abstraction.abstractions import char_abstraction_case_sensitive_function, char_abstraction_function, \
     sequence_abstraction_case_sensitive_function, sequence_abstraction_function, word_abstraction_function, \
     word_decimal_abstraction_function, word_sequence_abstraction_function, max_abstraction_function
 from gui_abstraction.abstraction_questions import abstraction_question_array
