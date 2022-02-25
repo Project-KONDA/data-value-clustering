@@ -9,7 +9,7 @@ from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score, com
     homogeneity_score, mutual_info_score, normalized_mutual_info_score, v_measure_score
 from sklearn.metrics.cluster import contingency_matrix
 
-from clustering.clustering import clustering_args_functions
+from clustering.clusterings import clustering_args_functions
 from abstraction.abstractions import get_abstraction_method
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel

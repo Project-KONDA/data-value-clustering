@@ -3,7 +3,7 @@ from datetime import datetime
 
 from data_extraction.representants import get_repr_cluster, get_repr_list
 from gui_center.cluster_representation import fancy_cluster_representation
-from clustering.clustering import get_clusters_original_values, get_cluster_sizes
+from clustering.clusterings import get_clusters_original_values, get_cluster_sizes
 from gui_distances.blobinput_helper import get_blob_configuration
 from distance.distance_matrix import calculate_distance_matrix_map
 from gui_general.DropdownInput import input_dropdown

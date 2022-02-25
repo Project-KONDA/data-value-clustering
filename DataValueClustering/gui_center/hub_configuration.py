@@ -9,7 +9,7 @@ import numpy
 import numpy as np
 
 from abstraction.abstractions import get_abstraction_method
-from clustering.clustering import get_clusters_original_values, get_cluster_sizes
+from clustering.clusterings import get_clusters_original_values, get_cluster_sizes
 from data_extraction import read_data_values_from_file
 from data_extraction.write_cluster_excel import cluster_to_excel
 from data_extraction.write_file import write_data_values_to_file
