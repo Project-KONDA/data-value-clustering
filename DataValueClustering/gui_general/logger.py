@@ -36,7 +36,7 @@ def append_log_clustering(configuration, is_refined_clustering, restricted):
         if is_refined_clustering:
             new_json_dict["distance_config_method"] = json_dict["distance_config_method"]
             new_json_dict["cost_map"] = json_dict["cost_map"]
-            new_json_dict["clustering_expert_mode"] = json_dict["clustering_expert_mode"]
+            new_json_dict["clustering_default_mode"] = json_dict["clustering_default_mode"]
             new_json_dict["clustering_algorithm"] = json_dict["clustering_algorithm"]
             new_json_dict["clustering_parameters"] = json_dict["clustering_parameters"]
 
