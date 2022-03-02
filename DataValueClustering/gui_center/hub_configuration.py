@@ -156,7 +156,16 @@ class HubConfiguration():
         self.noise_abstracted = None
         self.no_clusters = None
         self.no_noise = None
+        self.no_noise_abstracted = None
         self.timedelta_cluster = None
+
+        self.sort_size_order = None
+        self.condensed_cluster_order = None
+        self.position_abstract_noise = None
+        self.position_noise = None
+        self.no_clusters_without_our_noise = None
+        self.no_overall_noise = None
+        self.no_overall_noise_abstracted = None
 
         self.json_save_path = None
         self.json_saved = False
@@ -209,9 +218,40 @@ class HubConfiguration():
         self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
         self.cluster_sizes_abstracted, self.noise_size_abstracted = get_cluster_sizes(self.clusters_abstracted)
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
-        self.fancy_cluster_list_abstracted, self.noise_abstracted = fancy_cluster_representation_abstracted(self.values_abstracted, self.clusters_abstracted, self.data, self.clusters)
+        self.fancy_cluster_list_abstracted, self.noise_abstracted, self.sort_size_order = fancy_cluster_representation_abstracted(self.values_abstracted, self.clusters_abstracted, self.data, self.clusters)
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
+        self.no_noise_abstracted = len(self.noise_abstracted)
+
+        self.sort_clusters(self.sort_size_order)
+
+        self.condense_clusters()
+        if self.noise is not None:
+            our_noise_abstracted = filter(lambda x: len(self.abstraction_dict[x]) == 1, self.noise_abstracted)
+            our_abstract_noise_abstracted = filter(lambda x: len(self.abstraction_dict[x]) > 1, self.noise_abstracted)
+            self.fancy_cluster_list[len(self.fancy_cluster_list)-1].extend(list(map(lambda x: self.abstraction_dict[x], our_noise_abstracted)))
+            self.fancy_cluster_list[len(self.fancy_cluster_list)-2].extend(list(map(lambda x: self.abstraction_dict[x], our_abstract_noise_abstracted)))
+            self.fancy_cluster_list_abstracted[len(self.fancy_cluster_list_abstracted) - 1].extend(our_noise_abstracted)
+            self.fancy_cluster_list_abstracted[len(self.fancy_cluster_list_abstracted) - 2].extend(our_abstract_noise_abstracted)
+
+        self.sort_clusters(self.condensed_cluster_order)
+
+        self.no_clusters_without_our_noise = len(self.fancy_cluster_list) - 2
+        self.no_overall_noise = self.no_noise + len(self.fancy_cluster_list[len(self.fancy_cluster_list) - 2]) + len(self.fancy_cluster_list[len(self.fancy_cluster_list) - 1])
+        self.no_overall_noise_abstracted = self.no_noise_abstracted + len(self.fancy_cluster_list_abstracted[len(self.fancy_cluster_list_abstracted) - 2]) + len(self.fancy_cluster_list_abstracted[len(self.fancy_cluster_list_abstracted) - 1])
+
+    def sort_clusters(self, order_list):
+        clusters_abstracted_copy = self.clusters_abstracted.copy()
+        clusters_copy = self.clusters.copy()
+        for old, new in enumerate(order_list):
+            for j, c in enumerate(self.clusters_abstracted):
+                if c == old:
+                    clusters_abstracted_copy[j] = new
+            for j, c in enumerate(self.clusters):
+                if c == old:
+                    clusters_copy[j] = new
+        self.clusters_abstracted = clusters_abstracted_copy
+        self.clusters = clusters_copy
 
     def save_simple_as_excel(self):
         if self.excel_simple_save_path is not None:
@@ -550,3 +590,46 @@ class HubConfiguration():
     def create_blob_configuration(self):
         self.blob_configuration = get_blob_configuration(self.abstraction_answers)
         return self.blob_configuration
+
+    def condense_clusters(self):
+        new_fancy_clusters, new_fancy_clusters_abstracted = [], []
+        noise = []
+        abstract_noise = []
+        noise_abstracted = []
+        abstract_noise_abstracted = []
+        new_order = []
+
+        for i, c in enumerate(self.fancy_cluster_list_abstracted):
+            if len(c) != 1:
+                new_fancy_clusters.append(self.fancy_cluster_list[i])
+                new_fancy_clusters_abstracted.append(c)
+                new_order.append(len(new_fancy_clusters_abstracted) - 1)
+            elif len(self.fancy_cluster_list[i]) == 1:
+                noise.extend(self.fancy_cluster_list[i])
+                noise_abstracted.extend(c)
+                new_order.append(-1)
+            else:
+                abstract_noise.extend(self.fancy_cluster_list[i])
+                abstract_noise_abstracted.extend(c)
+                new_order.append(-2)
+
+        new_fancy_clusters.append(abstract_noise)
+        new_fancy_clusters.append(noise)
+        new_fancy_clusters_abstracted.append(abstract_noise_abstracted)
+        new_fancy_clusters_abstracted.append(noise_abstracted)
+
+        new_order_positive = []
+        self.position_abstract_noise = len(new_fancy_clusters_abstracted) - 2
+        self.position_noise = len(new_fancy_clusters_abstracted) - 1
+
+        for i, o in enumerate(new_order):
+            if o == -1:
+                new_order_positive.append(self.position_noise)
+            elif o == -2:
+                new_order_positive.append(self.position_abstract_noise)
+            else:
+                new_order_positive.append(new_order[i])
+
+        self.fancy_cluster_list = new_fancy_clusters
+        self.fancy_cluster_list_abstracted = new_fancy_clusters_abstracted
+        self.condensed_cluster_order = new_order_positive

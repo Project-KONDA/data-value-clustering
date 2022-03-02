@@ -5,31 +5,6 @@ import xlsxwriter
 
 from data_extraction.representants import get_repr_list
 
-def condense_clusters(clusters, clusters_compressed):
-    clusters2, clusters_compressed2, comp_to_normal_map2 = [], [], []
-    noise = []
-    abstract_noise = []
-    noise_compressed = []
-    abstract_noise_compressed = []
-
-    for i, c in enumerate(clusters_compressed):
-        if len(c) != 1:
-            clusters2.append(clusters[i])
-            clusters_compressed2.append(c)
-        elif len(clusters[i]) == 1:
-            noise.extend(clusters[i])
-            noise_compressed.extend(c)
-        else:
-            abstract_noise.extend(clusters[i])
-            abstract_noise_compressed.extend(c)
-
-    clusters2.append(abstract_noise)
-    clusters2.append(noise)
-    clusters_compressed2.append(abstract_noise_compressed)
-    clusters_compressed2.append(noise_compressed)
-
-    return clusters2, clusters_compressed2
-
 
 def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compressed, comp_to_normal_map,
                      average_intra_cluster_distances_per_cluster_per_value,
@@ -38,12 +13,6 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
         return
     if not (path.endswith('.xlsx')):
         path += '.xlsx'
-
-    if clusters_compressed is not None:
-        clusters, clusters_compressed = condense_clusters(clusters, clusters_compressed)
-        if noise is not None:
-            clusters[len(clusters)-1].extend(noise)
-            clusters_compressed[len(clusters_compressed) - 1].extend(noise_compressed)
 
     aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
 
