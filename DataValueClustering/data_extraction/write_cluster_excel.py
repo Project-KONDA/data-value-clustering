@@ -39,10 +39,11 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     if not (path.endswith('.xlsx')):
         path += '.xlsx'
 
-    clusters, clusters_compressed = condense_clusters(clusters, clusters_compressed)
-    if noise is not None:
-        clusters[len(clusters)-1].extend(noise)
-        clusters_compressed[len(clusters_compressed) - 1].extend(noise_compressed)
+    if clusters_compressed is not None:
+        clusters, clusters_compressed = condense_clusters(clusters, clusters_compressed)
+        if noise is not None:
+            clusters[len(clusters)-1].extend(noise)
+            clusters_compressed[len(clusters_compressed) - 1].extend(noise_compressed)
 
     aicdpcpv = average_intra_cluster_distances_per_cluster_per_value
 
@@ -252,16 +253,19 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
     j = -1
     for i in range(0, len(clusters)):
         j += 1
-        if i == len(clusters_compressed)-2:
-            if len(clusters_compressed[i]) == 0:
-                j -= 1
-                continue
-            name = "Abstract Noise"
-        elif i == len(clusters_compressed)-1:
-            if len(clusters_compressed[i]) == 0:
-                j -= 1
-                continue
-            name = "Noise"
+        if clusters_compressed is not None:
+            if i == len(clusters_compressed)-2:
+                if len(clusters_compressed[i]) == 0:
+                    j -= 1
+                    continue
+                name = "Abstract Noise"
+            elif i == len(clusters_compressed)-1:
+                if len(clusters_compressed[i]) == 0:
+                    j -= 1
+                    continue
+                name = "Noise"
+            else:
+                name = "Cluster " + str(j + 1)
         else:
             name = "Cluster " + str(j + 1)
         sheet_original.write(caption_row, j * 2 + column_offset, name, style_caption)
