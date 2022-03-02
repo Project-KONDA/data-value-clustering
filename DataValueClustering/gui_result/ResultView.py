@@ -108,9 +108,9 @@ class ResultView:
 
         # scatter plot in summary_frame
         representatives = get_repr_list(self.configuration.values_abstracted, self.configuration.abstraction_dict)
-        show_mds_scatter_plot_integrated(self.scrollable_frame_summary,representatives,
+        show_mds_scatter_plot_integrated(self.scrollable_frame_summary, representatives,
                                          self.configuration.distance_matrix_map["distance_matrix"],
-                                         self.configuration.clusters_abstracted)
+                                         self.configuration.clusters_abstracted, self.configuration.position_abstract_noise, self.configuration.position_noise)
 
         self.info = Label(self.scrollable_frame_summary, bg="white",
                           text="The plot visualizes the calculated distances and clusters. "
@@ -238,8 +238,8 @@ class ResultView:
     def open_excel(self):
         if self.configuration.excel_save_path is None:
             self.configuration.excel_save_path = getExcelSavePath()
-            if self.logging:
-                append_log_clustering(self.configuration, True, self.restricted)
+            # if self.logging:
+                # append_log_clustering(self.configuration, True, self.restricted)
 
         if self.configuration.excel_save_path is not None:
             try:
@@ -262,8 +262,9 @@ class ResultView:
         s += "\nNumber of Data Values: " + str(self.configuration.num_data)
         s += "\nNumber of Abstracted Data Values: " + str(self.configuration.num_abstracted_data)
         s += "\nAbstraction Rate: " + str(self.configuration.abstraction_rate)
-        s += "\n\nNumber of clusters: " + str(self.configuration.no_clusters)
-        s += "\nNumber of noisy values: " + str(self.configuration.no_noise)
+        s += "\n\nNumber of clusters: " + str(self.configuration.no_clusters_without_our_noise)
+        s += "\nNumber of noisy original values: " + str(self.configuration.no_overall_noise)
+        s += "\nNumber of noisy abstract values: " + str(self.configuration.no_overall_noise_abstracted)
 
         s += "\n\nTime Abstraction: " + str(self.configuration.timedelta_abstraction)
         s += "\nTime Distance: " + str(self.configuration.timedelta_distance)

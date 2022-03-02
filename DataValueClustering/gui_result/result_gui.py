@@ -11,8 +11,8 @@ from matplotlib.figure import Figure
 from distance.distance_matrix import get_symmetric
 
 
-def show_mds_scatter_plot_integrated(root, values_compressed, distance_matrix, clusters_compressed, savepath=None, show=True,
-                          show_labels=False):
+def show_mds_scatter_plot_integrated(root, values_compressed, distance_matrix, clusters_compressed, position_abstract_noise, position_noise, savepath=None, show=True,
+                                     show_labels=False):
     if not show and savepath is None:
         return
 
@@ -27,14 +27,18 @@ def show_mds_scatter_plot_integrated(root, values_compressed, distance_matrix, c
     a = fig.add_subplot(111)
     a.set_title("MDS Scatter Plot", fontsize=10)
     a.axis('equal')
-    clusters_compressed_plus_one = np.copy(clusters_compressed)
-    for i, e in enumerate(clusters_compressed):
-        clusters_compressed_plus_one[i] = clusters_compressed[i]+1
+
+    clusters_compressed_plus_one = list(map(lambda x: x+1, clusters_compressed))
     scatter = a.scatter(out[:, 0], out[:, 1], c=clusters_compressed_plus_one, norm=plt.Normalize(vmin=min(clusters_compressed_plus_one), vmax=max(clusters_compressed_plus_one)), cmap="nipy_spectral")
     handles, labels = scatter.legend_elements()
     for i, l in enumerate(labels):
         if l == "$\\mathdefault{0}$":
-            labels[i] = "$\\mathdefault{noise}$"
+            labels[i] = "$\\mathdefault{N.}$"
+        if i == position_abstract_noise:
+            labels[i] = "$\\mathdefault{A.N.}$"
+        if i == position_noise:
+            labels[i] = "$\\mathdefault{N.}$"
+
     fig.legend(handles, labels, title="Clusters", loc=7)
     # fig.tight_layout()
     fig.subplots_adjust(right=0.75)
