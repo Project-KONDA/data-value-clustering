@@ -72,6 +72,10 @@ def get_suggested_distance_modifications(validation_answers, configuration):
     distance_advice = ""
     if validation_answers[0] is not None and validation_answers[0] == ValidationAnswer.UNHAPPY:
         distance_advice += "To achieve a more meaningful clustering, ensure that you specify higher weights for aspects that cause more dissimilarity."
+    if validation_answers[1] is not None and validation_answers[1] == ValidationAnswer.MORE:
+        distance_advice += "To achieve more noise, you should choose higher weights."
+    if validation_answers[1] is not None and validation_answers[1] == ValidationAnswer.LESS:
+        distance_advice += "To achieve less noise, you should choose lower weights."
     if validation_answers[2] is not None and validation_answers[2] == ValidationAnswer.MORE:
         # TODO: check calculated distances concerning lack of diversity!?
         if distance_advice != "":

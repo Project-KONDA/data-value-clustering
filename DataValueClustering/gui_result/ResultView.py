@@ -163,8 +163,7 @@ class ResultView:
         self.q1.frame.grid(row=0, column=0, sticky='nsew')
 
         self.q2 = create_enum_validation_question(self.questions_frame, question_2, question_2_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_2())
-        if not self.restricted:
-            self.q2.frame.grid(row=1, column=0, sticky='nsew')
+        self.q2.frame.grid(row=1, column=0, sticky='nsew')
 
         self.q3 = create_enum_validation_question(self.questions_frame,
                                              question_3, question_3_answers, self.update_suggestion, line_break, self.configuration.get_validation_answer_3())
@@ -215,25 +214,15 @@ class ResultView:
         return labels
 
     def update_suggestion(self):
-        if self.restricted:
-            if self.q1.get_result() == ValidationAnswer.UNHAPPY or self.q3.get_result() == ValidationAnswer.MORE \
-                    or self.q3.get_result() == ValidationAnswer.LESS or self.q4.get_result()[0] == ValidationAnswer.UNHAPPY:
-                self.advice_label.config(text=NOT_SATISFIED, fg="red")
-            elif self.q1.get_result() == ValidationAnswer.HAPPY \
-                    and self.q3.get_result() == ValidationAnswer.HAPPY and self.q4.get_result()[0] == ValidationAnswer.HAPPY:
-                self.advice_label.config(text=SATISFIED, fg="green")
-            else:
-                self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
+        if self.q1.get_result() == ValidationAnswer.UNHAPPY or self.q2.get_result() == ValidationAnswer.MORE \
+                or self.q2.get_result() == ValidationAnswer.LESS or self.q3.get_result() == ValidationAnswer.MORE \
+                or self.q3.get_result() == ValidationAnswer.LESS or self.q4.get_result()[0] == ValidationAnswer.UNHAPPY:
+            self.advice_label.config(text=NOT_SATISFIED, fg="red")
+        elif self.q1.get_result() == ValidationAnswer.HAPPY and self.q2.get_result() == ValidationAnswer.HAPPY \
+                and self.q3.get_result() == ValidationAnswer.HAPPY and self.q4.get_result()[0] == ValidationAnswer.HAPPY:
+            self.advice_label.config(text=SATISFIED, fg="green")
         else:
-            if self.q1.get_result() == ValidationAnswer.UNHAPPY or self.q2.get_result() == ValidationAnswer.MORE \
-                    or self.q2.get_result() == ValidationAnswer.LESS or self.q3.get_result() == ValidationAnswer.MORE \
-                    or self.q3.get_result() == ValidationAnswer.LESS or self.q4.get_result()[0] == ValidationAnswer.UNHAPPY:
-                self.advice_label.config(text=NOT_SATISFIED, fg="red")
-            elif self.q1.get_result() == ValidationAnswer.HAPPY and self.q2.get_result() == ValidationAnswer.HAPPY \
-                    and self.q3.get_result() == ValidationAnswer.HAPPY and self.q4.get_result()[0] == ValidationAnswer.HAPPY:
-                self.advice_label.config(text=SATISFIED, fg="green")
-            else:
-                self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
+            self.advice_label.config(text=QUESTIONNAIRE_EXPLANATION, fg="blue")
 
     def open_excel(self):
         if self.configuration.excel_save_path is None:

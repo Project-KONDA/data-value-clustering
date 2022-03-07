@@ -769,9 +769,11 @@ class Hub:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
             else:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE_EXPERT)
+            self.label_distance_advice.config(text=DISTANCE_ADVICE)
         if answers[1] is not None and answers[1] == ValidationAnswer.LESS:
             if self.configuration.clustering_default_mode:
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+            self.label_distance_advice.config(text=DISTANCE_ADVICE)
         if answers[2] is not None and answers[2] != ValidationAnswer.HAPPY:
             if not self.restricted:
                 self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
