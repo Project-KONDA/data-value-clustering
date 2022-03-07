@@ -765,20 +765,22 @@ class Hub:
                     or not self.restricted and self.configuration.get_clustering_selection() == HIERARCHICAL and self.configuration.get_clustering_configuration()[METHOD] != 'average' and self.configuration.get_clustering_configuration()[METHOD] != 'weighted':
                 self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[1] is not None and answers[1] == ValidationAnswer.MORE:
-            if self.configuration.clustering_default_mode:
-                self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
-            else:
-                self.label_clustering_advice.config(text=CLUSTERING_ADVICE_EXPERT)
+            if not self.restricted:
+                if self.configuration.clustering_default_mode:
+                    self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+                else:
+                    self.label_clustering_advice.config(text=CLUSTERING_ADVICE_EXPERT)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
         if answers[1] is not None and answers[1] == ValidationAnswer.LESS:
-            if self.configuration.clustering_default_mode:
-                self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
+            if not self.restricted:
+                if self.configuration.clustering_default_mode:
+                    self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
         if answers[2] is not None and answers[2] != ValidationAnswer.HAPPY:
             if not self.restricted:
                 self.label_abstraction_advice.config(text=ABSTRACTION_ADVICE)
+                self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
             self.label_distance_advice.config(text=DISTANCE_ADVICE)
-            self.label_clustering_advice.config(text=CLUSTERING_ADVICE)
         if answers[3] is not None and answers[3][0] is not None and answers[3][0] != ValidationAnswer.HAPPY:
             self.label_data_advice.config(text=DATA_ADVICE)
 
@@ -1016,4 +1018,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub(restricted=False, logging=True)
+    Hub(restricted=True, logging=True)
