@@ -584,7 +584,7 @@ class Hub:
 
         if self.selected_distance_option.get() == DISTANCE_OPTION_SLIDERS:
             config_method, cost_map = slider_view(self.root, abstraction=blob_configuration[1:, 0:4],
-                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration, restricted=self.restricted)
+                                   texts=list(blob_configuration[1:,1]), costmap=previous_cost_map, suggestion=get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), configuration=self.configuration, values_abstracted=self.configuration.values_abstracted, restricted=self.restricted)
             blob_configuration = None
         elif self.selected_distance_option.get() == DISTANCE_OPTION_BLOBS:
             config_method, cost_map, blob_configuration = input_blobs(self.root, blob_configuration, get_suggested_distance_modifications(self.get_validation_answers(), self.configuration), restricted=self.restricted)

@@ -8,7 +8,7 @@ from gui_distances.costmapinput_helper import costmap_is_valid, print_cost_map, 
 from gui_distances.distance_choice import DistanceView
 from gui_distances.distance_warnings import warning_color, \
     undo_highlight_entries, update_warnings_vars
-from gui_distances.slider_helper import scale_to_weight, weight_to_scale, VALUE1, VALUE0
+from gui_distances.slider_helper import scale_to_weight, weight_to_scale, VALUE1, VALUE0, calculate_default_scales
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_general.scrollable_frame import create_scrollable_frame
@@ -18,14 +18,14 @@ disable_scale_color_trough = "grey90"
 disable_scale_color_fg = "grey40"
 
 
-def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None, restricted=False):
-    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration, restricted)
+def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None, values_abstracted=None, restricted=False):
+    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration, values_abstracted, restricted)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None, restricted=False):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None, values_abstracted=None, restricted=False):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
         assert (n or costmap or abstraction is not None)
 
@@ -33,7 +33,6 @@ class SliderInput:
         self.matrix_costmap = None
         self.abstraction = abstraction
         self.texts = texts
-        self.value = value
         self.fixed = fixed
         self.suggestion = suggestion
         self.configuration = configuration
@@ -46,6 +45,7 @@ class SliderInput:
         self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
         self.values = value
         self.updating_labels = False
+        self.values_abstracted = values_abstracted
 
         self.canceled = False
 
@@ -59,6 +59,9 @@ class SliderInput:
                 if i in costmap and (i, 0) in costmap:
                     self.texts.append(costmap[(i + 1)])
                     self.values.append(costmap[(i + 1, 0)])
+
+        elif self.values_abstracted is not None and self.values is None:
+            self.values = calculate_default_scales(values_abstracted, texts)
 
         self.root = Toplevel(self.master, bg="white")
         self.root.attributes('-alpha', 0.0)
