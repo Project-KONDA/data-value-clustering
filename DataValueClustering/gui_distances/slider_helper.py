@@ -41,12 +41,14 @@ def maptoscale(metriclist):
     metriclist2 = metriclist.copy()
     l = len(metriclist)
 
+    CRUTIALCUT = 0.1
+    HIGHCUT = 0.5
     # order metriclist, >1/10 to max, >1/3 to min
     metriclist2.sort()
     for metric in metriclist:
-        if metriclist2.index(metric) < l/10:
+        if metriclist2.index(metric) < l * CRUTIALCUT:
             resultlist.append(VALUE2)
-        elif metriclist2.index(metric) < l/3:
+        elif metriclist2.index(metric) < l * HIGHCUT:
             resultlist.append(VALUE1)
         else:
             resultlist.append(VALUE0)
@@ -58,14 +60,15 @@ def calculate_default_scales(abstractvalues, charlist):
     metriclist = []
     l = len(abstractvalues)
     for chars in charlist:
-        num = len(chars)
+        # num = len(chars)
+        # av = total/l
+        # av_per_occ = 0 if n == 0 else total/n
         n, total = char_occurences_in_wordlist(abstractvalues, chars)
         part = n/l
-        av = total/l
-        av_per_occ = total/n
 
         # TODO ???
-        metric = part / av_per_occ / num
+        # metric = part / av_per_occ / num
+        metric = abs(part - 0.33)
 
         metriclist.append(metric)
     scalelist = maptoscale(metriclist)
@@ -76,7 +79,7 @@ def calculate_default_scales(abstractvalues, charlist):
 def char_occurences_in_word(str, chars):
     res = 0
     for c in chars:
-      res += str.count(c)
+      res = max(res, str.count(c))
     return res > 0, res
 
 
