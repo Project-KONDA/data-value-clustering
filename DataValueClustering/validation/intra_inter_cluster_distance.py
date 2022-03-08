@@ -23,7 +23,7 @@ def min_inter_cluster_distance(cluster1, cluster2, clusters, distance_matrix):
 def max_intra_cluster_distances(clusters, distance_matrix, cluster_sizes):
     clusters_unique = np.array(list(set(clusters)))
     clusters_unique_sorted = np.sort(clusters_unique)
-    distances = np.full(len(clusters_unique_sorted), 0.0)
+    distances = np.full(max(clusters_unique_sorted)+1, 0.0)
     for i in clusters_unique_sorted:
         distances[i] = max_intra_cluster_distance(i, clusters, distance_matrix)
     distances_sorted = sort_distances_counts(distances, cluster_sizes)
