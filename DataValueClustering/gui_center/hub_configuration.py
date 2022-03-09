@@ -198,6 +198,8 @@ class HubConfiguration():
         for v in self.abstraction_dict.values():
             self.fancy_simple_cluster_list.append(v)
 
+        self.create_blob_configuration()
+
     def execute_distance(self):
         time_distance_start = datetime.now()
         distance_f = self.get_distance_function()
@@ -589,7 +591,26 @@ class HubConfiguration():
 
     def create_blob_configuration(self):
         self.blob_configuration = get_blob_configuration(self.abstraction_answers)
+        self.remove_non_occurring_char_groups()
         return self.blob_configuration
+
+    def remove_non_occurring_char_groups(self):
+        if self.values_abstracted is not None:
+            row = 0
+            for i in range(numpy.shape(self.blob_configuration)[0]-1):  # keep <rest> row
+                chars = self.blob_configuration[row, 1]
+                res = False
+                for d in self.values_abstracted:
+                    for c in chars:
+                        res |= c in d
+                        if res:
+                            break
+                    if res:
+                        break
+                if res:
+                    row += 1
+                else:
+                    self.blob_configuration = numpy.delete(self.blob_configuration, row, axis=0)
 
     def condense_clusters(self):
         new_fancy_clusters, new_fancy_clusters_abstracted = [], []
