@@ -321,7 +321,10 @@ def get_sorted_representatives_counts(comp_to_normal_map, values_compressed, val
 def sort_values_counts(values, counts):
     if not values or not counts:
         return [], []
-    res = list(zip(*sorted(zip(counts, values), reverse=True)))
+    zipped = zip(counts, values)
+    zipped_sorted = sorted(zipped, key=lambda tup: tup[1])
+    zipped_sorted = sorted(zipped_sorted, key=lambda tup: tup[0], reverse=True)
+    res = list(zip(*zipped_sorted))
     return res[1], res[0]
     # cluster_unique_count_dict = dict(zip(values, counts))
     # d_sorted = {k: v for k, v in sorted(cluster_unique_count_dict.items(), key=lambda item: item[1], reverse=True)}
