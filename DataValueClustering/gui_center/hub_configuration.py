@@ -596,8 +596,8 @@ class HubConfiguration():
 
     def remove_non_occurring_char_groups(self):
         if self.values_abstracted is not None:
-            row = 0
-            for i in range(numpy.shape(self.blob_configuration)[0]-1):  # keep <rest> row
+            row = 1
+            for i in range(1, numpy.shape(self.blob_configuration)[0]-1):  # keep empty row and <rest> row
                 chars = self.blob_configuration[row, 1]
                 res = False
                 for d in self.values_abstracted:
