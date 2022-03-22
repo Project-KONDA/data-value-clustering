@@ -1,4 +1,4 @@
-VALUE0 = 2
+VALUE0 = 1
 VALUE1 = 5
 VALUE2 = 11
 
