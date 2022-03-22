@@ -46,6 +46,8 @@ class SliderInput:
         self.values = value
         self.updating_labels = False
         self.values_abstracted = values_abstracted
+        self.default_texts = texts
+        self.default_values = calculate_default_scales(values_abstracted, texts)
 
         self.canceled = False
 
@@ -61,7 +63,7 @@ class SliderInput:
                     self.values.append(costmap[(i + 1, 0)])
 
         elif self.values_abstracted is not None and self.values is None:
-            self.values = calculate_default_scales(values_abstracted, texts)
+            self.values = self.default_values
 
         self.root = Toplevel(self.master, bg="white")
         self.root.attributes('-alpha', 0.0)
@@ -299,9 +301,11 @@ class SliderInput:
         self.updating_labels = True
         for i, t in enumerate(newtexts):
             self.entry_var_list[i].set(t)
-            self.sliderlist[i].set(1)
         self.updating_labels = False
         self.trigger_extend()
+        for i, t in enumerate(self.default_values):
+            self.sliderlist[i].set(weight_to_scale(t))
+
 
     def plus(self):
         # 1. create arrays
