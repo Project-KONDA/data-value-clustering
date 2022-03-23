@@ -145,10 +145,6 @@ class HubConfiguration():
         # self.cluster_f = None
         self.clusters_abstracted = None
         self.clusters = None
-        self.cluster_sizes = None
-        self.noise_size = None
-        self.cluster_sizes_abstracted = None
-        self.noise_size_abstracted = None
         self.fancy_cluster_list = None
         self.fancy_simple_cluster_list = None
         self.noise = None
@@ -217,8 +213,7 @@ class HubConfiguration():
                                                      self.get_abstraction_function(), self.data)
         self.timedelta_cluster = time_cluster_end - time_cluster_start
         self.timedelta_total = self.timedelta_cluster + self.timedelta_distance + self.timedelta_abstraction
-        self.cluster_sizes, self.noise_size = get_cluster_sizes(self.clusters)
-        self.cluster_sizes_abstracted, self.noise_size_abstracted = get_cluster_sizes(self.clusters_abstracted)
+
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
         self.fancy_cluster_list_abstracted, self.noise_abstracted, self.sort_size_order = fancy_cluster_representation_abstracted(self.values_abstracted, self.clusters_abstracted, self.data, self.clusters)
         self.no_clusters = len(self.fancy_cluster_list)
@@ -268,7 +263,7 @@ class HubConfiguration():
             lines = np.where(self.clusters_abstracted != -1)[0]
             distance_matrix_lines = self.distance_matrix_map['distance_matrix'][lines, :]
             filtered_distance_matrix = distance_matrix_lines[:, lines]
-            index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix, self.cluster_sizes
+            index_parameters = self.clusters_abstracted[self.clusters_abstracted != -1], filtered_distance_matrix
             intra_cluster_distances = max_intra_cluster_distances(*index_parameters)
             intra_cluster_distances_per_cluster_per_value = average_intra_cluster_distances_per_cluster_per_value(
                 *index_parameters)
@@ -574,10 +569,6 @@ class HubConfiguration():
         self.timedelta_total = None
 
     def reset_clustering(self):
-        self.cluster_sizes = None
-        self.noise_size = None
-        self.cluster_sizes_abstracted = None
-        self.noise_size_abstracted = None
         self.fancy_cluster_list = None
         self.noise = None
         self.fancy_cluster_list_abstracted = None
