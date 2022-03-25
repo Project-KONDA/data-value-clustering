@@ -252,7 +252,8 @@ class HubConfiguration():
 
     def save_simple_as_excel(self):
         if self.excel_simple_save_path is not None:
-            cluster_to_excel(self.excel_simple_save_path, self.fancy_simple_cluster_list, [], None,
+            clusters_sorted = sorted(self.fancy_simple_cluster_list, key=lambda k: len(k), reverse=True)
+            cluster_to_excel(self.excel_simple_save_path, clusters_sorted, [], None,
                              self.noise_abstracted, None, None, None)
 
     def save_as_excel(self, restricted):
