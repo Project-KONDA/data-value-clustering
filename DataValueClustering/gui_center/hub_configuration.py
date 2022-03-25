@@ -193,6 +193,7 @@ class HubConfiguration():
         self.fancy_simple_cluster_list = list()
         for v in self.abstraction_dict.values():
             self.fancy_simple_cluster_list.append(v)
+        self.fancy_simple_cluster_list = sorted(self.fancy_simple_cluster_list, key= lambda k: len(k), reverse=True)
 
         self.create_blob_configuration()
 
