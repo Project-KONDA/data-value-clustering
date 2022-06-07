@@ -99,7 +99,7 @@ Each configuration step results in input parameters to one of the data value clu
 
 ### Configuration Workflow
 
-![Hub View](readme_images/hub.png)
+![Hub View](readme_images/hub.PNG)
 
 The configuration workflow is realised by a central view, called Hub View, which guides the user through the configuration steps.
 In this view, the user can make basic settings and access the views for each configuration step, which are explained below.
