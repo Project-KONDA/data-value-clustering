@@ -200,7 +200,7 @@ When the configuration is complete, the user can finally access the Refined Clus
 For this purpose, the Result View provides a statistical overview of the clustering and its visualisation in two-dimensional Cartesian space (cf. Sec.~\ref{par:visualisation}).
 Most importantly, it allows saving and opening the clustering in an Excel file.
 
-![Excel Excerpt](readme_images/clustering_v5.png)
+![Excel Excerpt](readme_images/clustering_v5.PNG)
 
 The Excel file contains different representations of the clustering in different sheets.
 Each cluster is represented by a column.
