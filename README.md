@@ -75,7 +75,7 @@ These examples also were used for the evaluation of the approach in the associat
 
 ## Usage
 
-For running the GUI, [``hub.py```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/hub.py) has to be executed.
+For running the GUI, [```hub.py```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/hub.py) has to be executed.
 
 ## GUI
 
@@ -197,7 +197,7 @@ The parameter ```depth``` is enabled only if the option ```inconsistent``` is ch
 ![Evaluation](readme_images/evaluation.png)
 
 When the configuration is complete, the user can finally access the Refined Clustering.
-For this purpose, the Result View provides a statistical overview of the clustering and its visualisation in two-dimensional Cartesian space (cf. Sec.~\ref{par:visualisation}).
+For this purpose, the Result View provides a statistical overview of the clustering and its visualisation in two-dimensional Cartesian space.
 Most importantly, it allows saving and opening the clustering in an Excel file.
 
 ![Excel Excerpt](readme_images/clustering_v5.PNG)
