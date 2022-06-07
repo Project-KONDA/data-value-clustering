@@ -1,12 +1,12 @@
 # Data Value Clustering
 
-This tool is a proof-of-concept implementation of a bottom-up approach to detecting quality problems in data
-models that manifest in heterogeneous data values.
+This tool is a proof-of-concept implementation of a bottom-up approach to analysing data quality via clusterings of heterogeneous data values.
 The approach is presented in a [research paper](https://github.com/Project-KONDA/data-value-clustering/blob/master/Paper/Detecting_quality_problems_in_data_models_by_clustering_heterogeneous_data_values-extended_version.pdf).
 The approach supports an explorative analysis of the existing data and can be configured by domain experts according to their domain knowledge.
 All values of a selected data field are clustered by syntactic similarity.
 Thereby an overview of the data values' diversity in syntax is provided.
-It shall help domain experts to understand how the data model is used in practice and to derive potential quality problems of the data model.
+It shall help domain experts to understand how the data model is used in practice and to get an impression of of the rules and practices of data acquisition as well as their violations.
+This can be used to infer potential quality issues of the data acquisition process and system, as well as the data model and data transformations.
 
 <!---
 The approach is described in detail in the research paper "[Detecting Quality Problems in Data Models by
@@ -20,18 +20,17 @@ Clustering Heterogeneous Data Values](################)".
 This diagram gives an overview of the components and their interfaces.
 The core of the tool is the Clustering-based Analyser.
 It realises the workflow and controls the data flows between the other components.
-It is realized via the class [```Main```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/main.py).
+It is realized via the class [```Hub```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/hub.py).
 
-The Extraction component is extracts a list of data values from the database.
-It is not yet implemented.
+The Extraction component extracts a list of data values from the database.
+It currently supports BaseX XML databases.
 
 Multiple GUI components are provided to enable the configuration of the data value clustering based on domain knowledge and to present the clustering results.
-The GUI is still under development.
 
 The Data Value Clustering component allows performing 3-step data value clustering via an API.
-It starts with the abstraction of the original data values. Thereby irrelevant syntactical features that, according to the configuration by domain experts, are irrelevant for clustering are removed.
-Next, pairwise distances (i.e. dissimilarities) between the abstracted data values are calculated based on the configuration of the distance function.
-Finally, the abstracted data values are clustered via the chosen and configured clustering algorithm.
+It starts with the abstraction of the original data values, which is actually a first aggregation, i.e. coarse clustering (called 'Simple Clustering'), such that values with very similar syntax are grouped in one cluster.
+Next, pairwise distances (i.e. dissimilarities) between the abstracted data values are calculated based on the configuration of separating aspects.
+Finally, the abstracted data values are clustered based on the grouping configuration, which results in the 'Refined Clustering'.
 
 The Export component allows saving the parameters and the resulting clustering in a JSON file.
 Further it creates a representation of the clustering as an Excel file.
@@ -59,7 +58,7 @@ Required Python packages:
 * [xlsxwriter](https://xlsxwriter.readthedocs.io)
 * [tkinter](https://docs.python.org/3/library/tkinter.html)
 
-
+<!---
 ## Examples
 
 Four executable example configurations for data on cultural heritage objects, such as paintings and buildings, can be found in ```DataValueClustering\experiments\evaluation```.
@@ -76,8 +75,7 @@ These examples also were used for the evaluation of the approach in the associat
 
 ## Usage
 
-For running the GUI, [```main.py```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/main.py) has to be executed.
-
+For running the GUI, [``hub.py```](https://github.com/Project-KONDA/data-value-clustering/blob/master/DataValueClustering/gui_center/hub.py) has to be executed.
 
 ## GUI
 
@@ -85,9 +83,8 @@ To facilitate the usage of our tool, we provide a graphical user interface.
 <!---
 The goal of the GUI is to provide an interface with which the numerous parameters can be configured intuitively and easily by domain experts based on their domain knowledge.
 -->
-The goal is to enable domain experts to intuitively configure the numerous parameters based on their domain knowledge.
-Therefore, the GUI should require as little technical understanding of the clustering process as possible.
-We aim to lower the complexity by reducing the amount of parameters and determining fitting parameter values based on questionnaires adressing specific circumstances of the domain.
+Its main task is to enable the domain expert to configure the approach in such a way that all relevant domain knowledge is taken into account.
+The GUI is intended to provide a user-friendly configuration that includes an understandable interface and a reduction in the large amount of parameters.
 <!---
 Currently, the GUI is build from multiple windows that open successively.
 In the future we will reimplement the center window, to be the real center of configuration.
@@ -95,97 +92,99 @@ It shall be able to start the data value clustering process and present the resu
 Further it shall provide the reentry point for new iterations.
 -->
 
+![Configuration Workflow](readme_images/tool_flow.png)
 
-### Abstraction Configuration
+The configuration workflow supported by the GUI is visualised above.
+Each configuration step results in input parameters to one of the data value clustering steps.
 
-![Abstraction Configuration](readme_images/config_abstraction.png)
+### Configuration Workflow
 
-For the configuration of the abstraction step, we provide a binary response questionnaire.
-The questions aim at the expert's assessment of the importance of certain syntactical features.
-Each question is accompanied by a tool tip showing additional information including an explanation and an example.
-The answers are translated to valid combinations of abstraction rules. 
-The result of abstracting the first 100 original values is dynamically visualized on the right-hand side.
-For each abstracted value the list of all associated original values is shown.
+![Hub View](readme_images/hub.png)
+
+The configuration workflow is realised by a central view, called Hub View, which guides the user through the configuration steps.
+In this view, the user can make basic settings and access the views for each configuration step, which are explained below.
+For each step, a preview of the current configuration is displayed.
+Also, in the Hub View, the user can save the configuration at any time during the configuration process.
+Once the aggregation configuration is complete, the user can open an Excel file showing the Simple Clustering.
+Once the entire configuration is complete, the user can access the Result View to investigate the Refined Clustering and begin the evaluation.
+
+### Data Configuration
+First, the data value set to be clustered must be selected.
+Example data value sets extracted from cultural heritage databases are included in the tool.
+Further data value sets can be extracted from a custom XML database via a corresponding view.
+Alternatively, a data value set can be provided in form of a txt file that contains one value per line in the folder 'data'.
+
+### Aggregation Configuration
+
+![Abstraction Configuration](readme_images/abstraction.png)
+
+For the aggregation configuration, we provide a few predefined settings that have proven successful in our experiments.
+These can be selected from a drop-down menu in the Hub View.
+Our default configuration, which has proven sufficient in most of our experiments, abstracts from the length of letter and digit strings while preserving special characters.
+Therefore, values that differ only concerning the lengths of letter and digit strings are aggregated.
+A more flexible configuration for experienced users is provided in the form of a questionnaire with  binary answers in the Aggregation Configuration View.
+The questions aim to assess the importance of certain syntactical features by the expert.
+For each question there is an explanation and examples.
+The answers to this questionnaire are translated to valid combinations of abstraction rules.
+As further aid, a preview of abstracted data values resulting from the application of these rules is displayed as examples and dynamically updated.
 
 
-### Distance Configuration
 
-As a prerequisite for clustering, the similarity between the abstracted values must be measured.
-For this, we support the weighted Levenshtein distance, which is an edit distance based on insertions, deletions and substitutions of characters.
-The weights can be configured for each edit operation applied to each possible character.
-For the configuration of the weights we offer two options explained in the following.
-<!---
-which is a highly configurable edit distance function for string values.
-For the configuration each edit operation is assigned a weight.
-As the measured distance is the accumulated sum of the weights for each performed edit operation during the transformation of one string to another.
-Therefore each operation needs an associated weight, which can be dependent on the in- and outputs.
--->
+### Separation Configuration
 
+The next step in the GUI is the configuration of separating features to determine dissimilarities between data values.
+For this purpose, the weights of the weighted Levenshtein distance must be specified. 
+This means that for each character occurring in the abstracted values, a numerical weight must be specified for its deletion and insertion.
+In addition, for each combination of two such characters, a weight must be specified for their substitution.
+
+#### Slider View
+
+![Slider View](readme_images/slider.png)
+
+The tool offers an easy to use view for configuring separation, the Slider View shown above.
+Here, the number of weights that need be specified and also their range are drastically limited, as explained below.
+The Slider View displays a slider for each character group.
+A character group is a group of characters with similar characteristics, such as all kinds of brackets.
+Note that these groups can be configured.
+Each slider has three values: low, high and decisive.
+They are mapped to weights 1, 5 and 10.
+We interpret these as the weights for inserting and deleting the mapped characters.
+The remaining weights for substitutions between two characters are calculated as the maximum of both assigned weights.
+As long as the user does not specify weights manually by adjusting the sliders, default weights are used, which are computed based on the number of occurrences of the respective characters in the abstracted values.
+Our experiments have shown that this constrained configuration supported by the Slider View is sufficient in most cases.
+In the unexpected case that a fine-grained adjustment is required, the user can switch to the Matrix View.
 
 
 #### Matrix View
-
-A direct and flexible configuration of the distance function can be performed via the Matrix View.
-Here groups of characters can be configured freely.
-Every insertion, deletion and substitution of characters of these groups can be assigned a weight based on domain knowledge and personal intentions.
-
+<!---
 ![Matrix View](readme_images/config_matrixview.png)
-
-For this, the Matrix view offers a tabular interface.
-Each cell is assigned a substitution operation between groups of characters, where the user can input a custom weight.
-The table is to be read such that characters of the first column are substituted by characters of the first line.
-Additions and deletions are interpreted as substitutions from or to empty strings. 
-To represent this, the second column and second row is always reserved for empty strings.
-
-The distance function needs to be symmetrical to fulfill the symmetry axiom for metrics.
-Therefore, the weight matrix must be symmetrical to the diagonal.
-To guarantee this, all input values are copied into the symmetrically corresponding field.
-
-
-#### Blob View
-
-![Blob View](readme_images/config_blobview.png)
-
-As a more simple and playful approach to configuring the numerous weights of the distance function we provide the so called Blob View.
-It enables the configuration of the weight matrix by moving and scaling graphical objects.
-
-Groups of characters are represented by graphical objects, called blobs. 
-They correspond to the columns and rows of the matrix.
-Their distances correspond to the weights for subsitutions.
-For configuring the these weights, the user can move the blobs on the 2D canvas using drag and drop.
-To configure the weights for additions and deletions we use an additional blob, the small blue blob labelled with an X.
-The weight for substitutions within a group is represented by the size of the corresponding blob. 
-The user can modify the size using the mouse wheel while hovering over the blob.
-
-<!---
-#### Slider View (prevision)
-
-The Slider view is the easiest way of configuring the distance function.
-However it is not implemented yet.
-The idea of this view is, to only configure relative importance of different groups of symbols.
-For this each group will have one slider.
-From the relative importances a valid weight matrix is calculated.
 -->
 
+The Matrix View is the most direct way to configure the weights as the user can enter each weight by hand.
+However, the Matrix View requires the user to specify a large amount of weights, which can easily overwhelm inexperienced users.
+It can be difficult to understand the specific effects of all of these weights.
+It should be noted that not all combinations of weights are useful, and therefore some may result in unusable clusterings.
+Therefore, we consider the Matrix View as an advanced option for experienced experts who desire more flexibility.
 
-### Clustering Algorithm Selection
-
-We support the following clustering algorithms: hierarchical clustering, k-medoids, DBSCAN, OPTICS, affinity propagation and spectral clustering.
-For the selection of a fitting algorithm, we currently provide a binary questionnaire including tool tips.
-The translation into domain knowledge is subject to future work.
 
 
-### Clustering Algorithm Configuration
+### Grouping Configuration
 
-The clustering algorithms come with many parameters.
+In the last step, the user configures how the data values are grouped based on the calculated distances to form the Refined Clustering.
+This is done by selecting a clustering algorithm and configuring its parameters.
+By default, our tool applies the hierarchical clustering algorithm with single linkage and a distance threshold of 10.
+This means that clustering is performed in such a way that the distance between values of the same cluster is always below 10.
+This configuration fits especially well with the options in the Slider View.
+Remember that the weights 1, 5 and 10 can be selected as low, high and decisive in the Slider View.
+Thus, two values that differ by a single character weighted as decisive will definitely end up in different clusters.
+The same happens if the values differ by several characters and the sum of the associated weights is equal to or greater than 10.
+Thus, with this default setting, the influence of the weights on the resulting clustering can be traced.
+
+For a more flexible configuration, the user can freely choose one of the clustering algorithms (hierarchical clustering, k-medoids, DBSCAN, OPTICS, affinity propagation and spectral clustering) and configure its parameters.
 Our tool provides a modularized view to configure these parameters via standard widgets.
-<!---
-It contains a checkbox, a slider or an enumeration with radio buttons, respectively.
--->
-The sliders for the configuration of numerical parameters are provided with appropriate minimum and maximum values.
-For enumerations, tooltips are provided for each option.
+For each parameter, the user is provided with explanations and appropriate default values, some of which are dynamically derived from the Simple Clustering and the calculated distances.
 
-![Hierarchical Configuration 2](readme_images/config_clustering_hierarchical2.png)
+![Hierarchical Clustering Configuration](readme_images/hierarchical.png)
 
 The modules also mimic the dependencies between the parameters of the clustering algorithms.
 For example, in hierarchical clustering, there is an alternating dependency between ```n_clusters``` and ```distance_threshold```: 
@@ -193,25 +192,30 @@ only one of the parameters is required.
 The parameter ```depth``` is enabled only if the option ```inconsistent``` is chosen for the parameter ```criterion```.
 
 
-### Result
+### Evaluation
 
-![Excel Excerpt](readme_images/excel_excerpt2.png)
+![Evaluation](readme_images/evaluation.png)
 
-Currently, the calculated clusterings are provided via generated Excel files.
-They contain two sheets showing the complete clustering of the orginal values and the clustering of the abstracted data values via original values as representatives, as shown in the screenshot.
+When the configuration is complete, the user can finally access the Refined Clustering.
+For this purpose, the Result View provides a statistical overview of the clustering and its visualisation in two-dimensional Cartesian space (cf. Sec.~\ref{par:visualisation}).
+Most importantly, it allows saving and opening the clustering in an Excel file.
+
+![Excel Excerpt](readme_images/clustering_v5.png)
+
+The Excel file contains different representations of the clustering in different sheets.
+Each cluster is represented by a column.
+One sheet represents the clustering of all original values.
+Another sheet shows the condensed form of the clustering over original values as representatives, as shown in the screenshot.
+In addition, the Excel file contains a sheet that shows the mapping between representatives and original values, i.e. the Simple Clustering.
 In the second row the number of original values in each cluster is indicated.
 The number of abstracted values per cluster is indicated in the third row.
 Next to each representative value, the number of original values it represents is shown.
-<!---
-there is no real result view implemented.
-Instead
--->
-<!---
-In the future, we plan to also present the clustering directly in the GUI.
-This shall also include a questionnaire on on how satisfied the experts are with certain aspects of a produced clustering
-Based on the answers, suggestions on how to modify the configuration in the next iteration will be made.
--->
 
+To support the evaluation of the clustering, the result view contains a questionnaire about the user's satisfaction with certain characteristics of the clustering.
+Based on the answers, hints are given to whether further iteration might be appropriate.
+If so, hints in the Hub View and configuration views indicate which parts of the configuration should be modified and in what way to achieve  more useful clustering.
+For example, if the user wants more detailed clustering, the hints suggest, among other things, reducing the distance threshold when hierarchical clustering is used.
+The questionnaire also allows the user to select individual clusters that he or she considers too heterogeneous for another iteration.
 
 
 ## Authors
