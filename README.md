@@ -99,7 +99,7 @@ Each configuration step results in input parameters to one of the data value clu
 
 ### Configuration Workflow
 
-![Hub View](readme_images/hub.PNG)
+![Hub View](readme_images/hub2.png)
 
 The configuration workflow is realised by a central view, called Hub View, which guides the user through the configuration steps.
 In this view, the user can make basic settings and access the views for each configuration step, which are explained below.
@@ -116,7 +116,7 @@ Alternatively, a data value set can be provided in form of a txt file that conta
 
 ### Aggregation Configuration
 
-![Abstraction Configuration](readme_images/abstraction.png)
+![Aggregation Configuration](readme_images/abstraction2.png)
 
 For the aggregation configuration, we provide a few predefined settings that have proven successful in our experiments.
 These can be selected from a drop-down menu in the Hub View.
@@ -139,7 +139,7 @@ In addition, for each combination of two such characters, a weight must be speci
 
 #### Slider View
 
-![Slider View](readme_images/slider.png)
+![Slider View](readme_images/slider2.png)
 
 The tool offers an easy to use view for configuring separation, the Slider View shown above.
 Here, the number of weights that need be specified and also their range are drastically limited, as explained below.
