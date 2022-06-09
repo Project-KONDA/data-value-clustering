@@ -278,8 +278,8 @@ def cluster_to_excel(path, clusters, noise, clusters_compressed, noise_compresse
             sheet_mapping.write_number(2, i * 2 + 1, cluster_sizes[i], style_sum)
             sheet_mapping.write(2, i * 2 + 2, "", style_grey_right)
 
-            representative = simple_cluster[i][0]
             cluster_unique, cluster_count = get_sorted_unique_values_counts(simple_cluster[i])
+            representative = cluster_unique[0]
 
             row_offset = 2
             row_offset += 1

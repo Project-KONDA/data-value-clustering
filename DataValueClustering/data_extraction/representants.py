@@ -20,7 +20,10 @@ def get_repr_list(values_compressed, comp_to_normal_map):
 
 def get_repr(value_compressed, comp_to_normal_map):
     try:
-        return comp_to_normal_map[value_compressed][0]
+        all_values = comp_to_normal_map[value_compressed]
+        distinct_values = list(set(all_values))
+        distinct_values = sorted(distinct_values, key=lambda k: all_values.count(k), reverse=True)
+        return distinct_values[0]
     except:
         return ""
 

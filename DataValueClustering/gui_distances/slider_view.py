@@ -8,7 +8,7 @@ from gui_distances.costmapinput_helper import costmap_is_valid, print_cost_map, 
 from gui_distances.distance_choice import DistanceView
 from gui_distances.distance_warnings import warning_color, \
     undo_highlight_entries, update_warnings_vars
-from gui_distances.slider_helper import scale_to_weight, weight_to_scale, VALUE1, VALUE0
+from gui_distances.slider_helper import scale_to_weight, weight_to_scale, VALUE1, VALUE0, calculate_default_scales
 from gui_general import CreateToolTip
 from gui_general.help_popup_gui import menu_help_distance_slider
 from gui_general.scrollable_frame import create_scrollable_frame
@@ -18,14 +18,14 @@ disable_scale_color_trough = "grey90"
 disable_scale_color_fg = "grey40"
 
 
-def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None, restricted=False):
-    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration, restricted)
+def slider_view(master, n=None, costmap=None, abstraction=None, texts=list(), values=None, fixed=False, suggestion=None, configuration=None, values_abstracted=None, restricted=False):
+    view = SliderInput(master, n, costmap, abstraction, texts, values, fixed, suggestion, configuration, values_abstracted, restricted)
     return view.get()
 
 
 class SliderInput:
 
-    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None, restricted=False):
+    def __init__(self, master, n=None, costmap=None, abstraction=None, texts=list(), value=None, fixed=False, suggestion=None, configuration=None, values_abstracted=None, restricted=False):
         assert (not (costmap and value))  # (not (costmap and (abstraction_chars_and_names is not None or value)))
         assert (n or costmap or abstraction is not None)
 
@@ -33,7 +33,6 @@ class SliderInput:
         self.matrix_costmap = None
         self.abstraction = abstraction
         self.texts = texts
-        self.value = value
         self.fixed = fixed
         self.suggestion = suggestion
         self.configuration = configuration
@@ -46,6 +45,9 @@ class SliderInput:
         self.abstraction_values = list() if abstraction is None else abstraction[:, 0].tolist()
         self.values = value
         self.updating_labels = False
+        self.values_abstracted = values_abstracted
+        self.default_texts = texts
+        self.default_values = calculate_default_scales(values_abstracted, texts)
 
         self.canceled = False
 
@@ -60,9 +62,12 @@ class SliderInput:
                     self.texts.append(costmap[(i + 1)])
                     self.values.append(costmap[(i + 1, 0)])
 
+        elif self.values_abstracted is not None and self.values is None:
+            self.values = self.default_values
+
         self.root = Toplevel(self.master, bg="white")
         self.root.attributes('-alpha', 0.0)
-        self.root.title("Distance Configuration - Sliders")
+        self.root.title("Separation Configuration - Sliders")
         if hasattr(master, "icon"):
             self.root.icon = master.icon
             self.root.iconphoto(False, master.icon)
@@ -75,7 +80,7 @@ class SliderInput:
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root, restricted))
         self.root.config(menu=self.menu)
 
-        self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",
+        self.title = Label(self.root, text="Weight the influence of character groups on the separation of data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
         self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity. Rows with empty entries will be ignored. You can custimize the character groups.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view, state="disabled" if restricted else "normal")
@@ -296,9 +301,11 @@ class SliderInput:
         self.updating_labels = True
         for i, t in enumerate(newtexts):
             self.entry_var_list[i].set(t)
-            self.sliderlist[i].set(1)
         self.updating_labels = False
         self.trigger_extend()
+        for i, t in enumerate(self.default_values):
+            self.sliderlist[i].set(weight_to_scale(t))
+
 
     def plus(self):
         # 1. create arrays
