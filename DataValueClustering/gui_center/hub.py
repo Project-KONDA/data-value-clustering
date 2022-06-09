@@ -48,46 +48,46 @@ SIMPLE_CLUSTERING_HINT_1 = "The simple clustering yielded "
 SIMPLE_CLUSTERING_HINT_2 = " clusters. You can stop here \nor continue below to achieve a coarser clustering."
 # SIMPLE_CLUSTERING_HINT_2 = " clusters.\nTo achieve a coarser clustering, go to 'Refined Clustering'."
 
-CONFIG_DISSIMILARITIES = 'Configure Dissimilarities...'
-CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Dissimilarities... (Sliders)'
-CONFIG_DISSIMILARITIES_BLOBS = 'Configure Dissimilarities... (Blobs)'
-CONFIG_DISSIMILARITIES_MATRIX = 'Configure Dissimilarities... (Matrix)'
+CONFIG_DISSIMILARITIES = 'Configure Separation...'
+CONFIG_DISSIMILARITIES_SLIDERS = 'Configure Separation... (Sliders)'
+CONFIG_DISSIMILARITIES_BLOBS = 'Configure Separation... (Blobs)'
+CONFIG_DISSIMILARITIES_MATRIX = 'Configure Separation... (Matrix)'
 
 DISTANCE_OPTION_MATRIX = "Matrix (expert)"
 DISTANCE_OPTION_BLOBS = "Blobs (advanced)"
 DISTANCE_OPTION_SLIDERS = "Sliders (easy)"
 
-CONFIG_CLUSTERING = 'Configure Algorithm...'
+CONFIG_CLUSTERING = 'Configure Grouping...'
 
 STATUS = "Status: "
-CLUSTERING_NOT_CALC = STATUS + 'Algorithm configured but not executed'
-CLUSTERING_DONE = STATUS + 'Algorithm execution done'
-DISTANCE_NOT_CALC = STATUS + 'Dissimilarities configured but not calculated'
-DISTANCE_DONE = STATUS + 'Dissimilarity calculation done'
-ABSTRACTION_CONFIGURED = STATUS + 'Abstraction configured'
-ABSTRACTION_DONE = STATUS + 'Abstraction done'
+CLUSTERING_NOT_CALC = STATUS + 'Grouping configured but not executed'
+CLUSTERING_DONE = STATUS + 'Grouping execution done'
+DISTANCE_NOT_CALC = STATUS + 'Separation configured but not calculated'
+DISTANCE_DONE = STATUS + 'Separation calculation done'
+ABSTRACTION_CONFIGURED = STATUS + 'Aggregation configured'
+ABSTRACTION_DONE = STATUS + 'Aggregation done'
 DATA_DONE = STATUS + 'Data extraction done'
-CLUSTERING_IN_PROGRESS = STATUS + "Algorithm execution in progress ..."
-CLUSTERING_CONFIG_IN_PROGRESS = STATUS + "Algorithm configuration in progress ..."
-DISTANCE_CALC_IN_PROGRESS = STATUS + "Dissimilarity calculation in progress ..."
-DISTANCE_CONFIGURATION_IN_PROGRESS = STATUS + "Dissimilarity configuration in progress ..."
-ABSTRACTION_CONFIG_IN_PROGRESS = STATUS + "Abstraction configuration in progress ..."
-ABSTRACTION_IN_PROGRESS = STATUS + "Abstraction in progress ..."
+CLUSTERING_IN_PROGRESS = STATUS + "Grouping in progress ..."
+CLUSTERING_CONFIG_IN_PROGRESS = STATUS + "Grouping configuration in progress ..."
+DISTANCE_CALC_IN_PROGRESS = STATUS + "Separation in progress ..."
+DISTANCE_CONFIGURATION_IN_PROGRESS = STATUS + "Separation configuration in progress ..."
+ABSTRACTION_CONFIG_IN_PROGRESS = STATUS + "Aggregation configuration in progress ..."
+ABSTRACTION_IN_PROGRESS = STATUS + "Aggregation in progress ..."
 DATA_EXTRACTION_IN_PROGRESS = STATUS + "Data extraction in progress ..."
 DATA_CONFIG_IN_PROGRESS = STATUS + "Data configuration in progress ..."
-CLUSTERING_NOT_CONFIGURED = STATUS + "Algorithm not configured"
-DISTANCE_NOT_CONFIGURED = STATUS + "Dissimilarities not configured"
-ABSTRACTION_NOT_CONFIGURED = STATUS + "Abstraction not configured"
+CLUSTERING_NOT_CONFIGURED = STATUS + "Grouping not configured"
+DISTANCE_NOT_CONFIGURED = STATUS + "Separation not configured"
+ABSTRACTION_NOT_CONFIGURED = STATUS + "Aggregation not configured"
 DATA_NOT_CONFIGURED = STATUS + "Data not configured"
 
 NONE = "None"
 
-CLUSTERING_ADVICE = "Advice: reconfigure algorithm"
+CLUSTERING_ADVICE = "Advice: reconfigure grouping"
 CLUSTERING_ADVICE_SIMPLE = "Advice: consider simple mode"
 CLUSTERING_ADVICE_EXPERT = "Advice: consider expert mode"
 
-DISTANCE_ADVICE = "Advice: reconfigure dissimilarities"
-ABSTRACTION_ADVICE = "Advice: reconfigure abstraction"
+DISTANCE_ADVICE = "Advice: reconfigure separation"
+ABSTRACTION_ADVICE = "Advice: reconfigure aggregation"
 DATA_ADVICE = "Advice: reconfigure data"
 
 
@@ -148,7 +148,7 @@ class Hub:
         self.refined_clustering_frame.grid(sticky='nswe', row=6, column=0, columnspan=2, padx=5, pady=5)
 
         "preconfigured abstraction choice"
-        self.label_abstraction_preconfigured = Label(self.simple_clustering_frame, text="Preconfigured Abstraction:", bg="white")
+        self.label_abstraction_preconfigured = Label(self.simple_clustering_frame, text="Preconfigured Aggregation:", bg="white")
         self.label_abstraction_preconfigured.grid(sticky='w', row=0, column=1, padx=(10,0), pady=10)
 
         if restricted:
@@ -169,7 +169,7 @@ class Hub:
             self.option_menu_abstraction_choice.configure(state="disabled")
 
         "distance method choice"
-        self.label_distance_choice = Label(self.refined_clustering_frame, text="Dissimilarities Configuration Method:", bg="white")
+        self.label_distance_choice = Label(self.refined_clustering_frame, text="Separation Configuration Method:", bg="white")
         self.label_distance_choice.grid(sticky='w', row=10, column=1, padx=(10,0), pady=10)
 
         if restricted:
@@ -191,7 +191,7 @@ class Hub:
         button_height = 2
         self.button_data = Button(self.data_frame, text='Configure Data...', command=self.configure_data,
                                   width=button_width_full, height=button_height, bg='paleturquoise1')
-        self.button_abstraction = Button(self.simple_clustering_frame, text='Configure Abstraction...', command=self.configure_abstraction,
+        self.button_abstraction = Button(self.simple_clustering_frame, text='Configure Aggregation...', command=self.configure_abstraction,
                                          width=button_width_full, height=button_height, bg='paleturquoise1')
         self.button_distance = Button(self.refined_clustering_frame, text=CONFIG_DISSIMILARITIES_SLIDERS, command=self.configure_distance,
                                       width=button_width_full, height=button_height, state="disabled")
@@ -228,7 +228,7 @@ class Hub:
         # self.button_save_result.grid(sticky='nswe', row=17, column=1, padx=10, pady=10)
         # self.button_save_result.grid(sticky='ne', row=0, column=1, padx=10, pady=10)
 
-        self.label_expert_configuration = Label(self.refined_clustering_frame, text="Algorithm Configuration Method:", bg="white")
+        self.label_expert_configuration = Label(self.refined_clustering_frame, text="Grouping Configuration Method:", bg="white")
         self.label_expert_configuration.grid(sticky='w', row=14, column=1, padx=(10,0), pady=10)
         self.checked_expert_clustering = IntVar(value=1)
         self.checkbutton_expert_clustering = Checkbutton(self.refined_clustering_frame,
@@ -238,8 +238,8 @@ class Hub:
         # self.checkbutton_clustering_label = Label(self.refined_clustering_frame, text="Default", bg="white", width=7)
         # self.checkbutton_clustering_label.grid(sticky='nwe', row=14, column=1, columnspan=1, padx=10, pady=10)
 
-        CreateToolTip(self.button_distance_play, "Execute dissimilarity calculation.")
-        CreateToolTip(self.button_clustering_play, "Execute clustering algorithm.")
+        CreateToolTip(self.button_distance_play, "Execute separation.")
+        CreateToolTip(self.button_clustering_play, "Execute grouping.")
         CreateToolTip(self.button_show_result, "Show calculated clustering and evaluation questionnaire.")
         # CreateToolTip(self.button_save_result, "Save configuration.")
 
@@ -270,9 +270,9 @@ class Hub:
         self.label_clustering_progress.grid(sticky='nw', row=16, column=1, columnspan=2, padx=20, pady=2)
 
         CreateToolTip(self.label_data_progress, "Status of the data")
-        CreateToolTip(self.label_abstraction_progress, "Status of the abstraction")
-        CreateToolTip(self.label_distance_progress, "Status of the dissimilarities")
-        CreateToolTip(self.label_clustering_progress, "Status of the clustering")
+        CreateToolTip(self.label_abstraction_progress, "Status of the aggregation")
+        CreateToolTip(self.label_distance_progress, "Status of the separation")
+        CreateToolTip(self.label_clustering_progress, "Status of the grouping")
 
         "advice labels"
         self.label_data_advice = Label(self.data_frame, text="", bg="white", fg="blue")
@@ -325,9 +325,9 @@ class Hub:
         "labels in preview frames"
         label_width = 40
         self.label_data_config_heading = Label(self.preview_data, text="Current Data Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
-        self.label_abstraction_config_heading = Label(self.preview_abstraction, text="Current Abstraction Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
-        self.label_distance_config_heading = Label(self.preview_distance, text="Current Dissimilarity Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
-        self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Algorithm Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_abstraction_config_heading = Label(self.preview_abstraction, text="Current Aggregation Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_distance_config_heading = Label(self.preview_distance, text="Current Separation Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
+        self.label_clustering_config_heading = Label(self.preview_clustering, text="Current Grouping Configuration:", bg="grey90", anchor="w", justify="left", width=label_width)
 
         self.label_data_config_heading.grid(sticky='nw', row=0, column=0, rowspan=1)
         self.label_abstraction_config_heading.grid(sticky='nw', row=0, column=0)
@@ -361,7 +361,7 @@ class Hub:
         self.label_abstraction_hint.grid(sticky='w', row=4, column=0, padx=10, pady=10)
         self.button_abstraction_excel = Button(self.scrollable_frame, text="Open Simple Clustering", height=2, command=self.open_simple_clustering)
         self.button_abstraction_excel.grid(sticky='w', row=4, column=1, padx=10, pady=10)
-        CreateToolTip(self.button_abstraction_excel, "Open Excel file showing simple clustering resulting from the abstraction.")
+        CreateToolTip(self.button_abstraction_excel, "Open Excel file showing simple clustering resulting from the aggregation.")
         self.hide_simple_clustering_hint()
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -409,30 +409,30 @@ class Hub:
         if new_selection == DISTANCE_OPTION_SLIDERS:
             if previous_method == DistanceView.MATRIX:
                 if not messagebox.askokcancel("Potential Information Loss",
-                                              "You previously configured the dissimilarity "
-                                              "calculation via Expert Mode, i.e. the matrix. This configuration will be "
+                                              "You previously configured the separation "
+                                              "via Expert Mode, i.e. the matrix. This configuration will be "
                                               "lost if you configure the weights via the Sliders view.",
                                               icon=WARNING):
                     self.set_selected_distance_option(DISTANCE_OPTION_MATRIX)
             elif previous_method == DistanceView.BLOB:
                 if not messagebox.askokcancel("Potential Information Loss",
-                                              "You previously configured the dissimilarity "
-                                              "calculation via Blobs. This configuration will be "
+                                              "You previously configured the separation "
+                                              "via Blobs. This configuration will be "
                                               "lost if you configure the weights via the Sliders view.",
                                               icon=WARNING):
                     self.set_selected_distance_option(DISTANCE_OPTION_BLOBS)
         elif new_selection == DISTANCE_OPTION_BLOBS:
             if previous_method == DistanceView.MATRIX:
                 if not messagebox.askokcancel("Potential Information Loss",
-                                              "You previously configured the dissimilarity "
-                                              "calculation via Expert Mode, i.e. the matrix. This configuration will be "
+                                              "You previously configured the separation "
+                                              "via Expert Mode, i.e. the matrix. This configuration will be "
                                               "lost if you configure the weights via the Blobs view.",
                                               icon=WARNING):
                     self.set_selected_distance_option(DISTANCE_OPTION_MATRIX)
             elif previous_method == DistanceView.SLIDER:
                 if not messagebox.askokcancel("Potential Information Loss",
-                                              "You previously configured the dissimilarity "
-                                              "calculation via Sliders. This configuration will be "
+                                              "You previously configured the separation "
+                                              "via Sliders. This configuration will be "
                                               "lost if you configure the weights via the Blobs view.",
                                               icon=WARNING):
                     self.set_selected_distance_option(DISTANCE_OPTION_SLIDERS)
@@ -572,7 +572,7 @@ class Hub:
     def hide_simple_clustering_hint(self):
         # self.label_abstraction_hint.grid_remove()
         # self.button_abstraction_excel.grid_remove()
-        self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the abstraction\nbefore you can access the simple clustering.")
+        self.label_abstraction_hint.configure(fg="grey", text="You need to configure the data and the aggregation\nbefore you can access the simple clustering.")
         self.button_abstraction_excel.configure(state="disabled")
         self.button_abstraction_excel.configure(bg=self.original_button_color)
 
@@ -638,11 +638,11 @@ class Hub:
                 self.set_selected_distance_option(DISTANCE_OPTION_BLOBS)
 
     def execute_distance(self):
-        if not messagebox.askokcancel("Starting Distance Calculation", "Note that the Distance Calculation may take up to multiple hours and cannot be interrupted. "
+        if not messagebox.askokcancel("Starting Distance Calculation", "Note that the separation may take up to multiple hours and cannot be interrupted. "
                                                                        "You will not be able to make any inputs to this application during the calculation. "
                                                                        "In order for the calculation to complete successfully, you must not close the application. "
                                                                        "Once the calculation is completed, the application icon in the taskbar will be highlighted and the status label will change."
-                                                                       "\nDo you really want to start the Distance Calculation now?",
+                                                                       "\nDo you really want to start the separation now?",
                                        icon=WARNING):
             return
 
@@ -652,7 +652,7 @@ class Hub:
             self.configuration.execute_distance()
         except MemoryError:
             messagebox.showerror("Too many values",
-                                   "The distance calculation failed due to too many values. Please reconfigure the abstraction such that less values remain. "
+                                   "The separation failed due to too many values. Please reconfigure the aggregation such that less values remain. "
                                    "Typically, checking the last question, i.e. allowing the removal of duplicates, is sufficient.",
                                    icon=ERROR)
 

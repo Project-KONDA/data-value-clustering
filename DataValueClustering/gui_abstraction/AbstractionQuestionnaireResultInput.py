@@ -13,7 +13,7 @@ SHOW = "▼     Preview     ▼"
 HIDE = "▲     Preview     ▲"
 
 # CAPTION_PART_TWO = " The resulting abstraction from the first 100 data values is shown on the right-hand side."
-CAPTION_PART_ONE = "Answer the following questions to configure the abstraction from irrelevant details"
+CAPTION_PART_ONE = "Answer the following questions to configure the aggregation of very similar values"
 
 
 def abstraction_configuration(master, data, predefined_answers=None, suggestion=None, restricted=False):
@@ -39,14 +39,14 @@ class AbstractionQuestionnaireResultInput(QuestionnaireResultInput):
                          "and that do not alter the values’ meaning significantly. " \
                          "Each question is explained in detail in the corresponding tool tip. " \
                          "You can start with one of the predefined configurations. Typically the default configuration yields good results. " \
-                         "A preview of the simple clustering achieved through the abstraction is shown on demand."
+                         "A preview of the simple clustering achieved through the aggregation is shown on demand."
         if suggestion is not None:
             suggestion = "Advice based on the clustering evaluation:" + suggestion
         if restricted:
             disabled = [18]
         else:
             disabled = None
-        super().__init__(master, "Abstraction Configuration", config, predefined_answers, 10, suggestion, disabled)
+        super().__init__(master, "Aggregation Configuration", config, predefined_answers, 10, suggestion, disabled)
 
         # self.root.grid_columnconfigure((0, 1), minsize=self.root.winfo_screenwidth() / 3)
 

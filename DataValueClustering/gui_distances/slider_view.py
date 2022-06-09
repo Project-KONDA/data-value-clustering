@@ -67,7 +67,7 @@ class SliderInput:
 
         self.root = Toplevel(self.master, bg="white")
         self.root.attributes('-alpha', 0.0)
-        self.root.title("Distance Configuration - Sliders")
+        self.root.title("Separation Configuration - Sliders")
         if hasattr(master, "icon"):
             self.root.icon = master.icon
             self.root.iconphoto(False, master.icon)
@@ -80,7 +80,7 @@ class SliderInput:
         self.menu.add_command(label="Help", command=lambda: menu_help_distance_slider(self.root, restricted))
         self.root.config(menu=self.menu)
 
-        self.title = Label(self.root, text="Weight the influence of character groups on the dissimilarity between data values", bg="white",
+        self.title = Label(self.root, text="Weight the influence of character groups on the separation of data values", bg="white",
                            font=('TkDefaultFont', 12, 'bold'), anchor='c', justify="center")
         self.hint = Label(self.root, text="Choose heigher weights for characters or character sequences that you do not expect to find frequently in the data values\nand that may cause great dissimilarity. Rows with empty entries will be ignored. You can custimize the character groups.", bg="white", anchor='c', justify="center")
         self.button_expert = Button(self.root, text='Expert Mode', command=self.matrix_view, state="disabled" if restricted else "normal")
