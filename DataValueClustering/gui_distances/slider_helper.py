@@ -57,26 +57,31 @@ def maptoscale(metriclist):
 
 
 def calculate_default_scales(abstractvalues, charlist):
-    metriclist = []
+    scalelist = list()
+    if abstractvalues is None:
+        for i in charlist:
+            scalelist.append(3)
 
-    l = len(abstractvalues)
-    for chars in charlist:
-        # num = len(chars)
-        n, total = char_occurences_in_wordlist(abstractvalues, chars)
-        # av = total/l
-        # av_per_occ = 0 if n == 0 else total/n
-        part = n/l
+    else:
+        metriclist = []
+        l = len(abstractvalues)
+        for chars in charlist:
+            # num = len(chars)
+            n, total = char_occurences_in_wordlist(abstractvalues, chars)
+            # av = total/l
+            # av_per_occ = 0 if n == 0 else total/n
+            part = n/l
 
-        # TODO ???
-        # metric = part / av_per_occ / num
-        # metric = part - 0.382 # golden ratio
-        # if metric < 0:
-        #     metric = metric * -2
-        metric = abs(total*total / (max(n, 1) * l) - 1)
+            # TODO ???
+            # metric = part / av_per_occ / num
+            # metric = part - 0.382 # golden ratio
+            # if metric < 0:
+            #     metric = metric * -2
+            metric = abs(total*total / (max(n, 1) * l) - 1)
 
 
-        metriclist.append(metric)
-    scalelist = maptoscale(metriclist)
+            metriclist.append(metric)
+        scalelist = maptoscale(metriclist)
 
     return scalelist
 

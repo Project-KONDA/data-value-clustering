@@ -456,7 +456,7 @@ class SliderInput:
 if __name__ == "__main__":
     # result = slider_view(3, texts=("a-zA-Z", "0-9", "<rest>"), values=(1, 0, 4))
     # result = slider_view(None, costmap=example_costmap())
-    result = slider_view(None, n=4)
+    result = slider_view(None, n=4, texts=["a", "b", "c"], )
     try:
         costmap_is_valid(result)
         print("Costmap result is valid:", True)
