@@ -209,14 +209,18 @@ class HubConfiguration():
         time_cluster_start = datetime.now()
         cluster_f = self.get_clustering_function()
         self.clusters_abstracted = cluster_f(self.distance_matrix_map, self.values_abstracted)
+        # self.clusters_abstracted is list with clusternumbers: one number per abstracted value
         time_cluster_end = datetime.now()
         self.clusters = get_clusters_original_values(self.clusters_abstracted, self.values_abstracted,
                                                      self.get_abstraction_function(), self.data)
+        # self.clusters is list with clusternumbers: one number per original value
         self.timedelta_cluster = time_cluster_end - time_cluster_start
         self.timedelta_total = self.timedelta_cluster + self.timedelta_distance + self.timedelta_abstraction
 
         self.fancy_cluster_list, self.noise = fancy_cluster_representation(self.data, self.clusters)
+        # self.fancy_cluster_list is list of one list per cluster with original values
         self.fancy_cluster_list_abstracted, self.noise_abstracted, self.sort_size_order = fancy_cluster_representation_abstracted(self.values_abstracted, self.clusters_abstracted, self.data, self.clusters)
+        # self.fancy_cluster_list_abstracted is list of one list per cluster with abstracted values
         self.no_clusters = len(self.fancy_cluster_list)
         self.no_noise = len(self.noise)
         self.no_noise_abstracted = len(self.noise_abstracted)
