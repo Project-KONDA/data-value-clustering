@@ -136,7 +136,7 @@ def update_warnings(entry_list, label_warning, n, label_list, abstraction, toolt
                     value = text if i == regex_index else entry.get()
                 else:
                     value = entry_var_list[i].get()
-                if i < len(entry_list) - 1 and i >= start_index:
+                if len(entry_list) - 1 > i >= start_index:
                     if value == "":
                         if disable_input is not None:
                             disable_input(i)

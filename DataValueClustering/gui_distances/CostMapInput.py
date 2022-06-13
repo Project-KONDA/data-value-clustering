@@ -20,6 +20,7 @@ class CostMapInput:
 
     def __init__(self, master, n=None, regexes=None, costmap=None, empty=False, abstraction=None, suggestion=None,
                  configuration=None):
+        self.initializing = True
         if costmap is not None:
             regexes = None
         self.master = master
@@ -253,20 +254,24 @@ class CostMapInput:
 
         self.root.after(1, lambda: self.root.focus_force())
         self.root.protocol("WM_DELETE_WINDOW", self.cancel)
+        self.initializing = False
         self.root.mainloop()
 
     def disable_row_column(self, i):
         for j in range(self.n):
             if j <= i:
-                self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
-                self.value_entries[j, i].insert(END, 0)
+                if not self.initializing:
+                    self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
+                    self.value_entries[j, i].insert(END, 0)
                 self.value_entries[j, i].configure(state="readonly")
 
     def enable_row_column(self, i):
         for j in range(self.n):
             if j <= i and self.value_entries[j,i]["state"] != "normal":
-                self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
-                self.value_entries[j, i].insert(END, int(i != j))
+                if not self.initializing:
+                    self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
+                    self.value_entries[j, i].delete(0, len(self.value_entries[j, i].get()))
+                    self.value_entries[j, i].insert(END, int(i != j))
                 self.value_entries[j, i].configure(state="normal")
 
     def generate_entry(self, i, j):
@@ -284,7 +289,7 @@ class CostMapInput:
         if i > j:
             entry.config(state='readonly')
         if i + j > 0:
-            entry.grid(sticky=NW, column=i, row=j, padx=5, pady=1)
+            entry.grid(sticky=NW, column=i, row=j, padx=5, pady=2)
         return entry
 
     def reset_groups(self):
@@ -504,13 +509,36 @@ def input_costmap(root, size=None, empty=False, regexes=None, costmap=None, abst
 
 
 if __name__ == '__main__':
-    test_regexes = ["^$", "^a$", "^b$", "^c$", "^d$"]
-    test_regexes = ["", "0-9", "a-z", "A-Z", "$"]
-    test_costmap = example_costmap()
+    regexes = [' ', 'b', '1', '.,:;!?—', '()[]{}', '+-*/%=~<>^&|', '"`´\'»«’›‹‚‘', '_']
 
-    # print_cost_map(input_costmap(costmap=test_costmap))
+    costmap = {
+        (): 1.0, 0: '',
+        1: ' ', (0, 0): 0, (0, 1): 1, (1, 0): 1, (1, 1): 1, (1, 2): 1, (1, 3): 11, (1, 4): 5, (1, 5): 11, (1, 6): 11, (1, 7): 5, (1, 8): 5,
+        2: 'b', (0, 2): 1, (2, 0): 1, (2, 1): 1, (2, 2): 1, (2, 3): 11, (2, 4): 5, (2, 5): 11, (2, 6): 11, (2, 7): 5, (2, 8): 5,
+        3: '1', (0, 3): 11, (3, 0): 11, (3, 1): 11, (3, 2): 11, (3, 3): 11, (3, 4): 11, (3, 5): 11, (3, 6): 11, (3, 7): 11, (3, 8): 11,
+        4: '.,:;!?—', (0, 4): 5, (4, 0): 5, (4, 1): 5, (4, 2): 5, (4, 3): 11, (4, 4): 5, (4, 5): 11, (4, 6): 11, (4, 7): 5, (4, 8): 5,
+        5: '()[]{}', (0, 5): 11, (5, 0): 11, (5, 1): 11, (5, 2): 11, (5, 3): 11, (5, 4): 11, (5, 5): 11, (5, 6): 11, (5, 7): 11, (5, 8): 11,
+        6: '+-*/%=~<>^&|', (0, 6): 11, (6, 0): 11, (6, 1): 11, (6, 2): 11, (6, 3): 11, (6, 4): 11, (6, 5): 11, (6, 6): 11, (6, 7): 11, (6, 8): 11,
+        7: '"`´\'»«’›‹‚‘', (0, 7): 5, (7, 0): 5, (7, 1): 5, (7, 2): 5, (7, 3): 11, (7, 4): 5, (7, 5): 11, (7, 6): 11, (7, 7): 5, (7, 8): 5,
+        8: '<rest>', (0, 8): 5, (8, 0): 5, (8, 1): 5, (8, 2): 5, (8, 3): 11, (8, 4): 5, (8, 5): 11, (8, 6): 11, (8, 7): 5, (8, 8): 5}
 
-    print_cost_map(input_costmap(Tk(), regexes=test_regexes))
+    abstraction = [
+        ['space', ' ', False, "' ' represents a blank space."],
+        ['letter_sequences', 'b', False, "'b' represents all sequences of lower and upper case letters, e.g. 'Portrait', 'red' and 'USA'."],
+        ['integers', '1', False, "'1' represents all sequences of digits, i.e. integers, e.g. '1' and '1024'."],
+        ['punctuation_marks', '.,:;!?—', True, "all punctuation marks, i.e. '.', ',', ':', ';', '!', '?', and '—'."],
+        ['brackets', '()[]{}', True, "all brackets, i.e. '(', '[', '{' and the corresponding opposites."],
+        ['math_operators', '+-*/%=~<>^&|', True, "all math operators, i.e. '+', '-', '*', '/', '%', '=', '<', '>', '&', '^' and '|'."],
+        ['quotation_marks', '"`´\'»«’›‹‚‘', True, 'all quotation marks, i.e. \'"\', \'`\', \'´\', \'\'\', \'»\', \'«\', \'’\', \'›\', \'‹\', \'‚\' and \'‘\'.'],
+        ['other_characters', '_', True, "'_' represents all other characters."]]
 
-    # print_cost_map(input_costmap(9))
-    # print_cost_map(input_costmap(9, True))
+    input_costmap(None, regexes=regexes, costmap=costmap, abstraction=abstraction)
+
+
+    # test_regexes = ["^$", "^a$", "^b$", "^c$", "^d$"]
+    # test_regexes = ["", "0-9", "a-z", "A-Z", "$"]
+    # test_costmap = example_costmap()
+    # # print_cost_map(input_costmap(costmap=test_costmap))
+    # print_cost_map(input_costmap(Tk(), regexes=test_regexes))
+    # # print_cost_map(input_costmap(9))
+    # # print_cost_map(input_costmap(9, True))
