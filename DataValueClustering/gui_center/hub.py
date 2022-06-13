@@ -1018,4 +1018,4 @@ class Hub:
 
 
 if __name__ == "__main__":
-    Hub(restricted=True, logging=True)
+    Hub(restricted=False, logging=False)
